@@ -16,6 +16,9 @@
     <releaseNotes>First release of the library</releaseNotes>
     <copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</copyright>
     <tags>hintea dan alexandru .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections batch task array</tags>
+    <dependencies>
+      <group targetFramework="netstandard2.0" />
+    </dependencies>
   </metadata>
   <files>
     <file src="IconLogo.png" target="images\" />
