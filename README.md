@@ -499,7 +499,7 @@ async Task BackupFiles()
 ---
 ### ExecutionUtilities
 Extensions that help with the execution of unsafe code that we don't want to crash our app or to stop the execution flow.
-A good example is the interaction with external resource.
+A good example is the interaction with external resources.
 Say we want to raise a web-hook but we don't want our app to crash if that endpoint is not available but rather fallback to another mechanism.
 #### `TryAFewTimesOrFailWithGrace(action)`
 &
