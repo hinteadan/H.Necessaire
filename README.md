@@ -386,7 +386,7 @@ class InMemoryResource : ImAResource
 ```
 ---
 #### `action.AsAsync()`
-Transforms a synchronous `Action` to an asynchronous `Func<Task>` so you can safely used it along with the Task API.
+Transforms a synchronous `Action` to an asynchronous `Func<Task>` so you can safely use it along with the Task API.
 ##### Use Case code sample
 ```csharp
 interface ImAnEngine
