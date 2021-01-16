@@ -114,8 +114,5 @@
   <ItemGroup>
     <None Include="H.Necessaire.BridgeDotNet.nuspec" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="IconLogo.png" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
