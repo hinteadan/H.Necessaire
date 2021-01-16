@@ -2,7 +2,7 @@
 # H's Necessaire
 _**Data and operation extensions for faster .NET (standard2.0) development**_
 
-![Nuget](https://img.shields.io/nuget/v/H.Necessaire?label=NuGet) ![Nuget](https://img.shields.io/nuget/dt/H.Necessaire?label=NuGet%20Downloads) ![GitHub](https://img.shields.io/github/license/hinteadan/H.Necessaire?label=License) ![GitHub last commit](https://img.shields.io/github/last-commit/hinteadan/H.Necessaire?label=Latest%20commit) [![Build Status](https://dev.azure.com/hinteadan/H.Necessaire/_apis/build/status/H.Necessaire%20Build?branchName=master)](https://dev.azure.com/hinteadan/H.Necessaire/_build/latest?definitionId=6&branchName=master)
+[![Nuget](https://img.shields.io/nuget/v/H.Necessaire?label=NuGet)](https://www.nuget.org/packages/H.Necessaire) [![Nuget](https://img.shields.io/nuget/dt/H.Necessaire?label=NuGet%20Downloads)](https://www.nuget.org/packages/H.Necessaire) [![GitHub](https://img.shields.io/github/license/hinteadan/H.Necessaire?label=License)](https://github.com/hinteadan/H.Necessaire/blob/master/LICENSE) [![GitHub last commit](https://img.shields.io/github/last-commit/hinteadan/H.Necessaire?label=Latest%20commit)](https://github.com/hinteadan/H.Necessaire/commits/master) [![Build Status](https://dev.azure.com/hinteadan/H.Necessaire/_apis/build/status/H.Necessaire%20Build?branchName=master)](https://dev.azure.com/hinteadan/H.Necessaire/_build/latest?definitionId=6&branchName=master)
 
 
 This library groups together various data and operation extensions that I've used and I'm still using for faster .NET development.
