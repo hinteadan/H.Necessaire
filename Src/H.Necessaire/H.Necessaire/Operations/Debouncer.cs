@@ -18,7 +18,7 @@ namespace H.Necessaire
             this.periodicActionExecutioner = periodicActionFactory();
         }
 
-        public Debouncer(Func<Task> asyncActionToTame, TimeSpan debounceInterval) : this(asyncActionToTame, debounceInterval, () => new Operations.Concrete.NetStandardPeriodicAction()) { }
+        public Debouncer(Func<Task> asyncActionToTame, TimeSpan debounceInterval) : this(asyncActionToTame, debounceInterval, ConcreteFactory.BuildNewPeriodicAction) { }
         #endregion
 
         public async Task Invoke()

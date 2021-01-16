@@ -16,7 +16,7 @@ namespace H.Necessaire
             if (ex is AggregateException)
             {
                 result.Add(ex);
-                result.AddRange((ex as AggregateException).InnerExceptions?.SelectMany(x => x.Flatten()) ?? new Exception[0]);
+                result.AddRange((ex as AggregateException).InnerExceptions?.SelectMany(x => x.Flatten()).ToArray() ?? new Exception[0]);
             }
             else if (ex.InnerException != null)
             {

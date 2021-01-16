@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>H.Necessaire.BridgeDotNet</id>
+    <version>0.0.1-pre</version>
+    <title>H's Necessaire of various data and operation extensions for Bridge.NET</title>
+    <projectUrl>https://hinteadan.github.io/H.Necessaire</projectUrl>
+    <repository type="git" url="https://github.com/hinteadan/H.Necessaire.git" branch="master" />
+    <authors>Hintea Dan Alexandru</authors>
+    <owners>Hintea Dan Alexandru</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <icon>images\IconLogo.png</icon>
+    <description>A collection of useful data and execution extensions for Bridge.NET</description>
+    <summary>Various data and operation extensions for Bridge.NET</summary>
+    <releaseNotes>Added Note struct for esaier string-string key value pairs</releaseNotes>
+    <copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</copyright>
+    <tags>hintea dan alexandru .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections batch task array bridge bridge.net bridgedotnet</tags>
+  </metadata>
+  <files>
+    <file src="IconLogo.png" target="images\" />
+  </files>
+</package>

@@ -11,9 +11,4 @@ namespace H.Necessaire
 
         void Stop();
     }
-
-    public static class PeriodicAction
-    {
-        public static readonly ImAPeriodicAction Instance = new Operations.Concrete.NetStandardPeriodicAction();
-    }
 }

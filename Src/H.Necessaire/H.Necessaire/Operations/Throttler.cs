@@ -22,7 +22,7 @@ namespace H.Necessaire
             this.periodicActionDestroyer = periodicActionFactory();
         }
 
-        public Throttler(Func<Task> asyncActionToTame, TimeSpan throttleInterval) : this(asyncActionToTame, throttleInterval, () => new Operations.Concrete.NetStandardPeriodicAction()) { }
+        public Throttler(Func<Task> asyncActionToTame, TimeSpan throttleInterval) : this(asyncActionToTame, throttleInterval, ConcreteFactory.BuildNewPeriodicAction) { }
         #endregion
 
         public async Task Invoke()
