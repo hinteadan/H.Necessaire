@@ -5,6 +5,7 @@
     <NoStdLib>true</NoStdLib>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,10 +13,12 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{72DE3916-3D84-4185-8F21-8510E2EB1A6C}</ProjectGuid>
     <OutputType>Library</OutputType>
+    <OutputPath>bin\Latest\</OutputPath>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>H.Necessaire.BridgeDotNet</RootNamespace>
     <AssemblyName>H.Necessaire.BridgeDotNet</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RuntimeIdentifier>win</RuntimeIdentifier>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
