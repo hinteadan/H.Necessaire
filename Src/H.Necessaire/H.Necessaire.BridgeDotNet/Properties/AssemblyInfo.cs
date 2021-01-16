@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("H.Necessaire.BridgeDotNet")]
-[assembly: AssemblyDescription("A collection of useful data and execution extensions for .NET")]
+[assembly: AssemblyDescription("A collection of useful data and execution extensions for Bridge.NET")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("H.Necessaire.BridgeDotNet")]
