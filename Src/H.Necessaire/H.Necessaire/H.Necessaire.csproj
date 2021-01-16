@@ -18,6 +18,7 @@
     <Description>A collection of useful data and execution extensions for .NET</Description>
     <ApplicationIcon>necessaire_logo.ico</ApplicationIcon>
     <SignAssembly>false</SignAssembly>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
