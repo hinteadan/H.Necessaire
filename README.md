@@ -291,7 +291,7 @@ var result = new [] { 1, 2, 3 }.Jump(100); //No exception, result will be an emp
 ```
 ---
 #### `keywords.TrimToValidKeywordsOnly(int minLength, int maxNumberOfKeywords)`
-Useful when doing a wildcard search to exclude irrelevant entries and to minimize the max number to avoid performance or even overflow hits.
+Useful when doing a wildcard search to exclude irrelevant entries and to minimize the max number of search keys and avoid performance issues or overflows.
 ##### Use Case code sample
 ```csharp
 string[] keywordsToSearchFor = filter.Customer?.Keywords?.TrimToValidKeywordsOnly();
