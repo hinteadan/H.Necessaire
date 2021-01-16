@@ -16,6 +16,8 @@
     <PackageTags>hintea,dan,alexandru,.net,essentials,utils,extensions,core,utilities,data,execution,useful,collections,batch,task,array</PackageTags>
     <PackageReleaseNotes>A collection of useful data and execution extensions for .NET</PackageReleaseNotes>
     <Description>A collection of useful data and execution extensions for .NET</Description>
+    <ApplicationIcon>necessaire_logo.ico</ApplicationIcon>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>
