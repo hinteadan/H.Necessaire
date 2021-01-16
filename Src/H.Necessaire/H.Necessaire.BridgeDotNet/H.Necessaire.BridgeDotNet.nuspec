@@ -8,7 +8,7 @@
     <authors>Hintea Dan Alexandru</authors>
     <owners>Hintea Dan Alexandru</owners>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <license type="expression">MIT</license>
+    <licenseUrl>https://raw.githubusercontent.com/hinteadan/H.Necessaire/master/LICENSE</licenseUrl>
     <icon>images\IconLogo.png</icon>
     <description>A collection of useful data and execution extensions for Bridge.NET</description>
     <summary>Various data and operation extensions for Bridge.NET</summary>
