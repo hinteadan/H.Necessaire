@@ -4,6 +4,25 @@ namespace H.Necessaire
 {
     public static class DataExtensions
     {
+        public static DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+
+        public static long ToUnixTimestamp(this DateTime date)
+        {
+            TimeSpan t = (date.ToUniversalTime() - UnixEpoch);
+            return (long)(t.TotalMilliseconds + 0.5);
+        }
+
+        public static DateTime EnsureUtc(this DateTime dateTime)
+        {
+            if (dateTime.Kind == DateTimeKind.Utc)
+                return dateTime;
+
+            if (dateTime.Kind == DateTimeKind.Unspecified)
+                return DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+
+            return dateTime.ToUniversalTime();
+        }
+
         public static float TrimToPercent(this float value)
         {
             return

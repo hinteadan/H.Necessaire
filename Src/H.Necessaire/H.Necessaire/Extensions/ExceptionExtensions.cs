@@ -30,5 +30,17 @@ namespace H.Necessaire
 
             return result.Where(x => x != null).ToArray();
         }
+
+        public static Note[] ToNotes(this Exception[] exceptions)
+        {
+            if (!exceptions?.Any() ?? true)
+                return new Note[0];
+
+            return
+                exceptions
+                .Select(ex => new Note(ex.HResult.ToString(), ex.ToString()))
+                .ToArray()
+                ;
+        }
     }
 }
