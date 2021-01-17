@@ -57,6 +57,27 @@
     <Compile Include="..\H.Necessaire\Extensions\TaskExtensions.cs">
       <Link>Extensions\TaskExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\CollectionOfDisposables.cs">
+      <Link>Models\CollectionOfDisposables.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\IDisposableEnumerable.cs">
+      <Link>Models\IDisposableEnumerable.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\IGuidIdentity.cs">
+      <Link>Models\IGuidIdentity.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\IKeyValueStorage.cs">
+      <Link>Models\IKeyValueStorage.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\ILimitedEnumerable.cs">
+      <Link>Models\ILimitedEnumerable.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\IPageFilter.cs">
+      <Link>Models\IPageFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\ISortFilter.cs">
+      <Link>Models\ISortFilter.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Note.cs">
       <Link>Models\Note.cs</Link>
     </Compile>
@@ -69,11 +90,26 @@
     <Compile Include="..\H.Necessaire\Models\OperationResultException.cs">
       <Link>Models\OperationResultException.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Page.cs">
+      <Link>Models\Page.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\PageFilter.cs">
+      <Link>Models\PageFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\SortFilter.cs">
+      <Link>Models\SortFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\SortFilterBase.cs">
+      <Link>Models\SortFilterBase.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Version.cs">
       <Link>Models\Version.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Models\VersionNumber.cs">
       <Link>Models\VersionNumber.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Concrete\DataStream.cs">
+      <Link>Operations\Concrete\DataStream.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\DataNormalizer.cs">
       <Link>Operations\DataNormalizer.cs</Link>

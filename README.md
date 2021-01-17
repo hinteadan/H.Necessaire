@@ -25,74 +25,100 @@ They are grouped in three main areas, each with its own set of functional areas:
       - [Definition overview](#definition-overview-4)
     - [`NumberInterval`](#numberinterval)
       - [Definition overview](#definition-overview-5)
+    - [`IDisposableEnumerable`](#idisposableenumerable)
+      - [Definition overview](#definition-overview-6)
+    - [`ILimitedEnumerable`](#ilimitedenumerable)
+      - [Definition overview](#definition-overview-7)
+    - [`CollectionOfDisposables`](#collectionofdisposables)
+      - [Definition overview](#definition-overview-8)
+      - [Use Case code sample](#use-case-code-sample-1)
+    - [`IGuidIdentity`](#iguididentity)
+      - [Definition overview](#definition-overview-9)
+    - [`IKeyValueStorage`](#ikeyvaluestorage)
+      - [Definition overview](#definition-overview-10)
+    - [`SortFilter`](#sortfilter)
+      - [Definition overview](#definition-overview-11)
+    - [`ISortFilter`](#isortfilter)
+      - [Definition overview](#definition-overview-12)
+    - [`SortFilterBase`](#sortfilterbase)
+      - [Definition overview](#definition-overview-13)
+    - [`PageFilter`](#pagefilter)
+      - [Definition overview](#definition-overview-14)
+    - [`IPageFilter`](#ipagefilter)
+      - [Definition overview](#definition-overview-15)
+    - [`Page`](#page)
+      - [Definition overview](#definition-overview-16)
+        - [Use Case code sample](#use-case-code-sample-2)
   - [Extensions](#extensions)
     - [AzureExtensions](#azureextensions)
       - [`DateTime.ToAzureTableStorageSafeMinDate`](#datetimetoazuretablestoragesafemindate)
       - [`DateTime.ToNetMinDateFromAzureTableStorageMinDate`](#datetimetonetmindatefromazuretablestoragemindate)
-        - [Use Case code sample](#use-case-code-sample-1)
+        - [Use Case code sample](#use-case-code-sample-3)
     - [CollectionExtensions](#collectionextensions)
       - [`item.In(collection)`](#itemincollection)
       - [`item.NotIn(collection)`](#itemnotincollection)
-        - [Use Case code sample](#use-case-code-sample-2)
-      - [`collection.Batch(int batchSize)`](#collectionbatchint-batchsize)
-        - [Use Case code sample](#use-case-code-sample-3)
-      - [`item.AsArray()`](#itemasarray)
         - [Use Case code sample](#use-case-code-sample-4)
-      - [`array.Jump(int numberOfElementsToJump)`](#arrayjumpint-numberofelementstojump)
+      - [`collection.Batch(int batchSize)`](#collectionbatchint-batchsize)
         - [Use Case code sample](#use-case-code-sample-5)
-      - [`keywords.TrimToValidKeywordsOnly(int minLength, int maxNumberOfKeywords)`](#keywordstrimtovalidkeywordsonlyint-minlength-int-maxnumberofkeywords)
+      - [`item.AsArray()`](#itemasarray)
         - [Use Case code sample](#use-case-code-sample-6)
+      - [`array.Jump(int numberOfElementsToJump)`](#arrayjumpint-numberofelementstojump)
+        - [Use Case code sample](#use-case-code-sample-7)
+      - [`keywords.TrimToValidKeywordsOnly(int minLength, int maxNumberOfKeywords)`](#keywordstrimtovalidkeywordsonlyint-minlength-int-maxnumberofkeywords)
+        - [Use Case code sample](#use-case-code-sample-8)
     - [DataExtensions](#dataextensions)
       - [`number.TrimToPercent()`](#numbertrimtopercent)
-        - [Use Case code sample](#use-case-code-sample-7)
+        - [Use Case code sample](#use-case-code-sample-9)
       - [`string.ParseToGuidOrFallbackTo()`](#stringparsetoguidorfallbackto)
       - [`string.ParseToIntOrFallbackTo()`](#stringparsetointorfallbackto)
-        - [Use Case code sample](#use-case-code-sample-8)
-      - [`DateTime.IsBetweenInclusive(from, to)`](#datetimeisbetweeninclusivefrom-to)
-        - [Use Case code sample](#use-case-code-sample-9)
-      - [`value.And(action)`](#valueandaction)
         - [Use Case code sample](#use-case-code-sample-10)
-      - [`type.IsSameOrSubclassOf(otherType)`](#typeissameorsubclassofothertype)
+      - [`DateTime.IsBetweenInclusive(from, to)`](#datetimeisbetweeninclusivefrom-to)
         - [Use Case code sample](#use-case-code-sample-11)
-      - [`dateTime.ToUnixTimestamp()`](#datetimetounixtimestamp)
+      - [`value.And(action)`](#valueandaction)
         - [Use Case code sample](#use-case-code-sample-12)
-      - [`long.UnixTimeStampToDateTime()`](#longunixtimestamptodatetime)
+      - [`type.IsSameOrSubclassOf(otherType)`](#typeissameorsubclassofothertype)
         - [Use Case code sample](#use-case-code-sample-13)
-      - [`dateTime.EnsureUtc()`](#datetimeensureutc)
+      - [`dateTime.ToUnixTimestamp()`](#datetimetounixtimestamp)
         - [Use Case code sample](#use-case-code-sample-14)
+      - [`long.UnixTimeStampToDateTime()`](#longunixtimestamptodatetime)
+        - [Use Case code sample](#use-case-code-sample-15)
+      - [`dateTime.EnsureUtc()`](#datetimeensureutc)
+        - [Use Case code sample](#use-case-code-sample-16)
+      - [`collection.AsDisposableEnumerable()`](#collectionasdisposableenumerable)
+        - [Use Case code sample](#use-case-code-sample-17)
     - [ExceptionExtensions](#exceptionextensions)
       - [`exception.Flatten()`](#exceptionflatten)
-        - [Use Case code sample](#use-case-code-sample-15)
+        - [Use Case code sample](#use-case-code-sample-18)
       - [`exceptions.ToNotes()`](#exceptionstonotes)
-        - [Use Case code sample](#use-case-code-sample-16)
+        - [Use Case code sample](#use-case-code-sample-19)
     - [FileSystemExtensions](#filesystemextensions)
       - [`string.ToSafeFileName()`](#stringtosafefilename)
-        - [Use Case code sample](#use-case-code-sample-17)
+        - [Use Case code sample](#use-case-code-sample-20)
     - [TaskExtensions](#taskextensions)
       - [`value.AsTask()`](#valueastask)
-        - [Use Case code sample](#use-case-code-sample-18)
+        - [Use Case code sample](#use-case-code-sample-21)
       - [`action.AsAsync()`](#actionasasync)
-        - [Use Case code sample](#use-case-code-sample-19)
+        - [Use Case code sample](#use-case-code-sample-22)
   - [Operations](#operations)
     - [`DataNormalizer`](#datanormalizer)
-      - [Definition overview](#definition-overview-6)
-      - [Use Case code sample](#use-case-code-sample-20)
+      - [Definition overview](#definition-overview-17)
+      - [Use Case code sample](#use-case-code-sample-23)
     - [`Debouncer`](#debouncer)
-      - [Definition overview](#definition-overview-7)
-      - [Use Case code sample](#use-case-code-sample-21)
+      - [Definition overview](#definition-overview-18)
+      - [Use Case code sample](#use-case-code-sample-24)
     - [`Throttler`](#throttler)
-      - [Definition overview](#definition-overview-8)
-      - [Use Case code sample](#use-case-code-sample-22)
+      - [Definition overview](#definition-overview-19)
+      - [Use Case code sample](#use-case-code-sample-25)
     - [ExecutionUtilities](#executionutilities)
       - [`TryAFewTimesOrFailWithGrace(action)`](#tryafewtimesorfailwithgraceaction)
       - [`action.TryOrFailWithGrace()`](#actiontryorfailwithgrace)
-        - [Use Case code sample](#use-case-code-sample-23)
+        - [Use Case code sample](#use-case-code-sample-26)
     - [`ScopedRunner`](#scopedrunner)
-      - [Definition overview](#definition-overview-9)
-      - [Use Case code sample](#use-case-code-sample-24)
+      - [Definition overview](#definition-overview-20)
+      - [Use Case code sample](#use-case-code-sample-27)
     - [`TimeMeasurement`](#timemeasurement)
-      - [Definition overview](#definition-overview-10)
-      - [Use Case code sample](#use-case-code-sample-25)
+      - [Definition overview](#definition-overview-21)
+      - [Use Case code sample](#use-case-code-sample-28)
   - [Discussions](#discussions)
 
 ---
@@ -220,6 +246,149 @@ struct NumberInterval
     double Min
     double Max
 }
+```
+---
+### `IDisposableEnumerable`
+Used for modelling various use cases when you need to iterate on stuff that are bound to specific context.
+Best example is iterating over a database stream, when you need to free the connection or any other type of unit of work created to access those external resources.
+#### Definition overview
+```csharp
+interface IDisposableEnumerable<T> : IEnumerable<T>, IDisposable
+```
+---
+### `ILimitedEnumerable`
+Used for modelling limited collections. For instance when doing pagination or virtual pagination on a huge data set.
+#### Definition overview
+```csharp
+interface ILimitedEnumerable<T> : IEnumerable<T>
+{
+  int Offset
+  int Length
+  int TotalNumberOfItems
+}
+```
+---
+### `CollectionOfDisposables`
+The naming is super clear. It's used for working with a collection of disposable objects so that you don't need to handle each one's disposal.
+For instance when aggregating something form multiple streams.
+#### Definition overview
+```csharp
+class CollectionOfDisposables<T> : IDisposableEnumerable<T> where T : IDisposable
+{
+  //Constructs
+  CollectionOfDisposables(params T[] disposables)
+  CollectionOfDisposables(IEnumerable<T> disposables)
+}
+```
+#### Use Case code sample
+```csharp
+using(var streams = new CollectionOfDisposables(File.OpenRead(@"C:\a.txt"), File.OpenRead(@"C:\b.txt")))
+{
+  //Process streams
+}
+```
+---
+### `IGuidIdentity`
+Models and object that's identified by a `Guid`. Usage is obvious.
+#### Definition overview
+```csharp
+interface IGuidIdentity
+{
+  Guid ID
+}
+```
+---
+### `IKeyValueStorage`
+Operation contract for a key-values storage resource. Use case is obvious.
+#### Definition overview
+```csharp
+interface IKeyValueStorage
+{
+  string StoreName { get; }
+  Task Set(string key, string value, TimeSpan? validFor = null);
+  Task Set(string key, string value, DateTime? validUntil = null);
+  Task<string> Get(string key);
+  Task Zap(string key);
+  Task Remove(string key);//Should be just an alias for Zap. Most devs are not used to the verb "zap"
+}
+```
+---
+### `SortFilter`
+Model used to define a sort criteria
+#### Definition overview
+```csharp
+class SortFilter
+{
+  string By
+  SortDirection Direction
+  enum SortDirection
+  {
+    Ascending = 0,
+    Descending = 1,
+  }
+}
+```
+---
+### `ISortFilter`
+Operation Contract for sorting
+#### Definition overview
+```csharp
+interface ISortFilter
+{
+  SortFilter[] SortFilters
+  OperationResult ValidateSortFilters();
+}
+```
+---
+### `SortFilterBase`
+An abstract implementation of `ISortFilter` to make the use of it easier. When using this class you just need to override the `ValidSortNames`.
+#### Definition overview
+```csharp
+abstract class SortFilterBase : ISortFilter
+{
+  protected abstract string[] ValidSortNames { get; }
+}
+```
+---
+### `PageFilter`
+Model for pagination criteria.
+#### Definition overview
+```csharp
+class PageFilter
+{
+  int PageIndex
+  int PageSize
+}
+```
+---
+### `IPageFilter`
+Operation contract for pagination
+#### Definition overview
+```csharp
+interface IPageFilter
+{
+  PageFilter PageFilter
+}
+```
+---
+### `Page`
+Model for a pagination operation result
+#### Definition overview
+```csharp
+class Page<T>
+{
+  T[] Content
+  int PageIndex
+  int PageSize
+  int? TotalNumberOfPages
+  static Page<T> Single(params T[] content)
+  static Page<T> Empty(int pageIndex = 0, int pageSize = 0, int totalNumberOfPages = 1)
+}
+```
+##### Use Case code sample
+```csharp
+class UserFilter : SortFilterBase, IPageFilter { [...] }
+Page<User> usersPage = await userResource.Browse(new UserFilter([...]));
 ```
 
 ---
@@ -368,6 +537,14 @@ Makes sure that a given time is UTC so that you don't get unexpected behavior fr
 ##### Use Case code sample
 ```csharp
 DateTime utcDate = DateTime.Now.EnsureUtc();
+```
+---
+#### `collection.AsDisposableEnumerable()`
+Converts an `IEnumerable<T>` into an `IDisposableEnumerable<T>`. This is just an in-memory wrapper over the enumeration, useful for in-memory mocks of certain resources. For real-world use-cases this shouldn't be used. The resource should always implement `IDisposableEnumerable<T>` itself
+##### Use Case code sample
+```csharp
+int[] numbers = new [] { 1, 2, 3 };
+IDisposableEnumerable<User> = numbers.AsDisposableEnumerable();
 ```
 
 

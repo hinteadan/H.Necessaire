@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace H.Necessaire
 {
@@ -80,6 +81,11 @@ namespace H.Necessaire
                 typeToCheck == typeToCompareWith
                 || typeToCompareWith.IsSubclassOf(typeToCheck)
                 ;
+        }
+
+        public static IDisposableEnumerable<T> AsDisposableEnumerable<T>(this IEnumerable<T> collection)
+        {
+            return new Operations.Concrete.DataStream<T>(collection);
         }
     }
 }
