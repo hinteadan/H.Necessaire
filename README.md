@@ -48,7 +48,7 @@ They are grouped in three main areas, each with its own set of functional areas:
       - [Definition overview](#definition-overview-15)
     - [`Page`](#page)
       - [Definition overview](#definition-overview-16)
-        - [Use Case code sample](#use-case-code-sample-2)
+      - [Use Case code sample](#use-case-code-sample-2)
   - [Extensions](#extensions)
     - [AzureExtensions](#azureextensions)
       - [`DateTime.ToAzureTableStorageSafeMinDate`](#datetimetoazuretablestoragesafemindate)
@@ -270,7 +270,7 @@ interface ILimitedEnumerable<T> : IEnumerable<T>
 ---
 ### `CollectionOfDisposables`
 The naming is super clear. It's used for working with a collection of disposable objects so that you don't need to handle each one's disposal.
-For instance when aggregating something form multiple streams.
+For instance when aggregating something from multiple streams.
 #### Definition overview
 ```csharp
 class CollectionOfDisposables<T> : IDisposableEnumerable<T> where T : IDisposable
@@ -385,7 +385,7 @@ class Page<T>
   static Page<T> Empty(int pageIndex = 0, int pageSize = 0, int totalNumberOfPages = 1)
 }
 ```
-##### Use Case code sample
+#### Use Case code sample
 ```csharp
 class UserFilter : SortFilterBase, IPageFilter { [...] }
 Page<User> usersPage = await userResource.Browse(new UserFilter([...]));
