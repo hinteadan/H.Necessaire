@@ -12,6 +12,11 @@ namespace H.Necessaire
             return (long)(t.TotalMilliseconds + 0.5);
         }
 
+        public static DateTime UnixTimeStampToDateTime(this long unixTimeStamp)
+        {
+            return UnixEpoch.AddSeconds(unixTimeStamp).ToLocalTime();
+        }
+
         public static DateTime EnsureUtc(this DateTime dateTime)
         {
             if (dateTime.Kind == DateTimeKind.Utc)

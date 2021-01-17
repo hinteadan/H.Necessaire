@@ -54,37 +54,45 @@ They are grouped in three main areas, each with its own set of functional areas:
         - [Use Case code sample](#use-case-code-sample-10)
       - [`type.IsSameOrSubclassOf(otherType)`](#typeissameorsubclassofothertype)
         - [Use Case code sample](#use-case-code-sample-11)
+      - [`dateTime.ToUnixTimestamp()`](#datetimetounixtimestamp)
+        - [Use Case code sample](#use-case-code-sample-12)
+      - [`long.UnixTimeStampToDateTime()`](#longunixtimestamptodatetime)
+        - [Use Case code sample](#use-case-code-sample-13)
+      - [`dateTime.EnsureUtc()`](#datetimeensureutc)
+        - [Use Case code sample](#use-case-code-sample-14)
     - [ExceptionExtensions](#exceptionextensions)
       - [`exception.Flatten()`](#exceptionflatten)
-        - [Use Case code sample](#use-case-code-sample-12)
+        - [Use Case code sample](#use-case-code-sample-15)
+      - [`exceptions.ToNotes()`](#exceptionstonotes)
+        - [Use Case code sample](#use-case-code-sample-16)
     - [FileSystemExtensions](#filesystemextensions)
       - [`string.ToSafeFileName()`](#stringtosafefilename)
-        - [Use Case code sample](#use-case-code-sample-13)
+        - [Use Case code sample](#use-case-code-sample-17)
     - [TaskExtensions](#taskextensions)
       - [`value.AsTask()`](#valueastask)
-        - [Use Case code sample](#use-case-code-sample-14)
+        - [Use Case code sample](#use-case-code-sample-18)
       - [`action.AsAsync()`](#actionasasync)
-        - [Use Case code sample](#use-case-code-sample-15)
+        - [Use Case code sample](#use-case-code-sample-19)
   - [Operations](#operations)
     - [`DataNormalizer`](#datanormalizer)
       - [Definition overview](#definition-overview-6)
-      - [Use Case code sample](#use-case-code-sample-16)
+      - [Use Case code sample](#use-case-code-sample-20)
     - [`Debouncer`](#debouncer)
       - [Definition overview](#definition-overview-7)
-      - [Use Case code sample](#use-case-code-sample-17)
+      - [Use Case code sample](#use-case-code-sample-21)
     - [`Throttler`](#throttler)
       - [Definition overview](#definition-overview-8)
-      - [Use Case code sample](#use-case-code-sample-18)
+      - [Use Case code sample](#use-case-code-sample-22)
     - [ExecutionUtilities](#executionutilities)
       - [`TryAFewTimesOrFailWithGrace(action)`](#tryafewtimesorfailwithgraceaction)
       - [`action.TryOrFailWithGrace()`](#actiontryorfailwithgrace)
-        - [Use Case code sample](#use-case-code-sample-19)
+        - [Use Case code sample](#use-case-code-sample-23)
     - [`ScopedRunner`](#scopedrunner)
       - [Definition overview](#definition-overview-9)
-      - [Use Case code sample](#use-case-code-sample-20)
+      - [Use Case code sample](#use-case-code-sample-24)
     - [`TimeMeasurement`](#timemeasurement)
       - [Definition overview](#definition-overview-10)
-      - [Use Case code sample](#use-case-code-sample-21)
+      - [Use Case code sample](#use-case-code-sample-25)
   - [Discussions](#discussions)
 
 ---
@@ -340,6 +348,27 @@ Used to check if a given type **is a derivate or same type** as the other.  Suga
 class Customer : User { }
 typeof(Customer).IsSameOrSubclassOf(typeof(User));//true
 ```
+---
+#### `dateTime.ToUnixTimestamp()`
+Get the UNIX timestamp of a dateTime. Useful for compatibility with external systems, legacy code, cross-platform integration, JS integration
+##### Use Case code sample
+```csharp
+var unixStamp = DateTime.Now.ToUnixTimestamp()
+```
+---
+#### `long.UnixTimeStampToDateTime()`
+Get the DateTime out of a UNIX timestamp. Useful for compatibility with external systems, legacy code, cross-platform integration, JS integration
+##### Use Case code sample
+```csharp
+DateTime dateTime = 21763457162.UnixTimeStampToDateTime()
+```
+---
+#### `dateTime.EnsureUtc()`
+Makes sure that a given time is UTC so that you don't get unexpected behavior from `DateTime.Kind.Unspecified` or when persisting or serializing date-times.
+##### Use Case code sample
+```csharp
+DateTime utcDate = DateTime.Now.EnsureUtc();
+```
 
 
 ---
@@ -352,6 +381,14 @@ Super useful for logging the actual errors when dealing with Tasks, RPCs, DB acc
 ```csharp
 Exception[] allExceptions = aggExOrExWithInnerExOrCombinationOfBoth.Flatten();
 ```
+---
+#### `exceptions.ToNotes()`
+Converts the given `exceptions` to `Note[]`. Useful for persistence.
+##### Use Case code sample
+```csharp
+Note[] exceptions = aggregateException.Flatten().ToNotes();
+```
+
 
 ---
 ### FileSystemExtensions
