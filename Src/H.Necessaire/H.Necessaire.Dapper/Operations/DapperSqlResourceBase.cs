@@ -91,7 +91,23 @@ namespace H.Necessaire.Dapper
         {
             using (DapperSqlContext dapper = NewDbContext(tableName))
             {
-                await dapper.DeleteEntityByID<TSqlEntity>(id);
+                await dapper.DeleteEntityByID<TSqlEntity>(id, tableName);
+            }
+        }
+
+        protected virtual async Task DeleteEntities<TSqlEntity>(Guid[] ids, string tableName = null)
+        {
+            using (DapperSqlContext dapper = NewDbContext(tableName))
+            {
+                await dapper.DeleteEntitiesByIDs<TSqlEntity>(ids, tableName);
+            }
+        }
+
+        protected virtual async Task DeleteEntitiesByCustomCriteria<TSqlEntity>(ISqlFilterCriteria[] sqlFilters, object sqlParams, string tableName = null)
+        {
+            using (DapperSqlContext dapper = NewDbContext(tableName))
+            {
+                await dapper.DeleteEntitiesByByCustomCriteria<TSqlEntity>(sqlFilters, sqlParams, tableName);
             }
         }
 

@@ -140,6 +140,19 @@ namespace H.Necessaire.Dapper.Operations.Concrete
             await dbConnection.ExecuteAsync(sql, new { id });
         }
 
+        public async Task DeleteEntitiesByIDs<TSqlEntity>(Guid[] ids, string tableName = null, string idColumnName = "ID")
+        {
+            string sql = $"DELETE FROM [{tableName ?? defaultTableName}] WHERE [{idColumnName}] IN @{nameof(ids)}";
+            await dbConnection.ExecuteAsync(sql, new { ids });
+        }
+
+        public async Task DeleteEntitiesByByCustomCriteria<TSqlEntity>(ISqlFilterCriteria[] sqlFilters, object sqlParams, string tableName)
+        {
+            string filterSql = string.Join(" AND ", sqlFilters.Select(x => x.ToString()));
+            string sql = $"DELETE FROM [{tableName ?? defaultTableName}] WHERE {filterSql}";
+            await dbConnection.ExecuteAsync(sql, sqlParams);
+        }
+
         private static string PrintSqlColumns(params string[] columnNames)
         {
             return
