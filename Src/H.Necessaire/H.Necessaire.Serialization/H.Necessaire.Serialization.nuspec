@@ -15,7 +15,7 @@
     <summary>An API for the Data Serialization</summary>
     <releaseNotes>Version zero</releaseNotes>
     <copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</copyright>
-    <tags>hintea dan alexandru serialization data json dal data access layer stream .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections batch task array</tags>
+    <tags>hintea dan alexandru serialization data json dal data access layer stream .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections task array</tags>
     <dependencies>
       <dependency id="H.Necessaire" version="[1,2)" />
       <dependency id="Newtonsoft.Json" version="[12,13)" />
