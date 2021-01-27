@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>H.Necessaire.Dapper</id>
-    <version>0.0.0-preview-3</version>
+    <version>0.0.0-preview-4</version>
     <title>H's Dapper Necessaire</title>
     <projectUrl>https://hinteadan.github.io/H.Necessaire</projectUrl>
     <repository type="git" url="https://github.com/hinteadan/H.Necessaire.git" branch="master" />
@@ -19,6 +19,7 @@
     <dependencies>
       <dependency id="H.Necessaire" version="1.0.5" />
       <dependency id="Dapper" version="2.0.78" />
+      <dependency id="System.Data.SqlClient" version="4.8.2" />
     </dependencies>
   </metadata>
   <files>
