@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Necessaire.Testicles.Unit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.BridgeDotNet", "H.Necessaire.BridgeDotNet\H.Necessaire.BridgeDotNet.csproj", "{72DE3916-3D84-4185-8F21-8510E2EB1A6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.Dapper", "H.Necessaire.Dapper\H.Necessaire.Dapper.csproj", "{24B70F05-E06B-4A6E-933A-C32BD8D1E786}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Necessaire.Dapper", "H.Necessaire.Dapper\H.Necessaire.Dapper.csproj", "{24B70F05-E06B-4A6E-933A-C32BD8D1E786}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.Serialization", "H.Necessaire.Serialization\H.Necessaire.Serialization.csproj", "{37DE258F-D052-45FC-9D7E-3FBCE9F81209}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Necessaire.Serialization", "H.Necessaire.Serialization\H.Necessaire.Serialization.csproj", "{37DE258F-D052-45FC-9D7E-3FBCE9F81209}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.Notification", "H.Necessaire.Notification\H.Necessaire.Notification.csproj", "{0E372EC8-0C4B-42DE-A474-FCB799DC0EF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{37DE258F-D052-45FC-9D7E-3FBCE9F81209}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37DE258F-D052-45FC-9D7E-3FBCE9F81209}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37DE258F-D052-45FC-9D7E-3FBCE9F81209}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E372EC8-0C4B-42DE-A474-FCB799DC0EF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E372EC8-0C4B-42DE-A474-FCB799DC0EF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E372EC8-0C4B-42DE-A474-FCB799DC0EF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E372EC8-0C4B-42DE-A474-FCB799DC0EF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

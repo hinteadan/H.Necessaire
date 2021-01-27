@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>H.Necessaire.Serialization</id>
-    <version>0.0.0-preview-3</version>
-    <title>H's Serialization Necessaire</title>
+    <id>H.Necessaire.Notification</id>
+    <version>0.0.0-preview-1</version>
+    <title>H's Notifications Necessaire</title>
     <projectUrl>https://hinteadan.github.io/H.Necessaire</projectUrl>
     <repository type="git" url="https://github.com/hinteadan/H.Necessaire.git" branch="master" />
     <authors>Hintea Dan Alexandru</authors>
@@ -11,11 +11,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <icon>images\IconLogo.png</icon>
-    <description>An API for the Data Serialization</description>
-    <summary>An API for the Data Serialization</summary>
-    <releaseNotes>Fix namespace</releaseNotes>
+    <description>Concrete Implementations for the H.Necessaire Notifications API</description>
+    <summary>Concrete implementations for notifications</summary>
+    <releaseNotes>Version zero</releaseNotes>
     <copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</copyright>
-    <tags>hintea dan alexandru serialization data json dal data access layer stream .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections task array</tags>
+    <tags>hintea dan alexandru notification http smtp email data json dal data access layer stream .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections task array</tags>
     <dependencies>
       <dependency id="H.Necessaire" version="1.1.1" />
       <dependency id="Newtonsoft.Json" version="12.0.3" />

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace H.Necessaire.Serialization.Extensions
+namespace H.Necessaire.Serialization
 {
     public static class SerializationExtensions
     {
