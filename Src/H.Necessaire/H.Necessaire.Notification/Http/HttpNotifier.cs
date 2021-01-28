@@ -9,10 +9,25 @@ namespace H.Necessaire.Notification
     {
         #region Construct
         readonly HttpClient http = new HttpClient();
+
+        public HttpNotifier(HttpNotifierConfiguration configuration)
+        {
+            if (configuration.RequestHeaders?.Any() ?? false)
+            {
+                foreach (IGrouping<string, Note> header in configuration.RequestHeaders.GroupBy(x => x.Id))
+                {
+                    http.DefaultRequestHeaders.Add(header.Key, header.Select(x => x.Value).ToArray());
+                }
+            }
+            http.Timeout = configuration.Timeout;
+        }
         #endregion
 
         public async Task<OperationResult> Send(NotificationMessage message, NotificationAddress from, params NotificationEndpoint[] to)
         {
+            if (!to?.Any() ?? true)
+                return OperationResult.Win("No destinations were specified");
+
             OperationResult result = OperationResult.Win();
 
             await
@@ -33,9 +48,6 @@ namespace H.Necessaire.Notification
 
         private async Task<OperationResult> DoHttpPost(StringContent httpBody, NotificationEndpoint[] to)
         {
-            if (!to?.Any() ?? true)
-                return OperationResult.Win().WithPayload(new HttpResponseMessage[0]);
-
             OperationResult[] results
                 = await
                     Task.WhenAll(

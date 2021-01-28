@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>H.Necessaire.Notification</id>
-    <version>0.0.0-preview-2</version>
+    <version>0.0.0-preview-3</version>
     <title>H's Notifications Necessaire</title>
     <projectUrl>https://hinteadan.github.io/H.Necessaire</projectUrl>
     <repository type="git" url="https://github.com/hinteadan/H.Necessaire.git" branch="master" />
@@ -13,7 +13,7 @@
     <icon>images\IconLogo.png</icon>
     <description>Concrete Implementations for the H.Necessaire Notifications API</description>
     <summary>Concrete implementations for notifications</summary>
-    <releaseNotes>Version zero</releaseNotes>
+    <releaseNotes>SMTP Notifier</releaseNotes>
     <copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</copyright>
     <tags>hintea dan alexandru notification http smtp email data json dal data access layer stream .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections task array</tags>
     <dependencies>
