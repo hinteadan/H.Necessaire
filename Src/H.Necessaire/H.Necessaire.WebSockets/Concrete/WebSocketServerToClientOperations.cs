@@ -9,11 +9,12 @@ namespace H.Necessaire.WebSockets.Concrete
     {
         #region Construct
         readonly Func<string, string> sessionIdViaUserIdRetriever;
-        readonly WebSocketSessionManager webSocketSessionManager;
-        public WebSocketServerToClientOperations(WebSocketSessionManager webSocketSessionManager, Func<string, string> sessionIdViaUserIdRetriever)
+        readonly Func<WebSocketSessionManager> webSocketSessionManagerRetriever;
+        WebSocketSessionManager webSocketSessionManager => webSocketSessionManagerRetriever?.Invoke();
+        public WebSocketServerToClientOperations(Func<WebSocketSessionManager> webSocketSessionManagerRetriever, Func<string, string> sessionIdViaUserIdRetriever)
         {
             this.sessionIdViaUserIdRetriever = sessionIdViaUserIdRetriever;
-            this.webSocketSessionManager = webSocketSessionManager;
+            this.webSocketSessionManagerRetriever = webSocketSessionManagerRetriever;
         }
         #endregion
 
@@ -23,10 +24,9 @@ namespace H.Necessaire.WebSockets.Concrete
 
             new Action(() =>
             {
-                webSocketSessionManager.BroadcastAsync(message.Encoding.GetBytes(message.Content), () =>
-                {
-                    taskCompletionSource.SetResult(OperationResult.Win());
-                });
+                webSocketSessionManager.Broadcast(message.Content);
+
+                taskCompletionSource.SetResult(OperationResult.Win());
             })
             .TryOrFailWithGrace(
                 onFail: ex => taskCompletionSource.SetResult(OperationResult.Fail(ex))
@@ -45,13 +45,20 @@ namespace H.Necessaire.WebSockets.Concrete
             await
                 new Func<Task>(async () =>
                 {
-                    await
-                        Task.WhenAll(
-                            to.Select(
-                                client => SendMessageToSingleClient(message, from, client)
-                            )
-                            .ToArray()
-                        );
+                    OperationResult[] results =
+                        await
+                            Task.WhenAll(
+                                to.Select(
+                                    client => SendMessageToSingleClient(message, from, client)
+                                )
+                                .ToArray()
+                            );
+
+                    bool isSuccess = results.All(x => x.IsSuccessful);
+                    string[] comments = results.SelectMany(x => x.FlattenReasons()).ToArray();
+                    string reason = (!comments?.Any() ?? true) ? null : "There were some errors while sending message to requested destinations. See comments for details.";
+
+                    result = isSuccess ? OperationResult.Win(reason, comments) : OperationResult.Fail(reason, comments);
 
                 })
                 .TryOrFailWithGrace(
@@ -67,10 +74,17 @@ namespace H.Necessaire.WebSockets.Concrete
 
             new Action(() =>
             {
-                webSocketSessionManager.SendToAsync(message.Encoding.GetBytes(message.Content), sessionIdViaUserIdRetriever(to.Address.Address), isSuccessful =>
+                string sessionId = sessionIdViaUserIdRetriever(to.Address.Address) ?? sessionIdViaUserIdRetriever(to.Address.Name);
+
+                if (sessionId == null)
                 {
-                    taskCompletionSource.SetResult(isSuccessful ? OperationResult.Win() : OperationResult.Fail($"Cannot reach client {to.Address.Address}"));
-                });
+                    taskCompletionSource.SetResult(OperationResult.Fail($"There's no client connection for the given destination {(to.Address.Address ?? to.Address.Name)}"));
+                    return;
+                }
+
+                webSocketSessionManager.SendTo(message.Content, sessionIdViaUserIdRetriever(to.Address.Address));
+
+                taskCompletionSource.SetResult(OperationResult.Win());
             })
             .TryOrFailWithGrace(
                 onFail: ex => taskCompletionSource.SetResult(OperationResult.Fail(ex))

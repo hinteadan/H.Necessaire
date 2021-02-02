@@ -13,7 +13,7 @@ namespace H.Necessaire.WebSockets.Concrete
         readonly ConcurrentDictionary<string, string> sessionPerUser = new ConcurrentDictionary<string, string>();
         public void Initialize(Action<IWebSocketServerToClientOperations> wireup)
         {
-            wireup(new WebSocketServerToClientOperations(Sessions, GetSessionIdByUserId));
+            wireup(new WebSocketServerToClientOperations(() => Sessions, GetSessionIdByUserId));
         }
 
         protected override void OnOpen()
