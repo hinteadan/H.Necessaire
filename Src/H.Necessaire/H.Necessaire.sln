@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Necessaire.Dapper", "H.Ne
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Necessaire.Serialization", "H.Necessaire.Serialization\H.Necessaire.Serialization.csproj", "{37DE258F-D052-45FC-9D7E-3FBCE9F81209}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.Notification", "H.Necessaire.Notification\H.Necessaire.Notification.csproj", "{0E372EC8-0C4B-42DE-A474-FCB799DC0EF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Necessaire.Notification", "H.Necessaire.Notification\H.Necessaire.Notification.csproj", "{0E372EC8-0C4B-42DE-A474-FCB799DC0EF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.WebSockets", "H.Necessaire.WebSockets\H.Necessaire.WebSockets.csproj", "{4C67C91D-61CF-4900-A5F7-8647F6E9444C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{0E372EC8-0C4B-42DE-A474-FCB799DC0EF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E372EC8-0C4B-42DE-A474-FCB799DC0EF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E372EC8-0C4B-42DE-A474-FCB799DC0EF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C67C91D-61CF-4900-A5F7-8647F6E9444C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C67C91D-61CF-4900-A5F7-8647F6E9444C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C67C91D-61CF-4900-A5F7-8647F6E9444C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C67C91D-61CF-4900-A5F7-8647F6E9444C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
