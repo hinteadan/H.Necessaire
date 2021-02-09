@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="H.Necessaire.Dapper" Version="0.0.0-preview-5" />
+    <PackageReference Include="H.Necessaire.Serialization" Version="0.0.0-preview-3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="IconLogo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
