@@ -20,6 +20,9 @@ namespace H.Necessaire.WebHooks
             if (payloadType == null)
                 return default(T).AsTask();
 
+            if (typeof(T) == typeof(object))
+                return ((T)payload).AsTask();
+
             if (!typeof(T).IsSameOrSubclassOf(payloadType))
                 return default(T).AsTask();
 
