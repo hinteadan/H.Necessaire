@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>H.Necessaire.WebHooks</id>
-    <version>0.0.0-dev-0</version>
+    <version>0.0.0-dev-1</version>
     <title>H's Web Hooks Necessaire</title>
     <projectUrl>https://hinteadan.github.io/H.Necessaire</projectUrl>
     <repository type="git" url="https://github.com/hinteadan/H.Necessaire.git" branch="master" />
@@ -13,7 +13,7 @@
     <icon>images\IconLogo.png</icon>
     <description>Web Hooks Server API</description>
     <summary>Web Hooks Server API</summary>
-    <releaseNotes>Web Hooks API version zero</releaseNotes>
+    <releaseNotes>Add webhook processing results</releaseNotes>
     <copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</copyright>
     <tags>hintea dan alexandru notification http web hooks</tags>
     <dependencies>
@@ -25,5 +25,6 @@
   <files>
     <file src="IconLogo.png" target="images\" />
     <file src="Create_WebHooksStore_Table.sql" target="SQLs\" />
+    <file src="Create_WebHooksProcessingResultsStore_Table.sql" target="SQLs\" />
   </files>
 </package>

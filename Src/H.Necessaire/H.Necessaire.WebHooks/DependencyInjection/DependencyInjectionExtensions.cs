@@ -15,6 +15,7 @@ namespace H.Necessaire.WebHooks
         {
             singletonRegistrarByFactory?.Invoke(typeof(IWebHookProcessor[]), webHookProcessorsFactory);
             singletonRegistrarByFactory?.Invoke(typeof(IWebHookRequestStorage), x => new SqlServerWebHookRequestStore(sqlConnectionStringProvider(x)));
+            singletonRegistrarByFactory?.Invoke(typeof(IWebHookProcessingResultStorage), x => new SqlServerWebHookProcessingResultStore(sqlConnectionStringProvider(x)));
             singletonRegistrarByInterfaceType?.Invoke(typeof(IWebHookService), typeof(DefaultWebHookService));
         }
     }

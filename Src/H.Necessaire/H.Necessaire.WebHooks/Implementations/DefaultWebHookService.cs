@@ -8,13 +8,16 @@ namespace H.Necessaire.WebHooks.Implementations
     {
         #region Construct
         readonly IWebHookRequestStorage webHookRequestStorage;
+        readonly IWebHookProcessingResultStorage webHookProcessingResultStorage;
         readonly IWebHookProcessor[] webHookProcessors = new IWebHookProcessor[0];
         public DefaultWebHookService(
             IWebHookRequestStorage webHookRequestStorage,
+            IWebHookProcessingResultStorage webHookProcessingResultStorage,
             IWebHookProcessor[] webHookProcessors
             )
         {
             this.webHookRequestStorage = webHookRequestStorage;
+            this.webHookProcessingResultStorage = webHookProcessingResultStorage;
             this.webHookProcessors = webHookProcessors ?? new IWebHookProcessor[0];
         }
         #endregion
@@ -24,7 +27,11 @@ namespace H.Necessaire.WebHooks.Implementations
             await webHookRequestStorage.Append(request);
 
             if (!webHookProcessors?.Any() ?? true)
-                return OperationResult.Win("There are no web hook processeros defined. The web hook request was simply audited.");
+            {
+                OperationResult x = OperationResult.Win("There are no web hook processors defined. The web hook request was simply audited.");
+                await webHookProcessingResultStorage.Append(BuildWebHookProcessingResult(request, x));
+                return x;
+            }
 
             OperationResult[] results = await Task.WhenAll(webHookProcessors.Select(x => RunProcessor(x, request)).ToArray());
 
@@ -33,11 +40,15 @@ namespace H.Necessaire.WebHooks.Implementations
             string mainReason = !reasons.Any() ? null : reasons.Length == 1 ? reasons.Single() : "There are multiple reasons. See comments for details.";
             string[] moreReasons = reasons.Length <= 1 ? null : reasons;
 
-            return
+            OperationResult result =
                 isSuccess
                 ? OperationResult.Win(mainReason, moreReasons)
                 : OperationResult.Fail(mainReason, moreReasons)
                 ;
+
+            await webHookProcessingResultStorage.Append(BuildWebHookProcessingResult(request, result));
+
+            return result;
 
         }
 
@@ -60,6 +71,18 @@ namespace H.Necessaire.WebHooks.Implementations
                 );
 
             return result;
+        }
+
+        WebHookProcessingResult BuildWebHookProcessingResult(IWebHookRequest request, OperationResult result)
+        {
+            return
+                new WebHookProcessingResult
+                {
+                    WebHookRequestID = request.ID,
+                    Comments = result.Comments,
+                    IsSuccessful = result.IsSuccessful,
+                    Reason = result.Reason,
+                };
         }
     }
 }
