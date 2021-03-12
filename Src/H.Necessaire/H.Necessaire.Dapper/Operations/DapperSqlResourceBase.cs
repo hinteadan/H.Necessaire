@@ -17,11 +17,11 @@ namespace H.Necessaire.Dapper
         }
         #endregion
 
-        protected virtual async Task<TSqlEntity> LoadEntityByID<TSqlEntity>(Guid id, string tableName = null) where TSqlEntity : ISqlEntry
+        protected virtual async Task<TSqlEntity> LoadEntityByID<TSqlEntity>(Guid id, string tableName = null, string idColumnName = "ID") where TSqlEntity : ISqlEntry
         {
             using (DapperSqlContext dapper = NewDbContext(tableName))
             {
-                return await dapper.LoadEntityByID<TSqlEntity>(id);
+                return await dapper.LoadEntityByID<TSqlEntity>(id, idColumnName);
             }
         }
 
@@ -41,11 +41,11 @@ namespace H.Necessaire.Dapper
             }
         }
 
-        protected virtual async Task<TSqlEntity[]> LoadEntitiesByIDs<TSqlEntity>(Guid[] ids, string tableName = null) where TSqlEntity : ISqlEntry
+        protected virtual async Task<TSqlEntity[]> LoadEntitiesByIDs<TSqlEntity>(Guid[] ids, string tableName = null, string idColumnName = "ID") where TSqlEntity : ISqlEntry
         {
             using (DapperSqlContext dapper = NewDbContext(tableName))
             {
-                return await dapper.LoadEntitiesByIDs<TSqlEntity>(ids, tableName);
+                return await dapper.LoadEntitiesByIDs<TSqlEntity>(ids, tableName, idColumnName);
             }
         }
 
@@ -79,27 +79,35 @@ namespace H.Necessaire.Dapper
             return new DapperStream<TResult>(dapper, (await dapper.StreamAllByCustomSql<TSqlEntity>(sql)).Select(projection));
         }
 
-        protected virtual async Task SaveEntity<TSqlEntity>(Guid id, TSqlEntity entity, string tableName = null) where TSqlEntity : ISqlEntry
+        protected virtual async Task InsertEntity<TSqlEntity>(TSqlEntity entity, string tableName = null) where TSqlEntity : ISqlEntry
         {
             using (DapperSqlContext dapper = NewDbContext(tableName))
             {
-                await dapper.UpsertEntityByID(id, entity);
+                await dapper.InsertEntity(entity);
             }
         }
 
-        protected virtual async Task DeleteEntity<TSqlEntity>(Guid id, string tableName = null) where TSqlEntity : ISqlEntry
+        protected virtual async Task SaveEntity<TSqlEntity>(Guid id, TSqlEntity entity, string tableName = null, string idColumnName = "ID") where TSqlEntity : ISqlEntry
         {
             using (DapperSqlContext dapper = NewDbContext(tableName))
             {
-                await dapper.DeleteEntityByID<TSqlEntity>(id, tableName);
+                await dapper.UpsertEntityByID(id, entity, idColumnName: idColumnName);
             }
         }
 
-        protected virtual async Task DeleteEntities<TSqlEntity>(Guid[] ids, string tableName = null)
+        protected virtual async Task DeleteEntity<TSqlEntity>(Guid id, string tableName = null, string idColumnName = "ID") where TSqlEntity : ISqlEntry
         {
             using (DapperSqlContext dapper = NewDbContext(tableName))
             {
-                await dapper.DeleteEntitiesByIDs<TSqlEntity>(ids, tableName);
+                await dapper.DeleteEntityByID<TSqlEntity>(id, tableName, idColumnName);
+            }
+        }
+
+        protected virtual async Task DeleteEntities<TSqlEntity>(Guid[] ids, string tableName = null, string idColumnName = "ID")
+        {
+            using (DapperSqlContext dapper = NewDbContext(tableName))
+            {
+                await dapper.DeleteEntitiesByIDs<TSqlEntity>(ids, tableName, idColumnName);
             }
         }
 
