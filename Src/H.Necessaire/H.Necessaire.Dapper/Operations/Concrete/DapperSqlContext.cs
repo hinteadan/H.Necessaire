@@ -116,7 +116,7 @@ namespace H.Necessaire.Dapper.Operations.Concrete
         {
             System.Reflection.PropertyInfo[] publicProperties = entity.GetType().GetProperties();
             string updateColumns = string.Join(",", publicProperties.Where(p => p.Name != idColumnName).Select(p => $"[{p.Name}]=@{p.Name}"));
-            string sql = $"UPDATE [{tableName ?? defaultTableName}] SET {updateColumns} WHERE [{idColumnName}] = @{nameof(id)}";
+            string sql = $"UPDATE [{tableName ?? defaultTableName}] SET {updateColumns} WHERE [{idColumnName}] = @{idColumnName}";
             await dbConnection.ExecuteAsync(sql, entity);
         }
 
