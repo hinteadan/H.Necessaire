@@ -112,21 +112,21 @@ namespace H.Necessaire.Dapper.Operations.Concrete
             await dbConnection.ExecuteAsync(sql, entity);
         }
 
-        public async Task UpdateEntityByID<TSqlEntity>(Guid id, TSqlEntity entity, string tableName = null, string idColumnName = "ID") where TSqlEntity : ISqlEntry
+        public async Task UpdateEntityByID<TSqlEntity>(TSqlEntity entity, string tableName = null, string idColumnName = "ID") where TSqlEntity : ISqlEntry
         {
             System.Reflection.PropertyInfo[] publicProperties = entity.GetType().GetProperties();
             string updateColumns = string.Join(",", publicProperties.Where(p => p.Name != idColumnName).Select(p => $"[{p.Name}]=@{p.Name}"));
-            string sql = $"UPDATE [{tableName ?? defaultTableName}] SET {updateColumns} WHERE [{idColumnName}] = @{nameof(id)}";
+            string sql = $"UPDATE [{tableName ?? defaultTableName}] SET {updateColumns} WHERE [{idColumnName}] = @{idColumnName}";
             await dbConnection.ExecuteAsync(sql, entity);
         }
 
-        public async Task UpsertEntityByID<TSqlEntity>(Guid id, TSqlEntity entity, string tableName = null, string idColumnName = "ID") where TSqlEntity : ISqlEntry
+        public async Task UpsertEntityByID<TSqlEntity>(TSqlEntity entity, string tableName = null, string idColumnName = "ID") where TSqlEntity : ISqlEntry
         {
-            bool entityExists = (await dbConnection.ExecuteScalarAsync<int>($"SELECT COUNT(*) FROM [{tableName ?? defaultTableName}]  WHERE [{idColumnName}] = @{nameof(id)}", new { id })) > 0;
+            bool entityExists = (await dbConnection.ExecuteScalarAsync<int>($"SELECT COUNT(*) FROM [{tableName ?? defaultTableName}]  WHERE [{idColumnName}] = @{idColumnName}", entity)) > 0;
 
             if (entityExists)
             {
-                await UpdateEntityByID(id, entity, tableName, idColumnName);
+                await UpdateEntityByID(entity, tableName, idColumnName);
             }
             else
             {

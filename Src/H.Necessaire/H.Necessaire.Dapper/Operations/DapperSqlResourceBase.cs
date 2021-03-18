@@ -87,11 +87,11 @@ namespace H.Necessaire.Dapper
             }
         }
 
-        protected virtual async Task SaveEntity<TSqlEntity>(Guid id, TSqlEntity entity, string tableName = null, string idColumnName = "ID") where TSqlEntity : ISqlEntry
+        protected virtual async Task SaveEntity<TSqlEntity>(TSqlEntity entity, string tableName = null, string idColumnName = "ID") where TSqlEntity : ISqlEntry
         {
             using (DapperSqlContext dapper = NewDbContext(tableName))
             {
-                await dapper.UpsertEntityByID(id, entity, idColumnName: idColumnName);
+                await dapper.UpsertEntityByID(entity, idColumnName: idColumnName);
             }
         }
 

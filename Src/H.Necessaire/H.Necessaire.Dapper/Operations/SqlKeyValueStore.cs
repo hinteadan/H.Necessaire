@@ -49,7 +49,7 @@ namespace H.Necessaire.Dapper
             entry.Value = value;
             entry.ExpiresAtTicks = validUntil?.Ticks;
 
-            await SaveEntity(entry.ID, entry);
+            await SaveEntity(entry);
         }
 
         public async Task Zap(string key)
