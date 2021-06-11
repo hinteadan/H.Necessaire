@@ -70,10 +70,8 @@ namespace H.Necessaire.WebSockets.Concrete
 
         private string GetSessionIdByUserId(string userId)
         {
-
             if (!sessionPerUser.ContainsKey(userId))
                 return null;
-
 
             if (!Sessions.TryGetSession(sessionPerUser[userId], out IWebSocketSession userSession))
                 return null;

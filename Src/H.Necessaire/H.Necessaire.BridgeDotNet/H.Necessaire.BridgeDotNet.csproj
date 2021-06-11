@@ -120,6 +120,9 @@
     <Compile Include="..\H.Necessaire\Models\OperationResultException.cs">
       <Link>Models\OperationResultException.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\OperationResultGeneric.cs">
+      <Link>Models\OperationResultGeneric.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Versioning\Version.cs">
       <Link>Models\Versioning\Version.cs</Link>
     </Compile>

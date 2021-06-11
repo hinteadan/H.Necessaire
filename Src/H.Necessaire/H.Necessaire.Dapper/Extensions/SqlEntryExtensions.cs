@@ -17,8 +17,7 @@ namespace H.Necessaire.Dapper
                 = sqlEntryType
                 .GetProperties()
                 .Select(p => p.Name)
-                .ToArray()
-                ;
+                .ToArray();
 
             knownColumnNamesPerType.AddOrUpdate(sqlEntryType, columnNames, (a, b) => columnNames);
 

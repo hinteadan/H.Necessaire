@@ -34,8 +34,7 @@ namespace H.Necessaire
             return
                 value < 0 ? 0
                 : value > 100 ? 100
-                : value
-                ;
+                : value;
         }
         public static float TrimToPercent(this int value) => TrimToPercent((float)value);
         public static float TrimToPercent(this decimal value) => TrimToPercent((float)value);
@@ -79,8 +78,7 @@ namespace H.Necessaire
         {
             return
                 typeToCheck == typeToCompareWith
-                || typeToCompareWith.IsSubclassOf(typeToCheck)
-                ;
+                || typeToCompareWith.IsSubclassOf(typeToCheck);
         }
 
         public static IDisposableEnumerable<T> AsDisposableEnumerable<T>(this IEnumerable<T> collection)

@@ -37,8 +37,7 @@ namespace H.Necessaire
             return
                 errors.Count() == 1
                 ? Fail(errors.Single())
-                : Fail("There are several issues with the current operation. Check the comments for details.", errors.ToArray())
-                ;
+                : Fail("There are several issues with the current operation. Check the comments for details.", errors.ToArray());
         }
 
         public OperationResult WithComment(string comment)
@@ -72,37 +71,7 @@ namespace H.Necessaire
                 .AsArray()
                 .Concat(Comments ?? new string[0])
                 .Where(x => !string.IsNullOrWhiteSpace(x))
-                .ToArray()
-                ;
-        }
-    }
-
-    public class OperationResult<T> : OperationResult
-    {
-        public T Payload { get; set; }
-
-        public OperationResult()
-        {
-
-        }
-
-        public OperationResult(OperationResult operationResult)
-        {
-            IsSuccessful = operationResult.IsSuccessful;
-            Reason = operationResult.Reason;
-            Comments = operationResult.Comments ?? new string[0];
-        }
-
-        public OperationResult(OperationResult operationResult, T payload) : this(operationResult)
-        {
-            Payload = payload;
-        }
-
-        public T ThrowOnFailOrReturn()
-        {
-            ThrowOnFail();
-
-            return Payload;
+                .ToArray();
         }
     }
 }

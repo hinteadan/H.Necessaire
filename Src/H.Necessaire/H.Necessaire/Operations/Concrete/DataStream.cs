@@ -12,10 +12,7 @@ namespace H.Necessaire.Operations.Concrete
             this.data = data;
         }
 
-        public void Dispose()
-        {
-
-        }
+        public void Dispose() { }
 
         public IEnumerator<T> GetEnumerator()
         {

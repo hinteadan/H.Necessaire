@@ -59,7 +59,6 @@ namespace H.Necessaire.WebSockets.Concrete
                     string reason = (!comments?.Any() ?? true) ? null : "There were some errors while sending message to requested destinations. See comments for details.";
 
                     result = isSuccess ? OperationResult.Win(reason, comments) : OperationResult.Fail(reason, comments);
-
                 })
                 .TryOrFailWithGrace(
                     onFail: ex => result = OperationResult.Fail(ex)

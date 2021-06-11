@@ -43,13 +43,11 @@ namespace H.Necessaire.WebHooks.Implementations
             OperationResult result =
                 isSuccess
                 ? OperationResult.Win(mainReason, moreReasons)
-                : OperationResult.Fail(mainReason, moreReasons)
-                ;
+                : OperationResult.Fail(mainReason, moreReasons);
 
             await webHookProcessingResultStorage.Append(BuildWebHookProcessingResult(request, result));
 
             return result;
-
         }
 
         async Task<OperationResult> RunProcessor(IWebHookProcessor webHookProcessor, IWebHookRequest request)

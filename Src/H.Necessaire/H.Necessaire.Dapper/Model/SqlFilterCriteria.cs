@@ -39,7 +39,6 @@
                         value = $" CONCAT('%',@{ParameterName},'%')";
                         break;
                 }
-
             }
 
             return $"[{ColumnName}] {Operator}{(string.IsNullOrWhiteSpace(ParameterName) ? string.Empty : value)}";

@@ -55,7 +55,6 @@ namespace H.Necessaire
 
                 await TryAFewTimesOrFailWithGrace(doThis, numberOfTimes, onFail, onRetry, (int)(millisecondsToSleepBetweenRetries * 1.3));
             }
-
         }
 
         public static async Task TryAFewTimesOrFailWithGrace(Func<Task> doThis, int numberOfTimes = 1, Func<Exception, Task> onFail = null, Func<Exception, Task> onRetry = null, int millisecondsToSleepBetweenRetries = 500)
@@ -82,7 +81,6 @@ namespace H.Necessaire
 
                 await TryAFewTimesOrFailWithGrace(doThis, numberOfTimes, onFail, onRetry, (int)(millisecondsToSleepBetweenRetries * 1.3));
             }
-
         }
 
         public static void TryOrFailWithGrace(this Action doThis, int numberOfTimes = 1, Action<Exception> onFail = null, Action<Exception> onRetry = null, int millisecondsToSleepBetweenRetries = 500)

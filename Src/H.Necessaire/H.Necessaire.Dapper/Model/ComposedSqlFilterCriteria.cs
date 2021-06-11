@@ -11,12 +11,10 @@ namespace H.Necessaire.Dapper
             Criterias = criterias?.Where(x => x != null).ToArray() ?? new ISqlFilterCriteria[0];
         }
 
-        public ComposedSqlFilterCriteria(params ISqlFilterCriteria[] criterias) : this(criterias, "OR")
-        {
-
-        }
+        public ComposedSqlFilterCriteria(params ISqlFilterCriteria[] criterias) : this(criterias, "OR") { }
 
         public string JoinOperator { get; } = "OR";
+
         public ISqlFilterCriteria[] Criterias { get; } = new ISqlFilterCriteria[0];
 
         public override string ToString()

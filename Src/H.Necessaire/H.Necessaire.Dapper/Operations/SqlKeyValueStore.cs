@@ -64,7 +64,6 @@ namespace H.Necessaire.Dapper
 
         public async Task Remove(string key) => await Zap(key);
 
-
         private async Task<KeyValueSqlEntry> LoadSqlEntry(string key)
         {
             return

@@ -27,38 +27,7 @@ namespace H.Necessaire.WebHooks.Implementations.SQLServer
 
         public async Task<Page<IWebHookRequest>> Browse(WebHookRequestFilter filter)
         {
-            List<ISqlFilterCriteria> sqlFilterCriterias = new List<ISqlFilterCriteria>();
-            DynamicParameters parameters = new DynamicParameters();
-
-            if (filter.IDs != null)
-            {
-                sqlFilterCriterias.Add(new SqlFilterCriteria(nameof(WebHookRequestLightSqlEntry.ID), nameof(filter.IDs), "IN"));
-                parameters.AddDynamicParams(new { filter.IDs });
-            }
-
-            if (filter.Sources != null)
-            {
-                sqlFilterCriterias.Add(new SqlFilterCriteria(nameof(WebHookRequestLightSqlEntry.Source), nameof(filter.Sources), "IN"));
-                parameters.AddDynamicParams(new { filter.Sources });
-            }
-
-            if (filter.HandlingHosts != null)
-            {
-                sqlFilterCriterias.Add(new SqlFilterCriteria(nameof(WebHookRequestLightSqlEntry.HandlingHost), nameof(filter.HandlingHosts), "IN"));
-                parameters.AddDynamicParams(new { filter.HandlingHosts });
-            }
-
-            if (filter.FromInclusive != null)
-            {
-                sqlFilterCriterias.Add(new SqlFilterCriteria(nameof(WebHookRequestLightSqlEntry.HappenedAt), nameof(filter.FromInclusive), ">="));
-                parameters.AddDynamicParams(new { filter.FromInclusive });
-            }
-
-            if (filter.ToInclusive != null)
-            {
-                sqlFilterCriterias.Add(new SqlFilterCriteria(nameof(WebHookRequestLightSqlEntry.HappenedAt), nameof(filter.ToInclusive), "<="));
-                parameters.AddDynamicParams(new { filter.ToInclusive });
-            }
+            List<ISqlFilterCriteria> sqlFilterCriterias = ConstructSqlFilterCriteria(filter, out DynamicParameters parameters);
 
             ILimitedEnumerable<WebHookRequestLightSqlEntry> sqlEntities =
                 await LoadEntitiesByCustomCriteria<WebHookRequestLightSqlEntry>(
@@ -100,8 +69,7 @@ namespace H.Necessaire.WebHooks.Implementations.SQLServer
                     Source = request.Source,
                     MetaJson = request.Meta.ToJsonArray(),
                     PayloadJson = (await request.GetPayload<object>()).ToJsonObject(),
-                }
-                ;
+                };
         }
 
         DeleagatedJsonPayloadWebHookRequest ProjectLightSqlEntry(WebHookRequestLightSqlEntry sqlEntry)
@@ -122,6 +90,44 @@ namespace H.Necessaire.WebHooks.Implementations.SQLServer
             return
                 (await LoadEntityByID<WebHookRequestFullSqlEntry>(webHookRequest.ID))
                 ?.PayloadJson;
+        }
+
+        static List<ISqlFilterCriteria> ConstructSqlFilterCriteria(WebHookRequestFilter filter, out DynamicParameters parameters)
+        {
+            List<ISqlFilterCriteria> sqlFilterCriterias = new List<ISqlFilterCriteria>();
+            parameters = new DynamicParameters();
+
+            if (filter.IDs != null)
+            {
+                sqlFilterCriterias.Add(new SqlFilterCriteria(nameof(WebHookRequestLightSqlEntry.ID), nameof(filter.IDs), "IN"));
+                parameters.AddDynamicParams(new { filter.IDs });
+            }
+
+            if (filter.Sources != null)
+            {
+                sqlFilterCriterias.Add(new SqlFilterCriteria(nameof(WebHookRequestLightSqlEntry.Source), nameof(filter.Sources), "IN"));
+                parameters.AddDynamicParams(new { filter.Sources });
+            }
+
+            if (filter.HandlingHosts != null)
+            {
+                sqlFilterCriterias.Add(new SqlFilterCriteria(nameof(WebHookRequestLightSqlEntry.HandlingHost), nameof(filter.HandlingHosts), "IN"));
+                parameters.AddDynamicParams(new { filter.HandlingHosts });
+            }
+
+            if (filter.FromInclusive != null)
+            {
+                sqlFilterCriterias.Add(new SqlFilterCriteria(nameof(WebHookRequestLightSqlEntry.HappenedAt), nameof(filter.FromInclusive), ">="));
+                parameters.AddDynamicParams(new { filter.FromInclusive });
+            }
+
+            if (filter.ToInclusive != null)
+            {
+                sqlFilterCriterias.Add(new SqlFilterCriteria(nameof(WebHookRequestLightSqlEntry.HappenedAt), nameof(filter.ToInclusive), "<="));
+                parameters.AddDynamicParams(new { filter.ToInclusive });
+            }
+
+            return sqlFilterCriterias;
         }
     }
 }

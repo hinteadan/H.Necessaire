@@ -17,10 +17,9 @@
                 ? 0
                 : value >= From.Max
                 ? 1
-                : (value - From.Min) / (From.Max - From.Min)
-                ;
+                : (value - From.Min) / (From.Max - From.Min);
 
-            double targetValue = locationPercent * (To.Max - To.Min) + To.Min;
+            double targetValue = (locationPercent * (To.Max - To.Min)) + To.Min;
 
             return targetValue;
         }

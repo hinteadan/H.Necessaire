@@ -10,7 +10,7 @@ namespace H.Necessaire.Notification
     {
         #region Construct
         readonly string smtpServer = "smtp.sendgrid.net";
-        readonly int smtpPort = 587;//TLS
+        readonly int smtpPort = 587;
         readonly string smtpUser = "apikey";
         readonly string smtpPass = "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";
         readonly TimeSpan smtpSendTimeout = TimeSpan.FromSeconds(30);
@@ -69,8 +69,7 @@ namespace H.Necessaire.Notification
                 .And(x => x.SubjectEncoding = message.Encoding)
                 .And(x => x.Body = message.Content)
                 .And(x => x.BodyEncoding = message.Encoding)
-                .And(x => x.IsBodyHtml = message.ContentType.In(NotificationMessageContentType.Html))
-                ;
+                .And(x => x.IsBodyHtml = message.ContentType.In(NotificationMessageContentType.Html));
         }
 
         private MailAddress Map(NotificationAddress notificationAddress)
@@ -78,8 +77,7 @@ namespace H.Necessaire.Notification
             return
                 string.IsNullOrWhiteSpace(notificationAddress.Name)
                 ? new MailAddress(notificationAddress.Address)
-                : new MailAddress(notificationAddress.Address, notificationAddress.Name)
-                ;
+                : new MailAddress(notificationAddress.Address, notificationAddress.Name);
         }
 
         private SmtpClient ConstructSmtpClient()

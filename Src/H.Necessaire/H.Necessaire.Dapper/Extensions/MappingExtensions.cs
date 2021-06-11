@@ -50,7 +50,6 @@ namespace H.Necessaire.Dapper
                 throw new InvalidOperationException($"No mapper exists for: {typeof(SqlEntityMapperBase<TEntity, TSqlEntity>)}");
 
             return (SqlEntityMapperBase<TEntity, TSqlEntity>)mappers[typeof(SqlEntityMapperBase<TEntity, TSqlEntity>)];
-
         }
     }
 }

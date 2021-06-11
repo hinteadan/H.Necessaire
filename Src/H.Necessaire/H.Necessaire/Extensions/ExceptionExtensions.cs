@@ -39,8 +39,7 @@ namespace H.Necessaire
             return
                 exceptions
                 .Select(ex => new Note(ex.HResult.ToString(), ex.ToString()))
-                .ToArray()
-                ;
+                .ToArray();
         }
     }
 }

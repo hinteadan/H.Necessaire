@@ -57,12 +57,10 @@ namespace H.Necessaire.Notification
             bool isSuccess = results.All(x => x.IsSuccessful);
             string[] reasons = results.SelectMany(x => x.FlattenReasons()).ToArray();
 
-
             return
                 isSuccess
                 ? OperationResult.Win(reason: null, reasons)
-                : OperationResult.Fail(reason: "See comments for failure details", reasons)
-                ;
+                : OperationResult.Fail(reason: "See comments for failure details", reasons);
         }
 
         private async Task<OperationResult> DoHttpPost(StringContent httpBody, NotificationEndpoint to)
@@ -82,15 +80,13 @@ namespace H.Necessaire.Notification
                             result
                                 = to.IsOptional
                                 ? OperationResult.Win($"{to.Address} is optional", reason, responseContent)
-                                : OperationResult.Fail(reason, responseContent)
-                                ;
+                                : OperationResult.Fail(reason, responseContent);
 
                             return;
                         }
                     }
 
                     result = OperationResult.Win();
-
                 })
                 .TryOrFailWithGrace(
                     numberOfTimes: 3,

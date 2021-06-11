@@ -37,7 +37,6 @@ namespace H.Necessaire.WebHooks.Implementations.SQLServer
                 .ToArray()
                 ??
                 new WebHookProcessingResult[0];
-
         }
 
         WebHookProcessingResultSqlEntry Map(WebHookProcessingResult processingResult)

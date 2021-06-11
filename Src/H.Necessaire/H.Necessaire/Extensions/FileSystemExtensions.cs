@@ -17,7 +17,6 @@
             if (maxLength == null || escapedValue.Length <= maxLength.Value)
                 return escapedValue;
 
-
             return escapedValue.Substring(0, maxLength.Value);
         }
     }
