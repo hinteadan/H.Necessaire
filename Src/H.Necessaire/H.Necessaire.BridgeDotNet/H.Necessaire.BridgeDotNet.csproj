@@ -60,6 +60,27 @@
     <Compile Include="..\H.Necessaire\Extensions\TaskExtensions.cs">
       <Link>Extensions\TaskExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\IoC\Concrete\DependencyRegistry.cs">
+      <Link>IoC\Concrete\DependencyRegistry.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\IoC\Concrete\InstanceFactory.cs">
+      <Link>IoC\Concrete\InstanceFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\IoC\ImADependency.cs">
+      <Link>IoC\ImADependency.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\IoC\ImADependencyGroup.cs">
+      <Link>IoC\ImADependencyGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\IoC\ImADependencyProvider.cs">
+      <Link>IoC\ImADependencyProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\IoC\ImADependencyRegistry.cs">
+      <Link>IoC\ImADependencyRegistry.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\IoC\IoC.cs">
+      <Link>IoC\IoC.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Collections\CollectionOfDisposables.cs">
       <Link>Models\Collections\CollectionOfDisposables.cs</Link>
     </Compile>
@@ -153,6 +174,7 @@
     <Compile Include="..\H.Necessaire\Operations\TimeMeasurement.cs">
       <Link>Operations\TimeMeasurement.cs</Link>
     </Compile>
+    <Compile Include="Models\ConcurrentDictionary.cs" />
     <Compile Include="Operations\ConcreteFactory.cs" />
     <Compile Include="Operations\Concrete\JsPeriodicAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
