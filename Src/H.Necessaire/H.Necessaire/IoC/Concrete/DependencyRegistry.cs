@@ -24,10 +24,6 @@ namespace H.Necessaire
         }
         public ImADependencyRegistry Register<T>(Func<object> factory) => Register(typeof(T), factory);
 
-
-
-
-
         public ImADependencyRegistry RegisterAlwaysNew(Type type, Func<object> factory)
         {
             if (typeof(ImADependencyGroup).IsAssignableFrom(type))
@@ -41,7 +37,6 @@ namespace H.Necessaire
         }
         public ImADependencyRegistry RegisterAlwaysNew<T>(Func<object> factory) => RegisterAlwaysNew(typeof(T), factory);
 
-
         public ImADependencyRegistry Unregister(Type type)
         {
             InstanceFactory removedFactory;
@@ -49,7 +44,6 @@ namespace H.Necessaire
             return this;
         }
         public ImADependencyRegistry Unregister<T>() => Unregister(typeof(T));
-
 
         public object Get(Type type)
         {

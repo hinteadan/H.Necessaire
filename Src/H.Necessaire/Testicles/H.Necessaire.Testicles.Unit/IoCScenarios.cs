@@ -42,7 +42,6 @@ namespace H.Necessaire.Testicles.Unit
             dependencyRegistry.Get(typeof(ComposedDependency)).Should().NotBeSameAs(dependencyRegistry.Get(typeof(ComposedDependency)), "The composed dependecy was registered as transient");
             (dependencyRegistry.Get(typeof(ComposedDependency)) as ComposedDependency).PureDependency.Should().NotBeNull();
             (dependencyRegistry.Get(typeof(ComposedDependency)) as ComposedDependency).PureDependency.Should().NotBeSameAs(dependencyRegistry.Get(typeof(PureDependency)), "The composed dependecy refers the pure dependency, registred as transient");
-
         }
 
         [Fact(DisplayName = "IoC API Can Correctly Register A Transient Dependency Via GenericType")]
