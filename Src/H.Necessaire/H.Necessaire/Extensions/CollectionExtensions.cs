@@ -91,6 +91,20 @@ namespace H.Necessaire
             return array;
         }
 
+        public static T[] Set<T>(this T[] array, Predicate<T> predicate, T item)
+        {
+            if (array == null)
+                array = new T[0];
+
+            int existingIndex = Array.FindIndex(array, predicate ?? (x => false));
+            if (existingIndex < 0)
+                array = array.Push(item);
+            else
+                array[existingIndex] = item;
+
+            return array;
+        }
+
         public static T[] Remove<T>(this T[] array, Predicate<T> predicate)
         {
             if (predicate == null || (!array?.Any() ?? true))
@@ -99,6 +113,18 @@ namespace H.Necessaire
             array = array.Where(x => !predicate(x)).ToArray();
 
             return array;
+        }
+
+        public static T Get<T>(this T[] array, Predicate<T> predicate, T defaultTo = default(T))
+        {
+            if (predicate == null || (!array?.Any() ?? true))
+                return defaultTo;
+
+            int existingIndex = Array.FindIndex(array, predicate);
+            if (existingIndex < 0)
+                return defaultTo;
+
+            return array[existingIndex];
         }
 
         public static string[] TrimToValidKeywordsOnly(this string[] keywords, int minLength = 3, int maxNumberOfKeywords = 3)
