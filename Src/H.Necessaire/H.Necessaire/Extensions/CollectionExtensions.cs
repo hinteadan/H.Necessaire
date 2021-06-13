@@ -81,6 +81,26 @@ namespace H.Necessaire
             return result;
         }
 
+        public static T[] Push<T>(this T[] array, T item)
+        {
+            if (array == null)
+                array = new T[0];
+
+            array = array.Concat(item.AsArray()).ToArray();
+
+            return array;
+        }
+
+        public static T[] Remove<T>(this T[] array, Predicate<T> predicate)
+        {
+            if (predicate == null || (!array?.Any() ?? true))
+                return array;
+
+            array = array.Where(x => !predicate(x)).ToArray();
+
+            return array;
+        }
+
         public static string[] TrimToValidKeywordsOnly(this string[] keywords, int minLength = 3, int maxNumberOfKeywords = 3)
         {
             if (keywords == null)
