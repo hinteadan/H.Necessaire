@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace H.Necessaire
 {
@@ -84,6 +87,17 @@ namespace H.Necessaire
         public static IDisposableEnumerable<T> AsDisposableEnumerable<T>(this IEnumerable<T> collection)
         {
             return new Operations.Concrete.DataStream<T>(collection);
+        }
+
+        public static async Task<string> ReadAsStringAsync(this Stream stream, bool isStreamLeftOpen = false, Encoding encoding = null, bool detectEncodingFromByteOrderMarks = false, int bufferSize = 1024)
+        {
+            if (stream == null)
+                return null;
+
+            using (StreamReader reader = new StreamReader(stream, encoding ?? Encoding.UTF8, detectEncodingFromByteOrderMarks, bufferSize, leaveOpen: isStreamLeftOpen))
+            {
+                return await reader.ReadToEndAsync();
+            }
         }
     }
 }

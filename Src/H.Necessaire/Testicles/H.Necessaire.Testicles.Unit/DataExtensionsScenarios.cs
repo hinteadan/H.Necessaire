@@ -1,8 +1,10 @@
 ﻿using FluentAssertions;
-using H.Necessaire;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace H.Necessaire.Testicles.Unit
@@ -51,6 +53,39 @@ namespace H.Necessaire.Testicles.Unit
             batches.ElementAt(0).Should().BeEquivalentTo(1, 2);
             batches.ElementAt(1).Should().BeEquivalentTo(3, 4);
             batches.ElementAt(2).Should().BeEquivalentTo(5);
+        }
+
+        [Fact(DisplayName = "Stream Read As String Correctly Converts A Stream To String")]
+        public async Task Stream_Read_As_String_Correctly_Converts_A_Stream_To_String()
+        {
+            string readValue = await (null as Stream).ReadAsStringAsync();
+            readValue.Should().BeNull("the stream is null");
+
+            readValue = await GenerateStream(null).ReadAsStringAsync();
+            readValue.Should().BeEmpty("we wrote null to the stream");
+
+            readValue = await GenerateStream(string.Empty).ReadAsStringAsync();
+            readValue.Should().BeEmpty("we wrote string.Empty to the stream");
+
+            readValue = await GenerateStream("test").ReadAsStringAsync();
+            readValue.Should().Be("test", "that what the stream contains");
+        }
+
+        private static Stream GenerateStream(string content)
+        {
+            Stream result = new MemoryStream();
+
+            if (string.IsNullOrEmpty(content))
+                return result;
+
+            using (StreamWriter writer = new StreamWriter(result, Encoding.UTF8, content.Length, true))
+            {
+                writer.Write(content);
+                writer.Flush();
+                result.Seek(0, SeekOrigin.Begin);
+            }
+
+            return result;
         }
     }
 }
