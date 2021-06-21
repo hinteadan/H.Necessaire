@@ -69,6 +69,9 @@
     <Compile Include="..\H.Necessaire\IoC\ImADependency.cs">
       <Link>IoC\ImADependency.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\IoC\ImADependencyBrowser.cs">
+      <Link>IoC\ImADependencyBrowser.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\IoC\ImADependencyGroup.cs">
       <Link>IoC\ImADependencyGroup.cs</Link>
     </Compile>

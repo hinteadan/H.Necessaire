@@ -2,7 +2,7 @@
 
 namespace H.Necessaire
 {
-    public interface ImADependencyRegistry : ImADependencyProvider
+    public interface ImADependencyRegistry : ImADependencyProvider, ImADependencyBrowser
     {
         ImADependencyRegistry Register<T>(Func<object> factory);
         ImADependencyRegistry Register(Type type, Func<object> factory);

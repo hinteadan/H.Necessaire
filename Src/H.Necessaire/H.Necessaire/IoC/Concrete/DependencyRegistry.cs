@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace H.Necessaire
 {
@@ -53,5 +55,21 @@ namespace H.Necessaire
             return dependencyDictionary[type].GetInstance();
         }
         public T Get<T>() => (T)Get(typeof(T));
+
+        public IEnumerable<KeyValuePair<Type, Func<object>>> GetAllOneTimeTypes()
+        {
+            return
+                dependencyDictionary
+                .Where(x => !x.Value.IsAlwaysNew)
+                .Select(x => new KeyValuePair<Type, Func<object>>(x.Key, x.Value.GetInstance));
+        }
+
+        public IEnumerable<KeyValuePair<Type, Func<object>>> GetAllAlwaysNewTypes()
+        {
+            return
+                dependencyDictionary
+                .Where(x => x.Value.IsAlwaysNew)
+                .Select(x => new KeyValuePair<Type, Func<object>>(x.Key, x.Value.GetInstance));
+        }
     }
 }

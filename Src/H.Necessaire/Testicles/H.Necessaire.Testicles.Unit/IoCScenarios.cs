@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using H.Necessaire.Testicles.Unit.Model.IoC;
+using System.Linq;
 using Xunit;
 
 namespace H.Necessaire.Testicles.Unit
@@ -96,6 +97,19 @@ namespace H.Necessaire.Testicles.Unit
             dependencyRegistry.RegisterAlwaysNew<ComposedDependency>(() => new ComposedDependency());
             dependencyRegistry.Unregister<ComposedDependency>();
             dependencyRegistry.Get(typeof(ComposedDependency)).Should().BeNull("The transient composed dependency was unregistered");
+        }
+
+        [Fact(DisplayName = "IoC API Can Correctly Browse Registered Dependencies")]
+        public void IoC_API_Can_Correctly_Browse_Registered_Dependencies()
+        {
+            dependencyRegistry.Register<PureDependency>(() => new PureDependency());
+            dependencyRegistry.RegisterAlwaysNew<ComposedDependency>(() => new ComposedDependency());
+
+            dependencyRegistry.GetAllOneTimeTypes().Should().HaveCount(1, "we registred one singleton");
+            dependencyRegistry.GetAllAlwaysNewTypes().Should().HaveCount(1, "we registred one transient");
+            dependencyRegistry.GetAllOneTimeTypes().Single().Value().Should().Be(dependencyRegistry.Get<PureDependency>(), "singletons always have the same instance");
+            dependencyRegistry.GetAllAlwaysNewTypes().Single().Value().Should().NotBeNull("calling the factory should resolve");
+            dependencyRegistry.GetAllAlwaysNewTypes().Single().Value().Should().NotBe(dependencyRegistry.Get<ComposedDependency>(), "transients always resolve to new instances");
         }
     }
 }

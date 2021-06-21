@@ -8,13 +8,14 @@ namespace H.Necessaire
         private readonly ImADependencyProvider dependencyProvider;
         private readonly Func<object> factory;
         private object instance;
-        readonly bool isAlwaysNew = false;
+
+        public bool IsAlwaysNew { get; } = false;
 
         public InstanceFactory(ImADependencyProvider dependencyProvider, Func<object> factory, bool isAlwaysNew = false)
         {
             this.dependencyProvider = dependencyProvider;
             this.factory = factory;
-            this.isAlwaysNew = isAlwaysNew;
+            this.IsAlwaysNew = isAlwaysNew;
         }
 
         public InstanceFactory(ImADependencyProvider dependencyProvider, object instance)
@@ -32,7 +33,7 @@ namespace H.Necessaire
 
         private void EnsureInstance()
         {
-            if (instance != null && !isAlwaysNew)
+            if (instance != null && !IsAlwaysNew)
                 return;
 
             instance = factory();
