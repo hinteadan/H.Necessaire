@@ -17,9 +17,9 @@
     <copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</copyright>
     <tags>hintea dan alexandru notification http web hooks</tags>
     <dependencies>
-      <dependency id="H.Necessaire" version="1.1.1" />
-      <dependency id="H.Necessaire.Serialization" version="0.0.0-preview-3" />
-      <dependency id="H.Necessaire.Dapper" version="0.0.0-preview-5" />
+      <dependency id="H.Necessaire" version="1.1.6" />
+      <dependency id="H.Necessaire.Serialization" version="1.0.0" />
+      <dependency id="H.Necessaire.Dapper" version="1.0.2" />
     </dependencies>
   </metadata>
   <files>
