@@ -25,17 +25,12 @@ namespace H.Necessaire.Serialization
 
         public static T JsonToObject<T>(this string jsonString, T defaultTo = default)
         {
-            if (string.IsNullOrWhiteSpace(jsonString))
-                return defaultTo;
+            return jsonString.ParseJsonToObject(defaultTo).Payload;
+        }
 
-            T result = defaultTo;
-
-            new Action(() => result = JsonConvert.DeserializeObject<T>(jsonString)).TryOrFailWithGrace(numberOfTimes: 1, onFail: x => result = defaultTo);
-
-            if (result == null)
-                result = defaultTo;
-
-            return result;
+        public static OperationResult<T> TryJsonToObject<T>(this string jsonString, T defaultTo = default)
+        {
+            return jsonString.ParseJsonToObject(defaultTo);
         }
 
         public static Note[] DeserializeToNotes(this string json)
@@ -50,6 +45,32 @@ namespace H.Necessaire.Serialization
                 new Action(() => result = Note.FromDictionary(JsonConvert.DeserializeObject<Dictionary<string, string>>(json))).TryOrFailWithGrace(numberOfTimes: 1, onFail: x => result = null);
 
             return result ?? new Note[0];
+        }
+
+        private static OperationResult<T> ParseJsonToObject<T>(this string jsonString, T defaultTo = default)
+        {
+            if (string.IsNullOrWhiteSpace(jsonString))
+            {
+                return OperationResult.Fail("The JSON string is empty").WithPayload(defaultTo);
+            }
+
+            OperationResult<T> result = OperationResult.Win().WithPayload(defaultTo);
+
+            new Action(
+                () =>
+                    result = OperationResult.Win().WithPayload(
+                        JsonConvert.DeserializeObject<T>(jsonString)
+                    )
+                )
+                .TryOrFailWithGrace(
+                    numberOfTimes: 1,
+                    onFail: x => result = OperationResult.Fail(x).WithPayload(defaultTo)
+                );
+
+            if (result == null)
+                result = OperationResult.Win().WithPayload(defaultTo);
+
+            return result;
         }
     }
 }
