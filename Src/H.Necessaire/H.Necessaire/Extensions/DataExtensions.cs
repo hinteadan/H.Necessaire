@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,6 +9,8 @@ namespace H.Necessaire
 {
     public static class DataExtensions
     {
+        const string defaultGlobalReasonForMultipleFailedOperations = "There are multiple failure reasons; see comments for details.";
+
         public static DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
         public static long ToUnixTimestamp(this DateTime date)
@@ -98,6 +101,25 @@ namespace H.Necessaire
             {
                 return await reader.ReadToEndAsync();
             }
+        }
+
+        public static OperationResult Merge(this IEnumerable<OperationResult> operationResults, string globalReasonIfNecesarry = defaultGlobalReasonForMultipleFailedOperations)
+        {
+            if (!operationResults?.Any() ?? true)
+                return OperationResult.Win();
+
+            if (operationResults.All(x => x.IsSuccessful))
+                return OperationResult.Win();
+
+            OperationResult[] failedRules = operationResults.Where(x => !x.IsSuccessful).ToArray();
+
+            if (failedRules.Length == 1)
+                return OperationResult.Fail(failedRules.Single().Reason);
+
+            return OperationResult.Fail(
+                reason: string.IsNullOrWhiteSpace(globalReasonIfNecesarry) ? defaultGlobalReasonForMultipleFailedOperations : globalReasonIfNecesarry,
+                comments: failedRules.SelectMany(x => x.FlattenReasons()).ToArray()
+                );
         }
     }
 }

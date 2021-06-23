@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>H.Necessaire.BridgeDotNet</id>
-    <version>1.1.6</version>
+    <version>1.1.7</version>
     <title>H's Necessaire of various data and operation extensions for Bridge.NET</title>
     <projectUrl>https://hinteadan.github.io/H.Necessaire</projectUrl>
     <authors>Hintea Dan Alexandru</authors>
@@ -12,7 +12,7 @@
     <iconUrl>https://raw.githubusercontent.com/hinteadan/H.Necessaire/master/Branding/IconLogo.png</iconUrl>
     <description>A collection of useful data and execution extensions for Bridge.NET</description>
     <summary>Various data and operation extensions for Bridge.NET</summary>
-    <releaseNotes>Added IoC browser</releaseNotes>
+    <releaseNotes>Added OperationResult Merge</releaseNotes>
     <copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</copyright>
     <tags>hintea dan alexandru .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections batch task array bridge bridge.net bridgedotnet</tags>
   </metadata>
