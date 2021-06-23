@@ -26,7 +26,7 @@ namespace H.Necessaire
 
             string mainReason = !string.IsNullOrWhiteSpace(reason) ? reason : all.First().Message;
 
-            return OperationResult.Fail(mainReason, all.Skip(!string.IsNullOrWhiteSpace(reason) ? 1 : 0).Select(x => x.Message).ToArray());
+            return OperationResult.Fail(mainReason, all.Skip(!string.IsNullOrWhiteSpace(reason) ? 0 : 1).Select(x => x.Message).ToArray());
         }
 
         public static OperationResult Fail(IEnumerable<string> errors)

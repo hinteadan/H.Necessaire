@@ -17,7 +17,7 @@
     <copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</copyright>
     <tags>hintea dan alexandru dapper data access layer dal sql .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections task array</tags>
     <dependencies>
-      <dependency id="H.Necessaire" version="1.1.7" />
+      <dependency id="H.Necessaire" version="1.1.8" />
       <dependency id="Dapper" version="2.0.90" />
       <dependency id="System.Data.SqlClient" version="4.8.2" />
     </dependencies>
