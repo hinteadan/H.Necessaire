@@ -22,7 +22,7 @@ namespace H.Necessaire.WebHooks.Implementations.SQLServer
         {
             WebHookRequestFullSqlEntry sqlEntry = await Map(request);
 
-            await SaveEntity(sqlEntry.ID, sqlEntry);
+            await SaveEntity(sqlEntry);
         }
 
         public async Task<Page<IWebHookRequest>> Browse(WebHookRequestFilter filter)

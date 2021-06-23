@@ -20,7 +20,7 @@ namespace H.Necessaire.WebHooks.Implementations.SQLServer
         public async Task Append(WebHookProcessingResult processingResult)
         {
             await
-                SaveEntity(processingResult.ID, Map(processingResult));
+                SaveEntity(Map(processingResult));
         }
 
         public async Task<WebHookProcessingResult[]> GetAllResultsForRequest(Guid webHookRequestID)

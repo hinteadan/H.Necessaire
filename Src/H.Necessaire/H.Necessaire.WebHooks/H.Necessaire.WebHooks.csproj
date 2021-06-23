@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="H.Necessaire.Dapper" Version="0.0.0-preview-5" />
-    <PackageReference Include="H.Necessaire.Serialization" Version="0.0.0-preview-3" />
+    <PackageReference Include="H.Necessaire.Dapper" Version="1.0.3" />
+    <PackageReference Include="H.Necessaire.Serialization" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
