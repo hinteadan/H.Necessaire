@@ -18,6 +18,14 @@
             Payload = payload;
         }
 
+        public new void ThrowOnFail()
+        {
+            if (IsSuccessful)
+                return;
+
+            throw new OperationResultException<T>(this);
+        }
+
         public T ThrowOnFailOrReturn()
         {
             ThrowOnFail();
