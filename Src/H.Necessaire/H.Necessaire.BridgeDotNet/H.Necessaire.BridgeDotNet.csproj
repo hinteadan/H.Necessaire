@@ -117,6 +117,9 @@
     <Compile Include="..\H.Necessaire\Models\IKeyValueStorage.cs">
       <Link>Models\IKeyValueStorage.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\MultiType.cs">
+      <Link>Models\MultiType.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Note.cs">
       <Link>Models\Note.cs</Link>
     </Compile>
