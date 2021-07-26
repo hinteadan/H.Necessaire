@@ -153,6 +153,36 @@
     <Compile Include="..\H.Necessaire\Models\OperationResultGeneric.cs">
       <Link>Models\OperationResultGeneric.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\AuthInfo.cs">
+      <Link>Models\Security\AuthInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\IDentity.cs">
+      <Link>Models\Security\IDentity.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\IDentityBase.cs">
+      <Link>Models\Security\IDentityBase.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\Permission.cs">
+      <Link>Models\Security\Permission.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\PermissionClaim.cs">
+      <Link>Models\Security\PermissionClaim.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\PermissionLevel.cs">
+      <Link>Models\Security\PermissionLevel.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\Role.cs">
+      <Link>Models\Security\Role.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\SecurityContext.cs">
+      <Link>Models\Security\SecurityContext.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\UserInfo.cs">
+      <Link>Models\Security\UserInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\WellKnownAccessTokenType.cs">
+      <Link>Models\Security\WellKnownAccessTokenType.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Versioning\Version.cs">
       <Link>Models\Versioning\Version.cs</Link>
     </Compile>
