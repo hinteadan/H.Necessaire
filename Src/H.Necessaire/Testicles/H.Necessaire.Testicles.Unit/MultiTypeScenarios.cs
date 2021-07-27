@@ -29,7 +29,6 @@ namespace H.Necessaire.Testicles.Unit
             composedMultitype.ToObject().Should().Be(TimeSpan.FromMilliseconds(10));
             composedMultitype.Read(readSecondType: x => x.Read(readSecondType: y => y.Should().Be(TimeSpan.FromMilliseconds(10))));
 
-
             composedMultitype = 17;
 
             composedMultitype.ToObject().Should().Be(17);

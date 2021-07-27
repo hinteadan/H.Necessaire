@@ -17,7 +17,7 @@ namespace H.Necessaire.Runtime.Security.Engines.Concrete
         ImAUserInfoStorageResource userInfoStorageResource;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
-            secureHasher = dependencyProvider.Get<SecureHasher>();
+            secureHasher = dependencyProvider.Get<ImAHasherEngine>();
             userAuthInfoStorageResource = dependencyProvider.Get<ImAUserAuthInfoStorageResource>();
             userInfoStorageResource = dependencyProvider.Get<ImAUserInfoStorageResource>();
         }

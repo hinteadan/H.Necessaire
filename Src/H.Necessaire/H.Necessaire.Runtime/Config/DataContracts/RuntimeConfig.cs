@@ -10,8 +10,7 @@ namespace H.Necessaire.Runtime.Config.DataContracts
             {
                 return
                     Values
-                    ?.FirstOrDefault(x => string.Equals(x?.Id, id, System.StringComparison.InvariantCultureIgnoreCase))
-                    ;
+                    ?.FirstOrDefault(x => string.Equals(x?.Id, id, System.StringComparison.InvariantCultureIgnoreCase));
             }
         }
 

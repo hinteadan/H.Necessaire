@@ -36,9 +36,7 @@ namespace H.Necessaire.Runtime
             UseCaseContext useCaseContext = await GetCurrentContext();
 
             OperationResult<UseCaseContext> result =
-
                 useCaseContext?.SecurityContext == null
-
                 ? OperationResult
                 .Fail(noAuthReason)
                 .WithPayload(
@@ -49,10 +47,7 @@ namespace H.Necessaire.Runtime
                         ReasonPhrase = noAuthReason,
                     })
                 )
-
-                : OperationResult.Win().WithPayload(useCaseContext)
-
-                ;
+                : OperationResult.Win().WithPayload(useCaseContext);
 
             return result.And(x => x.ThrowOnFail());
         }

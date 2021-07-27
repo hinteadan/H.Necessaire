@@ -14,8 +14,7 @@ namespace H.Necessaire.Runtime.Config.DataContracts
                 return
                     (Value.ToObject() as ConfigNode[])
                     ?.FirstOrDefault(x => string.Equals(x?.Id, id, System.StringComparison.InvariantCultureIgnoreCase))
-                    ?.Value
-                    ;
+                    ?.Value;
             }
         }
 

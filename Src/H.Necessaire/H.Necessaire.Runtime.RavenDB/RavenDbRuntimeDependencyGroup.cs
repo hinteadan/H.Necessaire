@@ -17,9 +17,7 @@ namespace H.Necessaire.Runtime.RavenDB
                   ParseClientCertificateStreamFrom(runtimeConfig),
                   ParseDatabaseUrlsFrom(runtimeConfig)
             )
-        {
-
-        }
+        { }
 
         static Func<Stream> ParseClientCertificateStreamFrom(RuntimeConfig runtimeConfig)
         {
@@ -33,7 +31,6 @@ namespace H.Necessaire.Runtime.RavenDB
                 ravenConfig[RavenDbRuntimeConfigKey.RavenDbClientCertificateAssemblyTypeName].Read(x => certificateAssembly = Assembly.GetAssembly(Type.GetType(x)));
                 ravenConfig[RavenDbRuntimeConfigKey.RavenDbClientCertificateManifestResourceStreamName].Read(x => certificateManifestResourceStreamName = x);
             }).TryOrFailWithGrace(onFail: ex => configException = ex);
-
 
             if (certificateAssembly == null)
                 throw new InvalidOperationException("The RavenDB Configuration is invalid. Client Certificate assembly cannot be found.", configException);

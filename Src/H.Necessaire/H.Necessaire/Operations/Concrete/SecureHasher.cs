@@ -104,8 +104,7 @@ namespace H.Necessaire
         {
             return
                 !string.IsNullOrWhiteSpace(hash?.Hash)
-                && (hash?.Key?.StartsWith(currentVersion) ?? false)
-                ;
+                && (hash?.Key?.StartsWith(currentVersion) ?? false);
         }
     }
 }

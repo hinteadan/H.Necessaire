@@ -8,7 +8,6 @@
             dependencyRegistry.RegisterAlwaysNew<ImAPingUseCase>(() => new PingUseCase());
             dependencyRegistry.RegisterAlwaysNew<ImASecurityUseCase>(() => new SecurityUseCase());
 
-
             dependencyRegistry.Register<Validation.DependencyGroup>(() => new Validation.DependencyGroup());
             dependencyRegistry.Register<Security.DependencyGroup>(() => new Security.DependencyGroup());
         }

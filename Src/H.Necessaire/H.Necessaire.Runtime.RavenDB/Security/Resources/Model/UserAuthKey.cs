@@ -6,6 +6,5 @@ namespace H.Necessaire.Runtime.RavenDB.Security.Resources.Model
     {
         public Guid ID { get; set; } = Guid.NewGuid();
         public string Key { get; set; }
-
     }
 }

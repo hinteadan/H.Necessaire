@@ -57,8 +57,7 @@ namespace H.Necessaire.Runtime.RavenDB.Security.Resources
 
             UserCredentials userCredentials
                 = (await Search(new UserCredentialsFilter { UserInfoIDs = new[] { userInfo.ID } }))?.SingleOrDefault()
-                ?? new UserCredentials { UserInfo = userInfo.ID }
-                ;
+                ?? new UserCredentials { UserInfo = userInfo.ID };
 
             userCredentials.Password = password;
 
@@ -70,8 +69,7 @@ namespace H.Necessaire.Runtime.RavenDB.Security.Resources
             return
                 (await Search(new UserCredentialsFilter { UserInfoIDs = new[] { userID } }))
                 ?.SingleOrDefault()
-                ?.Password
-                ;
+                ?.Password;
         }
     }
 }

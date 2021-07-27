@@ -9,8 +9,6 @@ namespace H.Necessaire
         public AuthInfo Auth { get; set; }
         public Role[] Roles { get; set; } = new Role[0];
 
-
-
         public Permission[] EffectivePermissions => FlattenPermissions();
 
         public bool HasPermission(Guid id, PermissionLevel permissionLevel = PermissionLevel.Locked)
@@ -37,8 +35,7 @@ namespace H.Necessaire
             return
                 permissionClaims
                 .Where(x => x != null)
-                .All(HasPermissionClaim)
-                ;
+                .All(HasPermissionClaim);
         }
 
         private bool HasPermissionClaim(PermissionClaim permissionClaim)
@@ -65,8 +62,7 @@ namespace H.Necessaire
                 .SelectMany(x => x.Permissions ?? new Permission[0])
                 .GroupBy(x => x.ID)
                 .Select(x => x.OrderByDescending(p => p.Level).First())
-                .ToArray()
-                ;
+                .ToArray();
         }
     }
 }
