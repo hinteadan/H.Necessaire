@@ -22,7 +22,7 @@ namespace H.Necessaire
             new
                 Action(() =>
                 {
-                    string[] parts = securedHash.Split(new string[] { concatenator }, count: 2, StringSplitOptions.RemoveEmptyEntries);
+                    string[] parts = securedHash.Split(new string[] { concatenator }, 2, StringSplitOptions.RemoveEmptyEntries);
 
                     if (parts.Length == 1)
                     {
