@@ -174,6 +174,9 @@
     <Compile Include="..\H.Necessaire\Models\Security\Role.cs">
       <Link>Models\Security\Role.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\SecuredHash.cs">
+      <Link>Models\Security\SecuredHash.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Security\SecurityContext.cs">
       <Link>Models\Security\SecurityContext.cs</Link>
     </Compile>
@@ -200,6 +203,9 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\ExecutionUtilities.cs">
       <Link>Operations\ExecutionUtilities.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\ImAHasherEngine.cs">
+      <Link>Operations\ImAHasherEngine.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\ImAPeriodicAction.cs">
       <Link>Operations\ImAPeriodicAction.cs</Link>
