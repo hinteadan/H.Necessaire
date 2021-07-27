@@ -5,9 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="H.Necessaire" Version="1.3.0" />
-    <PackageReference Include="H.Necessaire.Serialization" Version="1.0.6" />
     <PackageReference Include="RavenDB.Client" Version="5.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\H.Necessaire.Serialization\H.Necessaire.Serialization.csproj" />
+    <ProjectReference Include="..\H.Necessaire\H.Necessaire.csproj" />
   </ItemGroup>
 
   <ItemGroup>

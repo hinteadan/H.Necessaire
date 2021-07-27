@@ -5,11 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.90" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <None Include="..\..\..\LICENSE" Link="LICENSE">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\H.Necessaire.RavenDB\H.Necessaire.RavenDB.csproj" />
+    <ProjectReference Include="..\H.Necessaire.Runtime\H.Necessaire.Runtime.csproj" />
     <ProjectReference Include="..\H.Necessaire\H.Necessaire.csproj" />
   </ItemGroup>
 

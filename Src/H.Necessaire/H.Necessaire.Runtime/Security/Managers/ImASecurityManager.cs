@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace H.Necessaire.Runtime
+namespace H.Necessaire.Runtime.Security.Managers
 {
     public interface ImASecurityManager
     {
