@@ -35,7 +35,7 @@ namespace H.Necessaire.Runtime.RavenDB.Security.Resources
             query = query.Where(x => x.ID != Guid.Empty);
 
             if (filter.IDs?.Any() ?? false)
-                query = query.Intersect().Where(x => x.ID.In(filter.IDs));
+                query = query.Intersect().Where(x => RavenQueryableExtensions.In(x.ID, filter.IDs));
 
             string[] validPasswordHashVersions = filter.PasswordHashVersions?.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
             if (validPasswordHashVersions?.Any() ?? false)
@@ -44,7 +44,7 @@ namespace H.Necessaire.Runtime.RavenDB.Security.Resources
             }
 
             if (filter.UserInfoIDs?.Any() ?? false)
-                query = query.Intersect().Where(x => x.UserInfo.In(filter.UserInfoIDs));
+                query = query.Intersect().Where(x => RavenQueryableExtensions.In(x.UserInfo, filter.UserInfoIDs));
 
             return query;
         }

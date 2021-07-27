@@ -35,11 +35,11 @@ namespace H.Necessaire.Runtime.RavenDB.Security.Resources
             query = query.Where(x => x.ID != Guid.Empty);
 
             if (filter.IDs?.Any() ?? false)
-                query = query.Intersect().Where(x => x.ID.In(filter.IDs));
+                query = query.Intersect().Where(x => RavenQueryableExtensions.In(x.ID, filter.IDs));
 
             string[] validUsernames = filter.Usernames?.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
             if (validUsernames?.Any() ?? false)
-                query = query.Intersect().Where(x => x.Username.In(validUsernames), exact: false);
+                query = query.Intersect().Where(x => RavenQueryableExtensions.In(x.Username, validUsernames), exact: false);
 
             return query;
         }
