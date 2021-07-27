@@ -19,7 +19,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Necessaire.Notification",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Necessaire.WebSockets", "H.Necessaire.WebSockets\H.Necessaire.WebSockets.csproj", "{4C67C91D-61CF-4900-A5F7-8647F6E9444C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.WebHooks", "H.Necessaire.WebHooks\H.Necessaire.WebHooks.csproj", "{ED6F922C-EB7C-46D1-AD77-59DC05105492}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Necessaire.WebHooks", "H.Necessaire.WebHooks\H.Necessaire.WebHooks.csproj", "{ED6F922C-EB7C-46D1-AD77-59DC05105492}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RAD", "RAD", "{382E206E-21B0-4973-B5C8-0B1705BE3A09}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Necessaire.Runtime", "H.Necessaire.Runtime\H.Necessaire.Runtime.csproj", "{DB007042-3C65-42C5-9106-75A8219A4B22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.RavenDB", "H.Necessaire.RavenDB\H.Necessaire.RavenDB.csproj", "{07B9EDAD-B1DE-44A2-AFEC-275FABF9F052}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,12 +65,21 @@ Global
 		{ED6F922C-EB7C-46D1-AD77-59DC05105492}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED6F922C-EB7C-46D1-AD77-59DC05105492}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED6F922C-EB7C-46D1-AD77-59DC05105492}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB007042-3C65-42C5-9106-75A8219A4B22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB007042-3C65-42C5-9106-75A8219A4B22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB007042-3C65-42C5-9106-75A8219A4B22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB007042-3C65-42C5-9106-75A8219A4B22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07B9EDAD-B1DE-44A2-AFEC-275FABF9F052}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07B9EDAD-B1DE-44A2-AFEC-275FABF9F052}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07B9EDAD-B1DE-44A2-AFEC-275FABF9F052}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07B9EDAD-B1DE-44A2-AFEC-275FABF9F052}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E8B31A4D-77B5-46D2-AC69-C8430BF11113} = {D39FD7F7-691E-448C-9309-FCBB03E26CAD}
+		{DB007042-3C65-42C5-9106-75A8219A4B22} = {382E206E-21B0-4973-B5C8-0B1705BE3A09}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52A5ABFD-D5C1-4438-AA09-AACE151366B9}
