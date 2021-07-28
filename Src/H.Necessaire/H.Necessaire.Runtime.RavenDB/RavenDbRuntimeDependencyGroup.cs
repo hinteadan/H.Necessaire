@@ -71,8 +71,6 @@ namespace H.Necessaire.Runtime.RavenDB
             dependencyRegistry.Register<ImAUserInfoStorageResource>(() => new RavenDbUserIdentityStorageResource());
             dependencyRegistry.Register<ImAUserCredentialsStorageResource>(() => new RavenDbUserCredentialsStorageResource());
             dependencyRegistry.Register<ImAUserAuthInfoStorageResource>(() => new RavenDbCachedUserAuthInfoStorageResource());
-
-            dependencyRegistry.Register<RuntimeDependencyGroup>(() => new RuntimeDependencyGroup());
         }
     }
 }
