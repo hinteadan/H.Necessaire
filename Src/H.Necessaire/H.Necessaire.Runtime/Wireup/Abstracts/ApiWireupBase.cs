@@ -20,8 +20,7 @@ namespace H.Necessaire.Runtime.Wireup.Abstracts
         {
             return
                 this
-                .With(x => x.Register<RuntimeDependencyGroup>(() => new RuntimeDependencyGroup()))
-                ;
+                .With(x => x.Register<RuntimeDependencyGroup>(() => new RuntimeDependencyGroup()));
         }
     }
 }

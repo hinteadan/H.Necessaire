@@ -3,7 +3,5 @@
 namespace H.Necessaire.Runtime.Integration.NetCore
 {
     public class NetCoreApiWireupBase : ApiWireupBase
-    {
-
-    }
+    { }
 }
