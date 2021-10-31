@@ -20,7 +20,7 @@ namespace H.Necessaire
 
         public static bool In<T>(this T item, IEnumerable<T> collection, Func<T, T, bool> comparer)
         {
-            return collection.Any(x => comparer.Invoke(item, x));
+            return collection?.Any(x => comparer.Invoke(item, x)) ?? false;
         }
         public static bool NotIn<T>(this T item, IEnumerable<T> collection, Func<T, T, bool> comparer) => !In(item, collection, comparer);
 
@@ -125,6 +125,16 @@ namespace H.Necessaire
                 return defaultTo;
 
             return array[existingIndex];
+        }
+
+        public static string Get(this IEnumerable<Note> notes, string id, bool isCaseInsensitive = false)
+        {
+            return
+                notes
+                ?.FirstOrDefault(
+                    x => string.Equals(id, x.Id, isCaseInsensitive ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture)
+                )
+                .Value;
         }
 
         public static string[] TrimToValidKeywordsOnly(this string[] keywords, int minLength = 3, int maxNumberOfKeywords = 3)

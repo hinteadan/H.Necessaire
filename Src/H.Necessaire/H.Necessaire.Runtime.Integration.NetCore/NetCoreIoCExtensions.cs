@@ -1,5 +1,4 @@
 ﻿using H.Necessaire.Runtime;
-using H.Necessaire.Runtime.Config;
 using H.Necessaire.Runtime.Integration.NetCore.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;

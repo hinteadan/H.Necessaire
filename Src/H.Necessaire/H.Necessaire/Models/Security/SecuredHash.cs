@@ -8,6 +8,7 @@ namespace H.Necessaire
 
         public string Hash { get; set; }
         public string Key { get; set; }
+        public Note[] Notes { get; set; }
         public override string ToString()
         {
             return $"{Key}{concatenator}{Hash}";

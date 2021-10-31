@@ -9,7 +9,8 @@ namespace H.Necessaire.Runtime.Security
     {
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
-            dependencyRegistry.Register<ImAHasherEngine>(() => new SecureHasher());
+            dependencyRegistry.Register<SimpleSecureHasher>(() => new SimpleSecureHasher());
+            dependencyRegistry.Register<RS512Hasher>(() => new RS512Hasher());
             dependencyRegistry.Register<ImAUserAuthAggregatorEngine>(() => new UserAuthAggregatorEngine());
 
             dependencyRegistry.Register<ImASecurityManager>(() => new SecurityManager());

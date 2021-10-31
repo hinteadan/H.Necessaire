@@ -1,5 +1,4 @@
 ﻿using H.Necessaire.RavenDB;
-using H.Necessaire.Runtime.Config.DataContracts;
 using H.Necessaire.Runtime.RavenDB.Security.Resources;
 using H.Necessaire.Runtime.Security.Resources;
 using System;
@@ -21,15 +20,15 @@ namespace H.Necessaire.Runtime.RavenDB
 
         static Func<Stream> ParseClientCertificateStreamFrom(RuntimeConfig runtimeConfig)
         {
-            ConfigNode ravenConfig = runtimeConfig[RavenDbRuntimeConfigKey.RavenDbNodeId];
+            ConfigNode ravenConfig = runtimeConfig.Get(RavenDbRuntimeConfigKey.RavenDbNodeId);
 
             Assembly certificateAssembly = null;
             string certificateManifestResourceStreamName = null;
             Exception configException = null;
             new Action(() =>
             {
-                ravenConfig[RavenDbRuntimeConfigKey.RavenDbClientCertificateAssemblyTypeName].Read(x => certificateAssembly = Assembly.GetAssembly(Type.GetType(x)));
-                ravenConfig[RavenDbRuntimeConfigKey.RavenDbClientCertificateManifestResourceStreamName].Read(x => certificateManifestResourceStreamName = x);
+                ravenConfig.Get(RavenDbRuntimeConfigKey.RavenDbClientCertificateAssemblyTypeName).Read(x => certificateAssembly = Assembly.GetAssembly(Type.GetType(x)));
+                ravenConfig.Get(RavenDbRuntimeConfigKey.RavenDbClientCertificateManifestResourceStreamName).Read(x => certificateManifestResourceStreamName = x);
             }).TryOrFailWithGrace(onFail: ex => configException = ex);
 
             if (certificateAssembly == null)
@@ -43,11 +42,11 @@ namespace H.Necessaire.Runtime.RavenDB
 
         static string[] ParseDatabaseUrlsFrom(RuntimeConfig runtimeConfig)
         {
-            ConfigNode ravenConfig = runtimeConfig[RavenDbRuntimeConfigKey.RavenDbNodeId];
+            ConfigNode ravenConfig = runtimeConfig.Get(RavenDbRuntimeConfigKey.RavenDbNodeId);
 
             string[] databaseUrls = new string[0];
 
-            ravenConfig[RavenDbRuntimeConfigKey.RavenDbDatabaseUrls]
+            ravenConfig.Get(RavenDbRuntimeConfigKey.RavenDbDatabaseUrls)
                 .Read(x =>
                     databaseUrls
                         = x

@@ -121,5 +121,10 @@ namespace H.Necessaire
                 comments: failedRules.SelectMany(x => x.FlattenReasons()).ToArray()
                 );
         }
+
+        public static Note NoteAs(this string value, string id)
+        {
+            return new Note(id, value);
+        }
     }
 }

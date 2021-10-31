@@ -111,6 +111,12 @@
     <Compile Include="..\H.Necessaire\Models\Collections\SortFilterBase.cs">
       <Link>Models\Collections\SortFilterBase.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Config\ConfigNode.cs">
+      <Link>Models\Config\ConfigNode.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Config\RuntimeConfig.cs">
+      <Link>Models\Config\RuntimeConfig.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\IGuidIdentity.cs">
       <Link>Models\IGuidIdentity.cs</Link>
     </Compile>
@@ -162,6 +168,18 @@
     <Compile Include="..\H.Necessaire\Models\Security\IDentityBase.cs">
       <Link>Models\Security\IDentityBase.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\JWT\AccessTokenJwtPayload.cs">
+      <Link>Models\Security\JWT\AccessTokenJwtPayload.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\JWT\JsonWebToken.cs">
+      <Link>Models\Security\JWT\JsonWebToken.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\JWT\JwtPayload.cs">
+      <Link>Models\Security\JWT\JwtPayload.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\JWT\RefreshTokenJwtPayload.cs">
+      <Link>Models\Security\JWT\RefreshTokenJwtPayload.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Security\Permission.cs">
       <Link>Models\Security\Permission.cs</Link>
     </Compile>
@@ -186,6 +204,9 @@
     <Compile Include="..\H.Necessaire\Models\Security\WellKnownAccessTokenType.cs">
       <Link>Models\Security\WellKnownAccessTokenType.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\JWT\JwtHeader.cs">
+      <Link>Models\Security\JWT\JwtHeader.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Versioning\Version.cs">
       <Link>Models\Versioning\Version.cs</Link>
     </Compile>
@@ -194,6 +215,9 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\Concrete\DataStream.cs">
       <Link>Operations\Concrete\DataStream.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Config\ImAConfigProvider.cs">
+      <Link>Operations\Config\ImAConfigProvider.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\DataNormalizer.cs">
       <Link>Operations\DataNormalizer.cs</Link>

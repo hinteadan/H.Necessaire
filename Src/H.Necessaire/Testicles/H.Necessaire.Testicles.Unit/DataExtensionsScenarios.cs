@@ -50,9 +50,9 @@ namespace H.Necessaire.Testicles.Unit
             IEnumerable<IEnumerable<int>> batches = collection.Batch(2);
 
             batches.Should().HaveCount(3, "we should have 2 complete batches and 1 incomplete");
-            batches.ElementAt(0).Should().BeEquivalentTo(1, 2);
-            batches.ElementAt(1).Should().BeEquivalentTo(3, 4);
-            batches.ElementAt(2).Should().BeEquivalentTo(5);
+            batches.ElementAt(0).Should().BeEquivalentTo(new[] { 1, 2 });
+            batches.ElementAt(1).Should().BeEquivalentTo(new[] { 3, 4 });
+            batches.ElementAt(2).Should().BeEquivalentTo(new[] { 5 });
         }
 
         [Fact(DisplayName = "Stream Read As String Correctly Converts A Stream To String")]

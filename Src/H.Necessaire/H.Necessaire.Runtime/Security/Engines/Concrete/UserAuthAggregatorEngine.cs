@@ -1,5 +1,4 @@
-﻿using H.Necessaire.Runtime.Security.Engines.Model;
-using H.Necessaire.Runtime.Security.Resources;
+﻿using H.Necessaire.Runtime.Security.Resources;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,12 +11,12 @@ namespace H.Necessaire.Runtime.Security.Engines.Concrete
         static readonly TimeSpan authTokenValidFor = TimeSpan.FromHours(1);
         static readonly TimeSpan refreshTokenValidFor = TimeSpan.FromDays(14);
 
-        ImAHasherEngine secureHasher;
+        ImAHasherEngine hasher;
         ImAUserAuthInfoStorageResource userAuthInfoStorageResource;
         ImAUserInfoStorageResource userInfoStorageResource;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
-            secureHasher = dependencyProvider.Get<ImAHasherEngine>();
+            hasher = dependencyProvider.Get<HasherFactory>().GetDefaultHasher();
             userAuthInfoStorageResource = dependencyProvider.Get<ImAUserAuthInfoStorageResource>();
             userInfoStorageResource = dependencyProvider.Get<ImAUserInfoStorageResource>();
         }
@@ -34,8 +33,8 @@ namespace H.Necessaire.Runtime.Security.Engines.Concrete
             JsonWebToken<AccessTokenJwtPayload> accessTokenJWT = await ConstructUnsignedAccessTokenJWT(userInfo, createdAt);
             JsonWebToken<RefreshTokenJwtPayload> refreshTokenJWT = await ConstructUnsignedRefreshTokenJWT(accessTokenJWT.Payload);
 
-            SecuredHash securedHashForAccessTokenJWT = await secureHasher.Hash(accessTokenJWT.ToStringUnsigned());
-            SecuredHash securedHashForRefreshTokenJWT = await secureHasher.Hash(refreshTokenJWT.ToStringUnsigned());
+            SecuredHash securedHashForAccessTokenJWT = await hasher.Hash(accessTokenJWT.ToStringUnsigned());
+            SecuredHash securedHashForRefreshTokenJWT = await hasher.Hash(refreshTokenJWT.ToStringUnsigned());
 
             await userAuthInfoStorageResource.SaveAuthKeyForUser(userID, securedHashForAccessTokenJWT.Key);
 
@@ -45,8 +44,8 @@ namespace H.Necessaire.Runtime.Security.Engines.Concrete
             AuthInfo result =
                 new AuthInfo
                 {
-                    AccessToken = accessTokenJWT.ToString(),
-                    RefreshToken = refreshTokenJWT.ToString(),
+                    AccessToken = accessTokenJWT.ToStringSigned(),
+                    RefreshToken = refreshTokenJWT.ToStringSigned(),
                     AccessTokenGeneratedAt = createdAt,
                     AccessTokenValidFor = authTokenValidFor,
                 };
@@ -95,11 +94,11 @@ namespace H.Necessaire.Runtime.Security.Engines.Concrete
             await
                 new Func<Task>(async () =>
                 {
-                    JsonWebToken<AccessTokenJwtPayload> accessTokenJWT = JsonWebToken<AccessTokenJwtPayload>.TryParse(accessToken).ThrowOnFailOrReturn();
+                    JsonWebToken<AccessTokenJwtPayload> accessTokenJWT = accessToken.TryParseJsonWebToken<AccessTokenJwtPayload>().ThrowOnFailOrReturn();
 
                     string userAuthKey = await userAuthInfoStorageResource.GetAuthKeyForUser(accessTokenJWT.Payload.UserID);
 
-                    OperationResult tokenSignatureValidationResult = await secureHasher.VerifyMatch(accessTokenJWT.ToStringUnsigned(), new SecuredHash { Hash = accessTokenJWT.Signature, Key = userAuthKey });
+                    OperationResult tokenSignatureValidationResult = await hasher.VerifyMatch(accessTokenJWT.ToStringUnsigned(), new SecuredHash { Hash = accessTokenJWT.Signature, Key = userAuthKey });
 
                     if (!tokenSignatureValidationResult.IsSuccessful)
                     {
@@ -139,11 +138,11 @@ namespace H.Necessaire.Runtime.Security.Engines.Concrete
             await
                 new Func<Task>(async () =>
                 {
-                    JsonWebToken<RefreshTokenJwtPayload> refreshTokenJWT = JsonWebToken<RefreshTokenJwtPayload>.TryParse(refreshToken).ThrowOnFailOrReturn();
+                    JsonWebToken<RefreshTokenJwtPayload> refreshTokenJWT = refreshToken.TryParseJsonWebToken<RefreshTokenJwtPayload>().ThrowOnFailOrReturn();
 
                     refreshTokenJWT.ValidateTiming().ThrowOnFail();
 
-                    JsonWebToken<AccessTokenJwtPayload> expiredAccessTokenJWT = JsonWebToken<AccessTokenJwtPayload>.TryParse(expiredAccessToken).ThrowOnFailOrReturn();
+                    JsonWebToken<AccessTokenJwtPayload> expiredAccessTokenJWT = expiredAccessToken.TryParseJsonWebToken<AccessTokenJwtPayload>().ThrowOnFailOrReturn();
 
                     if (refreshTokenJWT.Payload.AccessTokenID != expiredAccessTokenJWT.Payload.ID)
                     {
@@ -153,7 +152,7 @@ namespace H.Necessaire.Runtime.Security.Engines.Concrete
 
                     string userAuthKey = await userAuthInfoStorageResource.GetAuthKeyForUser(expiredAccessTokenJWT.Payload.UserID);
 
-                    OperationResult expiredAccessTokenSignatureValidationResult = await secureHasher.VerifyMatch(expiredAccessTokenJWT.ToStringUnsigned(), new SecuredHash { Hash = expiredAccessTokenJWT.Signature, Key = userAuthKey });
+                    OperationResult expiredAccessTokenSignatureValidationResult = await hasher.VerifyMatch(expiredAccessTokenJWT.ToStringUnsigned(), new SecuredHash { Hash = expiredAccessTokenJWT.Signature, Key = userAuthKey });
 
                     if (!expiredAccessTokenSignatureValidationResult.IsSuccessful)
                     {
@@ -161,7 +160,7 @@ namespace H.Necessaire.Runtime.Security.Engines.Concrete
                         return;
                     }
 
-                    OperationResult refreshTokenSignatureValidationResult = await secureHasher.VerifyMatch(refreshTokenJWT.ToStringUnsigned(), new SecuredHash { Hash = refreshTokenJWT.Signature, Key = userAuthKey });
+                    OperationResult refreshTokenSignatureValidationResult = await hasher.VerifyMatch(refreshTokenJWT.ToStringUnsigned(), new SecuredHash { Hash = refreshTokenJWT.Signature, Key = userAuthKey });
 
                     if (!refreshTokenSignatureValidationResult.IsSuccessful)
                     {

@@ -1,0 +1,24 @@
+{
+  "profiles": {
+    "WSL": {
+      "commandName": "WSL2",
+      "environmentVariables": {},
+      "distributionName": ""
+    },
+    "CLI": {
+      "commandName": "Project"
+    },
+    "CLI - nugetversion": {
+      "commandName": "Project",
+      "commandLineArgs": "nugetversion"
+    },
+    "CLI - nugetversion - patch H.Necessaire": {
+      "commandName": "Project",
+      "commandLineArgs": "nugetversion update H.Necessaire=patch"
+    },
+    "CLI - debug": {
+      "commandName": "Project",
+      "commandLineArgs": "debug"
+    }
+  }
+}

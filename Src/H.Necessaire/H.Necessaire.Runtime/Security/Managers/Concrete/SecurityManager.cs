@@ -12,11 +12,11 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
         #region Construct
         ImAUserInfoStorageResource userInfoStorageResource;
         ImAUserCredentialsStorageResource userCredentialsStorageResource;
-        ImAHasherEngine hasherEngine;
+        ImAHasherEngine hasher;
         ImAUserAuthAggregatorEngine userAuthAggregatorEngine;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
-            hasherEngine = dependencyProvider.Get<ImAHasherEngine>();
+            hasher = dependencyProvider.Get<HasherFactory>().GetDefaultHasher();
             userCredentialsStorageResource = dependencyProvider.Get<ImAUserCredentialsStorageResource>();
             userInfoStorageResource = dependencyProvider.Get<ImAUserInfoStorageResource>();
             userAuthAggregatorEngine = dependencyProvider.Get<ImAUserAuthAggregatorEngine>();
@@ -49,7 +49,7 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
             if (string.IsNullOrWhiteSpace(passwordHash))
                 return OperationResult.Fail("Invalid Credentials").WithoutPayload<SecurityContext>();
 
-            OperationResult matchResult = await hasherEngine.VerifyMatch(password, SecuredHash.TryParse(passwordHash).ThrowOnFailOrReturn());
+            OperationResult matchResult = await hasher.VerifyMatch(password, SecuredHash.TryParse(passwordHash).ThrowOnFailOrReturn());
 
             if (!matchResult.IsSuccessful)
                 return OperationResult.Fail("Invalid Credentials").WithoutPayload<SecurityContext>();
@@ -72,7 +72,7 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
 
             await
                 new Func<Task>(
-                    async () => await userCredentialsStorageResource.SetPasswordFor(userInfo, (await hasherEngine.Hash(newPassword)).ToString())
+                    async () => await userCredentialsStorageResource.SetPasswordFor(userInfo, (await hasher.Hash(newPassword)).ToString())
                 )
                 .TryOrFailWithGrace(
                     onFail: ex => result = OperationResult.Fail(ex)
