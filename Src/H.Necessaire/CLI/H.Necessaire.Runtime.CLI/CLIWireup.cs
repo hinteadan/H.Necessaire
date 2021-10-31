@@ -1,6 +1,8 @@
 ﻿using H.Necessaire.CLI.Commands;
 using H.Necessaire.Runtime.CLI.Builders;
 using H.Necessaire.Runtime.Wireup.Abstracts;
+using System;
+using System.Linq;
 using System.Reflection;
 
 namespace H.Necessaire.Runtime.CLI

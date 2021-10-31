@@ -1,4 +1,6 @@
-﻿namespace H.Necessaire.CLI.Commands
+﻿using System.Threading.Tasks;
+
+namespace H.Necessaire.CLI.Commands
 {
     public interface ImACliCommand
     {

@@ -1,5 +1,7 @@
 ﻿using H.Necessaire.CLI.Commands;
-using H.Necessaire.Runtime;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.CLI.Builders
 {
@@ -8,7 +10,7 @@ namespace H.Necessaire.Runtime.CLI.Builders
         #region Construct
         static readonly string[] commandTypeNameEndings = new[] { "UseCase", "Command", "CliCommand", "CommandUseCase", "UseCaseCommand", "CliCommandUseCase", "CliUseCaseCommand" };
         readonly ImADependencyBrowser dependencyBrowser;
-        ImADependencyProvider? dependencyProvider;
+        ImADependencyProvider dependencyProvider;
 
         public CliCommandFactory(ImADependencyBrowser dependencyBrowser)
         {
@@ -49,7 +51,7 @@ namespace H.Necessaire.Runtime.CLI.Builders
             if (commandType == null)
                 return OperationResult.Fail($"Command [{commandName}] doesn't exist. Will display help here.");
 
-            ImACliCommand? command = dependencyProvider?.Get(commandType) as ImACliCommand;
+            ImACliCommand command = dependencyProvider?.Get(commandType) as ImACliCommand;
 
             if (command == null)
                 return OperationResult.Fail($"Command [{commandName}] cannot be instantiated. Will display help here.");
