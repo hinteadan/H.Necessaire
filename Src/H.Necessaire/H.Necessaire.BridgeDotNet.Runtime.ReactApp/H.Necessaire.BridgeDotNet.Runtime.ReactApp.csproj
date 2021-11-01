@@ -1,20 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <NoStdLib>true</NoStdLib>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+	<SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{7D52953D-01D1-485B-924D-E095092F0CA9}</ProjectGuid>
     <OutputType>Library</OutputType>
+	<OutputPath>bin\Latest\</OutputPath>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>H.Necessaire.BridgeDotNet.Runtime.ReactApp</RootNamespace>
     <AssemblyName>H.Necessaire.BridgeDotNet.Runtime.ReactApp</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+	<RuntimeIdentifier>win</RuntimeIdentifier>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
