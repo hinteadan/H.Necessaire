@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>H.Necessaire.BridgeDotNet.Runtime.ReactApp</id>
+    <version>1.0.1</version>
+    <title>H's Necessaire Bridge.NET Runtime React App base</title>
+    <projectUrl>https://hinteadan.github.io/H.Necessaire</projectUrl>
+    <authors>Hintea Dan Alexandru</authors>
+    <owners>Hintea Dan Alexandru</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://raw.githubusercontent.com/hinteadan/H.Necessaire/master/LICENSE</licenseUrl>
+    <iconUrl>https://raw.githubusercontent.com/hinteadan/H.Necessaire/master/Branding/IconLogo.png</iconUrl>
+    <description>A React App Base for Bridge.NET</description>
+    <summary>A React App Base for Bridge.NET</summary>
+    <releaseNotes>First release</releaseNotes>
+    <copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</copyright>
+    <tags>hintea dan alexandru .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections batch task array bridge bridge.net bridgedotnet react reactjs runtime base app</tags>
+    <dependencies>
+      <dependency id="H.Necessaire.BridgeDotNet" version="1.3.3" />
+      <dependency id="Bridge" version="17.10.1" />
+      <dependency id="Bridge.Newtonsoft.Json" version="1.17.0" />
+      <dependency id="Bridge.Html5" version="17.10.0" />
+      <dependency id="Bridge.jQuery" version="2.24.0" />
+      <dependency id="Bridge.React" version="5.2.0" />
+      <dependency id="ProductiveRage.ReactRouting" version="7.1.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Refs/fabric.min.css" target="Refs\" />
+    <file src="Refs/react-dom.production.min.js" target="Refs\" />
+    <file src="Refs/react.production.min.js" target="Refs\" />
+    <file src="AppIcon/about.txt" target="AppIcon\" />
+    <file src="AppIcon/android-chrome-192x192.png" target="AppIcon\" />
+    <file src="AppIcon/android-chrome-512x512.png" target="AppIcon\" />
+    <file src="AppIcon/apple-touch-icon.png" target="AppIcon\" />
+    <file src="AppIcon/favicon.ico" target="AppIcon\" />
+    <file src="AppIcon/favicon-16x16.png" target="AppIcon\" />
+    <file src="AppIcon/favicon-32x32.png" target="AppIcon\" />
+    <file src="AppIcon/site.webmanifest" target="AppIcon\" />
+  </files>
+</package>

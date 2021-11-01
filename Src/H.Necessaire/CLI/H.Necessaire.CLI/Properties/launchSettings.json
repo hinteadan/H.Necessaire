@@ -14,11 +14,15 @@
     },
     "CLI - nugetversion - patch H.Necessaire": {
       "commandName": "Project",
-      "commandLineArgs": "nugetversion update H.Necessaire=patch"
+      "commandLineArgs": "nugetversion update H.Necessaire=patch H.Necessaire.BridgeDotNet=patch"
     },
     "CLI - debug": {
       "commandName": "Project",
       "commandLineArgs": "debug"
+    },
+    "CLI - BridgeDotNet": {
+      "commandName": "Project",
+      "commandLineArgs": "bridgedotnet copy \"Src=C:\\H\\H.Necessaire\\Src\\H.Necessaire\\Apps\\H.Necessaire.ReactAppSample\" \"Dst=C:\\H\\H.Necessaire\\Src\\H.Necessaire\\Apps\\H.Necessaire.AspNetCoreWebAppSample\""
     }
   }
 }

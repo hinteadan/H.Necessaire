@@ -17,5 +17,15 @@ namespace H.Necessaire
 
         public string Id { get; set; }
         public MultiType<string, ConfigNode[]> Value { get; set; } = null as string;
+
+        public override string ToString()
+        {
+            return Value?.ToString();
+        }
+
+        public string ToStringWithId()
+        {
+            return $"{Id}={ToString()}";
+        }
     }
 }

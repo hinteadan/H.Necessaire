@@ -16,6 +16,8 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
             nuSpecVersionProcessor = dependencyProvider.Get<NuSpecVersionProcessor>();
             nuSpecFileUpdater = dependencyProvider.Get<NuSpecFileUpdater>();
         }
+
+        protected override string[] GetUsageSyntaxes() => usageSyntax.AsArray();
         #endregion
 
         public override async Task<OperationResult> Run()
@@ -23,7 +25,7 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
             Note[] args = (await GetArguments())?.Jump(1) ?? new Note[0];
 
             if (!args.Any())
-                return OperationResult.Fail(usageSyntax);
+                return FailWithUsageSyntax();
 
             switch (args[0].Id.ToLowerInvariant())
             {

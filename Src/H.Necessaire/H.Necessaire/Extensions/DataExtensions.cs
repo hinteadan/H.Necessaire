@@ -70,6 +70,18 @@ namespace H.Necessaire
             return fallbackValue;
         }
 
+        public static bool? ParseToBoolOrFallbackTo(this string rawValue, bool? fallbackValue = null)
+        {
+            if (string.IsNullOrWhiteSpace(rawValue))
+                return fallbackValue;
+
+            bool parseResult;
+            if (bool.TryParse(rawValue, out parseResult))
+                return parseResult;
+
+            return fallbackValue;
+        }
+
         public static bool IsBetweenInclusive(this DateTime dateTime, DateTime? from, DateTime? to)
         {
             return

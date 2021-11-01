@@ -4,6 +4,8 @@ namespace H.Necessaire
 {
     public class RuntimeConfig
     {
+        public static readonly RuntimeConfig Empty = new RuntimeConfig();
+
         public ConfigNode Get(string id)
         {
             return
