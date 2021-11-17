@@ -140,10 +140,10 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         protected Task<bool> Confirm(params string[] messages) => ConfirmWithTitle(title: messages?.Length >= 1 ? messages.First() : string.Empty, descriptionHtml: string.Join("<br /><br />", messages.Jump(1)));
 
         protected Task<UserOptionSelectionResult> AskUserForSingleAnswer(Func<UserOptionsContext, ReactElement> userFeedbackRenderer, string title, string descriptionHtml = null, params UserOption[] options)
-            => AskUser(title, descriptionHtml, isMultipleSelection: false, userFeedbackRenderer, options);
+            => AskUser(title, descriptionHtml, isMultipleSelection: false, userFeedbackRenderer: userFeedbackRenderer, options: options);
 
         protected Task<UserOptionSelectionResult> AskUserForMultipleAnswers(Func<UserOptionsContext, ReactElement> userFeedbackRenderer, string title, string descriptionHtml = null, params UserOption[] options)
-            => AskUser(title, descriptionHtml, isMultipleSelection: true, userFeedbackRenderer, options);
+            => AskUser(title, descriptionHtml, isMultipleSelection: true, userFeedbackRenderer: userFeedbackRenderer, options: options);
 
         private async Task<UserOptionSelectionResult> AskUser(string title, string descriptionHtml, bool isMultipleSelection, Func<UserOptionsContext, ReactElement> userFeedbackRenderer, params UserOption[] options)
         {

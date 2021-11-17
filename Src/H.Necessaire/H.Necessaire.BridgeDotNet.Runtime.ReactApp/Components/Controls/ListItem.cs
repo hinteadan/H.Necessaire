@@ -125,7 +125,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                             {
                                 FontSize = Branding.Typography.FontSizeLarge.PointsCss,
                                 JustifyContent = Bridge.Html5.JustifyContent.Center,
-                            }.FlexNode(isVerticalFlow: true, 30)
+                            }.FlexNode(isVerticalFlow: true, size: 30)
                         },
                         props.Title
                     ),
