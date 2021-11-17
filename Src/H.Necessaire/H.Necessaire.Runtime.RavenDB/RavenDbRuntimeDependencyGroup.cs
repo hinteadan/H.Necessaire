@@ -1,6 +1,4 @@
 ﻿using H.Necessaire.RavenDB;
-using H.Necessaire.Runtime.RavenDB.Security.Resources;
-using H.Necessaire.Runtime.Security.Resources;
 using System;
 using System.IO;
 using System.Linq;
@@ -20,15 +18,29 @@ namespace H.Necessaire.Runtime.RavenDB
 
         static Func<Stream> ParseClientCertificateStreamFrom(RuntimeConfig runtimeConfig)
         {
-            ConfigNode ravenConfig = runtimeConfig.Get(RavenDbRuntimeConfigKey.RavenDbNodeId);
+            string clientCertificateAssemblyTypeName = runtimeConfig?.Get("RavenDB")?.Get("ClientCertificateAssemblyTypeName")?.ToString();
+            string clientCertificateFilePath = runtimeConfig?.Get("RavenDB")?.Get("ClientCertificatePath")?.ToString();
+
+            if (string.IsNullOrWhiteSpace(clientCertificateAssemblyTypeName) && string.IsNullOrWhiteSpace(clientCertificateFilePath))
+                throw new InvalidOperationException("The RavenDB Configuration is invalid. Client Certificate is not configured. Either the file path must be specified or the embedded resource.");
+
+            if (!string.IsNullOrWhiteSpace(clientCertificateFilePath))
+            {
+                FileInfo clientCertificateFile = new FileInfo(clientCertificateFilePath);
+                if (!clientCertificateFile.Exists)
+                    throw new InvalidOperationException($"The RavenDB Configuration is invalid. Client Certificate file doesn't exist: {clientCertificateFile.FullName}");
+
+                return () => clientCertificateFile.OpenRead();
+            }
+
 
             Assembly certificateAssembly = null;
             string certificateManifestResourceStreamName = null;
             Exception configException = null;
             new Action(() =>
             {
-                ravenConfig.Get(RavenDbRuntimeConfigKey.RavenDbClientCertificateAssemblyTypeName).Read(x => certificateAssembly = Assembly.GetAssembly(Type.GetType(x)));
-                ravenConfig.Get(RavenDbRuntimeConfigKey.RavenDbClientCertificateManifestResourceStreamName).Read(x => certificateManifestResourceStreamName = x);
+                certificateAssembly = Assembly.GetAssembly(Type.GetType(clientCertificateAssemblyTypeName));
+                runtimeConfig?.Get("RavenDB")?.Get("ClientCertificateManifestResourceStreamName").Value.Read(x => certificateManifestResourceStreamName = x);
             }).TryOrFailWithGrace(onFail: ex => configException = ex);
 
             if (certificateAssembly == null)
@@ -42,11 +54,12 @@ namespace H.Necessaire.Runtime.RavenDB
 
         static string[] ParseDatabaseUrlsFrom(RuntimeConfig runtimeConfig)
         {
-            ConfigNode ravenConfig = runtimeConfig.Get(RavenDbRuntimeConfigKey.RavenDbNodeId);
+            ConfigNode ravenConfig = runtimeConfig.Get("RavenDB");
 
             string[] databaseUrls = new string[0];
 
-            ravenConfig.Get(RavenDbRuntimeConfigKey.RavenDbDatabaseUrls)
+            ravenConfig.Get("DatabaseUrls")
+                .Value
                 .Read(x =>
                     databaseUrls
                         = x
@@ -67,9 +80,10 @@ namespace H.Necessaire.Runtime.RavenDB
         {
             base.RegisterDependencies(dependencyRegistry);
 
-            dependencyRegistry.Register<ImAUserInfoStorageResource>(() => new RavenDbUserIdentityStorageResource());
-            dependencyRegistry.Register<ImAUserCredentialsStorageResource>(() => new RavenDbUserCredentialsStorageResource());
-            dependencyRegistry.Register<ImAUserAuthInfoStorageResource>(() => new RavenDbCachedUserAuthInfoStorageResource());
+            dependencyRegistry
+                .Register<Core.DependencyGroup>(() => new Core.DependencyGroup())
+                .Register<Security.DependencyGroup>(() => new Security.DependencyGroup())
+                ;
         }
     }
 }

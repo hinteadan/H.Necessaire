@@ -7,9 +7,11 @@ namespace H.Necessaire
     {
         string StoreName { get; }
 
-        Task Set(string key, string value, TimeSpan? validFor = null);
+        Task Set(string key, string value);
 
-        Task Set(string key, string value, DateTime? validUntil = null);
+        Task SetFor(string key, string value, TimeSpan validFor);
+
+        Task SetUntil(string key, string value, DateTime validUntil);
 
         Task<string> Get(string key);
 

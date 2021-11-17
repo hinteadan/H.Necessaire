@@ -1,6 +1,4 @@
-﻿using H.Necessaire.Runtime.Security.Resources;
-using H.Necessaire.Runtime.Security.Resources.DataContracts;
-using H.Necessaire.Runtime.Validation.Engines.Abstract;
+﻿using H.Necessaire.Runtime.Validation.Engines.Abstract;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

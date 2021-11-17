@@ -2,7 +2,7 @@
 
 namespace H.Necessaire.Dapper
 {
-    public class KeyValueSqlEntry : SqlEntryBase
+    internal class KeyValueSqlEntry : SqlEntryBase
     {
         public Guid ID { get; set; } = Guid.NewGuid();
 

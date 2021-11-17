@@ -15,7 +15,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             {
                 MinWidth = 100,
                 MinHeight = 60,
-                BackgroundColor = Branding.BackgroundColorTranslucent.ToCssRGBA(),
+                BackgroundColor = Branding.BackgroundColor.ToCssRGBA(),
                 MarginBottom = (int)props.Depth + Branding.SizingUnitInPixels,
             };
 

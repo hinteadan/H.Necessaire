@@ -24,7 +24,7 @@ namespace H.Necessaire.CLI.Commands.BridgeDotNet
             if (!args.Any())
                 return FailWithUsageSyntax();
 
-            switch (args[0].Id.ToLowerInvariant())
+            switch (args[0].ID.ToLowerInvariant())
             {
                 case "copy": return await RunCopySubCommand(args.Jump(1));
                 default: return FailWithUsageSyntax();
@@ -72,6 +72,8 @@ namespace H.Necessaire.CLI.Commands.BridgeDotNet
             bool isFileFolderMaintained = file.Directory?.Name.ToLowerInvariant().In(foldersToMaintain.Select(x => x.ToLowerInvariant())) ?? false;
 
             string destinationFolderPath = Path.Combine(destinationProjectRoot.FullName, destinationMainFolder, isFileFolderMaintained ? file.Directory?.Name ?? string.Empty : string.Empty) ?? string.Empty;
+
+            new DirectoryInfo(destinationFolderPath).Create();
 
             string destinationFilePath = Path.Combine(destinationFolderPath, file.Name);
 

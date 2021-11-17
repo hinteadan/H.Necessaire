@@ -27,7 +27,7 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
             if (!args.Any())
                 return FailWithUsageSyntax();
 
-            switch (args[0].Id.ToLowerInvariant())
+            switch (args[0].ID.ToLowerInvariant())
             {
                 case "update": return await RunUpdateSubCommand(args.Jump(1));
                 default: return OperationResult.Fail(usageSyntax);
@@ -39,7 +39,7 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
             NuSpecInfo[] nuSpecs = new NuSpecInfo[0];
             foreach (Note arg in args)
             {
-                string name = arg.Id;
+                string name = arg.ID;
                 string version = arg.Value;
 
                 bool isOwnNuGet = name.StartsWith("H.Necessaire", StringComparison.InvariantCultureIgnoreCase);

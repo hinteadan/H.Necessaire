@@ -35,7 +35,7 @@ namespace H.Necessaire.Runtime.Integration.NetCore.Concrete
                 return
                     new ConfigNode
                     {
-                        Id = configurationSection.Key,
+                        ID = configurationSection.Key,
                         Value = configurationSection.Value,
                     };
             }
@@ -43,7 +43,7 @@ namespace H.Necessaire.Runtime.Integration.NetCore.Concrete
             return
                 new ConfigNode
                 {
-                    Id = configurationSection.Key,
+                    ID = configurationSection.Key,
                     Value = children.Select(Map).ToArray(),
                 };
         }

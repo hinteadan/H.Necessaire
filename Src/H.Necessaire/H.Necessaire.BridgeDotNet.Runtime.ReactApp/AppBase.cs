@@ -1,4 +1,5 @@
-﻿using Bridge.Html5;
+﻿using Bridge;
+using Bridge.Html5;
 using Bridge.jQuery2;
 using Bridge.React;
 using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Components;
@@ -23,17 +24,23 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         public static T Get<T>() => appWireup.DependencyRegistry.Get<T>();
 
-        public static BrandingStyle Branding => branding;
-
         public static RuntimeConfig Config => appWireup?.DependencyRegistry?.Get<ImAConfigProvider>()?.GetRuntimeConfig() ?? appWireup?.DependencyRegistry?.Get<RuntimeConfig>() ?? RuntimeConfig.Empty;
 
-        public static readonly string[] BaseHostPathParts = Window.Location.PathName.Split(new char[] { '/' }, System.StringSplitOptions.RemoveEmptyEntries);
+        public static BrandingStyle Branding => branding;
+
+        public static readonly string[] BaseHostPathParts = Window.Document["isWebWorkerContext"] == null ? Window.Location.PathName.Split(new char[] { '/' }, System.StringSplitOptions.RemoveEmptyEntries) : new string[0];
 
         public static readonly string BaseHostPath = "/" + string.Join("/", BaseHostPathParts);
 
         public static string BaseUrl => Config.Get("BaseUrl")?.ToString() ?? ((BaseHostPathParts?.Length ?? 0) > 1 ? Window.Location.Origin + "/" + string.Join("/", BaseHostPathParts) : Window.Location.Origin);
 
         public static string BaseApiUrl => Config.Get("BaseApiUrl")?.ToString() ?? ((BaseHostPathParts?.Length ?? 0) > 1 ? Window.Location.Origin + "/" + string.Join("/", BaseHostPathParts.Take(BaseHostPathParts.Length - 1)) : Window.Location.Origin);
+
+        public static bool IsWebWorker => Window.Document["isWebWorkerContext"] != null;
+
+        public static string WebWorkerID => Window.Document["webWorkerId"]?.ToString();
+
+        public static bool IsOnline => Window.Navigator.OnLine;
 
         public static void Initialize(ImAnAppWireup appWireup, Func<IDispatcher, AppNavigationRegistryBase> navigationRegistryFactory, Func<Task> appInitializer, BrandingStyle branding = null)
         {
@@ -43,8 +50,20 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             AppBase.navigationRegistryFactory = navigationRegistryFactory;
         }
 
+        public static async void MainAsWebWorker(ImAnAppWireup webWorkerWireup)
+        {
+            if (!IsWebWorker)
+                return;
+
+            appWireup = webWorkerWireup ?? new ConcreteCoreAppWireup();
+            await WireupDependencies();
+        }
+
         protected static async void MainAsync()
         {
+            if (IsWebWorker)
+                return;
+
             using (new TimeMeasurement(x => Console.WriteLine($"{DateTime.Now} App initialized in {x}")))
             {
                 using (new AppLoadIndicator())
@@ -64,6 +83,21 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 {
                     await appInitializer();
                 }
+
+                await StartDaemons();
+            }
+        }
+
+        private static async Task StartDaemons()
+        {
+            ImADaemon[] daemons = (Get<ImADaemon>()?.AsArray() ?? new ImADaemon[0]).Concat(Get<ImADaemon[]>() ?? new ImADaemon[0]).ToArray();
+
+            if (!daemons.Any())
+                return;
+
+            foreach (ImADaemon daemon in daemons)
+            {
+                await daemon.Start();
             }
         }
 
@@ -181,21 +215,24 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         {
             Document.Head.AppendChild(new HTMLLinkElement
             {
-                Href = "https://fonts.gstatic.com",
+                Href = "https://fonts.googleapis.com",
                 Rel = "preconnect",
             });
 
             Document.Head.AppendChild(new HTMLLinkElement
             {
-                Href = "https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap",
-                Rel = "stylesheet",
-            });
+                Href = "https://fonts.gstatic.com",
+                Rel = "preconnect",
+            }).And(x => x["crossorigin"] = "crossorigin");
 
-            Document.Head.AppendChild(new HTMLLinkElement
+            foreach (string fontFamilyUrl in branding?.Typography?.FontFamilyUrls ?? new string[0])
             {
-                Href = "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap&subset=latin-ext",
-                Rel = "stylesheet",
-            });
+                Document.Head.AppendChild(new HTMLLinkElement
+                {
+                    Href = fontFamilyUrl,
+                    Rel = "stylesheet",
+                });
+            }
         }
 
         private static void ReferenceAndSetGlobalCssAndStyles()
@@ -288,6 +325,9 @@ table tbody tr:hover td {
                 {
                     Cache = true,
                 });
+
+                await ReferenceLib("/dexie.js");
+                Script.Write("window.dexie = Dexie;");
 
                 await ReferenceLib("/react.production.min.js");
                 await ReferenceLib("/react-dom.production.min.js");

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace H.Necessaire.Runtime.Security.Resources
+namespace H.Necessaire.Runtime
 {
     public interface ImAUserCredentialsStorageResource
     {

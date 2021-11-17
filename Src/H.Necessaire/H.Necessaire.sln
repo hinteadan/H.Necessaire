@@ -41,13 +41,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Necessaire.Runtime.CLI", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{BF4926CE-985C-40B3-B5F4-6C240B41F3DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.AspNetCoreWebAppSample", "Apps\H.Necessaire.AspNetCoreWebAppSample\H.Necessaire.AspNetCoreWebAppSample.csproj", "{258E1FCB-7BFB-4381-9DA2-1B73F2062B2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Necessaire.AspNetCoreWebAppSample", "Apps\H.Necessaire.AspNetCoreWebAppSample\H.Necessaire.AspNetCoreWebAppSample.csproj", "{258E1FCB-7BFB-4381-9DA2-1B73F2062B2F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D0D2521F-7149-4F0F-AD5B-C20CD954A4D4} = {D0D2521F-7149-4F0F-AD5B-C20CD954A4D4}
 		{8818A331-CF9D-43D8-B78C-ECAE45C44442} = {8818A331-CF9D-43D8-B78C-ECAE45C44442}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.ReactAppSample", "Apps\H.Necessaire.ReactAppSample\H.Necessaire.ReactAppSample.csproj", "{D0D2521F-7149-4F0F-AD5B-C20CD954A4D4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Necessaire.Runtime.SqlServer", "H.Necessaire.Runtime.SqlServer\H.Necessaire.Runtime.SqlServer.csproj", "{4080DDC4-6D04-4348-BFD5-0EB178AF20E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +125,10 @@ Global
 		{D0D2521F-7149-4F0F-AD5B-C20CD954A4D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0D2521F-7149-4F0F-AD5B-C20CD954A4D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0D2521F-7149-4F0F-AD5B-C20CD954A4D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4080DDC4-6D04-4348-BFD5-0EB178AF20E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4080DDC4-6D04-4348-BFD5-0EB178AF20E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4080DDC4-6D04-4348-BFD5-0EB178AF20E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4080DDC4-6D04-4348-BFD5-0EB178AF20E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,6 +143,7 @@ Global
 		{B053FF46-4397-46C4-BA5D-C1383EE0E0FA} = {382E206E-21B0-4973-B5C8-0B1705BE3A09}
 		{258E1FCB-7BFB-4381-9DA2-1B73F2062B2F} = {BF4926CE-985C-40B3-B5F4-6C240B41F3DC}
 		{D0D2521F-7149-4F0F-AD5B-C20CD954A4D4} = {BF4926CE-985C-40B3-B5F4-6C240B41F3DC}
+		{4080DDC4-6D04-4348-BFD5-0EB178AF20E1} = {382E206E-21B0-4973-B5C8-0B1705BE3A09}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52A5ABFD-D5C1-4438-AA09-AACE151366B9}

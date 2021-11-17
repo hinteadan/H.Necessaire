@@ -25,9 +25,11 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 ;
         }
 
-        public virtual Task<ImAnAppWireup> Boot()
+        public virtual async Task<ImAnAppWireup> Boot()
         {
-            return (this as ImAnAppWireup).AsTask();
+            await dependencyRegistry.Get<ConsumerIdentityManager>().CreateOrResurrect();
+
+            return this;
         }
     }
 }

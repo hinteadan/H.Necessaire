@@ -92,6 +92,22 @@ namespace H.Necessaire
 
         public static T And<T>(this T data, Action<T> doThis) { doThis(data); return data; }
 
+        public static async Task<T> AndAsync<T>(this T data, Func<T, Task> doThis) { await doThis(data); return data; }
+
+        public static async Task<T> AndAsync<T>(this Task<T> asyncData, Func<T, Task> doThis)
+        {
+            T data = await asyncData;
+            await doThis(data);
+            return data;
+        }
+
+        public static async Task<T> AndAsync<T>(this Task<T> asyncData, Action<T> doThis)
+        {
+            T data = await asyncData;
+            doThis(data);
+            return data;
+        }
+
         public static bool IsSameOrSubclassOf(this Type typeToCheck, Type typeToCompareWith)
         {
             return
@@ -99,12 +115,20 @@ namespace H.Necessaire
                 || typeToCompareWith.IsSubclassOf(typeToCheck);
         }
 
+        public static string TypeName(this object instance)
+        {
+            if (instance is Type)
+                return (instance as Type).FullName;
+
+            return instance.GetType().FullName;
+        }
+
         public static IDisposableEnumerable<T> AsDisposableEnumerable<T>(this IEnumerable<T> collection)
         {
             return new Operations.Concrete.DataStream<T>(collection);
         }
 
-        public static async Task<string> ReadAsStringAsync(this Stream stream, bool isStreamLeftOpen = false, Encoding encoding = null, bool detectEncodingFromByteOrderMarks = false, int bufferSize = 1024)
+        public static async Task<string> ReadAsStringAsync(this Stream stream, bool isStreamLeftOpen = true, Encoding encoding = null, bool detectEncodingFromByteOrderMarks = false, int bufferSize = 1024)
         {
             if (stream == null)
                 return null;
@@ -113,6 +137,19 @@ namespace H.Necessaire
             {
                 return await reader.ReadToEndAsync();
             }
+        }
+
+        public static Task<Stream> WriteToStreamAsync(this string value, Stream stream, bool isStreamLeftOpen = true, Encoding encoding = null, int bufferSize = 1024)
+        {
+            if (stream == null)
+                return null;
+
+            using (StreamWriter writer = new StreamWriter(stream, encoding ?? Encoding.UTF8, bufferSize, leaveOpen: isStreamLeftOpen))
+            {
+                writer.Write(value);
+            }
+
+            return stream.AsTask();
         }
 
         public static OperationResult Merge(this IEnumerable<OperationResult> operationResults, string globalReasonIfNecesarry = defaultGlobalReasonForMultipleFailedOperations)
@@ -134,9 +171,74 @@ namespace H.Necessaire
                 );
         }
 
+        public static OperationResult ValidateSortFilters(this ISortFilter sortFilter, params string[] validateSortFilters)
+        {
+            if (!sortFilter.SortFilters?.Any(x => x != null) ?? true)
+                return OperationResult.Win();
+
+            if (sortFilter.SortFilters.Where(x => x != null).Any(x => x.By.NotIn(validateSortFilters)))
+                return OperationResult.Fail($"Some of the sort properties are invalid. These are the valid sortable properties: {string.Join(", ", validateSortFilters)}.");
+
+            return OperationResult.Win();
+        }
+
         public static Note NoteAs(this string value, string id)
         {
             return new Note(id, value);
         }
+
+        public static Note[] Add(this Note[] notes, params Note[] additionalNotes)
+        {
+            return
+                (notes ?? new Note[0]).Concat(additionalNotes ?? new Note[0]).Where(x => !x.IsEmpty()).ToArray();
+        }
+
+        public static Note[] Add(this Note note, params Note[] additionalNotes) => note.AsArray().Add(additionalNotes);
+
+        public static Note[] AddOrReplace(this Note[] notes, params Note[] additionalNotes) => notes.Add(additionalNotes).GroupBy(x => x.ID).Select(x => x.Last()).ToArray();
+        public static Note[] AddOrReplace(this Note note, params Note[] additionalNotes) => note.AsArray().AddOrReplace(additionalNotes);
+
+        public static ConfigNode ConfigWith(this string id, string value)
+        {
+            return
+                new ConfigNode
+                {
+                    ID = id,
+                    Value = value,
+                };
+        }
+
+        public static ConfigNode ConfigWith(this string id, params ConfigNode[] children)
+        {
+            return
+                new ConfigNode
+                {
+                    ID = id,
+                    Value = children,
+                };
+        }
+
+        public static SyncResponse RespondWith(this SyncRequest syncRequest, SyncStatus syncStatus)
+        {
+            return
+                new SyncResponse
+                {
+                    ID = syncRequest.ID,
+                    PayloadIdentifier = syncRequest.PayloadIdentifier,
+                    PayloadType = syncRequest.PayloadType,
+                    SyncStatus = syncStatus,
+                };
+        }
+
+        public static SyncResponse ToFailResponse(this SyncRequest syncRequest) => syncRequest.RespondWith(
+            syncRequest.SyncStatus.In(SyncStatus.NotSynced, SyncStatus.Synced) ? SyncStatus.NotSynced
+            : syncRequest.SyncStatus.In(SyncStatus.DeletedAndNotSynced, SyncStatus.DeletedAndSynced) ? SyncStatus.DeletedAndNotSynced
+            : SyncStatus.Inexistent
+            );
+        public static SyncResponse ToWinResponse(this SyncRequest syncRequest) => syncRequest.RespondWith(
+            syncRequest.SyncStatus.In(SyncStatus.NotSynced, SyncStatus.Synced) ? SyncStatus.Synced
+            : syncRequest.SyncStatus.In(SyncStatus.DeletedAndNotSynced, SyncStatus.DeletedAndSynced) ? SyncStatus.DeletedAndSynced
+            : SyncStatus.Inexistent
+            );
     }
 }

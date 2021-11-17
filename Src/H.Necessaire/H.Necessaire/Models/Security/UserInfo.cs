@@ -1,6 +1,6 @@
 ﻿namespace H.Necessaire
 {
-    public class UserInfo : IDentityBase
+    public class UserInfo : ConsumerIdentity
     {
         public string Username
         {

@@ -63,7 +63,7 @@ namespace H.Necessaire.Runtime.CLI.Builders
         {
             UseCaseContext context = await GetCurrentContext() ?? new UseCaseContext();
 
-            string commandName = context.Notes.FirstOrDefault().Id;
+            string commandName = context.Notes.FirstOrDefault().ID;
 
             if (string.IsNullOrWhiteSpace(commandName) && !askForCommandIfEmpty)
                 return OperationResult.Fail("Command name is empty. Will display help here.").WithoutPayload<string>();

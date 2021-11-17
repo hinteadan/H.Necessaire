@@ -1,6 +1,7 @@
 ﻿using H.Necessaire.Runtime.Integration.NetCore.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
@@ -53,6 +54,9 @@ namespace H.Necessaire.Runtime.Integration.NetCore
 
         protected void ConfigureWebAppHost(IApplicationBuilder app, IHostEnvironment env)
         {
+            using (new TimeMeasurement(x => logger.LogInformation($"{DateTime.Now}: Done calling HttpContext.Request Enable Buffering in {x}")))
+                app.Use((ctx, next) => { ctx.Request.EnableBuffering(); return next(); });
+
             using (new TimeMeasurement(x => logger.LogInformation($"{DateTime.Now}: Done calling Use ExceptionHandlerMiddleware in {x}")))
                 app.UseMiddleware<ExceptionHandlerMiddleware>();
 

@@ -2,7 +2,9 @@
 using Bridge.Html5;
 using Bridge.React;
 using H.Necessaire.Models.Branding;
+using H.Necessaire.UI;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
@@ -14,8 +16,6 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         #region Construct
         int? runAtStartupTimeoutId;
         int? flySafeTimeoutId;
-        AlertUserFeedback alertUserFeedback;
-        ConfirmUserFeedback confirmUserFeedback;
         RuntimeConfig runtimeConfig;
 
         protected SecurityContext SecurityContext { get; private set; }
@@ -62,8 +62,6 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         protected virtual void EnsureDependencies()
         {
-            alertUserFeedback = new AlertUserFeedback();
-            confirmUserFeedback = new ConfirmUserFeedback();
             SecurityContext = Get<SecurityContext>();
             runtimeConfig = AppBase.Config;
         }
@@ -107,11 +105,6 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         }
         #endregion
 
-        #region User Feedback
-        protected Task Alert(params string[] messages) => alertUserFeedback.Go(messages);
-        protected Task<bool> Confirm(params string[] messages) => confirmUserFeedback.Go(messages);
-        #endregion
-
         #region Execution Utils
         protected ScopedRunner BusyFlag(bool toggleBusyCursor = true)
         {
@@ -137,6 +130,38 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 return;
 
             flySafeTimeoutId = Window.SetTimeout(withThis);
+        }
+        #endregion
+
+        #region User Feedback
+        protected Task AlertWithTitle(string title, string descriptionHtml = null) => AskUserForSingleAnswer(UserFeedbackFactory.Alert, title, descriptionHtml);
+        protected async Task<bool> ConfirmWithTitle(string title, string descriptionHtml = null) => !(await AskUserForSingleAnswer(UserFeedbackFactory.Confirm, title, descriptionHtml)).HasCanceled;
+        protected Task Alert(params string[] messages) => AlertWithTitle(title: messages?.Length >= 1 ? messages.First() : string.Empty, descriptionHtml: string.Join("<br /><br />", messages.Jump(1)));
+        protected Task<bool> Confirm(params string[] messages) => ConfirmWithTitle(title: messages?.Length >= 1 ? messages.First() : string.Empty, descriptionHtml: string.Join("<br /><br />", messages.Jump(1)));
+
+        protected Task<UserOptionSelectionResult> AskUserForSingleAnswer(Func<UserOptionsContext, ReactElement> userFeedbackRenderer, string title, string descriptionHtml = null, params UserOption[] options)
+            => AskUser(title, descriptionHtml, isMultipleSelection: false, userFeedbackRenderer, options);
+
+        protected Task<UserOptionSelectionResult> AskUserForMultipleAnswers(Func<UserOptionsContext, ReactElement> userFeedbackRenderer, string title, string descriptionHtml = null, params UserOption[] options)
+            => AskUser(title, descriptionHtml, isMultipleSelection: true, userFeedbackRenderer, options);
+
+        private async Task<UserOptionSelectionResult> AskUser(string title, string descriptionHtml, bool isMultipleSelection, Func<UserOptionsContext, ReactElement> userFeedbackRenderer, params UserOption[] options)
+        {
+            UserOptionsContext userOptionsContext = new UserOptionsContext(title, descriptionHtml, isMultipleSelection, options);
+
+            using (new ScopedRunner(
+                    onStart: () => DoAndSetState(_ =>
+                    {
+                        React.Render(new CenteredCurtain(userFeedbackRenderer(userOptionsContext)), AppBase.CurtainContainer);
+                    }),
+                    onStop: () => DoAndSetState(_ =>
+                    {
+                        React.UnmountComponentAtNode(AppBase.CurtainContainer);
+                    })
+                ))
+            {
+                return await userOptionsContext.Task;
+            }
         }
         #endregion
 

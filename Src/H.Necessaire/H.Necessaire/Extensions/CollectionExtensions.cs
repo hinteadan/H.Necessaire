@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace H.Necessaire
 {
@@ -58,7 +59,69 @@ namespace H.Necessaire
             return result.ToArray();
         }
 
+        public static IEnumerable<T> ApplySortFilterIfAny<T>(this IEnumerable<T> collection, ISortFilter filter, bool throwOnValidationError = true)
+        {
+            IEnumerable<T> result = collection;
+
+            if (!filter?.SortFilters?.Any() ?? true)
+                return result;
+
+            OperationResult validation = filter.ValidateSortFilters();
+            if (!validation.IsSuccessful)
+            {
+                if (throwOnValidationError) validation.ThrowOnFail();
+                return result;
+            }
+
+            IOrderedEnumerable<T> orderedResult = result.OrderBy(x => 1);
+            foreach (SortFilter sortFilter in filter.SortFilters)
+            {
+                PropertyInfo sortProperty = typeof(T).GetProperty(sortFilter.By);
+                switch (sortFilter.Direction)
+                {
+                    case SortFilter.SortDirection.Descending:
+                        orderedResult = orderedResult.ThenByDescending(x => sortProperty.GetValue(x));
+                        break;
+                    case SortFilter.SortDirection.Ascending:
+                    default:
+                        orderedResult = orderedResult.ThenBy(x => sortProperty.GetValue(x));
+                        break;
+                }
+            }
+            result = orderedResult;
+
+            return result;
+        }
+
+        public static IEnumerable<T> ApplyPageFilterIfAny<T>(this IEnumerable<T> collection, IPageFilter filter)
+        {
+            IEnumerable<T> result = collection;
+
+            if (filter?.PageFilter == null)
+                return result;
+
+            result
+                = collection
+                .Skip(filter.PageFilter.PageIndex * filter.PageFilter.PageSize)
+                .Take(filter.PageFilter.PageSize)
+                ;
+
+            return result;
+        }
+
+        public static IEnumerable<T> ApplySortAndPageFilterIfAny<T, TFilter>(this IEnumerable<T> collection, TFilter filter, bool throwOnValidationError = true)
+            where TFilter : ISortFilter, IPageFilter
+        {
+            return
+                collection
+                .ApplySortFilterIfAny(filter, throwOnValidationError)
+                .ApplyPageFilterIfAny(filter)
+                ;
+        }
+
         public static T[] AsArray<T>(this T value) => new T[] { value };
+
+        public static string[] ToStringArray<T>(this T[] array) => array?.Select(x => x?.ToString()).ToArray();
 
         public static T[] Jump<T>(this T[] array, int numberOfElementsToJump)
         {
@@ -127,12 +190,12 @@ namespace H.Necessaire
             return array[existingIndex];
         }
 
-        public static string Get(this IEnumerable<Note> notes, string id, bool isCaseInsensitive = false)
+        public static string Get(this IEnumerable<Note> notes, string id, bool ignoreCase = false)
         {
             return
                 notes
                 ?.FirstOrDefault(
-                    x => string.Equals(id, x.Id, isCaseInsensitive ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture)
+                    x => string.Equals(id, x.ID, ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture)
                 )
                 .Value;
         }

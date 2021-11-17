@@ -5,6 +5,8 @@
         #region Construct
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
+            dependencyRegistry.Register<HNecessaireDependencyGroup>(() => new HNecessaireDependencyGroup());
+
             dependencyRegistry.Register<CoreDependencyGroup>(() => new CoreDependencyGroup());
 
             dependencyRegistry.Register<ResourcesDependencyGroup>(() => new ResourcesDependencyGroup());

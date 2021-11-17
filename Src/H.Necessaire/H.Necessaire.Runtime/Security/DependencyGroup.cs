@@ -2,6 +2,7 @@
 using H.Necessaire.Runtime.Security.Engines.Concrete;
 using H.Necessaire.Runtime.Security.Managers;
 using H.Necessaire.Runtime.Security.Managers.Concrete;
+using H.Necessaire.Runtime.Security.Resources.Concrete;
 
 namespace H.Necessaire.Runtime.Security
 {
@@ -9,12 +10,22 @@ namespace H.Necessaire.Runtime.Security
     {
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
-            dependencyRegistry.Register<SimpleSecureHasher>(() => new SimpleSecureHasher());
-            dependencyRegistry.Register<RS512Hasher>(() => new RS512Hasher());
-            dependencyRegistry.Register<ImAUserAuthAggregatorEngine>(() => new UserAuthAggregatorEngine());
+            dependencyRegistry
+                .Register<ImAUserAuthInfoStorageResource>(() => new UserAuthInfoFileSystemStorageResource())
+                .Register<ImAUserCredentialsStorageResource>(() => new UserCredentialsFileSystemStorageResource())
+                .Register<ImAUserInfoStorageResource>(() => new UserInfoFileSystemStorageResource())
+                ;
 
-            dependencyRegistry.Register<ImASecurityManager>(() => new SecurityManager());
-            dependencyRegistry.Register<ImAUserIdentityManager>(() => new UserIdentityManager());
+            dependencyRegistry
+                .Register<SimpleSecureHasher>(() => new SimpleSecureHasher())
+                .Register<RS512Hasher>(() => new RS512Hasher())
+                .Register<ImAUserAuthAggregatorEngine>(() => new UserAuthAggregatorEngine())
+                ;
+
+            dependencyRegistry
+                .Register<ImASecurityManager>(() => new SecurityManager())
+                .Register<ImAUserIdentityManager>(() => new UserIdentityManager())
+                ;
         }
     }
 }

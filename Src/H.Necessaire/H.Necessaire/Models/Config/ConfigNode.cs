@@ -2,20 +2,20 @@
 
 namespace H.Necessaire
 {
-    public class ConfigNode
+    public class ConfigNode : IStringIdentity
     {
-        public MultiType<string, ConfigNode[]> Get(string id)
+        public ConfigNode Get(string id)
         {
             if ((Value?.ToObject() ?? string.Empty) is string)
                 return null;
 
             return
                 (Value.ToObject() as ConfigNode[])
-                ?.FirstOrDefault(x => string.Equals(x?.Id, id, System.StringComparison.InvariantCultureIgnoreCase))
-                ?.Value;
+                ?.FirstOrDefault(x => string.Equals(x?.ID, id, System.StringComparison.InvariantCultureIgnoreCase))
+                ;
         }
 
-        public string Id { get; set; }
+        public string ID { get; set; }
         public MultiType<string, ConfigNode[]> Value { get; set; } = null as string;
 
         public override string ToString()
@@ -25,7 +25,7 @@ namespace H.Necessaire
 
         public string ToStringWithId()
         {
-            return $"{Id}={ToString()}";
+            return $"{ID}={ToString()}";
         }
     }
 }

@@ -11,11 +11,11 @@ namespace H.Necessaire.WebHooks.Implementations.SQLServer
     class SqlServerWebHookRequestStore : DapperSqlResourceBase, IWebHookRequestStorage
     {
         #region Construct
-        const string defaultTableName = "WebHookRequest";
-
         public SqlServerWebHookRequestStore(string connectionString)
-            : base(connectionString, defaultTableName)
+            : base(connectionString, tableName: "WebHookRequest")
         { }
+
+        protected override Task<SqlMigration[]> GetAllMigrations() => new SqlMigration[0].AsTask();
         #endregion
 
         public async Task Append(IWebHookRequest request)

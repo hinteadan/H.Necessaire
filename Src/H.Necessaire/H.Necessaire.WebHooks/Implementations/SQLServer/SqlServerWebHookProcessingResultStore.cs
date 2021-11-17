@@ -10,11 +10,11 @@ namespace H.Necessaire.WebHooks.Implementations.SQLServer
     class SqlServerWebHookProcessingResultStore : DapperSqlResourceBase, IWebHookProcessingResultStorage
     {
         #region Construct
-        const string defaultTableName = "WebHookProcessingResult";
-
         public SqlServerWebHookProcessingResultStore(string connectionString)
-            : base(connectionString, defaultTableName)
+            : base(connectionString, tableName: "WebHookProcessingResult")
         { }
+
+        protected override Task<SqlMigration[]> GetAllMigrations() => new SqlMigration[0].AsTask();
         #endregion
 
         public async Task Append(WebHookProcessingResult processingResult)

@@ -14,7 +14,7 @@ namespace H.Necessaire.Notification
         {
             if (configuration.RequestHeaders?.Any() ?? false)
             {
-                foreach (IGrouping<string, Note> header in configuration.RequestHeaders.GroupBy(x => x.Id))
+                foreach (IGrouping<string, Note> header in configuration.RequestHeaders.GroupBy(x => x.ID))
                 {
                     http.DefaultRequestHeaders.Add(header.Key, header.Select(x => x.Value).ToArray());
                 }

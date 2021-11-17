@@ -34,8 +34,10 @@ namespace H.Necessaire
         public byte Red { get; } = 0;
         public byte Green { get; } = 0;
         public byte Blue { get; } = 0;
-        public float Opacity { get; } = 1f;
+        public float Opacity { get; set; } = 1f;
         public string Hex { get; } = "#000000";
         public string ToCssRGBA() => $"rgba({Red},{Green},{Blue},{Opacity})";
+
+        public ColorInfo Clone() => new ColorInfo(Red, Green, Blue, Opacity);
     }
 }

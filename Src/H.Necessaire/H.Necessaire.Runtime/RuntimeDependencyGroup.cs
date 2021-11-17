@@ -5,13 +5,22 @@
         #region Construct
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
-            dependencyRegistry.RegisterAlwaysNew<ImAPingUseCase>(() => new PingUseCase());
-            dependencyRegistry.RegisterAlwaysNew<ImASecurityUseCase>(() => new SecurityUseCase());
+            dependencyRegistry
+                .Register<HasherFactory>(() => new HasherFactory())
+                ;
 
-            dependencyRegistry.Register<HasherFactory>(() => new HasherFactory());
+            dependencyRegistry
+                .Register<HNecessaireDependencyGroup>(() => new HNecessaireDependencyGroup())
+                ;
 
-            dependencyRegistry.Register<Validation.DependencyGroup>(() => new Validation.DependencyGroup());
-            dependencyRegistry.Register<Security.DependencyGroup>(() => new Security.DependencyGroup());
+            dependencyRegistry
+                .Register<Resources.DependencyGroup>(() => new Resources.DependencyGroup())
+                .Register<Validation.DependencyGroup>(() => new Validation.DependencyGroup())
+                .Register<Security.DependencyGroup>(() => new Security.DependencyGroup())
+                .Register<Sync.DependencyGroup>(() => new Sync.DependencyGroup())
+                .Register<UseCases.DependencyGroup>(() => new UseCases.DependencyGroup())
+                .Register<Daemons.DependencyGroup>(() => new Daemons.DependencyGroup())
+                ;
         }
         #endregion
     }

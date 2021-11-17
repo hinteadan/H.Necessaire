@@ -1,6 +1,5 @@
 ﻿using Bridge.Html5;
 using Bridge.jQuery2;
-using H.Necessaire;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,6 +16,12 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         public HttpClient SetAuth(string type, string token)
         {
             customHeaders["Authorization"] = $"{type} {token}";
+            return this;
+        }
+
+        public HttpClient SetConsumer(Guid consumerID)
+        {
+            customHeaders["X-H.Necessaire.ConsumerID"] = $"{consumerID}";
             return this;
         }
 

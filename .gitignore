@@ -349,3 +349,6 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 **/H.Necessaire.AspNetCoreWebAppSample/Content/
+**/ConnectionString.txt
+**/DebugConnectionString.txt
+**/appsettings.Local.json

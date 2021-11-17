@@ -7,20 +7,20 @@ namespace H.Necessaire.Serialization
 {
     public static class SerializationExtensions
     {
-        public static string ToJsonArray<T>(this IEnumerable<T> value, string defaultTo = null)
+        public static string ToJsonArray<T>(this IEnumerable<T> value, string defaultTo = null, bool isPrettyPrinted = false)
         {
             if (!value?.Any() ?? true)
                 return defaultTo;
 
-            return JsonConvert.SerializeObject(value);
+            return JsonConvert.SerializeObject(value, isPrettyPrinted ? Formatting.Indented : Formatting.None);
         }
 
-        public static string ToJsonObject<T>(this T value, string defaultTo = null)
+        public static string ToJsonObject<T>(this T value, string defaultTo = null, bool isPrettyPrinted = false)
         {
             if (value == null)
                 return defaultTo;
 
-            return JsonConvert.SerializeObject(value);
+            return JsonConvert.SerializeObject(value, isPrettyPrinted ? Formatting.Indented : Formatting.None);
         }
 
         public static T JsonToObject<T>(this string jsonString, T defaultTo = default)
@@ -33,10 +33,10 @@ namespace H.Necessaire.Serialization
             return jsonString.ParseJsonToObject(defaultTo);
         }
 
-        public static Note[] DeserializeToNotes(this string json)
+        public static Note[] DeserializeToNotes(this string json, Note[] defaultTo = null)
         {
             if (string.IsNullOrWhiteSpace(json))
-                return new Note[0];
+                return defaultTo;
 
             Note[] result = null;
 
@@ -44,7 +44,7 @@ namespace H.Necessaire.Serialization
             if (result == null)
                 new Action(() => result = Note.FromDictionary(JsonConvert.DeserializeObject<Dictionary<string, string>>(json))).TryOrFailWithGrace(numberOfTimes: 1, onFail: x => result = null);
 
-            return result ?? new Note[0];
+            return result ?? defaultTo;
         }
 
         private static OperationResult<T> ParseJsonToObject<T>(this string jsonString, T defaultTo = default)

@@ -36,8 +36,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="AppConfig.cs" />
     <Compile Include="AppNavigationRegistry.cs" />
     <Compile Include="AppWireup.cs" />
+    <Compile Include="Daemons\Abstracts\DaemonBase.cs" />
+    <Compile Include="Daemons\ConsolePingDaemon.cs" />
+    <Compile Include="Daemons\DaemonsDependencyGroup.cs" />
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -68,6 +72,7 @@
     <Content Include="AppIcon\favicon-16x16.png" />
     <Content Include="AppIcon\favicon-32x32.png" />
     <Content Include="AppIcon\favicon.ico" />
+    <Content Include="Refs\dexie.js" />
     <Content Include="Refs\fabric.min.css" />
     <Content Include="Refs\react-dom.production.min.js" />
     <Content Include="Refs\react.production.min.js" />

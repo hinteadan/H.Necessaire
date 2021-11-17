@@ -5,6 +5,7 @@
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry.Register<SecurityManager>(() => new SecurityManager());
+            dependencyRegistry.Register<ConsumerIdentityManager>(() => new ConsumerIdentityManager());
         }
     }
 }

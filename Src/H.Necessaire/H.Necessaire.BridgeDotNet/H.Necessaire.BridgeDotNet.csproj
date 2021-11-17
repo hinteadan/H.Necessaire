@@ -48,6 +48,9 @@
     <Compile Include="..\H.Necessaire\Extensions\DataExtensions.cs">
       <Link>Extensions\DataExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Extensions\DataPrintingExtensions.cs">
+      <Link>Extensions\DataPrintingExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Extensions\ExceptionExtensions.cs">
       <Link>Extensions\ExceptionExtensions.cs</Link>
     </Compile>
@@ -59,6 +62,9 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Extensions\TaskExtensions.cs">
       <Link>Extensions\TaskExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\HNecessaireDependencyGroup.cs">
+      <Link>HNecessaireDependencyGroup.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\IoC\Concrete\DependencyRegistry.cs">
       <Link>IoC\Concrete\DependencyRegistry.cs</Link>
@@ -105,6 +111,9 @@
     <Compile Include="..\H.Necessaire\Models\Collections\CollectionOfDisposables.cs">
       <Link>Models\Collections\CollectionOfDisposables.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Collections\IDFilter.cs">
+      <Link>Models\Collections\IDFilter.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Collections\IDisposableEnumerable.cs">
       <Link>Models\Collections\IDisposableEnumerable.cs</Link>
     </Compile>
@@ -135,11 +144,17 @@
     <Compile Include="..\H.Necessaire\Models\Config\RuntimeConfig.cs">
       <Link>Models\Config\RuntimeConfig.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\IDentityType.cs">
+      <Link>Models\IDentityType.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\IGuidIdentity.cs">
       <Link>Models\IGuidIdentity.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Models\IKeyValueStorage.cs">
       <Link>Models\IKeyValueStorage.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\IStringIdentity.cs">
+      <Link>Models\IStringIdentity.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Models\MultiType.cs">
       <Link>Models\MultiType.cs</Link>
@@ -165,6 +180,9 @@
     <Compile Include="..\H.Necessaire\Models\NumberInterval.cs">
       <Link>Models\NumberInterval.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\OperationContext.cs">
+      <Link>Models\OperationContext.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\OperationResult.cs">
       <Link>Models\OperationResult.cs</Link>
     </Compile>
@@ -182,6 +200,9 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Models\Security\AuthInfo.cs">
       <Link>Models\Security\AuthInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\ConsumerIdentity.cs">
+      <Link>Models\Security\ConsumerIdentity.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Models\Security\IDentity.cs">
       <Link>Models\Security\IDentity.cs</Link>
@@ -228,6 +249,12 @@
     <Compile Include="..\H.Necessaire\Models\Security\JWT\JwtHeader.cs">
       <Link>Models\Security\JWT\JwtHeader.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\WellKnownConsumerIdentityNote.cs">
+      <Link>Models\Security\WellKnownConsumerIdentityNote.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\WellKnownConsumerPlatformType.cs">
+      <Link>Models\Security\WellKnownConsumerPlatformType.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Versioning\Version.cs">
       <Link>Models\Versioning\Version.cs</Link>
     </Compile>
@@ -249,6 +276,9 @@
     <Compile Include="..\H.Necessaire\Operations\ExecutionUtilities.cs">
       <Link>Operations\ExecutionUtilities.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Operations\ImADaemon.cs">
+      <Link>Operations\ImADaemon.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Operations\ImAHasherEngine.cs">
       <Link>Operations\ImAHasherEngine.cs</Link>
     </Compile>
@@ -258,11 +288,92 @@
     <Compile Include="..\H.Necessaire\Operations\ScopedRunner.cs">
       <Link>Operations\ScopedRunner.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Storage\Abstract\InMemoryStorageServiceBase.cs">
+      <Link>Operations\Storage\Abstract\InMemoryStorageServiceBase.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Storage\Concrete\InMemoryStorageService.cs">
+      <Link>Operations\Storage\Concrete\InMemoryStorageService.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Storage\Concrete\InMemoryTableStore.cs">
+      <Link>Operations\Storage\Concrete\InMemoryTableStore.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Storage\ImAStorageBrowserService.cs">
+      <Link>Operations\Storage\ImAStorageBrowserService.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Storage\ImAStorageService.cs">
+      <Link>Operations\Storage\ImAStorageService.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\Abstracts\SyncerBase.cs">
+      <Link>Operations\Sync\Abstracts\SyncerBase.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\Concrete\CatchAllSyncRequestProcessor.cs">
+      <Link>Operations\Sync\Concrete\CatchAllSyncRequestProcessor.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\Concrete\SyncableBrowser.cs">
+      <Link>Operations\Sync\Concrete\SyncableBrowser.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\Concrete\SyncRequestProcessorFactory.cs">
+      <Link>Operations\Sync\Concrete\SyncRequestProcessorFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\ImASyncableBrowser.cs">
+      <Link>Operations\Sync\ImASyncableBrowser.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\ImASyncer.cs">
+      <Link>Operations\Sync\ImASyncer.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\ImASyncRegistry.cs">
+      <Link>Operations\Sync\ImASyncRegistry.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\ImASyncRequestExilationProcessor.cs">
+      <Link>Operations\Sync\ImASyncRequestExilationProcessor.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\ImASyncRequestProcessor.cs">
+      <Link>Operations\Sync\ImASyncRequestProcessor.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\ImASyncRequestProcessorFactory.cs">
+      <Link>Operations\Sync\ImASyncRequestProcessorFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\ImSyncable.cs">
+      <Link>Operations\Sync\ImSyncable.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\Models\ExiledSyncRequest.cs">
+      <Link>Operations\Sync\Models\ExiledSyncRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\Models\SyncNode.cs">
+      <Link>Operations\Sync\Models\SyncNode.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\Models\SyncRequest.cs">
+      <Link>Operations\Sync\Models\SyncRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\Models\SyncRequestFilter.cs">
+      <Link>Operations\Sync\Models\SyncRequestFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\Models\SyncResponse.cs">
+      <Link>Operations\Sync\Models\SyncResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\Models\SyncStatus.cs">
+      <Link>Operations\Sync\Models\SyncStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Sync\SyncDependencyGroup.cs">
+      <Link>Operations\Sync\SyncDependencyGroup.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Operations\Throttler.cs">
       <Link>Operations\Throttler.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\TimeMeasurement.cs">
       <Link>Operations\TimeMeasurement.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\UI\UserInput\UserInputValidationExtensions.cs">
+      <Link>UI\UserInput\UserInputValidationExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\UI\UserInput\UserOption.cs">
+      <Link>UI\UserInput\UserOption.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\UI\UserInput\UserOptionsContext.cs">
+      <Link>UI\UserInput\UserOptionsContext.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\UI\UserInput\UserOptionSelectionResult.cs">
+      <Link>UI\UserInput\UserOptionSelectionResult.cs</Link>
     </Compile>
     <Compile Include="Models\ConcurrentDictionary.cs" />
     <Compile Include="Operations\ConcreteFactory.cs" />
@@ -283,5 +394,6 @@
   <ItemGroup>
     <None Include="H.Necessaire.BridgeDotNet.nuspec" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

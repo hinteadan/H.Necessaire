@@ -13,8 +13,14 @@ namespace H.Necessaire.CLI
                 wireup
                 .With(x => x.Register<RuntimeConfig>(() => new RuntimeConfig
                 {
-                    Values = new ConfigNode[] {
-                        new ConfigNode { Id = "NuSpectRootFolderPath", Value = GetCodebaseFolderPath() },
+                    Values = new[] {
+                        "NuSpectRootFolderPath".ConfigWith(GetCodebaseFolderPath()),
+                        "SqlConnections".ConfigWith(
+                            "DefaultConnectionString".ConfigWith(File.ReadAllText("DebugConnectionString.txt")),
+                            "DatabaseNames".ConfigWith(
+                                "Core".ConfigWith("H.Necessaire.Core.Debug")
+                            )
+                        ),
                     },
                 }));
             ;

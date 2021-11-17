@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace H.Necessaire.Dapper
 {
@@ -9,8 +10,8 @@ namespace H.Necessaire.Dapper
         static readonly System.Reflection.PropertyInfo[] entityProperties;
         static SqlEntityMapperBase()
         {
-            sqlEntityProperties = typeof(TSqlEntity).GetProperties();
-            entityProperties = typeof(TEntity).GetProperties();
+            sqlEntityProperties = typeof(TSqlEntity).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            entityProperties = typeof(TEntity).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
         }
         #endregion
 
@@ -20,11 +21,11 @@ namespace H.Necessaire.Dapper
 
             foreach (System.Reflection.PropertyInfo property in entityProperties)
             {
-                System.Reflection.PropertyInfo sqlEntityProperty = sqlEntityProperties.SingleOrDefault(x => x.Name == property.Name);
+                System.Reflection.PropertyInfo sqlEntityProperty = sqlEntityProperties.SingleOrDefault(x => x.Name == property.Name && x.PropertyType == property.PropertyType);
                 if (sqlEntityProperty == null)
                     continue;
 
-                sqlEntityProperty.SetValue(sqlEntity, property.GetValue(entity));
+                new Action(() => sqlEntityProperty.SetValue(sqlEntity, property.GetValue(entity))).TryOrFailWithGrace();
             }
 
             return sqlEntity;
@@ -36,11 +37,11 @@ namespace H.Necessaire.Dapper
 
             foreach (System.Reflection.PropertyInfo property in sqlEntityProperties)
             {
-                System.Reflection.PropertyInfo entityProperty = entityProperties.SingleOrDefault(x => x.Name == property.Name);
+                System.Reflection.PropertyInfo entityProperty = entityProperties.SingleOrDefault(x => x.Name == property.Name && x.PropertyType == property.PropertyType);
                 if (entityProperty == null)
                     continue;
 
-                entityProperty.SetValue(entity, property.GetValue(sqlEntity));
+                new Action(() => entityProperty.SetValue(entity, property.GetValue(sqlEntity))).TryOrFailWithGrace();
             }
 
             return entity;

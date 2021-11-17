@@ -9,16 +9,22 @@ namespace H.Necessaire.CLI.Commands
     {
         #region Construct
         RS512Hasher hasher = new RS512Hasher();
+        ImAStorageService<string, ExiledSyncRequest> exiledSyncRequestStorageService = null;
+        IKeyValueStorage keyValueStorage = null;
         public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             base.ReferDependencies(dependencyProvider);
             hasher = dependencyProvider.Get<RS512Hasher>();
+            exiledSyncRequestStorageService = dependencyProvider.Get<ImAStorageService<string, ExiledSyncRequest>>();
+            keyValueStorage = dependencyProvider.Get<IKeyValueStorage>();
         }
         #endregion
 
         public override async Task<OperationResult> Run()
         {
-            await DebugJwt();
+            //await DebugJwt();
+
+            await DebugSql();
 
             return OperationResult.Win();
         }
@@ -56,6 +62,12 @@ namespace H.Necessaire.CLI.Commands
             string signature = jwtHash.Hash;
 
             string jwtString = jwt.ToStringSigned();
+        }
+
+        private async Task DebugSql()
+        {
+            await exiledSyncRequestStorageService.Save(new ExiledSyncRequest { });
+            await keyValueStorage.Set("Test", "abc");
         }
     }
 }

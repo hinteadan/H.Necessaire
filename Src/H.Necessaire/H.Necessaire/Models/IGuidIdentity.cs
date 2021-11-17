@@ -2,8 +2,5 @@
 
 namespace H.Necessaire
 {
-    public interface IGuidIdentity
-    {
-        Guid ID { get; }
-    }
+    public interface IGuidIdentity : IDentityType<Guid> { }
 }

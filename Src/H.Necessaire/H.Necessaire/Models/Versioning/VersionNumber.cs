@@ -6,14 +6,25 @@ namespace H.Necessaire
 {
     public class VersionNumber
     {
+        public static readonly IComparer<VersionNumber> Comparer = new VersionNumberComparer();
+
         public static readonly VersionNumber Unknown = new VersionNumber
         {
             Major = 0,
             Minor = 0,
             Patch = 0,
             Build = 0,
-            Suffix = "unknown",
+            Suffix = null,
         };
+
+        public VersionNumber(int major = 0, int minor = 0, int? patch = null, int? build = null, string suffix = null)
+        {
+            this.Major = major;
+            this.Minor = minor;
+            this.Patch = patch;
+            this.Build = build;
+            this.Suffix = suffix;
+        }
 
         public int Major { get; set; } = 0;
         public int Minor { get; set; } = 0;
@@ -144,6 +155,34 @@ namespace H.Necessaire
                     Build = Build,
                     Suffix = Suffix,
                 };
+        }
+
+        private class VersionNumberComparer : IComparer<VersionNumber>
+        {
+            public int Compare(VersionNumber x, VersionNumber y)
+            {
+                if (x.Major < y.Major)
+                    return -1;
+                if (x.Major > y.Major)
+                    return 1;
+
+                if (x.Minor < y.Minor)
+                    return -1;
+                if (x.Minor > y.Minor)
+                    return 1;
+
+                if ((x.Patch ?? 0) < (y.Patch ?? 0))
+                    return -1;
+                if ((x.Patch ?? 0) > (y.Patch ?? 0))
+                    return 1;
+
+                if ((x.Build ?? 0) < (y.Build ?? 0))
+                    return -1;
+                if ((x.Build ?? 0) > (y.Build ?? 0))
+                    return 1;
+
+                return string.Compare(x.Suffix, y.Suffix, ignoreCase: true);
+            }
         }
     }
 }

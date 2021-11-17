@@ -14,7 +14,7 @@ namespace H.Necessaire.CLI.Commands.BridgeDotNet.Operations
 
             new Action(() =>
             {
-                Note[] source = args?.Where(x => string.Equals(x.Id, "src", StringComparison.InvariantCultureIgnoreCase)).ToArray() ?? new Note[0];
+                Note[] source = args?.Where(x => string.Equals(x.ID, "src", StringComparison.InvariantCultureIgnoreCase)).ToArray() ?? new Note[0];
                 if (source.Length != 1)
                 {
                     result
@@ -24,7 +24,7 @@ namespace H.Necessaire.CLI.Commands.BridgeDotNet.Operations
                     return;
                 }
 
-                Note[] destinations = args?.Where(x => string.Equals(x.Id, "dst", StringComparison.InvariantCultureIgnoreCase)).ToArray() ?? new Note[0];
+                Note[] destinations = args?.Where(x => string.Equals(x.ID, "dst", StringComparison.InvariantCultureIgnoreCase)).ToArray() ?? new Note[0];
                 if (!destinations.Any())
                 {
                     result

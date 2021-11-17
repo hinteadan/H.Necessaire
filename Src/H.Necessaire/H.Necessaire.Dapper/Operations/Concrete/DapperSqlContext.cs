@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using H.Necessaire;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -97,6 +96,31 @@ namespace H.Necessaire.Dapper.Operations.Concrete
             return result;
         }
 
+        public async Task<IEnumerable<TSqlEntity>> StreamAllByCustomCriteria<TSqlEntity>(ISqlFilterCriteria[] sqlFilters, object sqlParams, SqlSortCriteria[] sortCriterias, SqlLimitCriteria limitCriteria, string tableName) where TSqlEntity : ISqlEntry
+        {
+            string filterSql = string.Join(" AND ", sqlFilters.Select(x => x.ToString()));
+
+            string sortSql = string.Empty;
+            if (sortCriterias?.Any() ?? false)
+                sortSql = string.Join(",", sortCriterias.Select(x => $"[{x.ColumnName}] {x.SortDirection}"));
+
+            string limitSql = string.Empty;
+            if (limitCriteria != null)
+            {
+                limitSql = $"OFFSET {limitCriteria.Offset} ROWS FETCH NEXT {limitCriteria.Count} ROWS ONLY";
+                if (string.IsNullOrWhiteSpace(sortSql))
+                    sortSql = "[ID] ASC";
+            }
+
+            string sql = $"SELECT {PrintSqlColumns(typeof(TSqlEntity).GetColumnNames())} FROM [{tableName ?? defaultTableName}]" +
+                $"{(string.IsNullOrWhiteSpace(filterSql) ? string.Empty : $" WHERE {filterSql}")}" +
+                $"{(string.IsNullOrWhiteSpace(sortSql) ? string.Empty : $" ORDER BY {sortSql}")}" +
+                $"{(string.IsNullOrWhiteSpace(limitSql) ? string.Empty : $" {limitSql}")}";
+
+            IEnumerable<TSqlEntity> result = await dbConnection.QueryAsync<TSqlEntity>(sql, sqlParams);
+            return result;
+        }
+
         public async Task<IEnumerable<TSqlEntity>> StreamAllByCustomSql<TSqlEntity>(string sql) where TSqlEntity : ISqlEntry
         {
             IEnumerable<TSqlEntity> result = await dbConnection.QueryAsync<TSqlEntity>(sql);
@@ -105,7 +129,7 @@ namespace H.Necessaire.Dapper.Operations.Concrete
 
         public async Task InsertEntity<TSqlEntity>(TSqlEntity entity, string tableName = null)
         {
-            System.Reflection.PropertyInfo[] publicProperties = entity.GetType().GetProperties().Where(p => !p.GetGetMethod().IsVirtual).ToArray();
+            System.Reflection.PropertyInfo[] publicProperties = entity.GetType().GetPropertiesThatCountAsColumns();
             string columnNames = string.Join(",", publicProperties.Select(p => $"[{p.Name}]"));
             string columnValues = string.Join(",", publicProperties.Select(p => $"@{p.Name}"));
             string sql = $"INSERT INTO [{tableName ?? defaultTableName}] ({columnNames}) VALUES ({columnValues})";
@@ -114,7 +138,7 @@ namespace H.Necessaire.Dapper.Operations.Concrete
 
         public async Task UpdateEntityByID<TSqlEntity>(TSqlEntity entity, string tableName = null, string idColumnName = "ID") where TSqlEntity : ISqlEntry
         {
-            System.Reflection.PropertyInfo[] publicProperties = entity.GetType().GetProperties();
+            System.Reflection.PropertyInfo[] publicProperties = entity.GetType().GetPropertiesThatCountAsColumns();
             string updateColumns = string.Join(",", publicProperties.Where(p => p.Name != idColumnName).Select(p => $"[{p.Name}]=@{p.Name}"));
             string sql = $"UPDATE [{tableName ?? defaultTableName}] SET {updateColumns} WHERE [{idColumnName}] = @{idColumnName}";
             await dbConnection.ExecuteAsync(sql, entity);

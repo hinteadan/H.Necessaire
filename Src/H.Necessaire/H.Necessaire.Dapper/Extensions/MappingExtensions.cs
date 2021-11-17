@@ -14,34 +14,32 @@ namespace H.Necessaire.Dapper
             mappers.AddOrUpdate(typeof(SqlEntityMapperBase<TEntity, TSqlEntity>), mapper, (a, b) => mapper);
         }
 
-        public static TSqlEntity ToSqlEntity<TEntity, TSqlEntity>(this TEntity entity, out TSqlEntity result) where TEntity : new() where TSqlEntity : new()
+        public static TSqlEntity ToSqlEntity<TEntity, TSqlEntity>(this TEntity entity) where TEntity : new() where TSqlEntity : ISqlEntry, new()
         {
-            result = GetMapper<TEntity, TSqlEntity>().MapEntityToSql(entity);
-            return result;
+            return GetMapper<TEntity, TSqlEntity>().MapEntityToSql(entity);
         }
-        public static TEntity ToEntity<TEntity, TSqlEntity>(this TSqlEntity sqlEntity, out TEntity result) where TEntity : new() where TSqlEntity : new()
+        public static TEntity ToEntity<TEntity, TSqlEntity>(this TSqlEntity sqlEntity) where TEntity : new() where TSqlEntity : ISqlEntry, new()
         {
-            result = GetMapper<TEntity, TSqlEntity>().MapSqlToEntity(sqlEntity);
-            return result;
+            return GetMapper<TEntity, TSqlEntity>().MapSqlToEntity(sqlEntity);
         }
 
-        public static Assembly InitializeHNecessaireDapperMappers(this Assembly assemblyToScanForMappers)
+        public static void InitializeHNecessaireDapperMappers()
         {
-            if (assemblyToScanForMappers == null)
-                throw new ArgumentNullException(nameof(assemblyToScanForMappers), "The given assembly is null");
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+            Type sqlMapperType = typeof(ISqlEntityMapper);
 
             Type[] mapperTypes
-                = assemblyToScanForMappers
-                .GetTypes()
-                .Where(type => type.GetInterfaces().Any(t => t == typeof(ISqlEntityMapper)) && type.IsClass && !type.IsAbstract)
+                = assemblies
+                .SelectMany(x => x.GetTypes())
+                .Where(type => type != null)
+                .Where(type => sqlMapperType.IsAssignableFrom(type) && type.IsClass && !type.IsAbstract)
                 .ToArray();
 
             foreach (Type mapperType in mapperTypes)
             {
                 mapperType.TypeInitializer.Invoke(null, null);
             }
-
-            return assemblyToScanForMappers;
         }
 
         private static SqlEntityMapperBase<TEntity, TSqlEntity> GetMapper<TEntity, TSqlEntity>() where TEntity : new() where TSqlEntity : new()

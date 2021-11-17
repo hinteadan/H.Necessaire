@@ -5,18 +5,22 @@ namespace H.Necessaire
 {
     public struct Note
     {
+        public static readonly Note Empty = new Note();
+
         public Note(string id, string value)
         {
-            this.Id = id;
+            this.ID = id;
             this.Value = value;
         }
 
-        public string Id { get; set; }
+        public string ID { get; set; }
         public string Value { get; set; }
+
+        public bool IsEmpty() => string.IsNullOrWhiteSpace(ID) && string.IsNullOrWhiteSpace(Value);
 
         public override string ToString()
         {
-            return $"[{Id}:\"{Value}\"]";
+            return $"[{ID}:\"{Value}\"]";
         }
 
         public static Note[] FromDictionary(Dictionary<string, string> keyValuePairs)

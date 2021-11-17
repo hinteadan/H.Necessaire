@@ -1,4 +1,5 @@
-﻿using Bridge.React;
+﻿using Bridge;
+using Bridge.React;
 using System;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
@@ -6,6 +7,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     public class BrandingHeader : ComponentBase<BrandingHeader.Props, BrandingHeader.State>
     {
         public BrandingHeader() : base(new Props(), null) { }
+        public BrandingHeader(Props props, params Union<ReactElement, string>[] children) : base(props, children) { }
 
         public override ReactElement Render()
         {
@@ -20,6 +22,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                             Display = Bridge.Html5.Display.Flex,
                             BackgroundColor = Branding.PrimaryColorTranslucent.ToCssRGBA(),
                             BoxShadow = "0 3.2px 7.2px 0 rgba(0,0,0,.132),0 .6px 1.8px 0 rgba(0,0,0,.108)",
+                            Color = Branding.LightTextColor.ToCssRGBA(),
                         },
                     },
 
@@ -59,7 +62,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         public class State : ComponentStateBase { }
         public class Props : ComponentPropsBase
         {
-            public Action OnClick { get; set; } = null;
+            public Action OnClick { get; set; } = () => Navi.GoHome();
         }
     }
 }

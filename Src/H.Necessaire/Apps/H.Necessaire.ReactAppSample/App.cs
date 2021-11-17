@@ -15,8 +15,16 @@ namespace H.Necessaire.ReactAppSample
 
         static async Task Run()
         {
+            await Task.Delay(1000);
+
+            await Debug();
+
+            Console.WriteLine($"DONE ReactAppSample App Initialize");
+        }
+
+        private static async Task Debug()
+        {
             await Task.Delay(500);
-            Console.WriteLine($"DONE OWN App Initialize");
         }
     }
 }

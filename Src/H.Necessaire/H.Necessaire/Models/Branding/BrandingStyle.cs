@@ -7,19 +7,15 @@
         #region Construct
         public readonly int SizingUnitInPixels = 10;
 
-        public readonly string DayOfWeekFormat = "dddd";
-        public readonly string TimeFormat = "HH:mm";
-        public readonly string TimeStampFormatThisYear = "MMM dd 'at' HH:mm";
-        public readonly string TimeStampFormat = "MMM dd, yyyy 'at' HH:mm";
-        public readonly string TimeStampIdentifierFormat = "yyyyMMdd_HHmmss";
+        //public ColorPalette Colors { get; } = ColorPalette.Default;
+        public ColorPalette Colors { get; } = ColorPalette.CyanMate;
 
-        public ColorPalette Colors { get; } = ColorPalette.Default;
-
-        public Typography Typography { get; } = Typography.Default;
+        //public Typography Typography { get; } = Typography.Default;
+        public Typography Typography { get; } = Typography.FiraSans;
         #endregion
 
-        public ColorInfo BackgroundColor => Colors.Complementary.Lighter();
-        public ColorInfo BackgroundColorTranslucent => Colors.Complementary.Lighter(10);
+        public ColorInfo BackgroundColor => Colors.Complementary.Lighter(10);
+        public ColorInfo BackgroundColorTranslucent => Colors.Complementary.Lighter(10).Clone().And(x => x.Opacity = .83f);
 
         public ColorInfo PrimaryColor => Colors.Primary.Color;
         public ColorInfo PrimaryColorTranslucent => Colors.Primary.Lighter();
@@ -30,7 +26,7 @@
         public ColorInfo SecondaryColorFaded => Colors.PrimaryIsh().Lighter(2);
 
         public ColorInfo TextColor { get; } = new ColorInfo(0, 0, 0);
-        public ColorInfo LightTextColor { get; } = new ColorInfo(0, 0, 0, .5f);
+        public ColorInfo LightTextColor { get; } = new ColorInfo(255, 255, 255, .85f);
         public ColorInfo MutedTextColor { get; } = new ColorInfo(0, 0, 0, .35f);
         public ColorInfo HighlightTextColor => Colors.Primary.Darker(10);
 

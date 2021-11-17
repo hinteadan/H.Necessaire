@@ -5,6 +5,76 @@ namespace H.Necessaire.Models.Branding
 {
     public class ColorPalette
     {
+        public static readonly ColorPalette CyanMate =
+            new ColorPalette(
+
+                new ColorVariation(
+                    new ColorInfo("#476569"),
+                    lighterShades: new ColorInfo[] {
+                        new ColorInfo("#597478"),
+                        new ColorInfo("#6c8487"),
+                        new ColorInfo("#7e9396"),
+                        new ColorInfo("#91a3a5"),
+                        new ColorInfo("#a3b2b4"),
+                        new ColorInfo("#b5c1c3"),
+                        new ColorInfo("#c8d1d2"),
+                        new ColorInfo("#dae0e1"),
+                        new ColorInfo("#edf0f0"),
+                        new ColorInfo("#ffffff"),
+                    },
+                    darkerShades: new ColorInfo[] {
+                        new ColorInfo("#405b5f"),
+                        new ColorInfo("#395154"),
+                        new ColorInfo("#32474a"),
+                        new ColorInfo("#2b3d3f"),
+                        new ColorInfo("#243335"),
+                        new ColorInfo("#1c282a"),
+                        new ColorInfo("#151e1f"),
+                        new ColorInfo("#0e1415"),
+                        new ColorInfo("#070a0a"),
+                        new ColorInfo("#000000"),
+                    }
+                ),
+
+                new ColorVariation(
+                    new ColorInfo("#A0D5DC"),
+                    lighterShades: new ColorInfo[] {
+                        new ColorInfo("#b3dde3"),
+                        new ColorInfo("#c6e6ea"),
+                        new ColorInfo("#d9eef1"),
+                        new ColorInfo("#f6fbfc"),
+                    },
+                    darkerShades: new ColorInfo[] {
+                        new ColorInfo("#90c0c6"),
+                        new ColorInfo("#80aab0"),
+                        new ColorInfo("#70959a"),
+                        new ColorInfo("#608084"),
+                        new ColorInfo("#506b6e"),
+                        new ColorInfo("#405558"),
+                        new ColorInfo("#304042"),
+                        new ColorInfo("#202b2c"),
+                    }
+                ),
+
+                new ColorVariation(
+                    new ColorInfo("#dbf5f8"),
+                    lighterShades: new ColorInfo[] {
+                        new ColorInfo("#e6f8fa"),
+                        new ColorInfo("#f4fcfd"),
+                        new ColorInfo("#ffffff"),
+                    },
+                    darkerShades: new ColorInfo[] {
+                        new ColorInfo("#c5dddf"),
+                        new ColorInfo("#afc4c6"),
+                        new ColorInfo("#99acae"),
+                        new ColorInfo("#839395"),
+                        new ColorInfo("#6e7b7c"),
+                        new ColorInfo("#586263"),
+                        new ColorInfo("#42494a"),
+                    }
+                )
+            );
+
         public static readonly ColorPalette Default =
             new ColorPalette(
 

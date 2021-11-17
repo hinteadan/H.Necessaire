@@ -24,7 +24,7 @@ namespace H.Necessaire.RavenDB
         }
 
         RavenDbDocumentStore ravenDbDocumentStore;
-        public void ReferDependencies(ImADependencyProvider dependencyProvider)
+        public virtual void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             ravenDbDocumentStore = dependencyProvider.Get<RavenDbDocumentStore>();
         }
@@ -40,7 +40,7 @@ namespace H.Necessaire.RavenDB
 
         protected virtual Task EnsureIndexes() { return true.AsTask(); }
 
-        public async Task Save(TEntity item)
+        public virtual async Task Save(TEntity item)
         {
             await EnsureIndexes();
 
@@ -62,7 +62,7 @@ namespace H.Necessaire.RavenDB
             }
         }
 
-        public async Task<TEntity> Load(TKey id)
+        public virtual async Task<TEntity> Load(TKey id)
         {
             await EnsureIndexes();
 
@@ -79,7 +79,7 @@ namespace H.Necessaire.RavenDB
             }
         }
 
-        public async Task Delete(TKey id)
+        public virtual async Task Delete(TKey id)
         {
             await EnsureIndexes();
 
@@ -98,7 +98,7 @@ namespace H.Necessaire.RavenDB
             }
         }
 
-        public async Task<TEntity[]> Search(TFilter filter)
+        public virtual async Task<TEntity[]> Search(TFilter filter)
         {
             await EnsureIndexes();
 
@@ -109,14 +109,14 @@ namespace H.Necessaire.RavenDB
             }
         }
 
-        public async Task<IAsyncDocumentSession> CustomQuerySession()
+        public virtual async Task<IAsyncDocumentSession> CustomQuerySession()
         {
             await EnsureIndexes();
 
             return NewReadSession();
         }
 
-        public async Task<long> Count(TFilter filter)
+        public virtual async Task<long> Count(TFilter filter)
         {
             await EnsureIndexes();
 
@@ -127,7 +127,7 @@ namespace H.Necessaire.RavenDB
             }
         }
 
-        public async Task<long> DeleteMany(TFilter filter)
+        public virtual async Task<long> DeleteMany(TFilter filter)
         {
             await EnsureIndexes();
 
@@ -151,7 +151,7 @@ namespace H.Necessaire.RavenDB
             }
         }
 
-        private IAsyncDocumentSession NewWriteSession()
+        protected IAsyncDocumentSession NewWriteSession()
         {
             return ravenDbDocumentStore.Store
                                 .OpenAsyncSession(
@@ -162,7 +162,7 @@ namespace H.Necessaire.RavenDB
                                 );
         }
 
-        private IAsyncDocumentSession NewReadSession()
+        protected IAsyncDocumentSession NewReadSession()
         {
             return ravenDbDocumentStore.Store
                                 .OpenAsyncSession(
@@ -195,14 +195,14 @@ namespace H.Necessaire.RavenDB
             }
         }
 
-        protected async Task EnsureIndex(Func<AbstractIndexCreationTask<TEntity>> indexDefiniton)
+        protected virtual async Task EnsureIndex(Func<AbstractIndexCreationTask<TEntity>> indexDefiniton)
         {
             await EnsureDatabaseExists();
 
             await indexDefiniton().ExecuteAsync(ravenDbDocumentStore.Store, ravenDbDocumentStore.Store.Conventions, DatabaseName);
         }
 
-        protected async Task EnsureIndex<TReduceResult>(Func<AbstractIndexCreationTask<TEntity, TReduceResult>> indexDefiniton)
+        protected virtual async Task EnsureIndex<TReduceResult>(Func<AbstractIndexCreationTask<TEntity, TReduceResult>> indexDefiniton)
         {
             await EnsureDatabaseExists();
 

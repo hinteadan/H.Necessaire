@@ -16,6 +16,10 @@
       "commandName": "Project",
       "commandLineArgs": "nugetversion update H.Necessaire=patch H.Necessaire.BridgeDotNet=patch"
     },
+    "CLI - nugetversion - major H.Necessaire": {
+      "commandName": "Project",
+      "commandLineArgs": "nugetversion update H.Necessaire=major H.Necessaire.BridgeDotNet=major"
+    },
     "CLI - debug": {
       "commandName": "Project",
       "commandLineArgs": "debug"

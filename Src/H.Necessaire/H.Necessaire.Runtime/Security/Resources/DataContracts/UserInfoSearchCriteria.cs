@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace H.Necessaire.Runtime.Security.Resources.DataContracts
+namespace H.Necessaire.Runtime
 {
     public class UserInfoSearchCriteria
     {

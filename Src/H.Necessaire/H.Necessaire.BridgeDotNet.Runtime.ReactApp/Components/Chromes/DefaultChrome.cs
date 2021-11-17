@@ -6,7 +6,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     public class DefaultChrome : ComponentBase<DefaultChrome.Props, DefaultChrome.State>
     {
         public DefaultChrome(Props props, params Union<ReactElement, string>[] children) : base(props, children) { }
-        public DefaultChrome(params Union<ReactElement, string>[] children) : base(Props.Default, children) { }
+        public DefaultChrome(params Union<ReactElement, string>[] children) : base(new Props(), children) { }
 
         public override ReactElement Render()
         {
@@ -23,7 +23,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                         }
                     },
 
-                    new BrandingHeader(),
+                    new BrandingHeader(props?.HeaderProps, props?.Title),
 
                     new MainLayout(
                         new ScrollableContent(
@@ -37,7 +37,9 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         public class Props : ComponentPropsBase
         {
-            public static readonly Props Default = new Props { };
+            public Union<ReactElement, string> Title { get; set; } = Config.Get("PageTitlePrefix")?.ToString() ?? "H.Necessaire";
+
+            public BrandingHeader.Props HeaderProps { get; set; } = new BrandingHeader.Props();
         }
     }
 }

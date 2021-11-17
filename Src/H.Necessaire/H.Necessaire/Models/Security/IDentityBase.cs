@@ -25,12 +25,12 @@ namespace H.Necessaire
 
         protected string GetNoteValueFor(string noteId)
         {
-            return Notes.Get(x => x.Id == noteId).Value;
+            return Notes.Get(x => x.ID == noteId).Value;
         }
 
         protected void SetNoteValueFor(string noteId, string value)
         {
-            Notes = Notes.Set(x => x.Id == noteId, new Note(noteId, value));
+            Notes = Notes.Set(x => x.ID == noteId, new Note(noteId, value));
         }
     }
 }

@@ -7,6 +7,19 @@
         public int PageSize { get; set; } = 10;
         public int? TotalNumberOfPages { get; set; } = null;
 
+        public static Page<T> For(IPageFilter pagefilter, long allCount, params T[] content)
+        {
+            return new Page<T>
+            {
+                Content = content ?? new T[0],
+                PageIndex = pagefilter?.PageFilter?.PageIndex ?? 0,
+                PageSize = pagefilter?.PageFilter?.PageSize ?? content?.Length ?? 10,
+                TotalNumberOfPages = (pagefilter?.PageFilter?.PageSize ?? 0) > 0
+                    ? (int)(allCount / pagefilter.PageFilter.PageSize) + (allCount % pagefilter.PageFilter.PageSize == 0 ? 0 : 1)
+                    : 1,
+            };
+        }
+
         public static Page<T> Single(params T[] content)
         {
             return new Page<T>

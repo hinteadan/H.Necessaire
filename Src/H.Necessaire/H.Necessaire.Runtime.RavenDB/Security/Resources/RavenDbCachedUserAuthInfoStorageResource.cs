@@ -2,7 +2,6 @@
 using H.Necessaire.Runtime.RavenDB.Security.Resources.Filters;
 using H.Necessaire.Runtime.RavenDB.Security.Resources.Indexes;
 using H.Necessaire.Runtime.RavenDB.Security.Resources.Model;
-using H.Necessaire.Runtime.Security.Resources;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using System;
@@ -17,7 +16,7 @@ namespace H.Necessaire.Runtime.RavenDB.Security.Resources
         #region Construct
         public const string dbNameUserAuthentication = "UserAuthentication";
 
-        static ConcurrentDictionary<Guid, string> cachedKeys = new ConcurrentDictionary<Guid, string>();
+        static ConcurrentDictionary<Guid, UserAuthKey> cachedKeys = new ConcurrentDictionary<Guid, UserAuthKey>();
 
         protected override string DatabaseName => dbNameUserAuthentication;
         protected override Guid GetIdFor(UserAuthKey item) => item.ID;
@@ -47,27 +46,30 @@ namespace H.Necessaire.Runtime.RavenDB.Security.Resources
         public async Task<string> GetAuthKeyForUser(Guid userID)
         {
             if (cachedKeys.ContainsKey(userID))
-                return cachedKeys[userID];
+                return cachedKeys[userID].Key;
 
-            string key = (await Load(userID))?.Key;
+            UserAuthKey key = await Load(userID);
 
             if (key == null)
                 return null;
 
             cachedKeys.AddOrUpdate(userID, key, (a, b) => key);
 
-            return key;
+            return key.Key;
         }
 
-        public async Task SaveAuthKeyForUser(Guid userID, string key)
+        public async Task SaveAuthKeyForUser(Guid userID, string key, params Note[] notes)
         {
-            await Save(new UserAuthKey
+            UserAuthKey userAuthKey = new UserAuthKey
             {
                 ID = userID,
                 Key = key,
-            });
+                Notes = notes,
+            };
 
-            cachedKeys.AddOrUpdate(userID, key, (a, b) => key);
+            await Save(userAuthKey);
+
+            cachedKeys.AddOrUpdate(userID, userAuthKey, (a, b) => userAuthKey);
         }
     }
 }

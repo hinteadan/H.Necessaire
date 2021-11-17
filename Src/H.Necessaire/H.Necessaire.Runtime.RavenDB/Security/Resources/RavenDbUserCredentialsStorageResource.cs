@@ -2,7 +2,6 @@
 using H.Necessaire.Runtime.RavenDB.Security.Resources.Filters;
 using H.Necessaire.Runtime.RavenDB.Security.Resources.Indexes;
 using H.Necessaire.Runtime.RavenDB.Security.Resources.Model;
-using H.Necessaire.Runtime.Security.Resources;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using System;

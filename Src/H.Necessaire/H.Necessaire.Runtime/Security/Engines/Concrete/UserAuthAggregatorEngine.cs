@@ -1,5 +1,4 @@
-﻿using H.Necessaire.Runtime.Security.Resources;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,9 +33,9 @@ namespace H.Necessaire.Runtime.Security.Engines.Concrete
             JsonWebToken<RefreshTokenJwtPayload> refreshTokenJWT = await ConstructUnsignedRefreshTokenJWT(accessTokenJWT.Payload);
 
             SecuredHash securedHashForAccessTokenJWT = await hasher.Hash(accessTokenJWT.ToStringUnsigned());
-            SecuredHash securedHashForRefreshTokenJWT = await hasher.Hash(refreshTokenJWT.ToStringUnsigned());
+            SecuredHash securedHashForRefreshTokenJWT = await hasher.Hash(refreshTokenJWT.ToStringUnsigned(), securedHashForAccessTokenJWT.Key);
 
-            await userAuthInfoStorageResource.SaveAuthKeyForUser(userID, securedHashForAccessTokenJWT.Key);
+            await userAuthInfoStorageResource.SaveAuthKeyForUser(userID, securedHashForAccessTokenJWT.Key, securedHashForAccessTokenJWT.Notes?.Where(x => x.ID.In(RS512Hasher.KnownNoteIdPrivateKey, RS512Hasher.KnownNoteIdPublicKey)).ToArray());
 
             accessTokenJWT.Signature = securedHashForAccessTokenJWT.Hash;
             refreshTokenJWT.Signature = securedHashForRefreshTokenJWT.Hash;
