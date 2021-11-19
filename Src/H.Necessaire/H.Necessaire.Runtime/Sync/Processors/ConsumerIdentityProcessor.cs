@@ -7,10 +7,19 @@ namespace H.Necessaire.Runtime.Sync.Processors
     internal class ConsumerIdentityProcessor : ImASyncRequestProcessor, ImADependency
     {
         #region Construct
+        static readonly IDentity processorIdentity = new InternalIdentity
+        {
+            ID = Guid.Parse("93CDC1B3-2FFA-45DE-A769-154B482E29A0"),
+            IDTag = nameof(ConsumerIdentityProcessor),
+            DisplayName = "Consumer Identity Processor",
+        };
+
         ImAStorageService<Guid, ConsumerIdentity> consumerIdentityStorageService = null;
+        ImAnAuditingService auditingService = null;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             consumerIdentityStorageService = dependencyProvider.Get<ImAStorageService<Guid, ConsumerIdentity>>();
+            auditingService = dependencyProvider.Get<ImAnAuditingService>();
         }
         #endregion
 
@@ -45,9 +54,11 @@ namespace H.Necessaire.Runtime.Sync.Processors
                         x.Notes = x.Notes.AddOrReplace(syncRequest.OperationContext?.Consumer?.Notes);
                     });
 
+                    bool consumerExists = (await consumerIdentityStorageService.LoadByID(consumerIdentity.ID))?.Payload != null;
+
                     result = await consumerIdentityStorageService.Save(consumerIdentity);
 
-                    //TODO: Add Auditing here
+                    await auditingService.Append(consumerIdentity.ToAuditMeta<ConsumerIdentity, Guid>(consumerExists ? AuditActionType.Modify : AuditActionType.Create, processorIdentity), consumerIdentity);
                 })
                 .TryOrFailWithGrace(onFail: ex => result = OperationResult.Fail(ex));
 

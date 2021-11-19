@@ -152,6 +152,8 @@ namespace H.Necessaire
             return stream.AsTask();
         }
 
+        public static Stream ToStream(this string value, Encoding encoding = null) => value == null ? null : new MemoryStream((encoding ?? Encoding.UTF8).GetBytes(value));
+
         public static OperationResult Merge(this IEnumerable<OperationResult> operationResults, string globalReasonIfNecesarry = defaultGlobalReasonForMultipleFailedOperations)
         {
             if (!operationResults?.Any() ?? true)
@@ -240,5 +242,22 @@ namespace H.Necessaire
             : syncRequest.SyncStatus.In(SyncStatus.DeletedAndNotSynced, SyncStatus.DeletedAndSynced) ? SyncStatus.DeletedAndSynced
             : SyncStatus.Inexistent
             );
+
+        public static AuditMetadataEntry ToMeta(this ImAnAuditEntry auditEntry) => new AuditMetadataEntry(auditEntry);
+
+        public static AuditMetadataEntry ToAuditMeta<T>(this T data, string dataID, AuditActionType auditActionType = AuditActionType.Modify, IDentity doneBy = null)
+        {
+            return
+                new AuditMetadataEntry
+                {
+                    AuditedObjectType = typeof(T).TypeName(),
+                    AuditedObjectID = dataID ?? Guid.Empty.ToString(),
+                    DoneBy = doneBy,
+                    ActionType = auditActionType,
+                };
+        }
+
+        public static AuditMetadataEntry ToAuditMeta<T, TId>(this T data, AuditActionType auditActionType = AuditActionType.Modify, IDentity doneBy = null) where T : IDentityType<TId>
+            => data.ToAuditMeta(data.ID?.ToString() ?? Guid.Empty.ToString(), auditActionType, doneBy);
     }
 }

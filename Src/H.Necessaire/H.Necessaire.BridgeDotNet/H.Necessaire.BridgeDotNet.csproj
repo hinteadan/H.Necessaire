@@ -90,6 +90,33 @@
     <Compile Include="..\H.Necessaire\IoC\IoC.cs">
       <Link>IoC\IoC.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Auditing\AuditActionType.cs">
+      <Link>Models\Auditing\AuditActionType.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Auditing\AuditComparison.cs">
+      <Link>Models\Auditing\AuditComparison.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Auditing\AuditEntryBase.cs">
+      <Link>Models\Auditing\AuditEntryBase.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Auditing\AuditMetadataEntry.cs">
+      <Link>Models\Auditing\AuditMetadataEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Auditing\AuditObjectDifference.cs">
+      <Link>Models\Auditing\AuditObjectDifference.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Auditing\AuditSearchFilter.cs">
+      <Link>Models\Auditing\AuditSearchFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Auditing\CachedStreamedAuditEntryBase.cs">
+      <Link>Models\Auditing\CachedStreamedAuditEntryBase.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Auditing\ImAnAuditEntry.cs">
+      <Link>Models\Auditing\ImAnAuditEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Auditing\StreamedAuditEntryBase.cs">
+      <Link>Models\Auditing\StreamedAuditEntryBase.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Branding\BrandingStyle.cs">
       <Link>Models\Branding\BrandingStyle.cs</Link>
     </Compile>
@@ -210,6 +237,9 @@
     <Compile Include="..\H.Necessaire\Models\Security\IDentityBase.cs">
       <Link>Models\Security\IDentityBase.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Security\InternalIdentity.cs">
+      <Link>Models\Security\InternalIdentity.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Security\JWT\AccessTokenJwtPayload.cs">
       <Link>Models\Security\JWT\AccessTokenJwtPayload.cs</Link>
     </Compile>
@@ -260,6 +290,9 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Models\Versioning\VersionNumber.cs">
       <Link>Models\Versioning\VersionNumber.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Auditing\ImAnAuditingService.cs">
+      <Link>Operations\Auditing\ImAnAuditingService.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\Concrete\DataStream.cs">
       <Link>Operations\Concrete\DataStream.cs</Link>

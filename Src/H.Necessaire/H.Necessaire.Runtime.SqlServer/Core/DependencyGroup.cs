@@ -24,6 +24,13 @@ namespace H.Necessaire.Runtime.SqlServer.Core
                 .Register<ImAStorageService<Guid, ConsumerIdentity>>(() => dependencyRegistry.Get<ConsumerIdentitySqlServerStorageResource>())
                 .Register<ImAStorageBrowserService<ConsumerIdentity, IDFilter<Guid>>>(() => dependencyRegistry.Get<ConsumerIdentitySqlServerStorageResource>())
                 ;
+
+            dependencyRegistry
+                .Register<AuditMetadataSqlServerStorageResource>(() => new AuditMetadataSqlServerStorageResource())
+                .Register<AuditPayloadSqlServerStorageResource>(() => new AuditPayloadSqlServerStorageResource())
+                .Register<AuditSqlServerStorageResource>(() => new AuditSqlServerStorageResource())
+                .Register<ImAnAuditingService>(() => dependencyRegistry.Get<AuditSqlServerStorageResource>())
+                ;
         }
     }
 }

@@ -6,11 +6,20 @@ namespace H.Necessaire.Runtime
 {
     class SyncUseCase : UseCaseBase, ImASyncUseCase
     {
+        static readonly IDentity useCaseIdentity = new InternalIdentity
+        {
+            ID = Guid.Parse("46B99D7E-12D2-4943-9EEF-45225AC944CF"),
+            IDTag = nameof(SyncUseCase),
+            DisplayName = "Sync Use Case",
+        };
+
         ImAStorageService<string, SyncRequest> syncRequestStorageService;
+        ImAnAuditingService auditingService = null;
         public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             base.ReferDependencies(dependencyProvider);
             syncRequestStorageService = dependencyProvider.Get<ImAStorageService<string, SyncRequest>>();
+            auditingService = dependencyProvider.Get<ImAnAuditingService>();
         }
 
         public async Task<OperationResult<SyncResponse>[]> Sync(SyncRequest[] syncRequests)
@@ -47,9 +56,14 @@ namespace H.Necessaire.Runtime
 
                     OperationResult saveResult = await syncRequestStorageService.Save(syncRequest);
                     if (saveResult.IsSuccessful)
+                    {
                         result = saveResult.WithPayload(syncRequest.ToWinResponse());
+                        await auditingService.Append(syncRequest.ToAuditMeta<SyncRequest, string>(AuditActionType.Create, useCaseIdentity), syncRequest);
+                    }
                     else
+                    {
                         result = saveResult.WithPayload(syncRequest.ToFailResponse());
+                    }
 
                 })
                 .TryOrFailWithGrace(onFail: ex => result = OperationResult.Fail(ex).WithPayload(syncRequest.ToFailResponse()));

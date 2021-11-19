@@ -1,4 +1,5 @@
-﻿using System;
+﻿using H.Necessaire.Operations.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -119,6 +120,8 @@ namespace H.Necessaire
                 ;
         }
 
+        public static IDisposableEnumerable<T> ToDisposableEnumerable<T>(this IEnumerable<T> collection) => new DataStream<T>(collection);
+
         public static T[] AsArray<T>(this T value) => new T[] { value };
 
         public static string[] ToStringArray<T>(this T[] array) => array?.Select(x => x?.ToString()).ToArray();
@@ -215,6 +218,18 @@ namespace H.Necessaire
                 )
                 .Take(maxNumberOfKeywords)
                 .ToArray();
+        }
+
+        public static ImAnAuditEntry LatestOrDefault(this IEnumerable<ImAnAuditEntry> auditEntries)
+        {
+            if (!auditEntries?.Any() ?? true)
+                return null;
+
+            return
+                auditEntries
+                .Where(x => x != null)
+                .OrderByDescending(x => x.HappenedAt)
+                .FirstOrDefault();
         }
     }
 }

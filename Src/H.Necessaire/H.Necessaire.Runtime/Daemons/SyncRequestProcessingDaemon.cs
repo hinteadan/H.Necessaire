@@ -8,6 +8,13 @@ namespace H.Necessaire.Runtime
     public class SyncRequestProcessingDaemon : ImADaemon, ImADependency
     {
         #region Construct
+        static readonly IDentity daemonIdentity = new InternalIdentity
+        {
+            ID = Guid.Parse("A2660F9E-A27C-4D80-8B14-8FF3B57B4EC6"),
+            IDTag = nameof(SyncRequestProcessingDaemon),
+            DisplayName = "Sync Request Processing Daemon",
+        };
+
 #if DEBUG
         static readonly TimeSpan processingInterval = TimeSpan.FromSeconds(5);
 #else
@@ -19,6 +26,7 @@ namespace H.Necessaire.Runtime
         ImAStorageBrowserService<SyncRequest, SyncRequestFilter> syncRequestBrowserResource = null;
         ImAStorageService<string, SyncRequest> syncRequestStorageResource = null;
         ImASyncRequestProcessorFactory syncRequestProcessorFactory = null;
+        ImAnAuditingService auditingService = null;
 
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
@@ -26,6 +34,7 @@ namespace H.Necessaire.Runtime
             syncRequestBrowserResource = dependencyProvider.Get<ImAStorageBrowserService<SyncRequest, SyncRequestFilter>>();
             syncRequestStorageResource = dependencyProvider.Get<ImAStorageService<string, SyncRequest>>();
             syncRequestProcessorFactory = dependencyProvider.Get<ImASyncRequestProcessorFactory>();
+            auditingService = dependencyProvider.Get<ImAnAuditingService>();
         }
         #endregion
 
@@ -107,6 +116,8 @@ namespace H.Necessaire.Runtime
                             return;
                         }
 
+                        await auditingService.Append(syncRequest.ToAuditMeta<SyncRequest, string>(AuditActionType.Remove, daemonIdentity), syncRequest);
+
                         await syncRequestStorageResource.DeleteByID(syncRequest.ID);
                     }
 
@@ -141,7 +152,7 @@ namespace H.Necessaire.Runtime
                             return;
                         }
 
-                        //TODO: Audit the SyncRequest before the deleting
+                        await auditingService.Append(syncRequest.ToAuditMeta<SyncRequest, string>(AuditActionType.Remove, daemonIdentity), syncRequest);
 
                         await syncRequestStorageResource.DeleteByID(syncRequest.ID);
                     }

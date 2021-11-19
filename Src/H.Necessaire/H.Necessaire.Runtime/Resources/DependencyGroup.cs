@@ -26,6 +26,12 @@ namespace H.Necessaire.Runtime.Resources
                 ;
 
             dependencyRegistry
+                .Register<AuditMetadataFileSystemStorageResource>(() => new AuditMetadataFileSystemStorageResource())
+                .Register<AuditFileSystemStorageResource>(() => new AuditFileSystemStorageResource())
+                .Register<ImAnAuditingService>(() => dependencyRegistry.Get<AuditFileSystemStorageResource>())
+                ;
+
+            dependencyRegistry
                 .Register<KeyValueFileSystemStorageResource>(() => new KeyValueFileSystemStorageResource())
                 .Register<IKeyValueStorage>(() => dependencyRegistry.Get<KeyValueFileSystemStorageResource>())
                 ;

@@ -26,6 +26,13 @@ namespace H.Necessaire.Runtime.RavenDB.Core
                 ;
 
             dependencyRegistry
+                .Register<AuditMetadataRavenDbStorageResource>(() => new AuditMetadataRavenDbStorageResource())
+                .Register<AuditPayloadRavenDbStorageResource>(() => new AuditPayloadRavenDbStorageResource())
+                .Register<AuditRavenDbStorageResource>(() => new AuditRavenDbStorageResource())
+                .Register<ImAnAuditingService>(() => dependencyRegistry.Get<AuditRavenDbStorageResource>())
+                ;
+
+            dependencyRegistry
                 .Register<RavenDbKeyValueStore>(() => new RavenDbKeyValueStore())
                 .Register<IKeyValueStorage>(() => dependencyRegistry.Get<RavenDbKeyValueStore>())
                 ;
