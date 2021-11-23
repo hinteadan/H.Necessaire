@@ -3,9 +3,15 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire
 {
-    public abstract class SyncerBase<TEntity, TId> : ImASyncer<TEntity, TId> where TEntity : ImSyncable
+    public abstract class SyncerBase<TEntity, TId> : ImASyncer<TEntity, TId>, ImADependency where TEntity : ImSyncable
     {
-        public abstract Task<ImASyncRegistry[]> GetRegistriesToSyncWith();
+        ImASyncRegistry[] syncRegistries = new ImASyncRegistry[0];
+        public virtual void ReferDependencies(ImADependencyProvider dependencyProvider)
+        {
+            syncRegistries = dependencyProvider.Get<ImASyncRegistry[]>() ?? dependencyProvider.Get<ImASyncRegistry>()?.AsArray() ?? new ImASyncRegistry[0];
+        }
+
+        public virtual Task<ImASyncRegistry[]> GetRegistriesToSyncWith() => syncRegistries.AsTask();
 
         protected abstract Task<TEntity> Load(TId id);
 

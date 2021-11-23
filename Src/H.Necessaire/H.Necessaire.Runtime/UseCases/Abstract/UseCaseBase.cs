@@ -12,11 +12,18 @@ namespace H.Necessaire.Runtime
         const string noAuthReason = "This use case requires authentication. The current request is anonymous. Please authenticate and try again.";
         private UseCaseContext currentContext = null;
         private ImAUseCaseContextProvider contextProvider;
+        private ImALogger logger;
         public virtual void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
+            CallContext<Guid?>.SetData(CallContextKey.LoggingScopeID, Guid.NewGuid());
+            CallContext<OperationContext>.SetData(CallContextKey.OperationContext, GetCurrentContext().ContinueWith(x => x.Result?.OperationContext).GetAwaiter().GetResult());
+
             contextProvider = dependencyProvider.Get<ImAUseCaseContextProvider>();
+            logger = dependencyProvider.GetLogger(this.GetType(), "H.Necessaire.Runtime");
         }
         #endregion
+
+        protected ImALogger Logger => logger;
 
         protected async Task<UseCaseContext> GetCurrentContext()
         {

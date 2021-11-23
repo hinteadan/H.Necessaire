@@ -8,11 +8,9 @@ namespace H.Necessaire.Runtime.Integration.NetCore
     {
         static readonly TimeSpan pingInterval = TimeSpan.FromSeconds(15);
 
-        protected override Task DoWork(CancellationToken? cancellationToken = null)
+        protected override async Task DoWork(CancellationToken? cancellationToken = null)
         {
-            Console.WriteLine($"{DateTime.Now} Ping from [{Thread.CurrentThread.ManagedThreadId}-{Thread.CurrentThread.Name}] Thread");
-
-            return true.AsTask();
+            await Logger.LogInfo($"Ping from [{Thread.CurrentThread.ManagedThreadId}-{Thread.CurrentThread.Name}] Thread");
         }
 
         protected override TimeSpan WorkCycleInterval { get; } = pingInterval;

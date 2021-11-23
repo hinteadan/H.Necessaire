@@ -36,6 +36,12 @@ namespace H.Necessaire.Runtime.RavenDB.Core
                 .Register<RavenDbKeyValueStore>(() => new RavenDbKeyValueStore())
                 .Register<IKeyValueStorage>(() => dependencyRegistry.Get<RavenDbKeyValueStore>())
                 ;
+
+            dependencyRegistry
+                .Register<LogEntryRavenDbStorageResource>(() => new LogEntryRavenDbStorageResource())
+                .Register<ImAStorageService<Guid, LogEntry>>(() => dependencyRegistry.Get<LogEntryRavenDbStorageResource>())
+                .Register<ImAStorageBrowserService<LogEntry, LogFilter>>(() => dependencyRegistry.Get<LogEntryRavenDbStorageResource>())
+                ;
         }
     }
 }

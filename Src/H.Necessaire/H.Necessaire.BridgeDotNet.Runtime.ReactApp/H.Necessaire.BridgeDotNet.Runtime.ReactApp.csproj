@@ -108,6 +108,8 @@
     <Compile Include="Core\Wireup\Abstracts\AppWireupBase.cs" />
     <Compile Include="Core\Wireup\ConcreteCoreAppWireup.cs" />
     <Compile Include="Core\Wireup\ImAnAppWireup.cs" />
+    <Compile Include="Logging\DependencyGroup.cs" />
+    <Compile Include="Logging\PersistentLogProcessor.cs" />
     <Compile Include="Managers\ConsumerIdentityManager.cs" />
     <Compile Include="Managers\ManagersDependencyGroup.cs" />
     <Compile Include="Managers\SecurityManager.cs" />
@@ -130,6 +132,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Abstracts\HttpApiResourceBase.cs" />
     <Compile Include="Resources\Abstracts\IndexedDbResourceBase.cs" />
+    <Compile Include="Resources\Abstracts\IndexedDbStorageResourceBase.cs" />
+    <Compile Include="Resources\Logging\LogEntryLocalStorageResource.cs" />
     <Compile Include="Resources\SyncRequestResource.cs" />
     <Compile Include="Resources\Sync\BffApiSyncRegistryResource.cs" />
     <Compile Include="Resources\ConsumerIdentityLocalStorageResource.cs" />
@@ -137,6 +141,7 @@
     <Compile Include="Resources\DeviceInfoResource.cs" />
     <Compile Include="Resources\ResourcesDependencyGroup.cs" />
     <Compile Include="Resources\SecurityResource.cs" />
+    <Compile Include="Resources\Sync\LogEntrySyncerResource.cs" />
     <Compile Include="RuntimeDependencyGroup.cs" />
   </ItemGroup>
   <ItemGroup>

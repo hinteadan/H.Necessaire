@@ -1,10 +1,9 @@
-﻿using H.Necessaire.Serialization;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.Sync.Processors
 {
-    internal class ConsumerIdentityProcessor : ImASyncRequestProcessor, ImADependency
+    internal class ConsumerIdentityProcessor : SyncRequestProcessorBase<ConsumerIdentity>, ImADependency
     {
         #region Construct
         static readonly IDentity processorIdentity = new InternalIdentity
@@ -23,44 +22,21 @@ namespace H.Necessaire.Runtime.Sync.Processors
         }
         #endregion
 
-        public Task<bool> IsEligibleFor(SyncRequest syncRequest)
+        protected override async Task<OperationResult> ProcessPayload(ConsumerIdentity payload, SyncRequest syncRequest)
         {
-            return syncRequest.PayloadType.In(typeof(ConsumerIdentity).TypeName()).AsTask();
-        }
+            ConsumerIdentity consumerIdentity = payload.And(x =>
+            {
+                x.ID = syncRequest.OperationContext?.Consumer?.ID ?? x.ID;
+                x.Notes = x.Notes.AddOrReplace(syncRequest.OperationContext?.Consumer?.Notes);
+            });
 
-        public async Task<OperationResult> Process(SyncRequest syncRequest)
-        {
-            OperationResult result = OperationResult.Fail();
+            bool consumerExists = (await consumerIdentityStorageService.LoadByID(consumerIdentity.ID))?.Payload != null;
 
-            await
-                new Func<Task>(async () =>
-                {
-                    OperationResult<ConsumerIdentity> parseOperation = syncRequest.Payload.TryJsonToObject<ConsumerIdentity>();
+            OperationResult result = await consumerIdentityStorageService.Save(consumerIdentity);
+            if (!result.IsSuccessful)
+                return result;
 
-                    if (!parseOperation.IsSuccessful)
-                    {
-                        result = parseOperation;
-                        return;
-                    }
-                    if (parseOperation.Payload == null)
-                    {
-                        result = OperationResult.Fail("The sync request payload is empty");
-                        return;
-                    }
-
-                    ConsumerIdentity consumerIdentity = parseOperation.Payload.And(x =>
-                    {
-                        x.ID = syncRequest.OperationContext?.Consumer?.ID ?? x.ID;
-                        x.Notes = x.Notes.AddOrReplace(syncRequest.OperationContext?.Consumer?.Notes);
-                    });
-
-                    bool consumerExists = (await consumerIdentityStorageService.LoadByID(consumerIdentity.ID))?.Payload != null;
-
-                    result = await consumerIdentityStorageService.Save(consumerIdentity);
-
-                    await auditingService.Append(consumerIdentity.ToAuditMeta<ConsumerIdentity, Guid>(consumerExists ? AuditActionType.Modify : AuditActionType.Create, processorIdentity), consumerIdentity);
-                })
-                .TryOrFailWithGrace(onFail: ex => result = OperationResult.Fail(ex));
+            await auditingService.Append(consumerIdentity.ToAuditMeta<ConsumerIdentity, Guid>(consumerExists ? AuditActionType.Modify : AuditActionType.Create, processorIdentity), consumerIdentity);
 
             return result;
         }

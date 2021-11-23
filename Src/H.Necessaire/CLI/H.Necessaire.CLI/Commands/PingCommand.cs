@@ -8,7 +8,7 @@ namespace H.Necessaire.CLI.Commands
         {
             UserInfo? user = (await EnsureAuthentication()).ThrowOnFailOrReturn().SecurityContext.User;
 
-            Console.WriteLine($"Pong from {(user?.DisplayName ?? user?.Username ?? "[NoUser]")} @ {DateTime.Now}");
+            await Logger.LogTrace($"Pong from {(user?.DisplayName ?? user?.Username ?? "[NoUser]")}");
 
             return OperationResult.Win();
         }

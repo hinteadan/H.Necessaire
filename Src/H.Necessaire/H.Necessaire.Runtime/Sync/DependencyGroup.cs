@@ -8,6 +8,7 @@ namespace H.Necessaire.Runtime.Sync
         {
             dependencyRegistry
                 .Register<ConsumerIdentityProcessor>(() => new ConsumerIdentityProcessor())
+                .Register<LogEntryProcessor>(() => new LogEntryProcessor())
                 ;
         }
     }

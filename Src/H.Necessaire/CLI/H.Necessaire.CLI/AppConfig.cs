@@ -16,7 +16,7 @@ namespace H.Necessaire.CLI
                     Values = new[] {
                         "NuSpectRootFolderPath".ConfigWith(GetCodebaseFolderPath()),
                         "SqlConnections".ConfigWith(
-                            "DefaultConnectionString".ConfigWith(File.ReadAllText("DebugConnectionString.txt")),
+                            "DefaultConnectionString".ConfigWith(ReadConnectionStringFromFile("DebugConnectionString.txt")),
                             "DatabaseNames".ConfigWith(
                                 "Core".ConfigWith("H.Necessaire.Core.Debug")
                             )
@@ -24,6 +24,24 @@ namespace H.Necessaire.CLI
                     },
                 }));
             ;
+        }
+
+        private static string? ReadConnectionStringFromFile(string filePath)
+        {
+            FileInfo fileInfo = new FileInfo(filePath);
+
+            if (!fileInfo.Exists)
+                return null;
+
+            string? result = null;
+
+            new Action(() =>
+            {
+                result = File.ReadAllText(fileInfo.FullName);
+            })
+            .TryOrFailWithGrace(onFail: ex => result = null);
+
+            return result;
         }
 
         private static string GetCodebaseFolderPath()

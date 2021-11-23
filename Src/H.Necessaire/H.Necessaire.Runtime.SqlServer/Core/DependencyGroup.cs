@@ -31,6 +31,12 @@ namespace H.Necessaire.Runtime.SqlServer.Core
                 .Register<AuditSqlServerStorageResource>(() => new AuditSqlServerStorageResource())
                 .Register<ImAnAuditingService>(() => dependencyRegistry.Get<AuditSqlServerStorageResource>())
                 ;
+
+            dependencyRegistry
+                .Register<LogEntrySqlServerStorageResource>(() => new LogEntrySqlServerStorageResource())
+                .Register<ImAStorageService<Guid, LogEntry>>(() => dependencyRegistry.Get<LogEntrySqlServerStorageResource>())
+                .Register<ImAStorageBrowserService<LogEntry, LogFilter>>(() => dependencyRegistry.Get<LogEntrySqlServerStorageResource>())
+                ;
         }
     }
 }

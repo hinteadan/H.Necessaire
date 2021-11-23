@@ -107,7 +107,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             return filteredCollection;
         }
 
-        public class SyncRegistryEntry
+        public class SyncRegistryEntry : IStringIdentity
         {
             public string ID => $"{EntityType}_{EntityIdentifier}";
 

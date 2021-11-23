@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
+﻿namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     internal class DebugWebWorkerDaemon : WebWorkerDaemonBase
     {
@@ -12,7 +10,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         {
             public void DoWork()
             {
-                Console.WriteLine("Hello from another Thread!");
+
             }
         }
     }

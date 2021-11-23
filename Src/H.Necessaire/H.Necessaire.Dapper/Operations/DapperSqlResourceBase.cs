@@ -36,7 +36,7 @@ namespace H.Necessaire.Dapper
         {
             if (IsCoreDatabase())
             {
-                RuntimeConfig runtimeConfig = dependencyProvider?.Get<ImAConfigProvider>()?.GetRuntimeConfig() ?? dependencyProvider?.Get<RuntimeConfig>() ?? RuntimeConfig.Empty;
+                RuntimeConfig runtimeConfig = dependencyProvider?.GetRuntimeConfig();
                 string coreDatabaseNameFromConfig = runtimeConfig?.Get("SqlConnections")?.Get("DatabaseNames")?.Get("Core")?.ToString();
                 this.databaseName = coreDatabaseNameFromConfig ?? this.databaseName;
             }

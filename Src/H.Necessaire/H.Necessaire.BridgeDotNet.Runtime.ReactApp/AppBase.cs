@@ -12,6 +12,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     public class AppBase
     {
+        static ImALogger appLogger = null;
         static ImAnAppWireup appWireup;
 
         static Func<Task> appInitializer;
@@ -22,9 +23,22 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         public static Element CurtainContainer { get; private set; }
 
-        public static T Get<T>() => appWireup.DependencyRegistry.Get<T>();
+        public static RuntimeConfig Config => appWireup?.DependencyRegistry?.GetRuntimeConfig();
 
-        public static RuntimeConfig Config => appWireup?.DependencyRegistry?.Get<ImAConfigProvider>()?.GetRuntimeConfig() ?? appWireup?.DependencyRegistry?.Get<RuntimeConfig>() ?? RuntimeConfig.Empty;
+        public static T Get<T>() => appWireup.DependencyRegistry.Get<T>();
+        public static ImALogger GetLoggerFor(string component) => appWireup.DependencyRegistry.GetLogger(component, "H.Necessaire.BridgeDotNet.Runtime.ReactApp");
+        public static ImALogger GetLoggerFor(Type type) => appWireup.DependencyRegistry.GetLogger(type, "H.Necessaire.BridgeDotNet.Runtime.ReactApp");
+        public static ImALogger GetLogger<T>() => appWireup.DependencyRegistry.GetLogger<T>("H.Necessaire.BridgeDotNet.Runtime.ReactApp");
+
+        public static ImALogger AppLogger
+        {
+            get
+            {
+                if (appLogger == null)
+                    appLogger = AppBase.GetLoggerFor("App");
+                return appLogger;
+            }
+        }
 
         public static BrandingStyle Branding => branding;
 
@@ -61,10 +75,12 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         protected static async void MainAsync()
         {
+            CallContext<Guid?>.SetData(CallContextKey.LoggingScopeID, Guid.NewGuid());
+
             if (IsWebWorker)
                 return;
 
-            using (new TimeMeasurement(x => Console.WriteLine($"{DateTime.Now} App initialized in {x}")))
+            using (new TimeMeasurement(x => Console.WriteLine($"App initialized in {x}")))
             {
                 using (new AppLoadIndicator())
                 {
@@ -103,7 +119,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         private static async Task WireupDependencies()
         {
-            using (new TimeMeasurement(x => Console.WriteLine($"{DateTime.Now} Done Wireup Dependencies in {x}")))
+            using (new TimeMeasurement(x => Console.WriteLine($"Done Wireup Dependencies in {x}")))
             {
                 await appWireup.WithEverything().Boot();
             }
@@ -111,7 +127,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         private static void WireupNavigation()
         {
-            using (new TimeMeasurement(x => Console.WriteLine($"{DateTime.Now} Done Wireup App Navigation in {x}")))
+            using (new TimeMeasurement(async x => await AppLogger.LogInfo($"Done Wireup App Navigation in {x}")))
             {
                 new AppNavigationBootstrapper(navigationRegistryFactory).Wireup(CreateAppContainer());
             }
@@ -319,7 +335,7 @@ table tbody tr:hover td {
 
         private static async Task ReferenceLibs()
         {
-            using (new TimeMeasurement(x => Console.WriteLine($"{DateTime.Now} Done referencing necessaire libraries in {x}")))
+            using (new TimeMeasurement(x => Console.WriteLine($"Done referencing necessaire libraries in {x}")))
             {
                 jQuery.AjaxSetup(new AjaxOptions
                 {
@@ -338,8 +354,8 @@ table tbody tr:hover td {
         {
             return Task.FromPromise<object>(
                 jQuery.GetScript(lib),
-                new Action(() => System.Console.WriteLine($"Loaded {lib}")),
-                new Action(() => System.Console.WriteLine($"Error loading {lib}"))
+                new Action(() => Console.WriteLine($"Loaded {lib}")),
+                new Action(() => Console.WriteLine($"Error loading {lib}"))
             );
         }
     }

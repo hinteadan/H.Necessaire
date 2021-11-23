@@ -11,6 +11,8 @@
 
             dependencyRegistry.Register<ResourcesDependencyGroup>(() => new ResourcesDependencyGroup());
             dependencyRegistry.Register<ManagersDependencyGroup>(() => new ManagersDependencyGroup());
+
+            dependencyRegistry.Register<Logging.DependencyGroup>(() => new Logging.DependencyGroup());
         }
         #endregion
     }

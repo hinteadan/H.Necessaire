@@ -92,6 +92,8 @@ namespace H.Necessaire
 
         public static T And<T>(this T data, Action<T> doThis) { doThis(data); return data; }
 
+        public static Tuple<T1, T2> TupleWith<T1, T2>(this T1 item1, T2 item2) => Tuple.Create<T1, T2>(item1, item2);
+
         public static async Task<T> AndAsync<T>(this T data, Func<T, Task> doThis) { await doThis(data); return data; }
 
         public static async Task<T> AndAsync<T>(this Task<T> asyncData, Func<T, Task> doThis)
@@ -106,21 +108,6 @@ namespace H.Necessaire
             T data = await asyncData;
             doThis(data);
             return data;
-        }
-
-        public static bool IsSameOrSubclassOf(this Type typeToCheck, Type typeToCompareWith)
-        {
-            return
-                typeToCheck == typeToCompareWith
-                || typeToCompareWith.IsSubclassOf(typeToCheck);
-        }
-
-        public static string TypeName(this object instance)
-        {
-            if (instance is Type)
-                return (instance as Type).FullName;
-
-            return instance.GetType().FullName;
         }
 
         public static IDisposableEnumerable<T> AsDisposableEnumerable<T>(this IEnumerable<T> collection)

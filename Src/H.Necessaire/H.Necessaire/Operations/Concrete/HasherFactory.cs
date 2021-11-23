@@ -19,7 +19,7 @@ namespace H.Necessaire
 
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
-            RuntimeConfig config = dependencyProvider.Get<ImAConfigProvider>()?.GetRuntimeConfig() ?? dependencyProvider.Get<RuntimeConfig>();
+            RuntimeConfig config = dependencyProvider.GetRuntimeConfig();
 
             defaultHasher = config?.Get(configKeyDefaultHasher)?.Value?.ToString() ?? defaultHasher;
             if (!knownHashers.ContainsKey(defaultHasher))

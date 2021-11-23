@@ -6,7 +6,10 @@
         {
             dependencyRegistry.RegisterAlwaysNew<ImAPeriodicAction>(() => ConcreteFactory.BuildNewPeriodicAction());
 
-            dependencyRegistry.Register<SyncDependencyGroup>(() => new SyncDependencyGroup());
+            dependencyRegistry
+                .Register<SyncDependencyGroup>(() => new SyncDependencyGroup())
+                .Register<LoggingDependencyGroup>(() => new LoggingDependencyGroup())
+                ;
         }
     }
 }

@@ -3,19 +3,16 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
-    class ConsumerIdentitySyncerResource : SyncerBase<ConsumerIdentity, Guid>, ImADependency
+    class ConsumerIdentitySyncerResource : SyncerBase<ConsumerIdentity, Guid>
     {
         #region Construct
-        ImASyncRegistry[] syncRegistries = new ImASyncRegistry[0];
         ConsumerIdentityLocalStorageResource localStorageResource;
-        public void ReferDependencies(ImADependencyProvider dependencyProvider)
+        public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
-            syncRegistries = dependencyProvider.Get<ImASyncRegistry[]>() ?? dependencyProvider.Get<ImASyncRegistry>()?.AsArray() ?? new ImASyncRegistry[0];
+            base.ReferDependencies(dependencyProvider);
             localStorageResource = dependencyProvider.Get<ConsumerIdentityLocalStorageResource>();
         }
         #endregion
-
-        public override Task<ImASyncRegistry[]> GetRegistriesToSyncWith() => syncRegistries.AsTask();
 
         protected override Task<ConsumerIdentity> Load(Guid id)
         {

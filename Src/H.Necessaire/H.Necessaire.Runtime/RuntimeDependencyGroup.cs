@@ -18,6 +18,7 @@
                 .Register<Validation.DependencyGroup>(() => new Validation.DependencyGroup())
                 .Register<Security.DependencyGroup>(() => new Security.DependencyGroup())
                 .Register<Sync.DependencyGroup>(() => new Sync.DependencyGroup())
+                .Register<Logging.DependencyGroup>(() => new Logging.DependencyGroup())
                 .Register<UseCases.DependencyGroup>(() => new UseCases.DependencyGroup())
                 .Register<Daemons.DependencyGroup>(() => new Daemons.DependencyGroup())
                 ;

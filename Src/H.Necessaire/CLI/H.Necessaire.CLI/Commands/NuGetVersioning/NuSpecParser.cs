@@ -15,7 +15,7 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
         readonly MemoryCache nuSpecsCache = new MemoryCache("NuSpecCache");
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
-            runtimeConfig = dependencyProvider.Get<RuntimeConfig>() ?? new RuntimeConfig();
+            runtimeConfig = dependencyProvider.GetRuntimeConfig();
             rootFolderToScan = new DirectoryInfo(runtimeConfig.Get(configKeyForNuSpectRootFolderPath)?.Value?.ToString() ?? defaultNuSpectRootFolderPath);
         }
         #endregion

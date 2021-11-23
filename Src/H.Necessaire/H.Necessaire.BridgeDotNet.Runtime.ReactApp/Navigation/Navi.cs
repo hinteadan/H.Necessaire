@@ -34,8 +34,6 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             if (queryParts.Any())
                 url += $"?{string.Join("&", queryParts)}";
 
-            Console.WriteLine($"Navi.Go({url})");
-
             Window.Location.Hash = url;
         }
 

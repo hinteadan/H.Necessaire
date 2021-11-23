@@ -31,12 +31,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 .And(x => x.IDTag = x.ID.ToString())
                 ;
 
-            if (deviceInfoResource != null)
-            {
-                consumerIdentity.Notes = await deviceInfoResource.GetRawProperties();
-                consumerIdentity.DisplayName = consumerIdentity.Notes.Get("UserAgent", ignoreCase: true);
-                httpClient.SetConsumer(consumerIdentity.ID);
-            }
+            await DecorateConsumerIdentity();
 
             await consumerIdentityLocalStorageResource.Save(consumerIdentity);
 
@@ -47,14 +42,23 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         {
             consumerIdentity = await consumerIdentityLocalStorageResource.Search();
 
-            if (deviceInfoResource != null)
-            {
-                consumerIdentity.Notes = await deviceInfoResource.GetRawProperties();
-                consumerIdentity.DisplayName = consumerIdentity.Notes.Get("UserAgent", ignoreCase: true);
-                httpClient.SetConsumer(consumerIdentity.ID);
-            }
+            await DecorateConsumerIdentity();
 
             return consumerIdentity;
+        }
+
+        private async Task DecorateConsumerIdentity()
+        {
+            if (deviceInfoResource == null)
+                return;
+
+            consumerIdentity.Notes = await deviceInfoResource.GetRawProperties();
+            consumerIdentity.DisplayName = consumerIdentity.Notes.Get("UserAgent", ignoreCase: true);
+            httpClient.SetConsumer(consumerIdentity.ID);
+            CallContext<OperationContext>.SetData(CallContextKey.OperationContext, new OperationContext
+            {
+                Consumer = consumerIdentity,
+            });
         }
     }
 }

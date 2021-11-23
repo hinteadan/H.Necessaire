@@ -9,9 +9,7 @@ namespace H.Necessaire.Runtime.Integration.NetCore
             ImAnApiWireup result =
                 base
                 .WithEverything()
-                .With(x => x.Register<HNecessaireDependencyGroup>(() => new HNecessaireDependencyGroup()))
-                .With(x => x.Register<SyncRequestProcessingHostedServiceDaemon>(() => new SyncRequestProcessingHostedServiceDaemon()))
-                //.With(x => x.Register<ConsolePingDaemon>(() => new ConsolePingDaemon()))
+                .With(x => x.Register<NetCoreDependencyGroup>(() => new NetCoreDependencyGroup()))
             ;
 
             return result;

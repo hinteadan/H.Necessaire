@@ -63,6 +63,9 @@
     <Compile Include="..\H.Necessaire\Extensions\TaskExtensions.cs">
       <Link>Extensions\TaskExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Extensions\TypeExtensions.cs">
+      <Link>Extensions\TypeExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\HNecessaireDependencyGroup.cs">
       <Link>HNecessaireDependencyGroup.cs</Link>
     </Compile>
@@ -183,6 +186,21 @@
     <Compile Include="..\H.Necessaire\Models\IStringIdentity.cs">
       <Link>Models\IStringIdentity.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Logging\LogConfig.cs">
+      <Link>Models\Logging\LogConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Logging\LogEntry.cs">
+      <Link>Models\Logging\LogEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Logging\LogEntryLevel.cs">
+      <Link>Models\Logging\LogEntryLevel.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Logging\LogFilter.cs">
+      <Link>Models\Logging\LogFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Logging\LoggerPriority.cs">
+      <Link>Models\Logging\LoggerPriority.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\MultiType.cs">
       <Link>Models\MultiType.cs</Link>
     </Compile>
@@ -294,6 +312,9 @@
     <Compile Include="..\H.Necessaire\Operations\Auditing\ImAnAuditingService.cs">
       <Link>Operations\Auditing\ImAnAuditingService.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Operations\CallContextKey.cs">
+      <Link>Operations\CallContextKey.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Operations\Concrete\DataStream.cs">
       <Link>Operations\Concrete\DataStream.cs</Link>
     </Compile>
@@ -317,6 +338,39 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\ImAPeriodicAction.cs">
       <Link>Operations\ImAPeriodicAction.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Logging\Abstract\LoggerBase.cs">
+      <Link>Operations\Logging\Abstract\LoggerBase.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Logging\Abstract\LogProcessorBase.cs">
+      <Link>Operations\Logging\Abstract\LogProcessorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Logging\Concrete\InMemoryLogger.cs">
+      <Link>Operations\Logging\Concrete\InMemoryLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Logging\Concrete\InMemoryLogProcessorRegistry.cs">
+      <Link>Operations\Logging\Concrete\InMemoryLogProcessorRegistry.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Logging\Concrete\LoggerFactory.cs">
+      <Link>Operations\Logging\Concrete\LoggerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Logging\ImALogBrowser.cs">
+      <Link>Operations\Logging\ImALogBrowser.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Logging\ImALogger.cs">
+      <Link>Operations\Logging\ImALogger.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Logging\ImALoggerFactory.cs">
+      <Link>Operations\Logging\ImALoggerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Logging\ImALogProcessor.cs">
+      <Link>Operations\Logging\ImALogProcessor.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Logging\ImALogProcessorRegistry.cs">
+      <Link>Operations\Logging\ImALogProcessorRegistry.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Logging\LoggingDependencyGroup.cs">
+      <Link>Operations\Logging\LoggingDependencyGroup.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\ScopedRunner.cs">
       <Link>Operations\ScopedRunner.cs</Link>
@@ -409,8 +463,12 @@
       <Link>UI\UserInput\UserOptionSelectionResult.cs</Link>
     </Compile>
     <Compile Include="Models\ConcurrentDictionary.cs" />
+    <Compile Include="Models\ConcurrentQueue.cs" />
+    <Compile Include="Operations\CallContext.cs" />
     <Compile Include="Operations\ConcreteFactory.cs" />
     <Compile Include="Operations\Concrete\JsPeriodicAction.cs" />
+    <Compile Include="Operations\Logging\Concrete\ConsoleLogProcessor.cs" />
+    <Compile Include="Operations\Logging\Concrete\LogEntryDecorator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

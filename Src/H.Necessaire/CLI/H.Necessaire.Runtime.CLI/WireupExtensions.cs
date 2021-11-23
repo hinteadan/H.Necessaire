@@ -21,9 +21,9 @@ namespace H.Necessaire.Runtime.CLI
 
             if (!result.IsSuccessful)
             {
-                Console.WriteLine(String.Join(Environment.NewLine, result.FlattenReasons()));
+                ImALogger logger = wireup.DependencyRegistry.GetLogger("Wireup", "H.Necessaire.Runtime.CLI");
+                await logger.LogError(string.Join(Environment.NewLine, result.FlattenReasons()));
             }
-
         }
     }
 }

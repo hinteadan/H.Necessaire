@@ -41,8 +41,6 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         private static void HandleHashChange(string currentLocation)
         {
-            Console.WriteLine($"HashChanged: Current[{currentLocation}] RequestedHash[{Window.Location.Hash}]");
-
             string requestedHash = Window.Location.Hash;
             currentLocation = currentLocation == $"{AppBase.BaseHostPath}/" ? AppBase.BaseHostPath : (currentLocation ?? AppBase.BaseHostPath);
 

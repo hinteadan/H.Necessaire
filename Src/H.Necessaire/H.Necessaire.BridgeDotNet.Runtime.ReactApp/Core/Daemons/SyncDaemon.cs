@@ -22,6 +22,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             ImASyncRegistry[] syncRegistries;
             SyncRequestResource syncRequestResource;
             ConsumerIdentityLocalStorageResource consumerIdentityStorage;
+            ImALogger logger;
             public void ReferDependencies(ImADependencyProvider dependencyProvider)
             {
                 repeater = new ActionRepeater(RunSyncCycle, TimeSpan.FromSeconds(AppBase.Config.Get("SyncIntervalInSeconds")?.ToString()?.ParseToIntOrFallbackTo(10).Value ?? 10));
@@ -29,6 +30,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 syncRegistries = dependencyProvider.Get<ImASyncRegistry[]>() ?? dependencyProvider.Get<ImASyncRegistry>()?.AsArray() ?? new ImASyncRegistry[0];
                 syncRequestResource = dependencyProvider.Get<SyncRequestResource>();
                 consumerIdentityStorage = dependencyProvider.Get<ConsumerIdentityLocalStorageResource>();
+                logger = dependencyProvider.GetLogger<Worker>();
             }
 
             public async void DoWork()
@@ -40,16 +42,16 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             {
                 if (!AppBase.IsOnline)
                 {
-                    Console.WriteLine($"Skipping Sync Cycle because we're offline");
+                    await logger.LogInfo($"Skipping Sync Cycle because we're offline");
                     return;
                 }
 
-                Console.WriteLine($"Running Sync Cycle");
-                using (new TimeMeasurement(x => Console.WriteLine($"DONE Running Sync Cycle in {x}")))
+                await logger.LogInfo($"Running Sync Cycle");
+                using (new TimeMeasurement(async x => await logger.LogInfo($"DONE Running Sync Cycle in {x}")))
                 {
                     Type[] syncableTypes = await syncablesBrowser.GetAllSyncableTypes();
 
-                    Console.WriteLine($"Syncable types: {string.Join(", ", syncableTypes.Select(x => x.TypeName()).ToArray())}");
+                    await logger.LogInfo($"Syncable types: {string.Join(", ", syncableTypes.Select(x => x.TypeName()).ToArray())}");
 
                     foreach (ImASyncRegistry syncRegistry in syncRegistries)
                     {
@@ -63,8 +65,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 await
                     new Func<Task>(async () =>
                     {
-                        Console.WriteLine($"Syncing batch for {syncRegistry.ReceiverNode}");
-                        using (new TimeMeasurement(x => Console.WriteLine($"DONE Syncing batch for {syncRegistry.ReceiverNode} in {x}")))
+                        await logger.LogInfo($"Syncing batch for {syncRegistry.ReceiverNode}");
+                        using (new TimeMeasurement(async x => await logger.LogInfo($"DONE Syncing batch for {syncRegistry.ReceiverNode} in {x}")))
                         {
                             foreach (Type syncableType in syncableTypes)
                             {
@@ -72,11 +74,11 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
                                 if (!entitiesToSync?.Any() ?? true)
                                 {
-                                    Console.WriteLine($"Nothing to sync for {syncableType.TypeName()}. Skipping...");
+                                    await logger.LogInfo($"Nothing to sync for {syncableType.TypeName()}. Skipping...");
                                     return;
                                 }
 
-                                Console.WriteLine($"Found {entitiesToSync.Length} entries to sync for {syncableType.TypeName()}");
+                                await logger.LogInfo($"Found {entitiesToSync.Length} entries to sync for {syncableType.TypeName()}");
 
                                 List<SyncRequest> syncRequests = new List<SyncRequest>(entitiesToSync.Length);
 
@@ -96,8 +98,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                                     });
                                 }
 
-                                Console.WriteLine($"Sync Requests for {syncableType.TypeName()}");
-                                Console.WriteLine(syncRequests.ObjectToJson());
+                                await logger.LogInfo($"Sync Requests for {syncableType.TypeName()}", syncRequests.ObjectToJson());
 
                                 OperationResult<SyncResponse>[] syncResults = await syncRequestResource.Sync(syncRegistry.ReceiverNode, syncRequests.ToArray());
 
@@ -111,7 +112,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                             }
                         }
                     })
-                    .TryOrFailWithGrace(onFail: x => Console.WriteLine(x))
+                    .TryOrFailWithGrace(onFail: async x => await logger.LogError(x))
                     ;
 
             }

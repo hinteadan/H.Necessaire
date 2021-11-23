@@ -10,7 +10,7 @@ namespace H.Necessaire.Dapper.Operations.Concrete
         readonly ConcurrentDictionary<Type, SqlEntityConnection> entityConnectionsDictionary = new ConcurrentDictionary<Type, SqlEntityConnection>();
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
-            RuntimeConfig runtimeConfig = dependencyProvider?.Get<ImAConfigProvider>()?.GetRuntimeConfig() ?? dependencyProvider?.Get<RuntimeConfig>() ?? RuntimeConfig.Empty;
+            RuntimeConfig runtimeConfig = dependencyProvider.GetRuntimeConfig();
             defaultSqlEntityConnection.ConnectionString = runtimeConfig?.Get("SqlConnections")?.Get("DefaultConnectionString")?.ToString();
         }
         #endregion

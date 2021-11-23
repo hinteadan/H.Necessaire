@@ -1,6 +1,7 @@
 ﻿using H.Necessaire.Runtime.CLI.Commands;
 using H.Necessaire.Serialization;
 using NeoSmart.Utils;
+using System.Diagnostics;
 using System.Text;
 
 namespace H.Necessaire.CLI.Commands
@@ -24,9 +25,71 @@ namespace H.Necessaire.CLI.Commands
         {
             //await DebugJwt();
 
-            await DebugSql();
+            //await DebugSql();
+
+            await DebugExecutionCallContext();
+
+            //await DebugConsoleStuff();
 
             return OperationResult.Win();
+        }
+
+        private Task DebugConsoleStuff()
+        {
+            ConsoleColor[] allConsoleColors = Enum.GetValues(typeof(ConsoleColor)).Cast<ConsoleColor>().ToArray();
+
+            foreach (ConsoleColor color in allConsoleColors)
+            {
+                using (new ScopedRunner(() => Console.ForegroundColor = color.And(x => { if (x == ConsoleColor.Black) Console.BackgroundColor = ConsoleColor.DarkGray; }), () => Console.ResetColor()))
+                {
+                    Console.WriteLine(color.ToString());
+                }
+            }
+
+            return true.AsTask();
+        }
+
+        private async Task DebugExecutionCallContext()
+        {
+            Console.WriteLine(MethodName.GetCurrentName());
+
+            StackTrace stackTrace = new StackTrace();
+
+            Console.WriteLine(stackTrace.ToString());
+
+            string stack = Environment.StackTrace;
+            Console.WriteLine(stack?.Substring(stack.IndexOf(Environment.NewLine) + Environment.NewLine.Length));
+
+            CallContext.SetData("GlobalID", "GLOBAL");
+
+            await Task.Run(async () =>
+            {
+                Console.WriteLine($"Thread [{Thread.CurrentThread.ManagedThreadId}] GlobalID: {CallContext.GetData("GlobalID") ?? "null"}");
+                CallContext.SetData("ChildID", "Thread1");
+
+                await Task.Run(() =>
+                {
+                    Console.WriteLine($"Thread [{Thread.CurrentThread.ManagedThreadId}] GlobalID: {CallContext.GetData("GlobalID") ?? "null"}");
+                    Console.WriteLine($"Thread [{Thread.CurrentThread.ManagedThreadId}] ChildID: {CallContext.GetData("ChildID") ?? "null"}");
+                });
+
+            });
+
+            await Task.Run(async () =>
+            {
+                Console.WriteLine($"Thread [{Thread.CurrentThread.ManagedThreadId}] GlobalID: {CallContext.GetData("GlobalID") ?? "null"}");
+                CallContext.SetData("ChildID", "Thread2");
+
+                await Task.Run(() =>
+                {
+                    Console.WriteLine($"Thread [{Thread.CurrentThread.ManagedThreadId}] GlobalID: {CallContext.GetData("GlobalID") ?? "null"}");
+                    Console.WriteLine($"Thread [{Thread.CurrentThread.ManagedThreadId}] ChildID: {CallContext.GetData("ChildID") ?? "null"}");
+                });
+
+            });
+
+            Console.WriteLine($"Thread [{Thread.CurrentThread.ManagedThreadId}] GlobalID: {CallContext.GetData("GlobalID") ?? "null"}");
+            Console.WriteLine($"Thread [{Thread.CurrentThread.ManagedThreadId}] ChildID: {CallContext.GetData("ChildID") ?? "null"}");
         }
 
         private async Task DebugJwt()
@@ -68,6 +131,11 @@ namespace H.Necessaire.CLI.Commands
         {
             await exiledSyncRequestStorageService.Save(new ExiledSyncRequest { });
             await keyValueStorage.Set("Test", "abc");
+        }
+
+        public static class MethodName
+        {
+            public static string GetCurrentName([System.Runtime.CompilerServices.CallerMemberName] string methodName = null) => string.IsNullOrWhiteSpace(methodName) ? null : methodName;
         }
     }
 }

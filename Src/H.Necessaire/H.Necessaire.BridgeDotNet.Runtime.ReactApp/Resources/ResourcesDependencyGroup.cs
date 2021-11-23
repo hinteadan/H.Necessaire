@@ -1,4 +1,6 @@
-﻿using System;
+﻿using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Logging;
+using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Sync;
+using System;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
@@ -6,18 +8,29 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     {
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
-            dependencyRegistry.Register<SecurityResource>(() => new SecurityResource());
-            dependencyRegistry.Register<SyncRequestResource>(() => new SyncRequestResource());
-            dependencyRegistry.Register<DeviceInfoResource>(() => new DeviceInfoResource());
-            dependencyRegistry.Register<ConsumerIdentityLocalStorageResource>(() => new ConsumerIdentityLocalStorageResource());
+            dependencyRegistry
+                .Register<SecurityResource>(() => new SecurityResource())
+                .Register<SyncRequestResource>(() => new SyncRequestResource())
+                .Register<DeviceInfoResource>(() => new DeviceInfoResource())
+                .Register<ConsumerIdentityLocalStorageResource>(() => new ConsumerIdentityLocalStorageResource())
+                ;
 
-            dependencyRegistry.Register<BffApiSyncRegistryResource>(() => new BffApiSyncRegistryResource());
+            dependencyRegistry
+                .Register<LogEntryLocalStorageResource>(() => new LogEntryLocalStorageResource())
+                .Register<ImAStorageService<Guid, LogEntry>>(() => dependencyRegistry.Get<LogEntryLocalStorageResource>())
+                .Register<ImAStorageBrowserService<LogEntry, LogFilter>>(() => dependencyRegistry.Get<LogEntryLocalStorageResource>())
+                ;
 
-            dependencyRegistry.Register<ImASyncRegistry[]>(() => new ImASyncRegistry[] {
-                dependencyRegistry.Get<BffApiSyncRegistryResource>(),
-            });
+            dependencyRegistry
+                .Register<BffApiSyncRegistryResource>(() => new BffApiSyncRegistryResource())
+                .Register<ImASyncRegistry[]>(() => new ImASyncRegistry[] {
+                    dependencyRegistry.Get<BffApiSyncRegistryResource>(),
+                });
 
-            dependencyRegistry.Register<ImASyncer<ConsumerIdentity, Guid>>(() => new ConsumerIdentitySyncerResource());
+            dependencyRegistry
+                .Register<ImASyncer<ConsumerIdentity, Guid>>(() => new ConsumerIdentitySyncerResource())
+                .Register<ImASyncer<LogEntry, Guid>>(() => new LogEntrySyncerResource())
+                ;
         }
     }
 }

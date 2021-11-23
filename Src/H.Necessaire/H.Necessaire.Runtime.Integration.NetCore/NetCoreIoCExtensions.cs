@@ -11,7 +11,7 @@ namespace H.Necessaire
 {
     public static class NetCoreIoCExtensions
     {
-        public static IServiceCollection AddHNecessaireDependencies(this IServiceCollection services, ImADependencyRegistry dependencyRegistry)
+        public static IServiceCollection AddNetCoreDependenciesToHNecessaire(this IServiceCollection services, ImADependencyRegistry dependencyRegistry)
         {
             if (services == null)
                 return services;
@@ -24,6 +24,13 @@ namespace H.Necessaire
                 return
                     new HttpContextToUseCaseContextProvider(netCoreServiceProvider.GetService<IHttpContextAccessor>()?.HttpContext);
             });
+
+            return services;
+        }
+
+        public static IServiceCollection AddHNecessaireDependenciesToNetCore(this IServiceCollection services, ImADependencyRegistry dependencyRegistry)
+        {
+            services.AddSingleton<ImADependencyRegistry>(dependencyRegistry);
 
             dependencyRegistry.RegisterAlwaysNew<ImAConfigProvider>(() =>
             {

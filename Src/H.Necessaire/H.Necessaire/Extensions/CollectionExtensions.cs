@@ -147,12 +147,12 @@ namespace H.Necessaire
             return result;
         }
 
-        public static T[] Push<T>(this T[] array, T item)
+        public static T[] Push<T>(this T[] array, T item, bool checkDistinct = true)
         {
             if (array == null)
                 array = new T[0];
 
-            array = array.Concat(item.AsArray()).ToArray();
+            array = checkDistinct ? array.Union(item.AsArray()).ToArray() : array.Concat(item.AsArray()).ToArray();
 
             return array;
         }

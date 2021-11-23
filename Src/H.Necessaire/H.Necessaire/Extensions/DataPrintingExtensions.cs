@@ -4,6 +4,15 @@ namespace H.Necessaire
 {
     public static class DataPrintingExtensions
     {
+        const string dateTimeFormat = "ddd, MMM dd, yyyy 'at' HH:mm";
+        const string dateFormat = "ddd, MMM dd, yyyy";
+        const string timeFormat = "HH:mm";
+        const string monthFormat = "yyyy MMM";
+        const string dayOfWeekFormat = "dddd";
+        const string timeStampThisYearFormat = "MMM dd 'at' HH:mm";
+        const string timeStampOtherYearFormat = "MMM dd, yyyy 'at' HH:mm";
+        const string timeStampIdentifierFormat = "yyyyMMdd_HHmmss_'UTC'";
+
         public static string PrintPercent(float percentValue)
         {
             return $"{Math.Round(percentValue.TrimToPercent(), 1)}%";
@@ -70,6 +79,68 @@ namespace H.Necessaire
                 return $"{timeSpan.Days} day & {timeSpan.Hours}h{timeSpan.Minutes}m";
 
             return $"{timeSpan.Days} days & {timeSpan.Hours}h{timeSpan.Minutes}m";
+        }
+
+        public static string PrintDateTimeAsOfNow(DateTime dateTime)
+        {
+            DateTime now = DateTime.Now;
+            DateTime localTime = dateTime.EnsureUtc().ToLocalTime();
+            TimeSpan life = now - localTime;
+
+            if (life < TimeSpan.FromMinutes(1))
+                return "just now";
+            if (life < TimeSpan.FromMinutes(5))
+                return $"a few minutes ago at {dateTime.ToString(timeFormat)}";
+            if (life < TimeSpan.FromMinutes(59))
+                return $"{(int)life.TotalMinutes} minutes ago at {dateTime.ToString(timeFormat)}";
+            if (life < TimeSpan.FromHours(2))
+                return $"about an hour ago at {dateTime.ToString(timeFormat)}";
+            if (life < TimeSpan.FromHours(24))
+                return $"{(int)life.TotalHours} hours ago at {dateTime.ToString(timeFormat)}";
+            if (life < TimeSpan.FromDays(2))
+                return $"{dateTime.ToString(dayOfWeekFormat)}, {(int)life.TotalDays} day ago at {dateTime.ToString(timeFormat)}";
+            if (life < TimeSpan.FromDays(7))
+                return $"{dateTime.ToString(dayOfWeekFormat)}, {(int)life.TotalDays} days ago at {dateTime.ToString(timeFormat)}";
+
+            return dateTime.PrintTimeStamp();
+        }
+
+        public static string PrintDateAndTime(this DateTime dateTime)
+        {
+            return dateTime.EnsureUtc().ToLocalTime().ToString(dateTimeFormat);
+        }
+
+        public static string PrintMonth(this DateTime dateTime)
+        {
+            return dateTime.ToString(monthFormat);
+        }
+
+        public static string PrintDate(this DateTime dateTime)
+        {
+            return dateTime.EnsureUtc().ToLocalTime().ToString(dateFormat);
+        }
+
+        public static string PrintTime(this DateTime dateTime)
+        {
+            return dateTime.EnsureUtc().ToLocalTime().ToString(timeFormat);
+        }
+
+        public static string PrintDayOfWeek(this DateTime dateTime)
+        {
+            return dateTime.EnsureUtc().ToLocalTime().ToString(dayOfWeekFormat);
+        }
+
+        public static string PrintTimeStampAsIdentifier(this DateTime dateTime)
+        {
+            return dateTime.EnsureUtc().ToString(timeStampIdentifierFormat);
+        }
+
+        public static string PrintTimeStamp(this DateTime dateTime)
+        {
+            DateTime localTime = dateTime.EnsureUtc().ToLocalTime();
+            bool isThisYear = localTime.Year == DateTime.Now.Year;
+            string format = isThisYear ? timeStampThisYearFormat : timeStampOtherYearFormat;
+            return localTime.ToString(format);
         }
     }
 }

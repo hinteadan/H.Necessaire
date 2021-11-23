@@ -9,6 +9,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         public readonly Dexie.Table<object, object> ConsumerIdentity;
         public readonly Dexie.Table<object, object> BffApiSyncRegistry;
+        public readonly Dexie.Table<object, object> Log;
 
         public HNecessaireIndexedDBStorage()
             : base(
@@ -22,11 +23,17 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                   {
                       Version = 2,
                       ConstructDbVersionSchema = ConstructDbVersion2Schema,
+                  },
+                  new IndexedDBVersionInfo
+                  {
+                      Version = 3,
+                      ConstructDbVersionSchema = ConstructDbVersion3Schema,
                   }
             )
         {
             this.ConsumerIdentity = database.table(nameof(ConsumerIdentity));
             this.BffApiSyncRegistry = database.table(nameof(BffApiSyncRegistry));
+            this.Log = database.table(nameof(Log));
         }
         #endregion
 
@@ -44,6 +51,15 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             Dexie.Version.storesConfig schema = new Dexie.Version.storesConfig();
 
             schema[nameof(BffApiSyncRegistry)] = "&ID";
+
+            return schema;
+        }
+
+        private static Dexie.Version.storesConfig ConstructDbVersion3Schema()
+        {
+            Dexie.Version.storesConfig schema = new Dexie.Version.storesConfig();
+
+            schema[nameof(Log)] = "&ID, Level, ScopeID, HappenedAt, Method, Component, Application";
 
             return schema;
         }

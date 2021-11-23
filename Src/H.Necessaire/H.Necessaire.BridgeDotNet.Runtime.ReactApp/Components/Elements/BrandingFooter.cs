@@ -39,7 +39,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         private string RenderCopyrightLabel()
         {
             return
-                Config.Get("Copyright")?.ToString()?.Replace("{year}", DateTime.Today.Year.ToString())
+                Config?.Get("App")?.Get("Copyright")?.ToString()?.Replace("{year}", DateTime.Today.Year.ToString())
                 ??
                 $"Copyright &copy; {DateTime.Today.Year}. H.Necessaire by Hintea Dan Alexandru. All rights reserved."
                 ;

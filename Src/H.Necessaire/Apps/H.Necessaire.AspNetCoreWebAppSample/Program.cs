@@ -1,24 +1,41 @@
+using H.Necessaire;
 using H.Necessaire.AspNetCoreWebAppSample;
+using H.Necessaire.Runtime.Integration.NetCore;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-CreateWebHostBuilder(args).Build().Run();
-
-static IWebHostBuilder CreateWebHostBuilder(string[] args)
+public class Program
 {
-    return
-        WebHost
+    public static readonly App App = new App(new AppWireup().WithEverything());
 
-        .CreateDefaultBuilder(args)
+    public static void Main(string[] args)
+    {
+        CreateWebHostBuilder(args).Build().Run();
+    }
 
-        .ConfigureLogging((context, logging) =>
-        {
-            logging.ClearProviders();
-            logging.AddConsole();
-        })
+    static IWebHostBuilder CreateWebHostBuilder(string[] args)
+    {
+        return
+            WebHost
 
-        .UseStartup<Startup>();
+            .CreateDefaultBuilder(args)
+
+            .ConfigureServices(x =>
+            {
+                x.AddHNecessaireDependenciesToNetCore(App.Wireup.DependencyRegistry);
+            })
+
+            .ConfigureLogging((context, logging) =>
+            {
+                logging
+                    .ClearProviders()
+                    .AddHNecessaireLogging(App.Wireup.DependencyRegistry)
+                    ;
+            })
+
+            .UseStartup<Startup>();
+    }
 }

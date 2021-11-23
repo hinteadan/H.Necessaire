@@ -9,7 +9,7 @@ namespace H.Necessaire.Runtime.CLI.Commands
         {
             UserInfo user = (await EnsureAuthentication()).ThrowOnFailOrReturn().SecurityContext.User;
 
-            Console.WriteLine($"All OK from {(user?.DisplayName ?? user?.Username ?? "Unknown User")} @ {DateTime.Now}");
+            await Logger.LogInfo($"All OK from {(user?.DisplayName ?? user?.Username ?? "Unknown User")}");
 
             return OperationResult.Win();
         }

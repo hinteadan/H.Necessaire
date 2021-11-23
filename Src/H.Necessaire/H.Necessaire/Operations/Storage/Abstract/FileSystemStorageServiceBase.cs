@@ -30,7 +30,7 @@ namespace H.Necessaire
 
         public virtual void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
-            string entityStorageFolderPathFromConfig = dependencyProvider.Get<RuntimeConfig>()?.Get(ConfigKeyRootFolderPath)?.ToString();
+            string entityStorageFolderPathFromConfig = dependencyProvider.GetRuntimeConfig()?.Get(ConfigKeyRootFolderPath)?.ToString();
             if (!string.IsNullOrWhiteSpace(entityStorageFolderPathFromConfig))
             {
                 this.entityStorageFolder = new DirectoryInfo(Path.Combine(entityStorageFolderPathFromConfig, typeof(TEntity).TypeName().ToSafeFileName()));

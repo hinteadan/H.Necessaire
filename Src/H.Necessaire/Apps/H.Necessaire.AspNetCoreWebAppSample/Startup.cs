@@ -6,9 +6,9 @@ using Microsoft.Extensions.Logging;
 
 namespace H.Necessaire.AspNetCoreWebAppSample
 {
-    public class Startup : DefaultStartup<AppWireup>
+    public class Startup : DefaultStartup
     {
-        public Startup(ILogger<DefaultStartup<AppWireup>> logger) : base(logger)
+        public Startup(ImADependencyRegistry dependencyRegistry, ILogger<DefaultStartup> logger) : base(dependencyRegistry, logger)
         {
         }
 

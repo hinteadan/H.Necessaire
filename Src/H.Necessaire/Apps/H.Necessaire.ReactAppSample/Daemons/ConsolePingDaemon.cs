@@ -9,10 +9,12 @@ namespace H.Necessaire.ReactAppSample
         public class Worker : ImAWebWorkerDaemonAction, ImADependency
         {
             ActionRepeater repeater;
+            ImALogger logger;
 
             public void ReferDependencies(ImADependencyProvider dependencyProvider)
             {
                 repeater = new ActionRepeater(Ping, TimeSpan.FromSeconds(1));
+                logger = dependencyProvider.GetLogger<ConsolePingDaemon>();
             }
 
             public async void DoWork()
@@ -20,11 +22,9 @@ namespace H.Necessaire.ReactAppSample
                 await repeater.Start();
             }
 
-            private Task Ping()
+            private async Task Ping()
             {
-                Console.WriteLine($"{DateTime.Now.PrintDateAndTime()} Ping from [{App.WebWorkerID}] Thread");
-
-                return true.AsTask();
+                await logger.LogTrace($"Ping from [{App.WebWorkerID}] Thread");
             }
         }
     }

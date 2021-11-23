@@ -5,8 +5,10 @@
         public static readonly RuntimeConfig Default = new RuntimeConfig
         {
             Values = new[] {
-
-                  "Copyright".ConfigWith("Copyright &copy; {year}. H.Necessaire React App Sample; by Hintea Dan Alexandru. All rights reserved.")
+                "App".ConfigWith(
+                    "Name".ConfigWith("H.Necessaire.ReactAppSample")
+                    , "Copyright".ConfigWith("Copyright &copy; {year}. H.Necessaire React App Sample; by Hintea Dan Alexandru. All rights reserved.")
+                )
 
                 //, "BaseUrl".ConfigWith("https://localhost")
                 //, "BaseApiUrl".ConfigWith("https://localhost")

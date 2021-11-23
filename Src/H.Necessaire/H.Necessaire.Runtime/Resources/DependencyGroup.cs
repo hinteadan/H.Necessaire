@@ -35,6 +35,12 @@ namespace H.Necessaire.Runtime.Resources
                 .Register<KeyValueFileSystemStorageResource>(() => new KeyValueFileSystemStorageResource())
                 .Register<IKeyValueStorage>(() => dependencyRegistry.Get<KeyValueFileSystemStorageResource>())
                 ;
+
+            dependencyRegistry
+                .Register<LogEntryFileSystemStorageResource>(() => new LogEntryFileSystemStorageResource())
+                .Register<ImAStorageService<Guid, LogEntry>>(() => dependencyRegistry.Get<LogEntryFileSystemStorageResource>())
+                .Register<ImAStorageBrowserService<LogEntry, LogFilter>>(() => dependencyRegistry.Get<LogEntryFileSystemStorageResource>())
+                ;
         }
     }
 }

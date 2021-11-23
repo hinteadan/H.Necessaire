@@ -6,8 +6,6 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     {
         public static bool IsIndexPath(this string path)
         {
-            Console.Write($"IsIndexPath({path})");
-
             path = path?.Trim();
 
             return

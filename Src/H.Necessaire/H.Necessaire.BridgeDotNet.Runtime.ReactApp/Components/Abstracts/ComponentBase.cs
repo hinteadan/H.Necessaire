@@ -24,6 +24,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         protected string BaseUrl => AppBase.BaseUrl;
         protected string BaseApiUrl => AppBase.BaseApiUrl;
 
+        protected ImALogger Logger { get; private set; }
+
         protected ComponentBase(TProps props, params Union<ReactElement, string>[] children) : base(props, children) { }
         #endregion
 
@@ -64,6 +66,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         {
             SecurityContext = Get<SecurityContext>();
             runtimeConfig = AppBase.Config;
+            Logger = AppBase.GetLoggerFor(this.GetType());
         }
 
         protected override TState GetInitialState()

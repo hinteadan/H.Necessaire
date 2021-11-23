@@ -10,12 +10,15 @@ namespace H.Necessaire.Runtime.Integration.NetCore
         #region Construct
         static readonly TimeSpan defaultWorkCycleInterval = TimeSpan.FromSeconds(30);
         ImAPeriodicAction periodicAction;
+        ImALogger logger;
         public virtual void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             periodicAction = dependencyProvider.Get<ImAPeriodicAction>();
+            logger = dependencyProvider.GetLogger(this.GetType(), "H.Necessaire.Runtime.Integration.NetCore");
         }
         #endregion
 
+        protected ImALogger Logger => logger;
 
         public Task StartAsync(CancellationToken cancellationToken) => Start(cancellationToken);
 

@@ -1,6 +1,5 @@
 ﻿using H.Necessaire.BridgeDotNet.Runtime.ReactApp;
 using H.Necessaire.Models.Branding;
-using System;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.ReactAppSample
@@ -19,7 +18,7 @@ namespace H.Necessaire.ReactAppSample
 
             await Debug();
 
-            Console.WriteLine($"DONE ReactAppSample App Initialize");
+            await AppLogger.LogInfo("DONE ReactAppSample App Initialize");
         }
 
         private static async Task Debug()
