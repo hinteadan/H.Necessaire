@@ -1,8 +1,7 @@
 Admin UI
  - Audit Browsing
    - Audit Comparison
- - Log Browser
- 
+ - Log Browser 
 
 QdActions
  - ConsumerIdentity Analytics
@@ -13,3 +12,8 @@ QdActions
 
 Admin UI
  - QD Actions
+ 
+Housekeeping Daemons
+ - UI Logs Cleaner
+ - UI sync Registry Cleaner
+ - BE Logs Cleaner
