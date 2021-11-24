@@ -10,6 +10,7 @@ namespace H.Necessaire
         DateTime HappenedAt { get; }
         IDentity DoneBy { get; }
         AuditActionType ActionType { get; }
+        Version AppVersion { get; }
         Task<T> GetObjectSnapshot<T>();
     }
 }

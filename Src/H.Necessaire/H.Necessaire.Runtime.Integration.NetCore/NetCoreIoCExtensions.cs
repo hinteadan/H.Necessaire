@@ -32,17 +32,12 @@ namespace H.Necessaire
         {
             services.AddSingleton<ImADependencyRegistry>(dependencyRegistry);
 
-            dependencyRegistry.RegisterAlwaysNew<ImAConfigProvider>(() =>
+            dependencyRegistry.Register<ImAConfigProvider>(() =>
             {
                 IServiceProvider netCoreServiceProvider = services.BuildServiceProvider();
                 return
                     new NetCoreConfigProvider(netCoreServiceProvider.GetService<IConfiguration>());
             });
-
-            foreach (KeyValuePair<Type, Func<object>> transientDependency in dependencyRegistry.GetAllAlwaysNewTypes())
-            {
-                services.AddTransient(transientDependency.Key, x => dependencyRegistry.Get(transientDependency.Key));
-            }
 
             foreach (KeyValuePair<Type, Func<object>> singletonDependency in dependencyRegistry.GetAllOneTimeTypes())
             {
@@ -51,6 +46,11 @@ namespace H.Necessaire
                 {
                     services.AddSingleton<IHostedService>(x => (IHostedService)dependencyRegistry.Get(singletonDependency.Key));
                 }
+            }
+
+            foreach (KeyValuePair<Type, Func<object>> transientDependency in dependencyRegistry.GetAllAlwaysNewTypes())
+            {
+                services.AddTransient(transientDependency.Key, x => dependencyRegistry.Get(transientDependency.Key));
             }
 
             return services;

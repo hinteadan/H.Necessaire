@@ -34,7 +34,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 Limit = maxBatchSize,
             };
 
-            SyncRegistryEntry[] results = await base.Search(filter);
+            SyncRegistryEntry[] results = await Search(filter);
 
             return results
                 .Select(x => x.EntityIdentifier)

@@ -81,6 +81,11 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
             public string ExceptionJson { get; set; }
             public string PayloadJson { get; set; }
             public string NotesJson { get; set; }
+            public string AppVersionJson { get; set; }
+            public string AppVersionNumber { get; set; }
+            public DateTime? AppVersionTimestamp { get; set; }
+            public string AppVersionBranch { get; set; }
+            public string AppVersionCommit { get; set; }
         }
 
         public class LogEntrySqlEntityMapper : SqlEntityMapperBase<LogEntry, LogEntrySqlEntry>
@@ -100,6 +105,11 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
                         x.ExceptionJson = entity.Exception?.ToJsonObject();
                         x.PayloadJson = entity.Payload?.ToJsonObject();
                         x.NotesJson = entity.Notes?.ToJsonArray();
+                        x.AppVersionJson = entity.AppVersion?.ToJsonObject();
+                        x.AppVersionNumber = entity.AppVersion?.Number?.ToString();
+                        x.AppVersionTimestamp = entity.AppVersion?.Timestamp;
+                        x.AppVersionBranch = entity.AppVersion?.Branch;
+                        x.AppVersionCommit = entity.AppVersion?.Commit;
                     })
                     ;
             }
@@ -116,6 +126,7 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
                         x.Exception = sqlEntity.ExceptionJson?.JsonToObject<Exception>();
                         x.Payload = sqlEntity.PayloadJson;
                         x.Notes = sqlEntity.NotesJson?.DeserializeToNotes();
+                        x.AppVersion = sqlEntity.AppVersionJson?.JsonToObject<Version>();
                     })
                     ;
             }

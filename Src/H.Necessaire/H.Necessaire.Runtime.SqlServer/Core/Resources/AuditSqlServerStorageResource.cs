@@ -14,17 +14,18 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
         #region Construct
         AuditMetadataSqlServerStorageResource metadataStorage = null;
         AuditPayloadSqlServerStorageResource payloadStorage = null;
-
+        ImAVersionProvider versionProvider = null;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             metadataStorage = dependencyProvider.Get<AuditMetadataSqlServerStorageResource>();
             payloadStorage = dependencyProvider.Get<AuditPayloadSqlServerStorageResource>();
+            versionProvider = dependencyProvider.Get<ImAVersionProvider>();
         }
         #endregion
 
         public async Task Append<T>(ImAnAuditEntry metadata, T objectSnapshot)
         {
-            (await metadataStorage.Save(metadata.ToMeta())).ThrowOnFail();
+            (await metadataStorage.Save(await metadata.ToMeta().AndAsync(async x => x.AppVersion = await versionProvider?.GetCurrentVersion()))).ThrowOnFail();
             (await payloadStorage.Save(new AuditPayloadSqlServerStorageResource.AuditPayloadSqlEntry
             {
                 ID = metadata.ID,
@@ -160,6 +161,11 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
             public string DoneByJson { get; set; }
             public AuditActionType ActionType { get; set; }
             public string ActionTypeLabel { get; set; }
+            public string AppVersionJson { get; set; }
+            public string AppVersionNumber { get; set; }
+            public DateTime? AppVersionTimestamp { get; set; }
+            public string AppVersionBranch { get; set; }
+            public string AppVersionCommit { get; set; }
         }
 
         public class AuditMetadataSqlEntryMapper : SqlEntityMapperBase<AuditMetadataEntry, AuditMetadataSqlEntry>
@@ -178,6 +184,11 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
                         x.DoneByDisplayName = entity.DoneBy?.DisplayName;
                         x.DoneByJson = entity.DoneBy?.ToJsonObject();
                         x.ActionTypeLabel = entity.ActionType.ToString();
+                        x.AppVersionJson = entity.AppVersion?.ToJsonObject();
+                        x.AppVersionNumber = entity.AppVersion?.Number?.ToString();
+                        x.AppVersionTimestamp = entity.AppVersion?.Timestamp;
+                        x.AppVersionBranch = entity.AppVersion?.Branch;
+                        x.AppVersionCommit = entity.AppVersion?.Commit;
                     });
             }
             public override AuditMetadataEntry MapSqlToEntity(AuditMetadataSqlEntry sqlEntity)
@@ -188,6 +199,7 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
                     {
                         x.HappenedAt = new DateTime(sqlEntity.HappenedAtTicks);
                         x.DoneBy = sqlEntity.DoneByJson?.JsonToObject<ConsumerIdentity>();
+                        x.AppVersion = sqlEntity.AppVersionJson?.JsonToObject<Version>();
                     });
             }
         }

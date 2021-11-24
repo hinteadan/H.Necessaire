@@ -1,5 +1,4 @@
 ﻿using H.Necessaire.BridgeDotNet.Runtime.ReactApp;
-using System.Linq;
 
 namespace H.Necessaire.ReactAppSample
 {
@@ -10,12 +9,12 @@ namespace H.Necessaire.ReactAppSample
 
             dependencyRegistry
 
-                .Register<ConsolePingDaemon>(() => new ConsolePingDaemon())
-                .Register<ConsolePingDaemon.Worker>(() => new ConsolePingDaemon.Worker())
+                //.Register<ConsolePingDaemon>(() => new ConsolePingDaemon())
+                //.Register<ConsolePingDaemon.Worker>(() => new ConsolePingDaemon.Worker())
 
                 .Register<ImADaemon[]>(() =>
                     new ImADaemon[] {
-                        dependencyRegistry.Get<ConsolePingDaemon>(),
+                        //dependencyRegistry.Get<ConsolePingDaemon>(),
                         dependencyRegistry.Get<SyncDaemon>(),
                     }
                 );

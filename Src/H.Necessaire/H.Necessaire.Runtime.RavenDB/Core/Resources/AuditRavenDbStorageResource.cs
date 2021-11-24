@@ -13,17 +13,18 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
         #region Construct
         AuditMetadataRavenDbStorageResource metadataStorage = null;
         AuditPayloadRavenDbStorageResource payloadStorage = null;
-
+        ImAVersionProvider versionProvider = null;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             metadataStorage = dependencyProvider.Get<AuditMetadataRavenDbStorageResource>();
             payloadStorage = dependencyProvider.Get<AuditPayloadRavenDbStorageResource>();
+            versionProvider = dependencyProvider.Get<ImAVersionProvider>();
         }
         #endregion
 
         public async Task Append<T>(ImAnAuditEntry metadata, T objectSnapshot)
         {
-            await metadataStorage.Save(metadata.ToMeta());
+            await metadataStorage.Save(await metadata.ToMeta().AndAsync(async x => x.AppVersion = await versionProvider?.GetCurrentVersion()));
             await payloadStorage.Save(new AuditPayloadRavenDbStorageResource.AuditPayloadEntry
             {
                 ID = metadata.ID,

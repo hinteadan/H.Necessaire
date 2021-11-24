@@ -1,4 +1,6 @@
-﻿namespace H.Necessaire
+﻿using H.Necessaire.Operations.Versioning;
+
+namespace H.Necessaire
 {
     public class HNecessaireDependencyGroup : ImADependencyGroup
     {
@@ -9,6 +11,7 @@
             dependencyRegistry
                 .Register<SyncDependencyGroup>(() => new SyncDependencyGroup())
                 .Register<LoggingDependencyGroup>(() => new LoggingDependencyGroup())
+                .Register<VersioningDependencyGroup>(() => new VersioningDependencyGroup())
                 ;
         }
     }

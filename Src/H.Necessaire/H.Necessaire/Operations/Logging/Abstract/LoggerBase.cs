@@ -30,8 +30,11 @@ namespace H.Necessaire
         ImALogProcessor[] immediateProcessors = null;
         ImALogProcessor[] delayedProcessors = null;
         ImAPeriodicAction delayedProcessorTimer = null;
+        ImAVersionProvider versionProvider = null;
         public virtual void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
+            versionProvider = dependencyProvider.Get<ImAVersionProvider>();
+
             ImALogProcessorRegistry logProcessorRegistry = dependencyProvider.Get<ImALogProcessorRegistry>();
             immediateProcessors = logProcessorRegistry.GetAllKnownProcessors().Where(x => x.GetPriority().In(LoggerPriority.Immediate)).ToArray();
             delayedProcessors = logProcessorRegistry.GetAllKnownProcessors().Where(x => x.GetPriority().In(LoggerPriority.Delayed)).ToArray();
@@ -52,7 +55,13 @@ namespace H.Necessaire
 
         public async Task<ImALogger> Log(LogEntry logEntry)
         {
-            logEntryDecorator.DecorateLogEntry(logEntry, LogConfig.MinimumLevelForStackTrace);
+            await
+                logEntryDecorator
+                .DecorateLogEntry(logEntry, LogConfig.MinimumLevelForStackTrace)
+                .AndAsync(async x =>
+                {
+                    x.AppVersion = await versionProvider?.GetCurrentVersion();
+                });
 
             await StoreLogEntry(logEntry);
 

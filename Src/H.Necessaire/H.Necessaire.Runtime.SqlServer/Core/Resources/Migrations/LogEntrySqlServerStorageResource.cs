@@ -47,6 +47,23 @@ ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 {nameof(LogEntrySqlEntry.Application).PrintColumnIndexCreationSqlScriptOn(logEntryTableName)}
 
 "
+            },
+            new SqlMigration
+            {
+                ResourceIdentifier = nameof(LogEntry),
+                VersionNumber = new VersionNumber(1, 1),
+                SqlCommand = $@"
+ALTER TABLE [dbo].[{logEntryTableName}] ADD [{nameof(LogEntrySqlEntry.AppVersionJson)}] [ntext] NULL;
+ALTER TABLE [dbo].[{logEntryTableName}] ADD [{nameof(LogEntrySqlEntry.AppVersionNumber)}] [nvarchar](450) NULL;
+ALTER TABLE [dbo].[{logEntryTableName}] ADD [{nameof(LogEntrySqlEntry.AppVersionTimestamp)}] [datetime2](7) NULL;
+ALTER TABLE [dbo].[{logEntryTableName}] ADD [{nameof(LogEntrySqlEntry.AppVersionBranch)}] [nvarchar](450) NULL;
+ALTER TABLE [dbo].[{logEntryTableName}] ADD [{nameof(LogEntrySqlEntry.AppVersionCommit)}] [nvarchar](450) NULL;
+
+{nameof(LogEntrySqlEntry.AppVersionNumber).PrintColumnIndexCreationSqlScriptOn(logEntryTableName)}
+{nameof(LogEntrySqlEntry.AppVersionTimestamp).PrintColumnIndexCreationSqlScriptOn(logEntryTableName)}
+{nameof(LogEntrySqlEntry.AppVersionBranch).PrintColumnIndexCreationSqlScriptOn(logEntryTableName)}
+{nameof(LogEntrySqlEntry.AppVersionCommit).PrintColumnIndexCreationSqlScriptOn(logEntryTableName)}
+",
             }
         };
     }

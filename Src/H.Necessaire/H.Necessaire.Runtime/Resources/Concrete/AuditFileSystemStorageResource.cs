@@ -10,15 +10,17 @@ namespace H.Necessaire.Runtime.Resources.Concrete
     internal class AuditFileSystemStorageResource : JsonCachedFileSystemStorageServiceBase<Guid, ImAnAuditEntry, AuditSearchFilter>, ImAnAuditingService
     {
         AuditMetadataFileSystemStorageResource auditMetadataStorageResource = null;
+        ImAVersionProvider versionProvider = null;
         public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             base.ReferDependencies(dependencyProvider);
             auditMetadataStorageResource = dependencyProvider.Get<AuditMetadataFileSystemStorageResource>();
+            versionProvider = dependencyProvider.Get<ImAVersionProvider>();
         }
 
         public async Task Append<T>(ImAnAuditEntry metadata, T objectSnapshot)
         {
-            await auditMetadataStorageResource.Save(metadata.ToMeta());
+            await auditMetadataStorageResource.Save(await metadata.ToMeta().AndAsync(async x => x.AppVersion = await versionProvider?.GetCurrentVersion()));
             FileInfo payloadFile = BuildPayloadFile(metadata.ID);
             payloadFile.Directory.Create();
             using (FileStream payloadFileStream = payloadFile.Create())

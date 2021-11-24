@@ -15,6 +15,7 @@ namespace H.Necessaire
         public string StackTrace { get; set; } = null;
         public string Component { get; set; } = null;
         public string Application { get; set; } = "H.Necessaire";
+        public Version AppVersion { get; set; } = null;
         public Exception Exception { get; set; } = null;
         public object Payload { get; set; } = null;
         public Note[] Notes { get; set; }

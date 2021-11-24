@@ -1,3 +1,5 @@
+Add version to logs and audits
+
 QdActions
  - ConsumerIdentity Analytics
    - IP Geolocation

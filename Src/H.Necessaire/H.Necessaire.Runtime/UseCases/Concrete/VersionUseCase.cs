@@ -1,15 +1,14 @@
-﻿using H.Necessaire.Runtime.Versioning;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.UseCases.Concrete
 {
     internal class VersionUseCase : UseCaseBase, ImAVersionUseCase
     {
-        VersionProvider versionProvider;
+        ImAVersionProvider versionProvider;
         public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             base.ReferDependencies(dependencyProvider);
-            this.versionProvider = dependencyProvider.Get<VersionProvider>();
+            this.versionProvider = dependencyProvider.Get<ImAVersionProvider>();
         }
 
         public Task<Version> GetCurrentVersion()

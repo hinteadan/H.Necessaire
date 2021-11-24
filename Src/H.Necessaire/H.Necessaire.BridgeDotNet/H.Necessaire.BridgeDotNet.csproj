@@ -450,6 +450,9 @@
     <Compile Include="..\H.Necessaire\Operations\TimeMeasurement.cs">
       <Link>Operations\TimeMeasurement.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Versioning\ImAVersionProvider.cs">
+      <Link>Operations\Versioning\ImAVersionProvider.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\UI\UserInput\UserInputValidationExtensions.cs">
       <Link>UI\UserInput\UserInputValidationExtensions.cs</Link>
     </Compile>
@@ -469,6 +472,7 @@
     <Compile Include="Operations\Concrete\JsPeriodicAction.cs" />
     <Compile Include="Operations\Logging\Concrete\ConsoleLogProcessor.cs" />
     <Compile Include="Operations\Logging\Concrete\LogEntryDecorator.cs" />
+    <Compile Include="Operations\Versioning\VersioningDependencyGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

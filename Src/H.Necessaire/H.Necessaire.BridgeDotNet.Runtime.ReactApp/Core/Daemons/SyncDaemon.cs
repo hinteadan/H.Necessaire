@@ -75,7 +75,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                                 if (!entitiesToSync?.Any() ?? true)
                                 {
                                     await logger.LogInfo($"Nothing to sync for {syncableType.TypeName()}. Skipping...");
-                                    return;
+                                    continue;
                                 }
 
                                 await logger.LogInfo($"Found {entitiesToSync.Length} entries to sync for {syncableType.TypeName()}");

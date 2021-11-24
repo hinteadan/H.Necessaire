@@ -13,6 +13,7 @@ namespace H.Necessaire
             HappenedAt = auditEntryMetadata?.HappenedAt ?? DateTime.UtcNow;
             DoneBy = auditEntryMetadata?.DoneBy;
             ActionType = auditEntryMetadata?.ActionType ?? AuditActionType.Modify;
+            AppVersion = auditEntryMetadata?.AppVersion;
         }
 
         public Guid ID { get; set; } = Guid.NewGuid();
@@ -21,6 +22,7 @@ namespace H.Necessaire
         public DateTime HappenedAt { get; set; } = DateTime.UtcNow;
         public IDentity DoneBy { get; set; }
         public AuditActionType ActionType { get; set; } = AuditActionType.Modify;
+        public Version AppVersion { get; set; } = null;
 
         public abstract Task<T> GetObjectSnapshot<T>();
     }

@@ -16,6 +16,7 @@ namespace H.Necessaire.Runtime.Integration.NetCore.Concrete
         static readonly Encoding basicAuthEncoding = Encoding.GetEncoding("iso-8859-1");
         ImASecurityManager securityManager = null;
         ImAStorageService<Guid, ConsumerIdentity> consumerIDentityStorageService = null;
+        ImALogger logger = null;
         readonly HttpContext httpContext;
         public HttpContextToUseCaseContextProvider(HttpContext httpContext)
         {
@@ -26,6 +27,7 @@ namespace H.Necessaire.Runtime.Integration.NetCore.Concrete
         {
             securityManager = dependencyProvider.Get<ImASecurityManager>();
             consumerIDentityStorageService = dependencyProvider.Get<ImAStorageService<Guid, ConsumerIdentity>>();
+            logger = dependencyProvider.GetLogger<HttpContextToUseCaseContextProvider>();
         }
         #endregion
 
@@ -45,8 +47,14 @@ namespace H.Necessaire.Runtime.Integration.NetCore.Concrete
             Stream requestBodyStream = httpContext?.Request?.Body;
             long requestBodyStreamPosition = requestBodyStream.Position;
             if (requestBodyStream != null)
-                using (new ScopedRunner(() => requestBodyStream.Position = 0, () => requestBodyStream.Position = requestBodyStreamPosition))
-                    rawBody = await requestBodyStream.ReadAsStringAsync();
+            {
+                await new Func<Task>(async () =>
+                {
+                    using (new ScopedRunner(() => requestBodyStream.Position = 0, () => requestBodyStream.Position = requestBodyStreamPosition))
+                        rawBody = await requestBodyStream.ReadAsStringAsync();
+                })
+                .TryOrFailWithGrace(onFail: async ex => await logger.LogError(ex));
+            }
 
             bool isSessionAvailable = false;
             new Action(() => isSessionAvailable = httpContext?.Session?.IsAvailable ?? false).TryOrFailWithGrace(onFail: ex => isSessionAvailable = false);

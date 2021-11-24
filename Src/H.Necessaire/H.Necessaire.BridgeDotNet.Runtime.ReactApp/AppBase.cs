@@ -3,7 +3,6 @@ using Bridge.Html5;
 using Bridge.jQuery2;
 using Bridge.React;
 using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Components;
-using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Versioning;
 using H.Necessaire.Models.Branding;
 using System;
 using System.Linq;
@@ -13,7 +12,6 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     public class AppBase
     {
-        static Version appVersion = null;
         static ImALogger appLogger = null;
         static ImAnAppWireup appWireup;
 
@@ -32,7 +30,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         public static ImALogger GetLoggerFor(Type type) => appWireup.DependencyRegistry.GetLogger(type, "H.Necessaire.BridgeDotNet.Runtime.ReactApp");
         public static ImALogger GetLogger<T>() => appWireup.DependencyRegistry.GetLogger<T>("H.Necessaire.BridgeDotNet.Runtime.ReactApp");
 
-        public static async Task<Version> GetAppVersion() { if (appVersion != null) return appVersion; appVersion = (await appWireup?.DependencyRegistry?.Get<VersionResource>()?.GetCurrentVersion()); return appVersion; }
+        public static async Task<Version> GetAppVersion() => (await appWireup?.DependencyRegistry?.Get<ImAVersionProvider>()?.GetCurrentVersion());
 
         public static ImALogger AppLogger
         {

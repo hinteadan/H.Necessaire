@@ -11,6 +11,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         {
             dependencyRegistry
                 .Register<VersionResource>(() => new VersionResource())
+                .Register<ImAVersionProvider>(() => dependencyRegistry.Get<VersionResource>())
                 .Register<SecurityResource>(() => new SecurityResource())
                 .Register<SyncRequestResource>(() => new SyncRequestResource())
                 .Register<DeviceInfoResource>(() => new DeviceInfoResource())

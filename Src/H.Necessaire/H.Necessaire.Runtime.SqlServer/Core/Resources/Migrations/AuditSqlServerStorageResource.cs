@@ -43,6 +43,23 @@ ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 ",
             },
+            new SqlMigration
+            {
+                ResourceIdentifier = "Audit",
+                VersionNumber = new VersionNumber(1, 1),
+                SqlCommand = $@"
+ALTER TABLE [dbo].[{auditMetaTableName}] ADD [{nameof(AuditMetadataSqlEntry.AppVersionJson)}] [ntext] NULL;
+ALTER TABLE [dbo].[{auditMetaTableName}] ADD [{nameof(AuditMetadataSqlEntry.AppVersionNumber)}] [nvarchar](450) NULL;
+ALTER TABLE [dbo].[{auditMetaTableName}] ADD [{nameof(AuditMetadataSqlEntry.AppVersionTimestamp)}] [datetime2](7) NULL;
+ALTER TABLE [dbo].[{auditMetaTableName}] ADD [{nameof(AuditMetadataSqlEntry.AppVersionBranch)}] [nvarchar](450) NULL;
+ALTER TABLE [dbo].[{auditMetaTableName}] ADD [{nameof(AuditMetadataSqlEntry.AppVersionCommit)}] [nvarchar](450) NULL;
+
+{nameof(AuditMetadataSqlEntry.AppVersionNumber).PrintColumnIndexCreationSqlScriptOn(auditMetaTableName)}
+{nameof(AuditMetadataSqlEntry.AppVersionTimestamp).PrintColumnIndexCreationSqlScriptOn(auditMetaTableName)}
+{nameof(AuditMetadataSqlEntry.AppVersionBranch).PrintColumnIndexCreationSqlScriptOn(auditMetaTableName)}
+{nameof(AuditMetadataSqlEntry.AppVersionCommit).PrintColumnIndexCreationSqlScriptOn(auditMetaTableName)}
+",
+            }
         };
     }
 
