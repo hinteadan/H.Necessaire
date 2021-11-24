@@ -4,14 +4,15 @@ namespace H.Necessaire
 {
     public static class DataPrintingExtensions
     {
-        const string dateTimeFormat = "ddd, MMM dd, yyyy 'at' HH:mm";
-        const string dateFormat = "ddd, MMM dd, yyyy";
-        const string timeFormat = "HH:mm";
-        const string monthFormat = "yyyy MMM";
-        const string dayOfWeekFormat = "dddd";
-        const string timeStampThisYearFormat = "MMM dd 'at' HH:mm";
-        const string timeStampOtherYearFormat = "MMM dd, yyyy 'at' HH:mm";
-        const string timeStampIdentifierFormat = "yyyyMMdd_HHmmss_'UTC'";
+        public const string DateTimeFormat = "ddd, MMM dd, yyyy 'at' HH:mm";
+        public const string DateFormat = "ddd, MMM dd, yyyy";
+        public const string TimeFormat = "HH:mm";
+        public const string MonthFormat = "yyyy MMM";
+        public const string DayOfWeekFormat = "dddd";
+        public const string TimeStampThisYearFormat = "MMM dd 'at' HH:mm";
+        public const string TimeStampOtherYearFormat = "MMM dd, yyyy 'at' HH:mm";
+        public const string TimeStampIdentifierFormat = "yyyyMMdd_HHmmss_'UTC'";
+        public const string ParsableTimeStampFormat = "yyyy-MM-dd HH:mm:ss 'UTC'";
 
         public static string PrintPercent(float percentValue)
         {
@@ -90,56 +91,56 @@ namespace H.Necessaire
             if (life < TimeSpan.FromMinutes(1))
                 return "just now";
             if (life < TimeSpan.FromMinutes(5))
-                return $"a few minutes ago at {dateTime.ToString(timeFormat)}";
+                return $"a few minutes ago at {dateTime.ToString(TimeFormat)}";
             if (life < TimeSpan.FromMinutes(59))
-                return $"{(int)life.TotalMinutes} minutes ago at {dateTime.ToString(timeFormat)}";
+                return $"{(int)life.TotalMinutes} minutes ago at {dateTime.ToString(TimeFormat)}";
             if (life < TimeSpan.FromHours(2))
-                return $"about an hour ago at {dateTime.ToString(timeFormat)}";
+                return $"about an hour ago at {dateTime.ToString(TimeFormat)}";
             if (life < TimeSpan.FromHours(24))
-                return $"{(int)life.TotalHours} hours ago at {dateTime.ToString(timeFormat)}";
+                return $"{(int)life.TotalHours} hours ago at {dateTime.ToString(TimeFormat)}";
             if (life < TimeSpan.FromDays(2))
-                return $"{dateTime.ToString(dayOfWeekFormat)}, {(int)life.TotalDays} day ago at {dateTime.ToString(timeFormat)}";
+                return $"{dateTime.ToString(DayOfWeekFormat)}, {(int)life.TotalDays} day ago at {dateTime.ToString(TimeFormat)}";
             if (life < TimeSpan.FromDays(7))
-                return $"{dateTime.ToString(dayOfWeekFormat)}, {(int)life.TotalDays} days ago at {dateTime.ToString(timeFormat)}";
+                return $"{dateTime.ToString(DayOfWeekFormat)}, {(int)life.TotalDays} days ago at {dateTime.ToString(TimeFormat)}";
 
             return dateTime.PrintTimeStamp();
         }
 
         public static string PrintDateAndTime(this DateTime dateTime)
         {
-            return dateTime.EnsureUtc().ToLocalTime().ToString(dateTimeFormat);
+            return dateTime.EnsureUtc().ToLocalTime().ToString(DateTimeFormat);
         }
 
         public static string PrintMonth(this DateTime dateTime)
         {
-            return dateTime.ToString(monthFormat);
+            return dateTime.ToString(MonthFormat);
         }
 
         public static string PrintDate(this DateTime dateTime)
         {
-            return dateTime.EnsureUtc().ToLocalTime().ToString(dateFormat);
+            return dateTime.EnsureUtc().ToLocalTime().ToString(DateFormat);
         }
 
         public static string PrintTime(this DateTime dateTime)
         {
-            return dateTime.EnsureUtc().ToLocalTime().ToString(timeFormat);
+            return dateTime.EnsureUtc().ToLocalTime().ToString(TimeFormat);
         }
 
         public static string PrintDayOfWeek(this DateTime dateTime)
         {
-            return dateTime.EnsureUtc().ToLocalTime().ToString(dayOfWeekFormat);
+            return dateTime.EnsureUtc().ToLocalTime().ToString(DayOfWeekFormat);
         }
 
         public static string PrintTimeStampAsIdentifier(this DateTime dateTime)
         {
-            return dateTime.EnsureUtc().ToString(timeStampIdentifierFormat);
+            return dateTime.EnsureUtc().ToString(TimeStampIdentifierFormat);
         }
 
         public static string PrintTimeStamp(this DateTime dateTime)
         {
             DateTime localTime = dateTime.EnsureUtc().ToLocalTime();
             bool isThisYear = localTime.Year == DateTime.Now.Year;
-            string format = isThisYear ? timeStampThisYearFormat : timeStampOtherYearFormat;
+            string format = isThisYear ? TimeStampThisYearFormat : TimeStampOtherYearFormat;
             return localTime.ToString(format);
         }
     }

@@ -15,6 +15,10 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
   </ItemGroup>
 
+    <ItemGroup>
+	    <EmbeddedResource Include="version.txt" />
+    </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\H.Necessaire.Runtime.Integration.NetCore\H.Necessaire.Runtime.Integration.NetCore.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime.SqlServer\H.Necessaire.Runtime.SqlServer.csproj" />
@@ -22,6 +26,11 @@
     <ProjectReference Include="..\..\H.Necessaire.Serialization\H.Necessaire.Serialization.csproj" />
     <ProjectReference Include="..\..\H.Necessaire\H.Necessaire.csproj" />
   </ItemGroup>
+
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<Exec Command="del /f &quot;$(SolutionDir)\Apps\H.Necessaire.AspNetCoreWebAppSample\version.txt&quot;" />
+		<Exec Command="&quot;$(SolutionDir)\CLI\H.Necessaire.CLI\bin\$(Configuration)\net6.0\H.Necessaire.CLI.exe&quot; version &gt;&gt; &quot;$(SolutionDir)\Apps\H.Necessaire.AspNetCoreWebAppSample\version.txt&quot;" />
+	</Target>
 
 	<Target Name="PostBuild" BeforeTargets="PostBuildEvent">
 		<Exec Command="&quot;$(SolutionDir)\CLI\H.Necessaire.CLI\bin\$(Configuration)\net6.0\H.Necessaire.CLI.exe&quot; bridgedotnet copy &quot;Src=$(SolutionDir)\Apps\H.Necessaire.ReactAppSample&quot; &quot;Dst=$(SolutionDir)\Apps\H.Necessaire.AspNetCoreWebAppSample&quot;" />

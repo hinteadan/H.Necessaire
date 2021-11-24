@@ -142,6 +142,7 @@
     <Compile Include="Resources\ResourcesDependencyGroup.cs" />
     <Compile Include="Resources\SecurityResource.cs" />
     <Compile Include="Resources\Sync\LogEntrySyncerResource.cs" />
+    <Compile Include="Resources\Versioning\VersionResource.cs" />
     <Compile Include="RuntimeDependencyGroup.cs" />
   </ItemGroup>
   <ItemGroup>

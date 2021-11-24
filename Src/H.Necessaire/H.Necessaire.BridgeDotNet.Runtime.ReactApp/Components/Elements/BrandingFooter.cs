@@ -1,11 +1,18 @@
 ﻿using Bridge.React;
 using System;
+using System.Threading.Tasks;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     public class BrandingFooter : ComponentBase<BrandingFooter.Props, BrandingFooter.State>
     {
         public BrandingFooter() : base(new Props(), null) { }
+
+        public override async Task RunAtStartup()
+        {
+            await base.RunAtStartup();
+            await DoAndSetStateAsync(async x => x.AppVersion = await AppBase.GetAppVersion());
+        }
 
         public override ReactElement Render()
         {
@@ -39,13 +46,25 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         private string RenderCopyrightLabel()
         {
             return
-                Config?.Get("App")?.Get("Copyright")?.ToString()?.Replace("{year}", DateTime.Today.Year.ToString())
+                Config?.Get("App")?.Get("Copyright")?.ToString()?.Replace("{year}", DateTime.Today.Year.ToString())?.Replace("{version}", PrintAppVersion())
                 ??
-                $"Copyright &copy; {DateTime.Today.Year}. H.Necessaire by Hintea Dan Alexandru. All rights reserved."
+                $"Copyright &copy; {DateTime.Today.Year}. H.Necessaire by Hintea Dan Alexandru. All rights reserved. {PrintAppVersion()}"
                 ;
         }
 
-        public class State : ComponentStateBase { }
+        private string PrintAppVersion()
+        {
+            return
+                state.AppVersion?.Number?.Semantic != null
+                ? $"v{state.AppVersion.Number.Semantic}"
+                : string.Empty
+                ;
+        }
+
+        public class State : ComponentStateBase
+        {
+            public Version AppVersion { get; set; } = null;
+        }
         public class Props : ComponentPropsBase { }
     }
 }

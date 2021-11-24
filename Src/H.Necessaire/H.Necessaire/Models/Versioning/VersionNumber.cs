@@ -83,43 +83,8 @@ namespace H.Necessaire
             };
         }
 
-        public static bool operator ==(VersionNumber a, VersionNumber b)
+        public bool IsEqualWith(VersionNumber other)
         {
-            if (a is null)
-            {
-                if (b is null)
-                {
-                    return true;
-                }
-
-                // Only the left side is null.
-                return false;
-            }
-            // Equals handles case of null on right side.
-
-            return a.Equals(b);
-        }
-
-        public static bool operator !=(VersionNumber a, VersionNumber b)
-        {
-            if (a is null)
-            {
-                if (b is null)
-                {
-                    return false;
-                }
-
-                // Only the left side is null.
-                return true;
-            }
-            // Equals handles case of null on right side.
-            return !a.Equals(b);
-        }
-
-        public override bool Equals(object obj)
-        {
-            VersionNumber other = obj as VersionNumber;
-
             if (other == null)
                 return false;
 

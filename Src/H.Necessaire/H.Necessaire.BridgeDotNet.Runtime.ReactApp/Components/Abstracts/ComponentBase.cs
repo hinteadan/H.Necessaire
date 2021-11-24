@@ -1,6 +1,7 @@
 ﻿using Bridge;
 using Bridge.Html5;
 using Bridge.React;
+using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Versioning;
 using H.Necessaire.Models.Branding;
 using H.Necessaire.UI;
 using System;

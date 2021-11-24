@@ -1,12 +1,17 @@
-﻿namespace H.Necessaire.Runtime.UseCases
+﻿using H.Necessaire.Runtime.UseCases.Concrete;
+
+namespace H.Necessaire.Runtime.UseCases
 {
     internal class DependencyGroup : ImADependencyGroup
     {
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
-            dependencyRegistry.RegisterAlwaysNew<ImAPingUseCase>(() => new PingUseCase());
-            dependencyRegistry.RegisterAlwaysNew<ImASecurityUseCase>(() => new SecurityUseCase());
-            dependencyRegistry.RegisterAlwaysNew<ImASyncUseCase>(() => new SyncUseCase());
+            dependencyRegistry
+                .RegisterAlwaysNew<ImAPingUseCase>(() => new PingUseCase())
+                .RegisterAlwaysNew<ImASecurityUseCase>(() => new SecurityUseCase())
+                .RegisterAlwaysNew<ImASyncUseCase>(() => new SyncUseCase())
+                .RegisterAlwaysNew<ImAVersionUseCase>(() => new VersionUseCase())
+            ;
         }
     }
 }

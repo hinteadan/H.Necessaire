@@ -1,5 +1,6 @@
 ﻿using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Logging;
 using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Sync;
+using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Versioning;
 using System;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
@@ -9,6 +10,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry
+                .Register<VersionResource>(() => new VersionResource())
                 .Register<SecurityResource>(() => new SecurityResource())
                 .Register<SyncRequestResource>(() => new SyncRequestResource())
                 .Register<DeviceInfoResource>(() => new DeviceInfoResource())

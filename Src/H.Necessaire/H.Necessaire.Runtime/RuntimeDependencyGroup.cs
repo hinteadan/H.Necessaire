@@ -19,6 +19,7 @@
                 .Register<Security.DependencyGroup>(() => new Security.DependencyGroup())
                 .Register<Sync.DependencyGroup>(() => new Sync.DependencyGroup())
                 .Register<Logging.DependencyGroup>(() => new Logging.DependencyGroup())
+                .Register<Versioning.DependencyGroup>(() => new Versioning.DependencyGroup())
                 .Register<UseCases.DependencyGroup>(() => new UseCases.DependencyGroup())
                 .Register<Daemons.DependencyGroup>(() => new Daemons.DependencyGroup())
                 ;

@@ -8,7 +8,7 @@
         public VersionNumber VersionNumber { get; set; } = VersionNumber.Unknown;
         public VersionNumber OriginalVersionNumber => originalVersionNumber ?? VersionNumber;
 
-        public bool IsDirtyVersion => originalVersionNumber != null && originalVersionNumber != VersionNumber;
+        public bool IsDirtyVersion => originalVersionNumber != null && !originalVersionNumber.IsEqualWith(VersionNumber);
 
         public void IncrementMajorVersion()
         {

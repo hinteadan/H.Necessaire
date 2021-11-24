@@ -2,6 +2,7 @@
 using H.Necessaire.Serialization;
 using NeoSmart.Utils;
 using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 
 namespace H.Necessaire.CLI.Commands
@@ -27,11 +28,20 @@ namespace H.Necessaire.CLI.Commands
 
             //await DebugSql();
 
-            await DebugExecutionCallContext();
+            //await DebugExecutionCallContext();
 
             //await DebugConsoleStuff();
 
+            await DebugAssemblyOps();
+
             return OperationResult.Win();
+        }
+
+        private Task DebugAssemblyOps()
+        {
+            Assembly? entryAssembly = Assembly.GetEntryAssembly();
+
+            return true.AsTask();
         }
 
         private Task DebugConsoleStuff()

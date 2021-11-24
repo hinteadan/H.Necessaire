@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>H.Necessaire.WebSockets</id>
-    <version>2.3.0</version>
-    <title>H's Web Sockets Necessaire</title>
+    <id>H.Necessaire.CLI</id>
+    <version>2.2.0</version>
+    <title>H's Necessaire's CLI</title>
     <projectUrl>https://hinteadan.github.io/H.Necessaire</projectUrl>
     <repository type="git" url="https://github.com/hinteadan/H.Necessaire.git" branch="master" />
     <authors>Hintea Dan Alexandru</authors>
@@ -11,15 +11,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <icon>images\IconLogo.png</icon>
-    <description>WebSockets Server API</description>
-    <summary>WebSockets Server API</summary>
-    <releaseNotes>Web Sockets server version zero</releaseNotes>
+    <description>A collection of useful data and execution extensions for .NET</description>
+    <summary>Various data and operation extensions for .NET</summary>
+    <releaseNotes>Added RS256 Hasher plus internal Bouncy Castle API + extensions for Notes</releaseNotes>
     <copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</copyright>
-    <tags>hintea dan alexandru notification http web sockets</tags>
-    <dependencies>
-      <dependency id="H.Necessaire" version="2.3.0" />
-      <dependency id="WebSocketSharp-netstandard" version="1.0.1" />
-    </dependencies>
+    <tags>hintea dan alexandru .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections batch task array CLI</tags>
   </metadata>
   <files>
     <file src="IconLogo.png" target="images\" />

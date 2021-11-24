@@ -352,3 +352,4 @@ MigrationBackup/
 **/ConnectionString.txt
 **/DebugConnectionString.txt
 **/appsettings.Local.json
+**/version.txt

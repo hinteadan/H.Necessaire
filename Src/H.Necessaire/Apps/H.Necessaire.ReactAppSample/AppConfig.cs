@@ -7,7 +7,7 @@
             Values = new[] {
                 "App".ConfigWith(
                     "Name".ConfigWith("H.Necessaire.ReactAppSample")
-                    , "Copyright".ConfigWith("Copyright &copy; {year}. H.Necessaire React App Sample; by Hintea Dan Alexandru. All rights reserved.")
+                    , "Copyright".ConfigWith("Copyright &copy; {year}. H.Necessaire React App Sample; by Hintea Dan Alexandru. All rights reserved. {version}")
                 )
 
                 //, "BaseUrl".ConfigWith("https://localhost")
