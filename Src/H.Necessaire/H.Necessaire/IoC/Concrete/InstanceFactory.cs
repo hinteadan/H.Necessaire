@@ -5,6 +5,8 @@ namespace H.Necessaire
 {
     class InstanceFactory
     {
+        static object locker = new object();
+
         private readonly ImADependencyProvider dependencyProvider;
         private readonly Func<object> factory;
         private object instance;
@@ -33,13 +35,16 @@ namespace H.Necessaire
 
         private void EnsureInstance()
         {
-            if (instance != null && !IsAlwaysNew)
-                return;
-
-            instance = factory();
-            if (instance is ImADependency)
+            lock (locker)
             {
-                (instance as ImADependency).ReferDependencies(dependencyProvider);
+                if (instance != null && !IsAlwaysNew)
+                    return;
+
+                instance = factory();
+                if (instance is ImADependency)
+                {
+                    (instance as ImADependency).ReferDependencies(dependencyProvider);
+                }
             }
         }
     }

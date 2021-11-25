@@ -1,12 +1,3 @@
-Add version to logs and audits
-
-QdActions
- - ConsumerIdentity Analytics
-   - IP Geolocation
-   - User Agent Parser
-   - MapReducer (Custom in FileSystem + SQL / MapReduce Index in RavenDB)
-
-
 Admin UI
  - Audit Browsing
    - Audit Comparison
@@ -16,7 +7,12 @@ Admin UI
 Admin UI
  - QD Actions
  
+ 
 Housekeeping Daemons
  - UI Logs Cleaner
  - UI sync Registry Cleaner
  - BE Logs Cleaner
+ 
+ 
+ - Qd Action for UserAgent Expander / Parser to get Browser and OS info
+ - Daemon that generates Consumer Identity Analytics Stats ()

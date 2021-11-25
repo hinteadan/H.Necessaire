@@ -37,6 +37,24 @@ namespace H.Necessaire.Runtime.SqlServer.Core
                 .Register<ImAStorageService<Guid, LogEntry>>(() => dependencyRegistry.Get<LogEntrySqlServerStorageResource>())
                 .Register<ImAStorageBrowserService<LogEntry, LogFilter>>(() => dependencyRegistry.Get<LogEntrySqlServerStorageResource>())
                 ;
+
+            dependencyRegistry
+                .Register<QdActionSqlServerStorageResource>(() => new QdActionSqlServerStorageResource())
+                .Register<ImAStorageService<Guid, QdAction>>(() => dependencyRegistry.Get<QdActionSqlServerStorageResource>())
+                .Register<ImAStorageBrowserService<QdAction, QdActionFilter>>(() => dependencyRegistry.Get<QdActionSqlServerStorageResource>())
+                ;
+
+            dependencyRegistry
+                .Register<QdActionResultSqlServerStorageResource>(() => new QdActionResultSqlServerStorageResource())
+                .Register<ImAStorageService<Guid, QdActionResult>>(() => dependencyRegistry.Get<QdActionResultSqlServerStorageResource>())
+                .Register<ImAStorageBrowserService<QdActionResult, QdActionResultFilter>>(() => dependencyRegistry.Get<QdActionResultSqlServerStorageResource>())
+                ;
+
+            dependencyRegistry
+                .Register<NetworkTraceSqlServerStorageResource>(() => new NetworkTraceSqlServerStorageResource())
+                .Register<ImAStorageService<Guid, NetworkTrace>>(() => dependencyRegistry.Get<NetworkTraceSqlServerStorageResource>())
+                .Register<ImAStorageBrowserService<NetworkTrace, IDFilter<Guid>>>(() => dependencyRegistry.Get<NetworkTraceSqlServerStorageResource>())
+                ;
         }
     }
 }

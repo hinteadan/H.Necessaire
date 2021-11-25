@@ -35,6 +35,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
             public async void DoWork()
             {
+                await Task.Delay(TimeSpan.FromSeconds(5));
                 await repeater.Start();
             }
 
@@ -42,16 +43,16 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             {
                 if (!AppBase.IsOnline)
                 {
-                    await logger.LogInfo($"Skipping Sync Cycle because we're offline");
+                    await logger.LogTrace($"Skipping Sync Cycle because we're offline");
                     return;
                 }
 
-                await logger.LogInfo($"Running Sync Cycle");
-                using (new TimeMeasurement(async x => await logger.LogInfo($"DONE Running Sync Cycle in {x}")))
+                await logger.LogDebug($"Running Sync Cycle");
+                using (new TimeMeasurement(async x => await logger.LogTrace($"DONE Running Sync Cycle in {x}")))
                 {
                     Type[] syncableTypes = await syncablesBrowser.GetAllSyncableTypes();
 
-                    await logger.LogInfo($"Syncable types: {string.Join(", ", syncableTypes.Select(x => x.TypeName()).ToArray())}");
+                    await logger.LogTrace($"Syncable types: {string.Join(", ", syncableTypes.Select(x => x.TypeName()).ToArray())}");
 
                     foreach (ImASyncRegistry syncRegistry in syncRegistries)
                     {
@@ -65,8 +66,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 await
                     new Func<Task>(async () =>
                     {
-                        await logger.LogInfo($"Syncing batch for {syncRegistry.ReceiverNode}");
-                        using (new TimeMeasurement(async x => await logger.LogInfo($"DONE Syncing batch for {syncRegistry.ReceiverNode} in {x}")))
+                        await logger.LogTrace($"Syncing batch for {syncRegistry.ReceiverNode}");
+                        using (new TimeMeasurement(async x => await logger.LogTrace($"DONE Syncing batch for {syncRegistry.ReceiverNode} in {x}")))
                         {
                             foreach (Type syncableType in syncableTypes)
                             {
@@ -74,11 +75,11 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
                                 if (!entitiesToSync?.Any() ?? true)
                                 {
-                                    await logger.LogInfo($"Nothing to sync for {syncableType.TypeName()}. Skipping...");
+                                    await logger.LogTrace($"Nothing to sync for {syncableType.TypeName()}. Skipping...");
                                     continue;
                                 }
 
-                                await logger.LogInfo($"Found {entitiesToSync.Length} entries to sync for {syncableType.TypeName()}");
+                                await logger.LogTrace($"Found {entitiesToSync.Length} entries to sync for {syncableType.TypeName()}");
 
                                 List<SyncRequest> syncRequests = new List<SyncRequest>(entitiesToSync.Length);
 
@@ -98,7 +99,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                                     });
                                 }
 
-                                await logger.LogInfo($"Sync Requests for {syncableType.TypeName()}", syncRequests.ObjectToJson());
+                                await logger.LogTrace($"Sync Requests for {syncableType.TypeName()}", syncRequests.ObjectToJson());
 
                                 OperationResult<SyncResponse>[] syncResults = await syncRequestResource.Sync(syncRegistry.ReceiverNode, syncRequests.ToArray());
 

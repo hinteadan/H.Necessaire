@@ -18,7 +18,7 @@ namespace H.Necessaire.ReactAppSample
 
             await Debug();
 
-            await AppLogger.LogInfo("DONE ReactAppSample App Initialize");
+            await AppLogger.LogTrace("DONE ReactAppSample App Initialize");
         }
 
         private static async Task Debug()

@@ -15,10 +15,12 @@ namespace H.Necessaire.Runtime.Sync.Processors
 
         ImAStorageService<Guid, ConsumerIdentity> consumerIdentityStorageService = null;
         ImAnAuditingService auditingService = null;
+        ImAnActionQer actionQer = null;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             consumerIdentityStorageService = dependencyProvider.Get<ImAStorageService<Guid, ConsumerIdentity>>();
             auditingService = dependencyProvider.Get<ImAnAuditingService>();
+            actionQer = dependencyProvider.Get<ImAnActionQer>();
         }
         #endregion
 
@@ -37,6 +39,9 @@ namespace H.Necessaire.Runtime.Sync.Processors
                 return result;
 
             await auditingService.Append(consumerIdentity.ToAuditMeta<ConsumerIdentity, Guid>(consumerExists ? AuditActionType.Modify : AuditActionType.Create, processorIdentity), consumerIdentity);
+
+            if (!string.IsNullOrWhiteSpace(payload.IpAddress))
+                await actionQer.Queue(QdAction.New(WellKnown.QdActionType.ProcessIpAddress, payload.IpAddress));
 
             return result;
         }

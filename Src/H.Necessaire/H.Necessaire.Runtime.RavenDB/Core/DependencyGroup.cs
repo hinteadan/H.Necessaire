@@ -42,6 +42,24 @@ namespace H.Necessaire.Runtime.RavenDB.Core
                 .Register<ImAStorageService<Guid, LogEntry>>(() => dependencyRegistry.Get<LogEntryRavenDbStorageResource>())
                 .Register<ImAStorageBrowserService<LogEntry, LogFilter>>(() => dependencyRegistry.Get<LogEntryRavenDbStorageResource>())
                 ;
+
+            dependencyRegistry
+                .Register<QdActionRavenDbStorageResource>(() => new QdActionRavenDbStorageResource())
+                .Register<ImAStorageService<Guid, QdAction>>(() => dependencyRegistry.Get<QdActionRavenDbStorageResource>())
+                .Register<ImAStorageBrowserService<QdAction, QdActionFilter>>(() => dependencyRegistry.Get<QdActionRavenDbStorageResource>())
+                ;
+
+            dependencyRegistry
+                .Register<QdActionResultRavenDbStorageResource>(() => new QdActionResultRavenDbStorageResource())
+                .Register<ImAStorageService<Guid, QdActionResult>>(() => dependencyRegistry.Get<QdActionResultRavenDbStorageResource>())
+                .Register<ImAStorageBrowserService<QdActionResult, QdActionResultFilter>>(() => dependencyRegistry.Get<QdActionResultRavenDbStorageResource>())
+                ;
+
+            dependencyRegistry
+                .Register<NetworkTraceRavenDbStorageResource>(() => new NetworkTraceRavenDbStorageResource())
+                .Register<ImAStorageService<Guid, NetworkTrace>>(() => dependencyRegistry.Get<NetworkTraceRavenDbStorageResource>())
+                .Register<ImAStorageBrowserService<NetworkTrace, IDFilter<Guid>>>(() => dependencyRegistry.Get<NetworkTraceRavenDbStorageResource>())
+                ;
         }
     }
 }

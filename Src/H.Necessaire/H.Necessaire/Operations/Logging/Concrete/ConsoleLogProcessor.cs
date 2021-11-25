@@ -12,8 +12,8 @@ namespace H.Necessaire
         const ConsoleColor defaultColor = ConsoleColor.DarkGray;
         static readonly Dictionary<LogEntryLevel, ConsoleColor> colorPerLevel = new Dictionary<LogEntryLevel, ConsoleColor>
         {
-            { LogEntryLevel.Trace, ConsoleColor.DarkBlue },
-            { LogEntryLevel.Debug, ConsoleColor.DarkGray },
+            { LogEntryLevel.Trace, ConsoleColor.DarkGray },
+            { LogEntryLevel.Debug, ConsoleColor.DarkGreen },
             { LogEntryLevel.Info, ConsoleColor.DarkCyan },
             { LogEntryLevel.Warn, ConsoleColor.DarkYellow },
             { LogEntryLevel.Error, ConsoleColor.DarkRed },
@@ -36,7 +36,7 @@ namespace H.Necessaire
                 Write($"{Environment.NewLine}Payload: {logEntry.Payload}", ColorFor(LogEntryLevel.Debug));
 
             if (logEntry.Level >= LogEntryLevel.Error && !string.IsNullOrWhiteSpace(logEntry.StackTrace))
-                Write($"{Environment.NewLine}Stack Trace:{Environment.NewLine}{logEntry.StackTrace}", ColorFor(LogEntryLevel.Debug));
+                Write($"{Environment.NewLine}Stack Trace:{Environment.NewLine}{logEntry.StackTrace}", ColorFor(LogEntryLevel.Warn));
 
             Console.WriteLine();
 

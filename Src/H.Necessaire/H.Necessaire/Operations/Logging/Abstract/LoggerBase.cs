@@ -8,7 +8,7 @@ namespace H.Necessaire
     public abstract class LoggerBase : ImALogger, ImADependency
     {
         #region Construct
-        static readonly TimeSpan delayedProcessorsInterval = TimeSpan.FromSeconds(10);
+        static readonly TimeSpan delayedProcessorsInterval = TimeSpan.FromSeconds(15);
 
         private readonly ConcurrentDictionary<Guid, LogEntry> logDictionary = new ConcurrentDictionary<Guid, LogEntry>();
 

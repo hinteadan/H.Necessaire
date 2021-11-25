@@ -20,6 +20,7 @@
                 .Register<Sync.DependencyGroup>(() => new Sync.DependencyGroup())
                 .Register<Logging.DependencyGroup>(() => new Logging.DependencyGroup())
                 .Register<UseCases.DependencyGroup>(() => new UseCases.DependencyGroup())
+                .Register<QdActions.DependencyGroup>(() => new QdActions.DependencyGroup())
                 .Register<Daemons.DependencyGroup>(() => new Daemons.DependencyGroup())
                 ;
         }

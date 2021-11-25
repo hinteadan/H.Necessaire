@@ -54,9 +54,9 @@ namespace H.Necessaire.Runtime
 
         private async Task DoWork(CancellationToken? cancellationToken = null)
         {
-            await logger.LogInfo($"Processing Sync Requests");
+            await logger.LogTrace($"Processing Sync Requests");
 
-            using (new TimeMeasurement(x => logger.LogInfo($"DONE Processing Sync Requests in {x}").Wait()))
+            using (new TimeMeasurement(x => logger.LogTrace($"DONE Processing Sync Requests in {x}").Wait()))
             {
                 await
                     new Func<Task>(async () =>
@@ -70,11 +70,11 @@ namespace H.Necessaire.Runtime
 
                         if (!requestsToProcess.Content?.Any() ?? true)
                         {
-                            await logger.LogInfo($"There are no sync requests to process. Skipping processing cycle...");
+                            await logger.LogTrace($"There are no sync requests to process. Skipping processing cycle...");
                             return;
                         }
 
-                        await logger.LogInfo($"Found a batch of {requestsToProcess.Content.Length} requests to process. Types: {string.Join(", ", requestsToProcess.Content.Select(x => x.PayloadType).Distinct())}");
+                        await logger.LogTrace($"Found a batch of {requestsToProcess.Content.Length} requests to process. Types: {string.Join(", ", requestsToProcess.Content.Select(x => x.PayloadType).Distinct())}");
 
                         foreach (SyncRequest syncRequest in requestsToProcess.Content)
                         {
@@ -98,12 +98,12 @@ namespace H.Necessaire.Runtime
 
                     if (syncRequestProcessor == null)
                     {
-                        await logger.LogInfo($"Cannot find any processor for Sync Request of type: {syncRequest.PayloadType}");
+                        await logger.LogWarn($"Cannot find any processor for Sync Request of type: {syncRequest.PayloadType}");
                         return;
                     }
 
-                    await logger.LogInfo($"Processing {syncRequest}...");
-                    using (new TimeMeasurement(x => logger.LogInfo($"DONE Processing {syncRequest} in {x}").Wait()))
+                    await logger.LogTrace($"Processing {syncRequest}...");
+                    using (new TimeMeasurement(x => logger.LogTrace($"DONE Processing {syncRequest} in {x}").Wait()))
                     {
                         OperationResult processingResult
                             = syncRequestProcessor is ImASyncRequestExilationProcessor
@@ -131,7 +131,7 @@ namespace H.Necessaire.Runtime
             if (result.IsSuccessful)
                 return result;
 
-            await logger.LogInfo($"Sync Request Processing failed. Will exile sync request {syncRequest}");
+            await logger.LogWarn($"Sync Request Processing failed. Will exile sync request {syncRequest}");
             await
                 new Func<Task>(async () =>
                 {
@@ -143,8 +143,8 @@ namespace H.Necessaire.Runtime
                         return;
                     }
 
-                    await logger.LogInfo($"Exiling {syncRequest}...");
-                    using (new TimeMeasurement(x => logger.LogInfo($"DONE Exiling {syncRequest} in {x}").Wait()))
+                    await logger.LogTrace($"Exiling {syncRequest}...");
+                    using (new TimeMeasurement(x => logger.LogTrace($"DONE Exiling {syncRequest} in {x}").Wait()))
                     {
                         OperationResult processingResult = await syncRequestExilationProcessor.ProcessExilation(syncRequest, result.WithoutPayload<SyncRequest>());
                         if (!processingResult.IsSuccessful)

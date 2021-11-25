@@ -41,6 +41,24 @@ namespace H.Necessaire.Runtime.Resources
                 .Register<ImAStorageService<Guid, LogEntry>>(() => dependencyRegistry.Get<LogEntryFileSystemStorageResource>())
                 .Register<ImAStorageBrowserService<LogEntry, LogFilter>>(() => dependencyRegistry.Get<LogEntryFileSystemStorageResource>())
                 ;
+
+            dependencyRegistry
+                .Register<QdActionFileSystemStorageResource>(() => new QdActionFileSystemStorageResource())
+                .Register<ImAStorageService<Guid, QdAction>>(() => dependencyRegistry.Get<QdActionFileSystemStorageResource>())
+                .Register<ImAStorageBrowserService<QdAction, QdActionFilter>>(() => dependencyRegistry.Get<QdActionFileSystemStorageResource>())
+                ;
+
+            dependencyRegistry
+                .Register<QdActionResultFileSystemStorageResource>(() => new QdActionResultFileSystemStorageResource())
+                .Register<ImAStorageService<Guid, QdActionResult>>(() => dependencyRegistry.Get<QdActionResultFileSystemStorageResource>())
+                .Register<ImAStorageBrowserService<QdActionResult, QdActionResultFilter>>(() => dependencyRegistry.Get<QdActionResultFileSystemStorageResource>())
+                ;
+
+            dependencyRegistry
+                .Register<NetworkTraceFileSystemStorageResource>(() => new NetworkTraceFileSystemStorageResource())
+                .Register<ImAStorageService<Guid, NetworkTrace>>(() => dependencyRegistry.Get<NetworkTraceFileSystemStorageResource>())
+                .Register<ImAStorageBrowserService<NetworkTrace, IDFilter<Guid>>>(() => dependencyRegistry.Get<NetworkTraceFileSystemStorageResource>())
+                ;
         }
     }
 }

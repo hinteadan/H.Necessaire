@@ -129,7 +129,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         private static void WireupNavigation()
         {
-            using (new TimeMeasurement(async x => await AppLogger.LogInfo($"Done Wireup App Navigation in {x}")))
+            using (new TimeMeasurement(async x => await AppLogger.LogTrace($"Done Wireup App Navigation in {x}")))
             {
                 new AppNavigationBootstrapper(navigationRegistryFactory).Wireup(CreateAppContainer());
             }

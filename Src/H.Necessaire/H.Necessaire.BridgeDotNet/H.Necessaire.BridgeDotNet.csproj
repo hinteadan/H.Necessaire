@@ -174,6 +174,27 @@
     <Compile Include="..\H.Necessaire\Models\Config\RuntimeConfig.cs">
       <Link>Models\Config\RuntimeConfig.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Geography\GeoAddress.cs">
+      <Link>Models\Geography\GeoAddress.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Geography\GeoAddressArea.cs">
+      <Link>Models\Geography\GeoAddressArea.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Geography\GeoDataExtensions.cs">
+      <Link>Models\Geography\GeoDataExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Geography\GeoLocation.cs">
+      <Link>Models\Geography\GeoLocation.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Geography\GpsArea.cs">
+      <Link>Models\Geography\GpsArea.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Geography\GpsLocation.cs">
+      <Link>Models\Geography\GpsLocation.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Geography\GpsPoint.cs">
+      <Link>Models\Geography\GpsPoint.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\IDentityType.cs">
       <Link>Models\IDentityType.cs</Link>
     </Compile>
@@ -203,6 +224,9 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Models\MultiType.cs">
       <Link>Models\MultiType.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Networking\NetworkTrace.cs">
+      <Link>Models\Networking\NetworkTrace.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Models\Note.cs">
       <Link>Models\Note.cs</Link>
@@ -242,6 +266,21 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Models\PeriodOfTime.cs">
       <Link>Models\PeriodOfTime.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\QdAction\QdAction.cs">
+      <Link>Models\QdAction\QdAction.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\QdAction\QdActionFilter.cs">
+      <Link>Models\QdAction\QdActionFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\QdAction\QdActionResult.cs">
+      <Link>Models\QdAction\QdActionResult.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\QdAction\QdActionResultFilter.cs">
+      <Link>Models\QdAction\QdActionResultFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\QdAction\QdActionStatus.cs">
+      <Link>Models\QdAction\QdActionStatus.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Models\Security\AuthInfo.cs">
       <Link>Models\Security\AuthInfo.cs</Link>
@@ -371,6 +410,24 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\Logging\LoggingDependencyGroup.cs">
       <Link>Operations\Logging\LoggingDependencyGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\QdAction\Abstract\QdActionProcessorBase.cs">
+      <Link>Operations\QdAction\Abstract\QdActionProcessorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\QdAction\Concrete\ActionQer.cs">
+      <Link>Operations\QdAction\Concrete\ActionQer.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\QdAction\Concrete\QdActionProcessingDaemon.cs">
+      <Link>Operations\QdAction\Concrete\QdActionProcessingDaemon.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\QdAction\DependenctGroup.cs">
+      <Link>Operations\QdAction\DependenctGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\QdAction\ImAnActionQer.cs">
+      <Link>Operations\QdAction\ImAnActionQer.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\QdAction\ImAQdActionProcessor.cs">
+      <Link>Operations\QdAction\ImAQdActionProcessor.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\ScopedRunner.cs">
       <Link>Operations\ScopedRunner.cs</Link>

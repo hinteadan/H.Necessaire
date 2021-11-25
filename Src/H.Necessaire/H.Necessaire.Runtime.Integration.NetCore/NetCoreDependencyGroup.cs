@@ -7,9 +7,7 @@ namespace H.Necessaire.Runtime.Integration.NetCore
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry
-                .Register<HNecessaireDependencyGroup>(() => new HNecessaireDependencyGroup())
-                .Register<SyncRequestProcessingHostedServiceDaemon>(() => new SyncRequestProcessingHostedServiceDaemon())
-                //.Register<ConsolePingDaemon>(() => new ConsolePingDaemon())
+                .Register<Daemons.DependencyGroup>(() => new Daemons.DependencyGroup())
                 ;
 
             dependencyRegistry

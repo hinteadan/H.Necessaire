@@ -82,6 +82,18 @@ namespace H.Necessaire
             return fallbackValue;
         }
 
+        public static double? ParseToDoubleOrFallbackTo(this string rawValue, double? fallbackValue = null)
+        {
+            if (string.IsNullOrWhiteSpace(rawValue))
+                return fallbackValue;
+
+            double parseResult;
+            if (double.TryParse(rawValue, out parseResult))
+                return parseResult;
+
+            return fallbackValue;
+        }
+
         public static bool IsBetweenInclusive(this DateTime dateTime, DateTime? from, DateTime? to)
         {
             return
@@ -186,6 +198,13 @@ namespace H.Necessaire
 
         public static Note[] AddOrReplace(this Note[] notes, params Note[] additionalNotes) => notes.Add(additionalNotes).GroupBy(x => x.ID).Select(x => x.Last()).ToArray();
         public static Note[] AddOrReplace(this Note note, params Note[] additionalNotes) => note.AsArray().AddOrReplace(additionalNotes);
+        public static Note[] ToNotes(this string[] values, string idPrefix = null, int offsetIndex = 0)
+        {
+            if (values == null) return null;
+            if (!values.Any()) return new Note[0];
+
+            return values.Where(x => !string.IsNullOrWhiteSpace(x)).Select((x, i) => x.NoteAs($"{idPrefix}{offsetIndex + i}")).ToArray();
+        }
 
         public static ConfigNode ConfigWith(this string id, string value)
         {

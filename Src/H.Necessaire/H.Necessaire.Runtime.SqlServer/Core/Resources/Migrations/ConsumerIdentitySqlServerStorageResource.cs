@@ -28,6 +28,18 @@ ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 ",
             },
+            new SqlMigration
+            {
+                ResourceIdentifier = nameof(ConsumerIdentity),
+                VersionNumber = new VersionNumber(1, 1),
+                SqlCommand = $@"
+
+ALTER TABLE [dbo].[H.Necessaire.{nameof(ConsumerIdentity)}] ADD [{nameof(ConsumerIdentitySqlEntry.IpAddress)}] [nvarchar](450) NULL;
+
+{nameof(ConsumerIdentitySqlEntry.IpAddress).PrintColumnIndexCreationSqlScriptOn($"H.Necessaire.{nameof(ConsumerIdentity)}")}
+
+",
+            },
         };
     }
 }
