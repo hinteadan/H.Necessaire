@@ -4,13 +4,13 @@ namespace H.Necessaire
 {
     public static class DataPrintingExtensions
     {
-        public const string DateTimeFormat = "ddd, MMM dd, yyyy 'at' HH:mm";
+        public const string DateTimeFormat = "ddd, MMM dd, yyyy 'at' HH:mm:ss";
         public const string DateFormat = "ddd, MMM dd, yyyy";
-        public const string TimeFormat = "HH:mm";
+        public const string TimeFormat = "HH:mm:ss";
         public const string MonthFormat = "yyyy MMM";
         public const string DayOfWeekFormat = "dddd";
-        public const string TimeStampThisYearFormat = "MMM dd 'at' HH:mm";
-        public const string TimeStampOtherYearFormat = "MMM dd, yyyy 'at' HH:mm";
+        public const string TimeStampThisYearFormat = "MMM dd 'at' HH:mm:ss";
+        public const string TimeStampOtherYearFormat = "MMM dd, yyyy 'at' HH:mm:ss";
         public const string TimeStampIdentifierFormat = "yyyyMMdd_HHmmss_'UTC'";
         public const string ParsableTimeStampFormat = "yyyy-MM-dd HH:mm:ss 'UTC'";
 
