@@ -10,7 +10,7 @@ namespace H.Necessaire
         #region Construct
         int maxProcessingAttempts = 3;
         int processingBatchSize = 10;
-        TimeSpan processingInterval = TimeSpan.FromMinutes(5);
+        TimeSpan processingInterval = TimeSpan.FromSeconds(15);
         ImALogger logger;
         ImAPeriodicAction processingTimer;
         ImAStorageService<Guid, QdAction> qdActionStorage;
@@ -61,6 +61,7 @@ namespace H.Necessaire
                         {
                             MaxRunCount = maxProcessingAttempts - 1,
                             Statuses = new QdActionStatus[] { QdActionStatus.Queued, QdActionStatus.Failed },
+                            PageFilter = new PageFilter { PageSize = processingBatchSize }
                         }))
                         .ThrowOnFailOrReturn()
                         ?.Content;
