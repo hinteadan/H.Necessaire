@@ -1,3 +1,14 @@
+For ReactApp runtime add predefined Nuget Files (no overwrite):
+ - Startup.cs
+ - Program.cs
+
+For Bridge Runtime add predefined NuGet Files (no overwrite):
+ - HomePage.cs
+ - App.cs
+ - AppConfig.cs
+ - AppNavigationRegistry.cs
+ - AppWireup.cs
+
 Admin UI
  - Audit Browsing
    - Audit Comparison
