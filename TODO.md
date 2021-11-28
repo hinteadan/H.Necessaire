@@ -9,6 +9,8 @@ For Bridge Runtime add predefined NuGet Files (no overwrite):
  - AppNavigationRegistry.cs
  - AppWireup.cs
 
+ Create Folder for SyncRegistry browse to prevent exception
+
 Admin UI
  - Audit Browsing
    - Audit Comparison
