@@ -1,5 +1,8 @@
 ﻿using H.Necessaire.CLI.Commands.BridgeDotNet.Model;
 using H.Necessaire.Runtime.CLI.Commands;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Commands.BridgeDotNet
 {

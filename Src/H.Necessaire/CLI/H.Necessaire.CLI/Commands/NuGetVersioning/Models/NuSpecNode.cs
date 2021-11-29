@@ -1,8 +1,10 @@
-﻿namespace H.Necessaire.CLI.Commands.NuGetVersioning.Models
+﻿using System.Linq;
+
+namespace H.Necessaire.CLI.Commands.NuGetVersioning.Models
 {
     class NuSpecNode
     {
-        public NuSpecInfo? NuSpecInfo { get; set; }
+        public NuSpecInfo NuSpecInfo { get; set; }
 
         public NuSpecNode[] UsedBy { get; set; } = new NuSpecNode[0];
 

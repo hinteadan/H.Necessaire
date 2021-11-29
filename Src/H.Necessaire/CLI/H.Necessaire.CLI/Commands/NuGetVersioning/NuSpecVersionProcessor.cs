@@ -1,4 +1,7 @@
 ﻿using H.Necessaire.CLI.Commands.NuGetVersioning.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Commands.NuGetVersioning
 {
@@ -53,7 +56,7 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
             return UpdateVersion(nuGetID, x => x.SetVersionSuffix(suffix));
         }
 
-        private async Task<OperationResult<NuSpecInfo[]>> UpdateVersion(string nuGetID, Action<NuSpecTree> versionUpdater, NuSpecInfo[]? nuSpecsPool = null)
+        private async Task<OperationResult<NuSpecInfo[]>> UpdateVersion(string nuGetID, Action<NuSpecTree> versionUpdater, NuSpecInfo[] nuSpecsPool = null)
         {
             NuSpecInfo[] nuSpecs = nuSpecsPool ?? (await nuSpecParser.GetAllNuSpecs()).ThrowOnFailOrReturn() ?? new NuSpecInfo[0];
 
@@ -70,9 +73,9 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
         {
             foreach (NuSpecInfo nuSpec in nuSpecs)
             {
-                foreach (NuGetIdentifier? dep in nuSpec.Dependencies ?? new NuGetIdentifier[0])
+                foreach (NuGetIdentifier dep in nuSpec.Dependencies ?? new NuGetIdentifier[0])
                 {
-                    NuSpecInfo? fullNuSpec = nuSpecs.SingleOrDefault(x => x.ID == dep.ID);
+                    NuSpecInfo fullNuSpec = nuSpecs.SingleOrDefault(x => x.ID == dep.ID);
                     if (fullNuSpec == null)
                         continue;
 

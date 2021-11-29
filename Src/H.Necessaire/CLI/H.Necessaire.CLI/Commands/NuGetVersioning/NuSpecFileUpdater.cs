@@ -1,4 +1,7 @@
 ﻿using H.Necessaire.CLI.Commands.NuGetVersioning.Models;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace H.Necessaire.CLI.Commands.NuGetVersioning

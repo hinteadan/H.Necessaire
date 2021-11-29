@@ -2,7 +2,7 @@
 {
     class NuGetIdentifier
     {
-        private VersionNumber? originalVersionNumber = null;
+        private VersionNumber originalVersionNumber = null;
 
         public string ID { get; set; } = string.Empty;
         public VersionNumber VersionNumber { get; set; } = VersionNumber.Unknown;

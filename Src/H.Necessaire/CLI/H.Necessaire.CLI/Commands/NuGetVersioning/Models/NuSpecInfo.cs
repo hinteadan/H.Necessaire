@@ -1,4 +1,6 @@
-﻿namespace H.Necessaire.CLI.Commands.NuGetVersioning.Models
+﻿using System.IO;
+
+namespace H.Necessaire.CLI.Commands.NuGetVersioning.Models
 {
     class NuSpecInfo : NuGetIdentifier
     {

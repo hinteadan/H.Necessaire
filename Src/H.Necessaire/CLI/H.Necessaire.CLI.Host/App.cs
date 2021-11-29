@@ -3,15 +3,14 @@ using H.Necessaire.Runtime.CLI;
 
 namespace H.Necessaire.CLI
 {
-    public class CliApp : CliWireup
+    class App : CliApp
     {
         public override ImAnApiWireup WithEverything()
         {
             return
                 base
                 .WithEverything()
-                .WithDefaultRuntimeConfig()
-                .With(x => x.Register<Commands.NuGetVersioning.DependencyGroup>(() => new Commands.NuGetVersioning.DependencyGroup()))
+                .With(x => x.Register<Runtime.SqlServer.SqlServerRuntimeDependencyGroup>(() => new Runtime.SqlServer.SqlServerRuntimeDependencyGroup()))
                 ;
         }
     }

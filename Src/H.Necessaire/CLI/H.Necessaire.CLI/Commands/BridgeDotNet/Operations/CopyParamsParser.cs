@@ -1,5 +1,8 @@
 ﻿using H.Necessaire.CLI.Commands.BridgeDotNet.Model;
 using H.Necessaire.Runtime.CLI;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace H.Necessaire.CLI.Commands.BridgeDotNet.Operations
 {
@@ -34,7 +37,7 @@ namespace H.Necessaire.CLI.Commands.BridgeDotNet.Operations
                     return;
                 }
 
-                BridgeDotNetCopyParams? payload = new BridgeDotNetCopyParams
+                BridgeDotNetCopyParams payload = new BridgeDotNetCopyParams
                 {
                     SourceProjectRoot = new DirectoryInfo(source.Single().Value),
                     DestinationProjectsRoots = destinations.Select(x => new DirectoryInfo(x.Value)).ToArray(),
@@ -64,7 +67,7 @@ namespace H.Necessaire.CLI.Commands.BridgeDotNet.Operations
                 onFail: x => result
                     = OperationResult
                     .Fail(x, "Cannot parse copy params from given arguments")
-                    .And(x => x.Comments = usageSyntaxes)
+                    .And(r => r.Comments = usageSyntaxes)
                     .WithoutPayload<BridgeDotNetCopyParams>()
             );
 

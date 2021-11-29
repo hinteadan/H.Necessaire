@@ -1,4 +1,5 @@
 ﻿using H.Necessaire.Runtime.CLI.Commands;
+using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Commands
 {
@@ -6,7 +7,7 @@ namespace H.Necessaire.CLI.Commands
     {
         public override async Task<OperationResult> Run()
         {
-            UserInfo? user = (await EnsureAuthentication()).ThrowOnFailOrReturn().SecurityContext.User;
+            UserInfo user = (await EnsureAuthentication()).ThrowOnFailOrReturn().SecurityContext.User;
 
             await Logger.LogTrace($"Pong from {(user?.DisplayName ?? user?.Username ?? "[NoUser]")}");
 

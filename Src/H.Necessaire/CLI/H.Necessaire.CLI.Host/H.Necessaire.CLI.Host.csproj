@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="H.Versioning" Version="2.0.0" />
+    <PackageReference Include="System.Runtime.Caching" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\H.Necessaire.Dapper\H.Necessaire.Dapper.csproj" />
+    <ProjectReference Include="..\..\H.Necessaire.Runtime.SqlServer\H.Necessaire.Runtime.SqlServer.csproj" />
+    <ProjectReference Include="..\..\H.Necessaire.Runtime\H.Necessaire.Runtime.csproj" />
+    <ProjectReference Include="..\..\H.Necessaire.Serialization\H.Necessaire.Serialization.csproj" />
+    <ProjectReference Include="..\..\H.Necessaire\H.Necessaire.csproj" />
+    <ProjectReference Include="..\H.Necessaire.CLI\H.Necessaire.CLI.csproj" />
+    <ProjectReference Include="..\H.Necessaire.Runtime.CLI\H.Necessaire.Runtime.CLI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="DebugConnectionString.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,5 +1,10 @@
 ﻿using H.Necessaire.CLI.Commands.NuGetVersioning.Models;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Runtime.Caching;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace H.Necessaire.CLI.Commands.NuGetVersioning
@@ -22,12 +27,13 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
 
         public async Task<OperationResult<NuSpecInfo[]>> GetAllNuSpecs()
         {
-            NuSpecInfo[]? nuSpecs = nuSpecsCache.Get(cacheKeyNuSpecs) as NuSpecInfo[];
+            NuSpecInfo[] nuSpecs = nuSpecsCache.Get(cacheKeyNuSpecs) as NuSpecInfo[];
             if (nuSpecs != null)
                 return OperationResult.Win().WithPayload(nuSpecs);
 
             if (!rootFolderToScan.Exists)
                 return OperationResult.Fail($"Folder {rootFolderToScan.FullName} doesn't exist").WithoutPayload<NuSpecInfo[]>();
+
 
             FileInfo[] nuSpecFiles = rootFolderToScan.GetFiles("*.nuspec", SearchOption.AllDirectories) ?? new FileInfo[0];
 
@@ -47,7 +53,7 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
 
             XNamespace ns = nuSpecXml.Root?.GetDefaultNamespace() ?? XNamespace.None;
 
-            XElement? nuSpecMetadataElement = nuSpecXml.Root?.Element(ns + "metadata");
+            XElement nuSpecMetadataElement = nuSpecXml.Root?.Element(ns + "metadata");
 
             return
                 new NuSpecInfo(fileInfo)
@@ -59,7 +65,7 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
                 };
         }
 
-        private NuGetIdentifier[] ParseDependencies(XElement? dependenciesElement, XNamespace ns)
+        private NuGetIdentifier[] ParseDependencies(XElement dependenciesElement, XNamespace ns)
         {
             IEnumerable<XElement> dependencyElements
                 = dependenciesElement?.Elements(ns + "dependency")
@@ -85,7 +91,7 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
                 ;
         }
 
-        private VersionNumber ParseVersionNumber(string? value)
+        private VersionNumber ParseVersionNumber(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
                 return VersionNumber.Unknown;
