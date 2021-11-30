@@ -77,18 +77,31 @@ namespace H.Necessaire.Runtime.Integration.NetCore
                 ConfigureAppEndpoints(app, env);
 
             using (new TimeMeasurement(x => logger.LogInformation($"Done calling UseDefaultFiles in {x}")))
-                app.UseDefaultFiles(new DefaultFilesOptions
-                {
-                    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Content")),
-                    RequestPath = string.Empty,
-                });
+                app
+                    .UseDefaultFiles(new DefaultFilesOptions
+                    {
+                        FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Content")),
+                        RequestPath = string.Empty,
+                    });
 
             using (new TimeMeasurement(x => logger.LogInformation($"Done calling UseStaticFiles in {x}")))
-                app.UseStaticFiles(new StaticFileOptions
-                {
-                    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Content")),
-                    RequestPath = string.Empty,
-                });
+                app
+                    .UseStaticFiles(new StaticFileOptions
+                    {
+                        FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Content")),
+                        RequestPath = string.Empty,
+                    })
+                    .UseStaticFiles(new StaticFileOptions
+                    {
+                        FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Content")),
+                        RequestPath = "/css",
+                    })
+                    .UseStaticFiles(new StaticFileOptions
+                    {
+                        FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Content")),
+                        RequestPath = "/webfonts",
+                    })
+                    ;
 
             using (new TimeMeasurement(x => logger.LogInformation($"Done configuring App Extras in {x}")))
                 ConfigureAppExtras(app, env);

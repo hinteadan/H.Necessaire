@@ -37,6 +37,8 @@ namespace H.Necessaire.ReactAppSample.Pages
                             },
 
                         }, "Debug")
+                        ,
+                        new FontIcon(new FontIcon.Props { Provider = FontIcon.Provider.FontAwesome, IconName = "user" })
 
                     )
 

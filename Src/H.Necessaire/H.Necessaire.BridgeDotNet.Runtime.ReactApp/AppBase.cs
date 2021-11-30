@@ -261,6 +261,12 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 Rel = "stylesheet",
             });
 
+            Document.Head.AppendChild(new HTMLLinkElement
+            {
+                Href = "css/fa.all.min.css",
+                Rel = "stylesheet",
+            });
+
             jQuery.Select("html, body").Css(new
             {
                 width = "100%",

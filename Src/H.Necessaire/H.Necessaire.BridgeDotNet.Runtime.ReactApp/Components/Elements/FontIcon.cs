@@ -52,6 +52,9 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 case Provider.FabricUI:
                     attributes = new Attributes { ClassName = $"ms-Icon ms-Icon--{props.IconName}" };
                     break;
+                case Provider.FontAwesome:
+                    attributes = new Attributes { ClassName = $"{GetFontAwesomeVariantClassName()} fa-{props.IconName}" };
+                    break;
                 default:
                     attributes = new Attributes { };
                     break;
@@ -63,9 +66,26 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             return attributes;
         }
 
+        private string GetFontAwesomeVariantClassName()
+        {
+            switch (props.Variant)
+            {
+                case IconVariant.Regular:
+                    return "far";
+                case IconVariant.Brand:
+                    return "fab";
+                case IconVariant.Light:
+                    return "fal";
+                case IconVariant.Solid:
+                default:
+                    return "fas";
+            }
+        }
+
         public class Props : ComponentPropsBase
         {
             public Provider Provider { get; set; } = Provider.FabricUI;
+            public IconVariant Variant { get; set; } = IconVariant.Default;
             public string IconName { get; set; } = null;
             public bool HasExternalLabel { get; set; } = false;
             public Func<ReactStyle, ReactStyle> StyleDecorator { get; set; }
@@ -77,6 +97,16 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         public enum Provider
         {
             FabricUI = 0,
+            FontAwesome = 1,
+        }
+
+        public enum IconVariant
+        {
+            Default = 0,
+            Solid = 0,
+            Regular = 1,
+            Light = 2,
+            Brand = 3,
         }
     }
 }

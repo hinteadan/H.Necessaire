@@ -149,6 +149,18 @@
     <None Include="AppIcon\site.webmanifest" />
     <None Include="bridge.json" />
     <None Include="H.Necessaire.BridgeDotNet.Runtime.ReactApp.nuspec" />
+    <None Include="Refs\webfonts\fa-brands-400.eot" />
+    <None Include="Refs\webfonts\fa-brands-400.ttf" />
+    <None Include="Refs\webfonts\fa-brands-400.woff" />
+    <None Include="Refs\webfonts\fa-brands-400.woff2" />
+    <None Include="Refs\webfonts\fa-regular-400.eot" />
+    <None Include="Refs\webfonts\fa-regular-400.ttf" />
+    <None Include="Refs\webfonts\fa-regular-400.woff" />
+    <None Include="Refs\webfonts\fa-regular-400.woff2" />
+    <None Include="Refs\webfonts\fa-solid-900.eot" />
+    <None Include="Refs\webfonts\fa-solid-900.ttf" />
+    <None Include="Refs\webfonts\fa-solid-900.woff" />
+    <None Include="Refs\webfonts\fa-solid-900.woff2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\H.Necessaire.BridgeDotNet\H.Necessaire.BridgeDotNet.csproj">
@@ -188,9 +200,13 @@
     <Content Include="AppIcon\favicon-32x32.png" />
     <Content Include="AppIcon\favicon.ico" />
     <Content Include="Refs\dexie.js" />
+    <Content Include="Refs\fa.all.min.css" />
     <Content Include="Refs\fabric.min.css" />
     <Content Include="Refs\react-dom.production.min.js" />
     <Content Include="Refs\react.production.min.js" />
+    <Content Include="Refs\webfonts\fa-brands-400.svg" />
+    <Content Include="Refs\webfonts\fa-regular-400.svg" />
+    <Content Include="Refs\webfonts\fa-solid-900.svg" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
