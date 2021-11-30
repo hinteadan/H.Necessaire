@@ -25,11 +25,13 @@
       <dependency id="ProductiveRage.ReactRouting" version="7.1.0" />
       <dependency id="Retyped.dexie" version="2.0.6733" />
     </dependencies>
+	<contentFiles>
+	  <files include="Refs/webfonts/*.*" buildAction="None" flatten="false" copyToOutput="false"/>
+	</contentFiles>
   </metadata>
   <files>
     <file src="Refs/fabric.min.css" target="Refs\" />
     <file src="Refs/fa.all.min.css" target="Refs\" />
-    <file src="Refs/webfonts/**" target="Refs\webfonts" />
     <file src="Refs/react-dom.production.min.js" target="Refs\" />
     <file src="Refs/react.production.min.js" target="Refs\" />
     <file src="Refs/dexie.js" target="Refs\" />
