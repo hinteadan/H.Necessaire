@@ -29,7 +29,7 @@
   <files>
     <file src="Refs/fabric.min.css" target="Refs\" />
     <file src="Refs/fa.all.min.css" target="Refs\" />
-    <file src="Refs/webfonts/*.*" target="Refs\webfonts" />
+    <file src="Refs/webfonts/**" target="Refs\webfonts" />
     <file src="Refs/react-dom.production.min.js" target="Refs\" />
     <file src="Refs/react.production.min.js" target="Refs\" />
     <file src="Refs/dexie.js" target="Refs\" />
