@@ -38,6 +38,8 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
             public string NotesJson { get; set; }
 
             public string IpAddress { get; set; }
+            public DateTime AsOf { get; set; }
+            public long AsOfTicks { get; set; }
         }
 
         public class ConsumerIdentitySqlEntityMapper : SqlEntityMapperBase<ConsumerIdentity, ConsumerIdentitySqlEntry>
@@ -51,6 +53,7 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
                     .And(x =>
                     {
                         x.Notes = sqlEntity.NotesJson.DeserializeToNotes();
+                        x.AsOf = new DateTime(sqlEntity.AsOfTicks);
                     });
             }
 
@@ -61,6 +64,7 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
                     .And(x =>
                     {
                         x.NotesJson = entity.Notes.ToJsonArray();
+                        x.AsOfTicks = entity.AsOf.Ticks;
                     })
                     ;
             }

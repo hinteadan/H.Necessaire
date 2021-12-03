@@ -29,6 +29,7 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
                         doc.ID,
                         doc.IDTag,
                         doc.DisplayName,
+                        doc.AsOf,
                     }
                 );
             }

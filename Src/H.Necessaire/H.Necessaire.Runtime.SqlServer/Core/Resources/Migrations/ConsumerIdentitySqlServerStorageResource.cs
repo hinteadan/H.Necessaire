@@ -40,6 +40,17 @@ ALTER TABLE [dbo].[H.Necessaire.{nameof(ConsumerIdentity)}] ADD [{nameof(Consume
 
 ",
             },
+            new SqlMigration
+            {
+                ResourceIdentifier = nameof(ConsumerIdentity),
+                VersionNumber = new VersionNumber(1, 2),
+                SqlCommand = $@"
+
+ALTER TABLE [dbo].[H.Necessaire.{nameof(ConsumerIdentity)}] ADD [{nameof(ConsumerIdentitySqlEntry.AsOf)}] [datetime2](7) NOT NULL DEFAULT '1900-01-01';
+ALTER TABLE [dbo].[H.Necessaire.{nameof(ConsumerIdentity)}] ADD [{nameof(ConsumerIdentitySqlEntry.AsOfTicks)}] [bigint] NOT NULL DEFAULT (0);
+
+",
+            },
         };
     }
 }

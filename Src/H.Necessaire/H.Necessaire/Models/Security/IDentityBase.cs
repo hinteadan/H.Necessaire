@@ -10,6 +10,8 @@ namespace H.Necessaire
 
         public virtual string DisplayName { get; set; }
 
+        public virtual DateTime AsOf { get; set; } = DateTime.UtcNow;
+
         public Note[] Notes { get; set; }
 
         public override string ToString()
