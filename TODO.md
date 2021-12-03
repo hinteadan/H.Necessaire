@@ -1,3 +1,5 @@
+Add AsOf property and SQL Column for ConsumerIdentity
+
 For ReactApp runtime add predefined Nuget Files (no overwrite):
  - Startup.cs
  - Program.cs
