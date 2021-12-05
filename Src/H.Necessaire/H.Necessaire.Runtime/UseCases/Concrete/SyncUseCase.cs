@@ -66,7 +66,11 @@ namespace H.Necessaire.Runtime
                     }
 
                 })
-                .TryOrFailWithGrace(onFail: ex => result = OperationResult.Fail(ex).WithPayload(syncRequest.ToFailResponse()));
+                .TryOrFailWithGrace(onFail: async ex =>
+                {
+                    await Logger.LogError(ex);
+                    result = OperationResult.Fail(ex).WithPayload(syncRequest.ToFailResponse());
+                });
 
             return result;
         }
