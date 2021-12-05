@@ -1,5 +1,3 @@
-Add ConsumerID to Network Trace
-
 Fix "Object Ref not set to an instance" for /version/json endpoint
 
 For ReactApp runtime add predefined Nuget Files (no overwrite):
