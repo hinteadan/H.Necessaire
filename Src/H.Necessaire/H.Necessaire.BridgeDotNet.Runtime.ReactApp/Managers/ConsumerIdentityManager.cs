@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
@@ -54,6 +55,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
             consumerIdentity.Notes = await deviceInfoResource.GetRawProperties();
             consumerIdentity.DisplayName = consumerIdentity.Notes.Get("UserAgent", ignoreCase: true);
+            consumerIdentity.AsOf = DateTime.UtcNow;
             httpClient.SetConsumer(consumerIdentity.ID);
             CallContext<OperationContext>.SetData(CallContextKey.OperationContext, new OperationContext
             {
