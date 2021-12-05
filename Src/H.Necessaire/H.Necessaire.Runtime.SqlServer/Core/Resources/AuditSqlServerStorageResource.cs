@@ -189,6 +189,10 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
                         x.AppVersionTimestamp = entity.AppVersion?.Timestamp;
                         x.AppVersionBranch = entity.AppVersion?.Branch;
                         x.AppVersionCommit = entity.AppVersion?.Commit;
+                    })
+                    .And(x =>
+                    {
+                        if (x.AppVersionTimestamp == DateTime.MinValue) x.AppVersionTimestamp = null;
                     });
             }
             public override AuditMetadataEntry MapSqlToEntity(AuditMetadataSqlEntry sqlEntity)
