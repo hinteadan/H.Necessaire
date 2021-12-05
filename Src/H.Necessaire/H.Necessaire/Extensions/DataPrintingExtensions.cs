@@ -14,7 +14,7 @@ namespace H.Necessaire
         public const string TimeStampIdentifierFormat = "yyyyMMdd_HHmmss_'UTC'";
         public const string ParsableTimeStampFormat = "yyyy-MM-dd HH:mm:ss 'UTC'";
 
-        public static string PrintPercent(float percentValue)
+        public static string PrintPercent(this float percentValue)
         {
             return $"{Math.Round(percentValue.TrimToPercent(), 1)}%";
         }
@@ -82,7 +82,7 @@ namespace H.Necessaire
             return $"{timeSpan.Days} days & {timeSpan.Hours}h{timeSpan.Minutes}m";
         }
 
-        public static string PrintDateTimeAsOfNow(DateTime dateTime)
+        public static string PrintDateTimeAsOfNow(this DateTime dateTime)
         {
             DateTime now = DateTime.Now;
             DateTime localTime = dateTime.EnsureUtc().ToLocalTime();
