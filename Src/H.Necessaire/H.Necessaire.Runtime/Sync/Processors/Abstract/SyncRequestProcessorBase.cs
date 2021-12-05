@@ -4,8 +4,14 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime
 {
-    public abstract class SyncRequestProcessorBase<TEntity> : ImASyncRequestProcessor
+    public abstract class SyncRequestProcessorBase<TEntity> : ImASyncRequestProcessor, ImADependency
     {
+        ImALogger logger = null;
+        public void ReferDependencies(ImADependencyProvider dependencyProvider)
+        {
+            logger = dependencyProvider.GetLogger<SyncRequestProcessorBase<TEntity>>();
+        }
+
         public virtual Task<bool> IsEligibleFor(SyncRequest syncRequest)
         {
             return syncRequest.PayloadType.In(typeof(TEntity).TypeName()).AsTask();
@@ -34,7 +40,11 @@ namespace H.Necessaire.Runtime
                     result = await ProcessPayload(parseOperation.Payload, syncRequest);
 
                 })
-                .TryOrFailWithGrace(onFail: ex => result = OperationResult.Fail(ex));
+                .TryOrFailWithGrace(onFail: async ex =>
+                {
+                    await logger?.LogError(ex);
+                    result = OperationResult.Fail(ex);
+                });
 
             return result;
         }
