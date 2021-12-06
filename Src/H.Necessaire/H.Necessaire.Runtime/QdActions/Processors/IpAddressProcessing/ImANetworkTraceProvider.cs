@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.QdActions.Processors.IpAddressProcessing
 {
     internal interface ImANetworkTraceProvider
     {
-        Task<OperationResult<NetworkTrace>> Trace(string ipAddress);
+        Task<OperationResult<NetworkTrace>> Trace(string ipAddress, Guid? consumerIdentityID = null);
     }
 }

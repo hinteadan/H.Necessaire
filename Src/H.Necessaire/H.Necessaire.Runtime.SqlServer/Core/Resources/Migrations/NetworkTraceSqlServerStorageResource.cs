@@ -51,6 +51,18 @@ ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 ",
             },
+            new SqlMigration
+            {
+                ResourceIdentifier = nameof(NetworkTrace),
+                VersionNumber = new VersionNumber(1, 1),
+                SqlCommand = $@"
+
+ALTER TABLE [dbo].[{netowrkTraceTableName}] ADD [{nameof(NetworkTraceSqlEntry.ConsumerIdentityID)}] [uniqueidentifier] NULL;
+
+{nameof(NetworkTraceSqlEntry.ConsumerIdentityID).PrintColumnIndexCreationSqlScriptOn(netowrkTraceTableName)}
+
+",
+            },
         };
     }
 }

@@ -22,7 +22,7 @@ namespace H.Necessaire.Runtime.QdActions.Processors.IpAddressProcessing.Provider
         #endregion
 
         #region Operations
-        public async Task<OperationResult<NetworkTrace>> Trace(string networkAddress)
+        public async Task<OperationResult<NetworkTrace>> Trace(string networkAddress, Guid? consumerIdentityID = null)
         {
             await Cooldown();
 
@@ -53,6 +53,7 @@ namespace H.Necessaire.Runtime.QdActions.Processors.IpAddressProcessing.Provider
                         {
                             x.NetworkTraceProvider = About;
                             x.IpAddress = networkAddress;
+                            x.ConsumerIdentityID = consumerIdentityID;
                         })
                     );
 

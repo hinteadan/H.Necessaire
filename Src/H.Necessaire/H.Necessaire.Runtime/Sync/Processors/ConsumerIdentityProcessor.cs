@@ -41,7 +41,7 @@ namespace H.Necessaire.Runtime.Sync.Processors
             await auditingService.Append(consumerIdentity.ToAuditMeta<ConsumerIdentity, Guid>(consumerExists ? AuditActionType.Modify : AuditActionType.Create, processorIdentity), consumerIdentity);
 
             if (!string.IsNullOrWhiteSpace(payload.IpAddress))
-                await actionQer.Queue(QdAction.New(WellKnown.QdActionType.ProcessIpAddress, payload.IpAddress));
+                await actionQer.Queue(QdAction.New(WellKnown.QdActionType.ProcessIpAddress, $"{payload.IpAddress}|{payload.ID}" ));
 
             return result;
         }

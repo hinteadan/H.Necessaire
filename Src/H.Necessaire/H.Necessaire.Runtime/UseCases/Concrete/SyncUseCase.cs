@@ -47,6 +47,16 @@ namespace H.Necessaire.Runtime
                             x.Consumer.Notes = x.Consumer.Notes.AddOrReplace(
                                 context?.OperationContext?.Parameters?.Get("Connection.RemoteIpAddress")?.NoteAs(WellKnownConsumerIdentityNote.IpAddress) ?? Note.Empty
                                 , context?.OperationContext?.Parameters?.Get("Connection.RemotePort")?.NoteAs(WellKnownConsumerIdentityNote.Port) ?? Note.Empty
+                                , context?.OperationContext?.Parameters?.Get("TraceIdentifier")?.NoteAs(WellKnownConsumerIdentityNote.TraceIdentifier) ?? Note.Empty
+                                , context?.OperationContext?.Parameters?.Get("Connection.ID")?.NoteAs(WellKnownConsumerIdentityNote.ConnectionID) ?? Note.Empty
+                                , context?.OperationContext?.Parameters?.Get("Connection.LocalIpAddress")?.NoteAs(WellKnownConsumerIdentityNote.ServerIpAddress) ?? Note.Empty
+                                , context?.OperationContext?.Parameters?.Get("Connection.LocalPort")?.NoteAs(WellKnownConsumerIdentityNote.ServerPort) ?? Note.Empty
+                                , (context?.OperationContext?.Parameters?.Get("Request.Host") ?? context?.OperationContext?.Parameters?.Get("Request.Header.Host"))?.NoteAs(WellKnownConsumerIdentityNote.HostName) ?? Note.Empty
+                                , context?.OperationContext?.Parameters?.Get("Request.Protocol")?.NoteAs(WellKnownConsumerIdentityNote.Protocol) ?? Note.Empty
+                                , context?.OperationContext?.Parameters?.Get("Request.Header.User-Agent")?.NoteAs(WellKnownConsumerIdentityNote.UserAgent) ?? Note.Empty
+                                , context?.OperationContext?.Parameters?.Get("Request.Cookie.ai_user")?.NoteAs(WellKnownConsumerIdentityNote.AiUserID) ?? Note.Empty
+                                , context?.OperationContext?.Parameters?.Get("Request.Header.Origin")?.NoteAs(WellKnownConsumerIdentityNote.Origin) ?? Note.Empty
+                                , context?.OperationContext?.Parameters?.Get("Request.Header.Referer")?.NoteAs(WellKnownConsumerIdentityNote.Referer) ?? Note.Empty
                             );
                         }
                         x.Parameters = x.Parameters.Add(context?.OperationContext?.Parameters);

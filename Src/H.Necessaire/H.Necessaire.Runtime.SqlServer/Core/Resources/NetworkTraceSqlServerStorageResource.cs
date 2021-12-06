@@ -30,6 +30,7 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
         public class NetworkTraceSqlEntry : SqlEntryBase, IGuidIdentity
         {
             public Guid ID { get; set; }
+            public Guid? ConsumerIdentityID { get; set; }
 
             public DateTime AsOf { get; set; }
             public long AsOfTicks { get; set; }

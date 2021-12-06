@@ -37,9 +37,17 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
 
             public string NotesJson { get; set; }
 
-            public string IpAddress { get; set; }
             public DateTime AsOf { get; set; }
+
             public long AsOfTicks { get; set; }
+
+            public string IpAddress { get; set; }
+            public string HostName { get; set; }
+            public string Protocol { get; set; }
+            public string UserAgent { get; set; }
+            public string AiUserID { get; set; }
+            public string Origin { get; set; }
+            public string Referer { get; set; }
         }
 
         public class ConsumerIdentitySqlEntityMapper : SqlEntityMapperBase<ConsumerIdentity, ConsumerIdentitySqlEntry>

@@ -5,6 +5,7 @@ namespace H.Necessaire
     public class NetworkTrace : IGuidIdentity
     {
         public Guid ID { get; set; } = Guid.NewGuid();
+        public Guid? ConsumerIdentityID { get; set; }
         public DateTime AsOf { get; set; } = DateTime.UtcNow;
         public InternalIdentity NetworkTraceProvider { get; set; }
 

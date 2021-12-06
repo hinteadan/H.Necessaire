@@ -1,6 +1,7 @@
 ﻿using H.Necessaire.Runtime.QdActions.Processors.IpAddressProcessing;
 using H.Necessaire.Runtime.QdActions.Processors.IpAddressProcessing.Providers.Concrete;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.QdActions.Processors
@@ -34,9 +35,24 @@ namespace H.Necessaire.Runtime.QdActions.Processors
         {
             NetworkTrace networkTrace = null;
 
+            string ipAddress = null;
+            Guid? consumerId = null;
+
+            string[] payloadParts = action?.Payload?.Split('|'.AsArray(), StringSplitOptions.RemoveEmptyEntries);
+
+            if (!payloadParts?.Any(x => !string.IsNullOrWhiteSpace(x)) ?? true)
+                return OperationResult.Win($"Nothing to process, QdAction Payload is empty ot cannot be parsed. Payload: {action?.Payload ?? "[NULL]"}");
+
+            ipAddress = payloadParts[0]?.Trim();
+            if (payloadParts.Length > 1)
+                consumerId = payloadParts[1]?.Trim()?.ParseToGuidOrFallbackTo(null);
+
+            if (string.IsNullOrWhiteSpace(ipAddress))
+                return OperationResult.Win($"Nothing to process, IP Address is empty. Payload: {action?.Payload ?? "[NULL]"}");
+
             foreach (ImANetworkTraceProvider networkTraceProvider in networkTraceProviders)
             {
-                OperationResult<NetworkTrace> result = await TraceIpAddress(networkTraceProvider, action.Payload);
+                OperationResult<NetworkTrace> result = await TraceIpAddress(networkTraceProvider, ipAddress, consumerId);
                 if (result.IsSuccessful)
                 {
                     networkTrace = result.Payload;
@@ -53,14 +69,14 @@ namespace H.Necessaire.Runtime.QdActions.Processors
                 await SaveNetworkTrace(networkTrace);
         }
 
-        private async Task<OperationResult<NetworkTrace>> TraceIpAddress(ImANetworkTraceProvider networkTraceProvider, string ipAddress)
+        private async Task<OperationResult<NetworkTrace>> TraceIpAddress(ImANetworkTraceProvider networkTraceProvider, string ipAddress, Guid? consumerId = null)
         {
             OperationResult<NetworkTrace> result = OperationResult.Fail("Not yet started").WithoutPayload<NetworkTrace>();
 
             await
                 new Func<Task>(async () =>
                 {
-                    result = await networkTraceProvider.Trace(ipAddress);
+                    result = await networkTraceProvider.Trace(ipAddress, consumerId);
                 })
                 .TryOrFailWithGrace(
                     onFail: async ex =>
