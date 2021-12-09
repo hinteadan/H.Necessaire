@@ -20,6 +20,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         static Func<IDispatcher, AppNavigationRegistryBase> navigationRegistryFactory;
 
         static BrandingStyle branding = BrandingStyle.Default;
+        static string[] extraLibs = null;
 
         public static Element CurtainContainer { get; private set; }
 
@@ -58,12 +59,19 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         public static bool IsOnline => Window.Navigator.OnLine;
 
-        public static void Initialize(ImAnAppWireup appWireup, Func<IDispatcher, AppNavigationRegistryBase> navigationRegistryFactory, Func<Task> appInitializer, BrandingStyle branding = null)
+        public static void Initialize(
+            ImAnAppWireup appWireup,
+            Func<IDispatcher, AppNavigationRegistryBase> navigationRegistryFactory,
+            Func<Task> appInitializer,
+            BrandingStyle branding = null,
+            string[] extraLibs = null
+        )
         {
             AppBase.branding = branding ?? BrandingStyle.Default;
             AppBase.appInitializer = appInitializer;
             AppBase.appWireup = appWireup;
             AppBase.navigationRegistryFactory = navigationRegistryFactory;
+            AppBase.extraLibs = extraLibs;
         }
 
         public static async void MainAsWebWorker(ImAnAppWireup webWorkerWireup)
@@ -355,6 +363,14 @@ table tbody tr:hover td {
 
                 await ReferenceLib("/react.production.min.js");
                 await ReferenceLib("/react-dom.production.min.js");
+
+                if(extraLibs?.Any() == true)
+                {
+                    foreach(string lib in extraLibs)
+                    {
+                        await ReferenceLib(lib);
+                    }
+                }
             }
         }
 
