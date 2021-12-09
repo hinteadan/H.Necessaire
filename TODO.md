@@ -1,4 +1,6 @@
-Fix "Object Ref not set to an instance" for /version/json endpoint
+(I don't think it reproduces in IIS Hosting) Fix "Object Ref not set to an instance" for /version/json endpoint
+
+Exceptionless Log Processor
 
 For ReactApp runtime add predefined Nuget Files (no overwrite):
  - Startup.cs
