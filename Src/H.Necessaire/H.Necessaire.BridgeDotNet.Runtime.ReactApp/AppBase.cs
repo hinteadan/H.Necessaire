@@ -162,6 +162,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             curtainContainer.Style.Height = "1px";
             curtainContainer.Style.Top = "0px";
             curtainContainer.Style.Left = "0px";
+            curtainContainer.Style.ZIndex = int.MaxValue.ToString();
             Document.Body.AppendChild(curtainContainer);
             return curtainContainer;
         }
@@ -364,9 +365,9 @@ table tbody tr:hover td {
                 await ReferenceLib("/react.production.min.js");
                 await ReferenceLib("/react-dom.production.min.js");
 
-                if(extraLibs?.Any() == true)
+                if (extraLibs?.Any() == true)
                 {
-                    foreach(string lib in extraLibs)
+                    foreach (string lib in extraLibs)
                     {
                         await ReferenceLib(lib);
                     }
