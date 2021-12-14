@@ -101,6 +101,16 @@ namespace H.Necessaire.Runtime.Integration.NetCore
                         FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Content")),
                         RequestPath = "/webfonts",
                     })
+                    .UseStaticFiles(new StaticFileOptions
+                    {
+                        FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Content")),
+                        RequestPath = "/woff2",
+                    })
+                    .UseStaticFiles(new StaticFileOptions
+                    {
+                        FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Content")),
+                        RequestPath = "/woff",
+                    })
                     ;
 
             using (new TimeMeasurement(x => logger.LogInformation($"Done configuring App Extras in {x}")))
