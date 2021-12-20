@@ -7,7 +7,7 @@ namespace H.Necessaire.Testicles.Unit
 {
     public class ExecutionUtilitiesScenarios
     {
-        private const double timingToleranceInMilliseconds = 80;
+        private const double timingToleranceInMilliseconds = 100;
 
         [Fact(DisplayName = "TryAFewTimesOrFailWithGrace Doesnt Retry If Call Succeeds")]
         public void TryAFewTimesOrFailWithGrace_Doesnt_Retry_If_Call_Succeeds()
