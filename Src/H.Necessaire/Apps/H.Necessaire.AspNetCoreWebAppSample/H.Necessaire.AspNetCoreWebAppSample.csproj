@@ -29,7 +29,7 @@
 
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
 		<Exec Command="del /f &quot;$(SolutionDir)\Apps\H.Necessaire.AspNetCoreWebAppSample\version.txt&quot;" />
-		<Exec Command="&quot;$(SolutionDir)\CLI\H.Necessaire.CLI.Host\bin\$(Configuration)\net6.0\H.Necessaire.CLI.Host.exe&quot; version &gt;&gt; &quot;$(SolutionDir)\Apps\H.Necessaire.AspNetCoreWebAppSample\version.txt&quot;" />
+		<Exec Command="&quot;$(SolutionDir)\CLI\H.Necessaire.CLI.Host\bin\$(Configuration)\net6.0\H.Necessaire.CLI.Host.exe&quot; version &gt; &quot;$(SolutionDir)\Apps\H.Necessaire.AspNetCoreWebAppSample\version.txt&quot;" />
 	</Target>
 
 	<Target Name="PostBuild" BeforeTargets="PostBuildEvent">

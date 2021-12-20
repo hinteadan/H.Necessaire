@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace H.Necessaire
 {
@@ -9,7 +8,7 @@ namespace H.Necessaire
 
         private readonly ImADependencyProvider dependencyProvider;
         private readonly Func<object> factory;
-        private object instance;
+        private Lazy<object> lazyInstance = null;
 
         public bool IsAlwaysNew { get; } = false;
 
@@ -20,30 +19,25 @@ namespace H.Necessaire
             this.IsAlwaysNew = isAlwaysNew;
         }
 
-        public InstanceFactory(ImADependencyProvider dependencyProvider, object instance)
-            : this(dependencyProvider, () => instance, isAlwaysNew: false)
-        {
-            this.instance = instance;
-            this.factory = () => this.instance;
-        }
+        public InstanceFactory(ImADependencyProvider dependencyProvider, object instance) : this(dependencyProvider, () => instance, isAlwaysNew: false) { }
 
         public object GetInstance()
         {
             EnsureInstance();
-            return instance;
+            return lazyInstance.Value;
         }
 
         private void EnsureInstance()
         {
             lock (locker)
             {
-                if (instance != null && !IsAlwaysNew)
+                if (lazyInstance != null && !IsAlwaysNew)
                     return;
 
-                instance = factory();
-                if (instance is ImADependency)
+                lazyInstance = new Lazy<object>(factory);
+                if (lazyInstance.Value is ImADependency)
                 {
-                    (instance as ImADependency).ReferDependencies(dependencyProvider);
+                    (lazyInstance.Value as ImADependency).ReferDependencies(dependencyProvider);
                 }
             }
         }

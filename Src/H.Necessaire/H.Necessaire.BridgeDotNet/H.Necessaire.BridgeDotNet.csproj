@@ -524,6 +524,8 @@
     </Compile>
     <Compile Include="Models\ConcurrentDictionary.cs" />
     <Compile Include="Models\ConcurrentQueue.cs" />
+    <Compile Include="Models\Lazy.cs" />
+    <Compile Include="Models\LazyThreadSafetyMode.cs" />
     <Compile Include="Operations\CallContext.cs" />
     <Compile Include="Operations\ConcreteFactory.cs" />
     <Compile Include="Operations\Concrete\JsPeriodicAction.cs" />

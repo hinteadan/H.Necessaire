@@ -1,4 +1,4 @@
-(I don't think it reproduces in IIS Hosting) Fix "Object Ref not set to an instance" for /version/json endpoint
+Fix "Object Ref not set to an instance" for /version/json endpoint
 
 Exceptionless Log Processor
 

@@ -51,7 +51,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.ReactAppSample
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Necessaire.Runtime.SqlServer", "H.Necessaire.Runtime.SqlServer\H.Necessaire.Runtime.SqlServer.csproj", "{4080DDC4-6D04-4348-BFD5-0EB178AF20E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.CLI", "CLI\H.Necessaire.CLI\H.Necessaire.CLI.csproj", "{FD8E4727-EC20-46B8-B07E-3642623A3809}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Necessaire.CLI", "CLI\H.Necessaire.CLI\H.Necessaire.CLI.csproj", "{FD8E4727-EC20-46B8-B07E-3642623A3809}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
