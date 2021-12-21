@@ -1,4 +1,6 @@
-Fix "Object Ref not set to an instance" for /version/json endpoint
+[I think it's done] Fix "Object Ref not set to an instance" for /version/json endpoint
+
+Implement Runtime Host: Windows Service (https://docs.microsoft.com/en-us/dotnet/core/extensions/windows-service)
 
 Exceptionless Log Processor
 
