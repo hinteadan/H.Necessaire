@@ -1,7 +1,35 @@
-﻿namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
+﻿using System;
+
+namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     public static class JsonExtensions
     {
+        public static string SerializeToJson<T>(this T obj)
+        {
+            if (obj == null)
+                return null;
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+        }
+
+        public static T DeserializeFromJson<T>(this string serializedJson, T defaultTo = default(T))
+        {
+            if (string.IsNullOrWhiteSpace(serializedJson))
+                return defaultTo;
+
+            T result = defaultTo;
+
+            new Action(() =>
+            {
+                result = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(serializedJson);
+            })
+            .TryOrFailWithGrace(
+                onFail: ex => result = defaultTo
+            );
+
+            return result;
+        }
+
         public static object ObjectToJson<T>(this T obj)
         {
             if (obj == null)
