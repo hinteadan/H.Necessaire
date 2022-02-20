@@ -18,7 +18,7 @@ namespace H.Necessaire.Runtime.RavenDB.Security.Resources
 
         static ConcurrentDictionary<Guid, UserAuthKey> cachedKeys = new ConcurrentDictionary<Guid, UserAuthKey>();
 
-        protected override string DatabaseName => dbNameUserAuthentication;
+        protected override string DatabaseName => $"{base.DatabaseName}.UserAuthentication";
         protected override Guid GetIdFor(UserAuthKey item) => item.ID;
 
         private static Lazy<UserAuthKeyFilterIndex> userAuthKeyFilterIndex = new Lazy<UserAuthKeyFilterIndex>(() => new UserAuthKeyFilterIndex());

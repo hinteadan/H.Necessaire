@@ -18,19 +18,20 @@ namespace H.Necessaire.RavenDB
         where TFilterIndex : AbstractIndexCreationTask<TEntity>, new()
     {
         #region Construct
-        protected RavenDbStorageResourceBase()
-        {
-            EnsureIndexes();
-        }
+        string defaultDatabaseName = null;
 
         RavenDbDocumentStore ravenDbDocumentStore;
         public virtual void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
+            defaultDatabaseName = dependencyProvider?.GetRuntimeConfig()?.Get("RavenDbConnections")?.Get("DatabaseNames")?.Get("Core")?.ToString();
+
             ravenDbDocumentStore = dependencyProvider.Get<RavenDbDocumentStore>();
+
+            EnsureIndexes();
         }
         #endregion
 
-        protected abstract string DatabaseName { get; }
+        protected virtual string DatabaseName => !string.IsNullOrWhiteSpace(defaultDatabaseName) ? defaultDatabaseName : typeof(TEntity).TypeName().ToSafeFileName();
 
         protected abstract TKey GetIdFor(TEntity item);
 

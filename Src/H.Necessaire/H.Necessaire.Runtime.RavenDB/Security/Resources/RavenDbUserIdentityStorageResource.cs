@@ -12,9 +12,7 @@ namespace H.Necessaire.Runtime.RavenDB.Security.Resources
     class RavenDbUserIdentityStorageResource : RavenDbStorageResourceBase<Guid, UserInfo, UserIdentityFilter, UserIdentityFilterIndex>, ImAUserInfoStorageResource
     {
         #region Construct
-        public const string dbNameUserIdentity = "UserIdentity";
-
-        protected override string DatabaseName => dbNameUserIdentity;
+        protected override string DatabaseName => $"{base.DatabaseName}.UserIdentity";
         protected override Guid GetIdFor(UserInfo item) => item.ID;
 
         private static Lazy<UserIdentityFilterIndex> userIdentityFilterIndex = new Lazy<UserIdentityFilterIndex>(() => new UserIdentityFilterIndex());

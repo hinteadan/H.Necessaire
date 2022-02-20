@@ -6,8 +6,6 @@ namespace H.Necessaire.Runtime.RavenDB
 {
     internal class SyncRequestRavenDbStorageResource : RavenDbStorageServiceBase<string, SyncRequest, SyncRequestFilter, SyncRequestRavenDbStorageResource.SyncRequestFilterIndex>
     {
-        protected override string DatabaseName { get; } = "H.Necessaire.Core";
-
         protected override IAsyncDocumentQuery<SyncRequest> ApplyFilter(IAsyncDocumentQuery<SyncRequest> result, SyncRequestFilter filter)
         {
             if (filter?.IDs?.Any() ?? false)

@@ -6,8 +6,6 @@ namespace H.Necessaire.Runtime.RavenDB
 {
     internal class ExiledSyncRequestRavenDbStorageResource : RavenDbStorageServiceBase<string, ExiledSyncRequest, SyncRequestFilter, ExiledSyncRequestRavenDbStorageResource.ExiledSyncRequestFilterIndex>
     {
-        protected override string DatabaseName { get; } = "H.Necessaire.Core";
-
         protected override IAsyncDocumentQuery<ExiledSyncRequest> ApplyFilter(IAsyncDocumentQuery<ExiledSyncRequest> result, SyncRequestFilter filter)
         {
             if (filter?.IDs?.Any() ?? false)

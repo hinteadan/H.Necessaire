@@ -7,8 +7,6 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
 {
     internal class LogEntryRavenDbStorageResource : RavenDbStorageServiceBase<Guid, LogEntry, LogFilter, LogEntryRavenDbStorageResource.LogFilterIndex>
     {
-        protected override string DatabaseName { get; } = "H.Necessaire.Core";
-
         protected override IAsyncDocumentQuery<LogEntry> ApplyFilter(IAsyncDocumentQuery<LogEntry> result, LogFilter filter)
         {
             if (filter?.IDs?.Any() ?? false)

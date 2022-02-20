@@ -7,8 +7,6 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
 {
     internal class QdActionRavenDbStorageResource : RavenDbStorageServiceBase<Guid, QdAction, QdActionFilter, QdActionRavenDbStorageResource.QdActionFilterIndex>
     {
-        protected override string DatabaseName { get; } = "H.Necessaire.Core";
-
         protected override IAsyncDocumentQuery<QdAction> ApplyFilter(IAsyncDocumentQuery<QdAction> result, QdActionFilter filter)
         {
             if (filter?.IDs?.Any() ?? false)

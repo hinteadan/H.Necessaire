@@ -7,8 +7,6 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
 {
     internal class ConsumerIdentityRavenDbStorageResource : RavenDbStorageServiceBase<Guid, ConsumerIdentity, IDFilter<Guid>, ConsumerIdentityRavenDbStorageResource.ConsumerIdentityFilterIndex>
     {
-        protected override string DatabaseName { get; } = "H.Necessaire.Core";
-
         protected override IAsyncDocumentQuery<ConsumerIdentity> ApplyFilter(IAsyncDocumentQuery<ConsumerIdentity> result, IDFilter<Guid> filter)
         {
             if (filter?.IDs?.Any() ?? false)

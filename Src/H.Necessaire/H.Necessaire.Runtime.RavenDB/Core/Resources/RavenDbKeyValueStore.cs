@@ -18,7 +18,7 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
             this.storeName = string.IsNullOrWhiteSpace(storeName) ? this.storeName : storeName;
         }
 
-        protected override string DatabaseName { get; } = "H.Necessaire.Core.KeyValueStore";
+        protected override string DatabaseName => $"{base.DatabaseName}.KeyValueStore";
 
         protected override string GetIdFor(KeyValueEntry item) => item.ID;
 

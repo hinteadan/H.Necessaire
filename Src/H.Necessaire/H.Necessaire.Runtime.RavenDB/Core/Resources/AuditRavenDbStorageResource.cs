@@ -27,7 +27,7 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
             await metadataStorage.Save(await metadata.ToMeta().AndAsync(async x => x.AppVersion = await versionProvider?.GetCurrentVersion()));
             await payloadStorage.Save(new AuditPayloadRavenDbStorageResource.AuditPayloadEntry
             {
-                ID = metadata.ID,
+                ID = $"PayloadFor-{metadata.ID}",
                 PayloadAsJson = objectSnapshot.ToJsonObject(),
             });
         }
@@ -47,16 +47,14 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
 
         private async Task<Stream> LoadAuditJsonPayload(ImAnAuditEntry auditMetadata)
         {
-            AuditPayloadRavenDbStorageResource.AuditPayloadEntry auditPayloadEntry = (await payloadStorage.LoadByID(auditMetadata.ID)).ThrowOnFailOrReturn();
+            AuditPayloadRavenDbStorageResource.AuditPayloadEntry auditPayloadEntry = (await payloadStorage.LoadByID($"PayloadFor-{auditMetadata.ID}")).ThrowOnFailOrReturn();
             return auditPayloadEntry?.PayloadAsJson?.ToStream();
         }
     }
 
-    internal class AuditPayloadRavenDbStorageResource : RavenDbStorageServiceBase<Guid, AuditPayloadRavenDbStorageResource.AuditPayloadEntry, IDFilter<Guid>, AuditPayloadRavenDbStorageResource.AuditPayloadFilterIndex>
+    internal class AuditPayloadRavenDbStorageResource : RavenDbStorageServiceBase<string, AuditPayloadRavenDbStorageResource.AuditPayloadEntry, IDFilter<string>, AuditPayloadRavenDbStorageResource.AuditPayloadFilterIndex>
     {
-        protected override string DatabaseName { get; } = "H.Necessaire.Core";
-
-        protected override IAsyncDocumentQuery<AuditPayloadEntry> ApplyFilter(IAsyncDocumentQuery<AuditPayloadEntry> result, IDFilter<Guid> filter)
+        protected override IAsyncDocumentQuery<AuditPayloadEntry> ApplyFilter(IAsyncDocumentQuery<AuditPayloadEntry> result, IDFilter<string> filter)
         {
             if (filter?.IDs?.Any() ?? false)
             {
@@ -66,9 +64,9 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
             return result;
         }
 
-        public class AuditPayloadEntry : IGuidIdentity
+        public class AuditPayloadEntry : IStringIdentity
         {
-            public Guid ID { get; set; }
+            public string ID { get; set; }
             public string PayloadAsJson { get; set; }
         }
 
@@ -86,8 +84,6 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
 
     internal class AuditMetadataRavenDbStorageResource : RavenDbStorageServiceBase<Guid, AuditMetadataEntry, AuditSearchFilter, AuditMetadataRavenDbStorageResource.AuditSearchFilterIndex>
     {
-        protected override string DatabaseName { get; } = "H.Necessaire.Core";
-
         protected override IAsyncDocumentQuery<AuditMetadataEntry> ApplyFilter(IAsyncDocumentQuery<AuditMetadataEntry> result, AuditSearchFilter filter)
         {
             if (filter?.IDs?.Any() ?? false)

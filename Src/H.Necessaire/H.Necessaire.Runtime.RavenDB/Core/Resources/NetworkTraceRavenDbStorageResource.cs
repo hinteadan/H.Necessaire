@@ -7,8 +7,6 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
 {
     internal class NetworkTraceRavenDbStorageResource : RavenDbStorageServiceBase<Guid, NetworkTrace, IDFilter<Guid>, NetworkTraceRavenDbStorageResource.NetworkTraceFilterIndex>
     {
-        protected override string DatabaseName { get; } = "H.Necessaire.Core";
-
         protected override IAsyncDocumentQuery<NetworkTrace> ApplyFilter(IAsyncDocumentQuery<NetworkTrace> result, IDFilter<Guid> filter)
         {
             if (filter?.IDs?.Any() ?? false)

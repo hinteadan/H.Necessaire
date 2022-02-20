@@ -18,7 +18,6 @@ namespace H.Necessaire.Runtime.RavenDB
         where TFilterIndex : AbstractIndexCreationTask<TEntity>, new()
     {
         #region Construct
-        protected override string DatabaseName { get; } = typeof(TEntity).TypeName().ToSafeFileName();
         protected override TId GetIdFor(TEntity item) => item.ID;
 
         private static Lazy<TFilterIndex> filterIndex = new Lazy<TFilterIndex>(() => new TFilterIndex());
