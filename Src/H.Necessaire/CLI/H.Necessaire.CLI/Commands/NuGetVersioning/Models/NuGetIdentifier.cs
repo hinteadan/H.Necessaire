@@ -1,6 +1,6 @@
 ﻿namespace H.Necessaire.CLI.Commands.NuGetVersioning.Models
 {
-    class NuGetIdentifier
+    class NuGetIdentifier : IStringIdentity
     {
         private VersionNumber originalVersionNumber = null;
 

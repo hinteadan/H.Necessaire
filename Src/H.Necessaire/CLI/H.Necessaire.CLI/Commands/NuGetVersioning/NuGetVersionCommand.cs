@@ -9,14 +9,18 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
     public class NuGetVersionCommand : CommandBase
     {
         #region Construct
-        const string usageSyntax = "Syntax: update [RavenDB.Client=5.2.5] [H.Necessaire=major|minor|patch] [...]";
+        static readonly string usageSyntax = "Syntax: update [RavenDB.Client=5.2.5] [H.Necessaire=major|minor|patch] [...]" +
+            $"{Environment.NewLine}--OR--{Environment.NewLine}" +
+            $"        consolidate-deps";
 
-        NuSpecVersionProcessor nuSpecVersionProcessor = new NuSpecVersionProcessor();
-        NuSpecFileUpdater nuSpecFileUpdater = new NuSpecFileUpdater();
+        NuSpecVersionProcessor nuSpecVersionProcessor = null;
+        CsprojNugetVersionProcessor csprojNugetVersionProcessor = null;
+        NuSpecFileUpdater nuSpecFileUpdater = null;
         public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             base.ReferDependencies(dependencyProvider);
             nuSpecVersionProcessor = dependencyProvider.Get<NuSpecVersionProcessor>();
+            csprojNugetVersionProcessor = dependencyProvider.Get<CsprojNugetVersionProcessor>();
             nuSpecFileUpdater = dependencyProvider.Get<NuSpecFileUpdater>();
         }
 
@@ -33,8 +37,21 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
             switch (args[0].ID.ToLowerInvariant())
             {
                 case "update": return await RunUpdateSubCommand(args.Jump(1));
+                case "consolidate-deps": return await RunConsolidateSubCommand(args.Jump(1));
                 default: return OperationResult.Fail(usageSyntax);
             }
+        }
+
+        private async Task<OperationResult> RunConsolidateSubCommand(Note[] args)
+        {
+            NuGetIdentifier[] nuGetsFromCsProjs = (await csprojNugetVersionProcessor.GetAllLatestNuGets()).ThrowOnFailOrReturn();
+
+            foreach(NuGetIdentifier externalNuget in nuGetsFromCsProjs)
+            {
+                (await nuSpecVersionProcessor.UpdateExternalNuGetVersion(externalNuget.ID, externalNuget.VersionNumber.ToString())).ThrowOnFailOrReturn();
+            }
+
+            return OperationResult.Win();
         }
 
         private async Task<OperationResult<NuSpecInfo[]>> RunUpdateSubCommand(Note[] args)

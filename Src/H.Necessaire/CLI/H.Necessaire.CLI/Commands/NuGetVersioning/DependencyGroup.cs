@@ -4,10 +4,14 @@
     {
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
-            dependencyRegistry.Register<NuSpecParser>(() => new NuSpecParser());
-            dependencyRegistry.Register<NuSpecDependencyTreeProcessor>(() => new NuSpecDependencyTreeProcessor());
-            dependencyRegistry.Register<NuSpecVersionProcessor>(() => new NuSpecVersionProcessor());
-            dependencyRegistry.Register<NuSpecFileUpdater>(() => new NuSpecFileUpdater());
+            dependencyRegistry
+                .Register<NuSpecParser>(() => new NuSpecParser())
+                .Register<CsprojParser>(() => new CsprojParser())
+                .Register<NuSpecDependencyTreeProcessor>(() => new NuSpecDependencyTreeProcessor())
+                .Register<NuSpecVersionProcessor>(() => new NuSpecVersionProcessor())
+                .Register<CsprojNugetVersionProcessor>(() => new CsprojNugetVersionProcessor())
+                .Register<NuSpecFileUpdater>(() => new NuSpecFileUpdater())
+                ;
         }
     }
 }

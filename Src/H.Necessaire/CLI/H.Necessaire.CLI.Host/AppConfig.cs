@@ -14,7 +14,7 @@ namespace H.Necessaire.CLI
                 .With(x => x.Register<RuntimeConfig>(() => new RuntimeConfig
                 {
                     Values = new[] {
-                        "NuSpectRootFolderPath".ConfigWith(GetCodebaseFolderPath()),
+                        "NuSpecRootFolderPath".ConfigWith(GetCodebaseFolderPath()),
                         "SqlConnections".ConfigWith(
                             "DefaultConnectionString".ConfigWith(ReadConnectionStringFromFile("DebugConnectionString.txt")),
                             "DatabaseNames".ConfigWith(

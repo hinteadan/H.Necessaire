@@ -13,15 +13,15 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
     {
         #region Construct
         const string cacheKeyNuSpecs = "NuSpecs";
-        const string configKeyForNuSpectRootFolderPath = "NuSpectRootFolderPath";
-        const string defaultNuSpectRootFolderPath = @"C:\H\H.Necessaire\Src\H.Necessaire";
-        DirectoryInfo rootFolderToScan = new DirectoryInfo(defaultNuSpectRootFolderPath);
+        const string configKeyForNuSpecRootFolderPath = "NuSpecRootFolderPath";
+        const string defaultNuSpecRootFolderPath = @"C:\H\H.Necessaire\Src\H.Necessaire";
+        DirectoryInfo rootFolderToScan = new DirectoryInfo(defaultNuSpecRootFolderPath);
         RuntimeConfig runtimeConfig = new RuntimeConfig();
         readonly MemoryCache nuSpecsCache = new MemoryCache("NuSpecCache");
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             runtimeConfig = dependencyProvider.GetRuntimeConfig();
-            rootFolderToScan = new DirectoryInfo(runtimeConfig.Get(configKeyForNuSpectRootFolderPath)?.Value?.ToString() ?? defaultNuSpectRootFolderPath);
+            rootFolderToScan = new DirectoryInfo(runtimeConfig.Get(configKeyForNuSpecRootFolderPath)?.Value?.ToString() ?? defaultNuSpecRootFolderPath);
         }
         #endregion
 

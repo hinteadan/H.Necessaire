@@ -265,5 +265,7 @@ namespace H.Necessaire
 
         public static AuditMetadataEntry ToAuditMeta<T, TId>(this T data, AuditActionType auditActionType = AuditActionType.Modify, IDentity doneBy = null) where T : IDentityType<TId>
             => data.ToAuditMeta(data.ID?.ToString() ?? Guid.Empty.ToString(), auditActionType, doneBy);
+
+        public static OperationResult<T> ToWinResult<T>(this T payload, string reason = null, params string[] comments) => OperationResult.Win(reason, comments).WithPayload(payload);
     }
 }

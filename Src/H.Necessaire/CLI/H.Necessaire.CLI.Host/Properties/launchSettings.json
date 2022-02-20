@@ -12,6 +12,10 @@
       "commandName": "Project",
       "commandLineArgs": "nugetversion"
     },
+    "CLI - nugetversion - consolidate-deps": {
+      "commandName": "Project",
+      "commandLineArgs": "nugetversion consolidate-deps"
+    },
     "CLI - nugetversion - patch H.Necessaire": {
       "commandName": "Project",
       "commandLineArgs": "nugetversion update H.Necessaire=patch H.Necessaire.BridgeDotNet=patch"
