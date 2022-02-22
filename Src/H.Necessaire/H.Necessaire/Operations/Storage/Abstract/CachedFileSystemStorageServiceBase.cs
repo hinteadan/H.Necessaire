@@ -27,7 +27,7 @@ namespace H.Necessaire
                 return inMemoryEntry;
 
             OperationResult<TEntity> diskEntry = await base.LoadByID(id);
-            if (!diskEntry.IsSuccessful)
+            if (!diskEntry.IsSuccessful || diskEntry.Payload == null)
                 return diskEntry;
 
             await inMemoryStorage.Save(diskEntry.Payload);
