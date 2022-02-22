@@ -135,7 +135,7 @@ namespace H.Necessaire
             OperationResult<IDisposableEnumerable<TEntity>> filteredStream = await Stream(filter);
             using (IDisposableEnumerable<TEntity> filtered = filteredStream.Payload)
             {
-                return OperationResult.Win().WithPayload(Page<TEntity>.For(filter, entityStorageFolder.EnumerateFiles("*.*", SearchOption.TopDirectoryOnly).Count(), filtered.ToArray()));
+                return OperationResult.Win().WithPayload(Page<TEntity>.For(filter, entityStorageFolder.Exists ? entityStorageFolder.EnumerateFiles("*.*", SearchOption.TopDirectoryOnly).Count() : 0, filtered.ToArray()));
             }
         }
     }
