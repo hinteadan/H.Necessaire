@@ -1,6 +1,4 @@
 ﻿using Bridge.Html5;
-using H.Necessaire;
-using System;
 using System.Linq;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
@@ -8,6 +6,39 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     public static class Navi
     {
         public static void Go(params object[] pathAndQueryParts)
+        {
+            Window.Location.Hash = CurateUrl(pathAndQueryParts);
+        }
+
+        public static void GoToLogin(string returnTo = null)
+            => Go(
+                    "login",
+                    string.IsNullOrWhiteSpace(returnTo) ? null : $"?returnTo={Window.EncodeURIComponent(returnTo)}"
+                );
+
+        public static void GoHome()
+            => Go(string.Empty);
+
+        public static void GoToUnauthorized(string pageRef = null)
+            => Go(
+                    "nogo",
+                    string.IsNullOrWhiteSpace(pageRef) ? null : $"?ref={Window.EncodeURIComponent(pageRef)}"
+                );
+
+        public static void ChangeDisplayedHash(params object[] pathAndQueryParts)
+        {
+            using (new ScopedRunner
+                (
+                onStart: AppNavigationBootstrapper.PauseHashNavigation,
+                onStop: AppNavigationBootstrapper.ResumeHashNavigation
+                )
+            )
+            {
+                Window.Location.Hash = CurateUrl(pathAndQueryParts);
+            }
+        }
+
+        private static string CurateUrl(object[] pathAndQueryParts)
         {
             string[] curatedParts
                 = pathAndQueryParts
@@ -34,22 +65,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             if (queryParts.Any())
                 url += $"?{string.Join("&", queryParts)}";
 
-            Window.Location.Hash = url;
+            return url;
         }
-
-        public static void GoToLogin(string returnTo = null)
-            => Go(
-                    "login",
-                    string.IsNullOrWhiteSpace(returnTo) ? null : $"?returnTo={Window.EncodeURIComponent(returnTo)}"
-                );
-
-        public static void GoHome()
-            => Go(string.Empty);
-
-        public static void GoToUnauthorized(string pageRef = null)
-            => Go(
-                    "nogo",
-                    string.IsNullOrWhiteSpace(pageRef) ? null : $"?ref={Window.EncodeURIComponent(pageRef)}"
-                );
     }
 }

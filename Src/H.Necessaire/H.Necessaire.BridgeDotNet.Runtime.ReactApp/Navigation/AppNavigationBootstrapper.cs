@@ -10,6 +10,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     public class AppNavigationBootstrapper
     {
         #region Construct
+        static bool isHashNavigationDisabled = false;
         readonly AppNavigationRegistryBase appNavigationRegistry;
         readonly IDispatcher dispatcher;
         readonly Html5HistoryRouter historyHandler;
@@ -41,6 +42,9 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         private static void HandleHashChange(string currentLocation)
         {
+            if (isHashNavigationDisabled)
+                return;
+
             string requestedHash = Window.Location.Hash;
             currentLocation = currentLocation == $"{AppBase.BaseHostPath}/" ? AppBase.BaseHostPath : (currentLocation ?? AppBase.BaseHostPath);
 
@@ -62,5 +66,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             Html5HistoryRouter.Instance.RaiseNavigateToForCurrentLocation();
             Window.History.ReplaceState(null, null, $"{AppBase.BaseUrl}/{requestedHash}");
         }
+
+        public static void PauseHashNavigation() => isHashNavigationDisabled = true;
+        public static void ResumeHashNavigation() => isHashNavigationDisabled = false;
     }
 }
