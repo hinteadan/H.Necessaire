@@ -1,9 +1,11 @@
 ﻿using Bridge.Html5;
 using Bridge.jQuery2;
 using Bridge.React;
+using ProductiveRage.Immutable;
 using ProductiveRage.ReactRouting;
 using ProductiveRage.ReactRouting.Helpers;
 using System;
+using System.Collections.Generic;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
@@ -12,14 +14,12 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         #region Construct
         static bool isHashNavigationDisabled = false;
         readonly AppNavigationRegistryBase appNavigationRegistry;
-        readonly IDispatcher dispatcher;
-        readonly Html5HistoryRouter historyHandler;
+        static readonly ControllableDispatcher dispatcher = new ControllableDispatcher();
+        static readonly ControllableRouter historyHandler = new ControllableRouter();
 
         public AppNavigationBootstrapper(Func<IDispatcher, AppNavigationRegistryBase> navigationRegistryFactory)
         {
-            this.dispatcher = new AppDispatcher();
-            this.appNavigationRegistry = navigationRegistryFactory(this.dispatcher);
-            this.historyHandler = Html5HistoryRouter.Instance;
+            this.appNavigationRegistry = navigationRegistryFactory(dispatcher);
         }
         #endregion
 
@@ -67,7 +67,87 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             Window.History.ReplaceState(null, null, $"{AppBase.BaseUrl}/{requestedHash}");
         }
 
-        public static void PauseHashNavigation() => isHashNavigationDisabled = true;
-        public static void ResumeHashNavigation() => isHashNavigationDisabled = false;
+        public static void PauseHashNavigation()
+        {
+            dispatcher.IsDisabled = true;
+            historyHandler.IsDisabled = true;
+            isHashNavigationDisabled = true;
+        }
+        public static void ResumeHashNavigation()
+        {
+            dispatcher.IsDisabled = false;
+            historyHandler.IsDisabled = false;
+            isHashNavigationDisabled = false;
+        }
+
+
+        private class ControllableRouter : IInteractWithBrowserRouting
+        {
+            readonly Html5HistoryRouter historyHandler;
+            public ControllableRouter()
+            {
+                this.historyHandler = Html5HistoryRouter.Instance;
+            }
+
+            public bool IsDisabled { get; set; } = false;
+
+            public UrlDetails CurrentLocation => historyHandler.CurrentLocation;
+
+            public Optional<UrlDetails> LastNavigatedToUrl => historyHandler.LastNavigatedToUrl;
+
+            public void NavigateTo(UrlDetails url)
+            {
+                if (IsDisabled)
+                    return;
+
+                historyHandler.NavigateTo(url);
+            }
+
+            public void RaiseNavigateToForCurrentLocation()
+            {
+                if (IsDisabled)
+                    return;
+
+                historyHandler.RaiseNavigateToForCurrentLocation();
+            }
+
+            public void RegisterForNavigatedCallback(Action<UrlDetails> callback)
+            {
+                historyHandler.RegisterForNavigatedCallback(callback);
+            }
+        }
+
+        private class ControllableDispatcher : IDispatcher
+        {
+            readonly IDispatcher dispatcher;
+            public ControllableDispatcher()
+            {
+                this.dispatcher = new AppDispatcher();
+            }
+
+            public bool IsDisabled { get; set; } = false;
+
+            public void Dispatch(IDispatcherAction action)
+            {
+                if (IsDisabled)
+                    return;
+
+                dispatcher.Dispatch(action);
+            }
+
+            public void HandleServerAction(IDispatcherAction action) => dispatcher.HandleServerAction(action);
+
+            public void HandleViewAction(IDispatcherAction action) => dispatcher.HandleViewAction(action);
+
+            public DispatchToken Receive(Action<IDispatcherAction> callback) => dispatcher.Receive(callback);
+
+            public DispatchToken Register(Action<DispatcherMessage> callback) => dispatcher.Register(callback);
+
+            public void Unregister(DispatchToken token) => dispatcher.Unregister(token);
+
+            public void WaitFor(IEnumerable<DispatchToken> tokens) => dispatcher.WaitFor(tokens);
+
+            public void WaitFor(params DispatchToken[] tokens) => dispatcher.WaitFor(tokens);
+        }
     }
 }

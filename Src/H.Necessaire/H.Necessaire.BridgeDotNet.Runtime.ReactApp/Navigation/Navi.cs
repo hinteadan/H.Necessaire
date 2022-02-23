@@ -30,7 +30,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             using (new ScopedRunner
                 (
                 onStart: AppNavigationBootstrapper.PauseHashNavigation,
-                onStop: AppNavigationBootstrapper.ResumeHashNavigation
+                onStop: () => Window.SetTimeout(AppNavigationBootstrapper.ResumeHashNavigation)
                 )
             )
             {
