@@ -14,7 +14,12 @@ namespace H.Necessaire
 
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                embeddedResourceFullName = assembly.GetManifestResourceNames().FirstOrDefault(x => x.EndsWith(embeddedResourceName, StringComparison.InvariantCultureIgnoreCase));
+                new Action(() =>
+                    {
+                        embeddedResourceFullName = assembly.GetManifestResourceNames().FirstOrDefault(x => x.EndsWith(embeddedResourceName, StringComparison.InvariantCultureIgnoreCase));
+                    }
+                ).TryOrFailWithGrace();
+
                 if (embeddedResourceFullName != null)
                 {
                     embeddedResourceAssembly = assembly;
