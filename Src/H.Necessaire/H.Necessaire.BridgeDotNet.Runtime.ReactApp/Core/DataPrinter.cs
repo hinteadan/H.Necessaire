@@ -24,19 +24,19 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             if (life < TimeSpan.FromMinutes(1))
                 return "just now";
             if (life < TimeSpan.FromMinutes(5))
-                return $"a few minutes ago at {dateTime.ToString(timeFormat)}";
+                return $"a few minutes ago at {localTime.ToString(timeFormat)}";
             if (life < TimeSpan.FromMinutes(59))
-                return $"{(int)life.TotalMinutes} minutes ago at {dateTime.ToString(timeFormat)}";
+                return $"{(int)life.TotalMinutes} minutes ago at {localTime.ToString(timeFormat)}";
             if (life < TimeSpan.FromHours(2))
-                return $"about an hour ago at {dateTime.ToString(timeFormat)}";
+                return $"about an hour ago at {localTime.ToString(timeFormat)}";
             if (life < TimeSpan.FromHours(24))
-                return $"{(int)life.TotalHours} hours ago at {dateTime.ToString(timeFormat)}";
+                return $"{(int)life.TotalHours} hours ago at {localTime.ToString(timeFormat)}";
             if (life < TimeSpan.FromDays(2))
-                return $"{dateTime.ToString(dayOfWeekFormat)}, {(int)life.TotalDays} day ago at {dateTime.ToString(timeFormat)}";
+                return $"{localTime.ToString(dayOfWeekFormat)}, {(int)life.TotalDays} day ago at {localTime.ToString(timeFormat)}";
             if (life < TimeSpan.FromDays(7))
-                return $"{dateTime.ToString(dayOfWeekFormat)}, {(int)life.TotalDays} days ago at {dateTime.ToString(timeFormat)}";
+                return $"{localTime.ToString(dayOfWeekFormat)}, {(int)life.TotalDays} days ago at {localTime.ToString(timeFormat)}";
 
-            return dateTime.PrintTimeStamp();
+            return localTime.PrintTimeStamp();
         }
 
         public static string PrintDateAndTime(this DateTime dateTime)
