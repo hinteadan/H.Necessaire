@@ -91,19 +91,19 @@ namespace H.Necessaire
             if (life < TimeSpan.FromMinutes(1))
                 return "just now";
             if (life < TimeSpan.FromMinutes(5))
-                return $"a few minutes ago at {dateTime.ToString(TimeFormat)}";
+                return $"a few minutes ago at {localTime.ToString(TimeFormat)}";
             if (life < TimeSpan.FromMinutes(59))
-                return $"{(int)life.TotalMinutes} minutes ago at {dateTime.ToString(TimeFormat)}";
+                return $"{(int)life.TotalMinutes} minutes ago at {localTime.ToString(TimeFormat)}";
             if (life < TimeSpan.FromHours(2))
-                return $"about an hour ago at {dateTime.ToString(TimeFormat)}";
+                return $"about an hour ago at {localTime.ToString(TimeFormat)}";
             if (life < TimeSpan.FromHours(24))
-                return $"{(int)life.TotalHours} hours ago at {dateTime.ToString(TimeFormat)}";
+                return $"{(int)life.TotalHours} hours ago at {localTime.ToString(TimeFormat)}";
             if (life < TimeSpan.FromDays(2))
-                return $"{dateTime.ToString(DayOfWeekFormat)}, {(int)life.TotalDays} day ago at {dateTime.ToString(TimeFormat)}";
+                return $"{localTime.ToString(DayOfWeekFormat)}, {(int)life.TotalDays} day ago at {localTime.ToString(TimeFormat)}";
             if (life < TimeSpan.FromDays(7))
-                return $"{dateTime.ToString(DayOfWeekFormat)}, {(int)life.TotalDays} days ago at {dateTime.ToString(TimeFormat)}";
+                return $"{localTime.ToString(DayOfWeekFormat)}, {(int)life.TotalDays} days ago at {localTime.ToString(TimeFormat)}";
 
-            return dateTime.PrintTimeStamp();
+            return localTime.PrintTimeStamp();
         }
 
         public static string PrintDateAndTime(this DateTime dateTime)
