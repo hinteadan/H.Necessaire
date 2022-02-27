@@ -46,9 +46,11 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
         {
             NuGetIdentifier[] nuGetsFromCsProjs = (await csprojNugetVersionProcessor.GetAllLatestNuGets()).ThrowOnFailOrReturn();
 
-            foreach(NuGetIdentifier externalNuget in nuGetsFromCsProjs)
+            foreach (NuGetIdentifier externalNuget in nuGetsFromCsProjs)
             {
-                (await nuSpecVersionProcessor.UpdateExternalNuGetVersion(externalNuget.ID, externalNuget.VersionNumber.ToString())).ThrowOnFailOrReturn();
+                NuSpecInfo[] nuSpecs = (await nuSpecVersionProcessor.UpdateExternalNuGetVersion(externalNuget.ID, externalNuget.VersionNumber.ToString(), updateNuSpecVersion: false)).ThrowOnFailOrReturn();
+
+                await nuSpecFileUpdater.SaveNuSpecs(nuSpecs);
             }
 
             return OperationResult.Win();

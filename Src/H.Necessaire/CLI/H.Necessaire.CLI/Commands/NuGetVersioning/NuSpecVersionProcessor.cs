@@ -17,7 +17,7 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
         }
         #endregion
 
-        public async Task<OperationResult<NuSpecInfo[]>> UpdateExternalNuGetVersion(string externalNuGetID, string newVersion)
+        public async Task<OperationResult<NuSpecInfo[]>> UpdateExternalNuGetVersion(string externalNuGetID, string newVersion, bool updateNuSpecVersion = true)
         {
             NuSpecInfo[] nuSpecs = (await nuSpecParser.GetAllNuSpecs()).ThrowOnFailOrReturn() ?? new NuSpecInfo[0];
             NuSpecInfo[] nuSpecsWithExternalNuGet = nuSpecs.Where(x => externalNuGetID.In(x.Dependencies?.Select(d => d.ID))).ToArray();
@@ -25,7 +25,8 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
             foreach (NuSpecInfo nuSpec in nuSpecsWithExternalNuGet)
             {
                 nuSpec.Dependencies.Single(x => x.ID == externalNuGetID).UpdateVersionTo(VersionNumber.Parse(newVersion));
-                await UpdateVersion(nuSpec.ID, x => x.IncrementPatchVersion(), nuSpecs);
+                if (updateNuSpecVersion)
+                    await UpdateVersion(nuSpec.ID, x => x.IncrementPatchVersion(), nuSpecs);
             }
 
             return OperationResult.Win().WithPayload(nuSpecs);
