@@ -84,9 +84,8 @@ namespace H.Necessaire
 
         public static string PrintDateTimeAsOfNow(this DateTime dateTime)
         {
-            DateTime now = DateTime.Now;
+            TimeSpan life = TimeSpan.FromTicks(DateTime.UtcNow.Ticks - dateTime.EnsureUtc().Ticks);
             DateTime localTime = dateTime.EnsureUtc().ToLocalTime();
-            TimeSpan life = now - localTime;
 
             if (life < TimeSpan.FromMinutes(1))
                 return "just now";

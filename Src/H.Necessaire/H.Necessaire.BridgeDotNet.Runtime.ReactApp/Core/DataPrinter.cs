@@ -17,9 +17,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         public static string PrintDateTimeAsOfNow(DateTime dateTime)
         {
-            DateTime now = DateTime.Now;
+            TimeSpan life = TimeSpan.FromTicks(DateTime.UtcNow.Ticks - dateTime.EnsureUtc().Ticks);
             DateTime localTime = dateTime.EnsureUtc().ToLocalTime();
-            TimeSpan life = now - localTime;
 
             if (life < TimeSpan.FromMinutes(1))
                 return "just now";
