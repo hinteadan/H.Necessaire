@@ -131,7 +131,10 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         {
             using (new TimeMeasurement(x => Console.WriteLine($"Done Wireup Dependencies in {x}")))
             {
-                await appWireup.WithEverything().Boot();
+                appWireup.WithEverything();
+
+                if (!IsWebWorker)
+                    await appWireup.Boot();
             }
         }
 

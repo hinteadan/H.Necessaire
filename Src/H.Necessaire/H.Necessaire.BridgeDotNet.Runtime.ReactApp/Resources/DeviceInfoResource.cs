@@ -1,4 +1,5 @@
-﻿using Bridge.Html5;
+﻿using Bridge;
+using Bridge.Html5;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -38,8 +39,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 result.Add(new Note(WellKnownConsumerIdentityNote.DisplayWindowWidth, Window.InnerWidth.ToString()));
                 result.Add(new Note(WellKnownConsumerIdentityNote.DisplayHeight, Window.Screen.Height.ToString()));
                 result.Add(new Note(WellKnownConsumerIdentityNote.DisplayWindowHeight, Window.InnerHeight.ToString()));
-                result.Add(new Note(WellKnownConsumerIdentityNote.DisplayColorDepth, Window.Screen.ColotDepth.ToString()));
                 result.Add(new Note(WellKnownConsumerIdentityNote.DisplayPixelDepth, Window.Screen.PixelDepth.ToString()));
+                result.Add(new Note(WellKnownConsumerIdentityNote.DisplayColorDepth, Script.Eval<string>("window.screen.colorDepth.toString()")));
             }
             catch (Exception) { }
 
