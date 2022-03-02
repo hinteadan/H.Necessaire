@@ -8,6 +8,7 @@ namespace H.Necessaire.Runtime.QdActions
         {
             dependencyRegistry
                 .Register<IpAddressInfoProcessor>(() => new IpAddressInfoProcessor())
+                .Register<RuntimePlatformProcessor>(() => new RuntimePlatformProcessor())
                 ;
         }
     }

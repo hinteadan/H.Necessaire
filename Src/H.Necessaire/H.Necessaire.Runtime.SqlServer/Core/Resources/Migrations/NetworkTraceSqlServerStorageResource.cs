@@ -4,7 +4,7 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
 {
     internal partial class NetworkTraceSqlServerStorageResource
     {
-        const string netowrkTraceTableName = "H.Necessaire.NetworkTrace";
+        const string networkTraceTableName = "H.Necessaire.NetworkTrace";
 
         static readonly SqlMigration[] sqlMigrations = new SqlMigration[] {
             new SqlMigration
@@ -12,7 +12,7 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
                 ResourceIdentifier = nameof(NetworkTrace),
                 VersionNumber = new VersionNumber(1, 0),
                 SqlCommand = $@"
-CREATE TABLE [dbo].[{netowrkTraceTableName}] 
+CREATE TABLE [dbo].[{networkTraceTableName}] 
 (
 	[{nameof(NetworkTraceSqlEntry.ID)}] [uniqueidentifier] NOT NULL,
     [{nameof(NetworkTraceSqlEntry.AsOf)}] [datetime2](7) NOT NULL,
@@ -31,23 +31,23 @@ CREATE TABLE [dbo].[{netowrkTraceTableName}]
     [{nameof(NetworkTraceSqlEntry.GeoLocationGpsPosition)}] [nvarchar](450) NULL,
 	
 
-	{nameof(NetworkTraceSqlEntry.ID).PrintColumnAsPrimaryKeyConstraintSqlScriptOn(netowrkTraceTableName)}
+	{nameof(NetworkTraceSqlEntry.ID).PrintColumnAsPrimaryKeyConstraintSqlScriptOn(networkTraceTableName)}
 )
 
 ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-{nameof(NetworkTraceSqlEntry.AsOf).PrintColumnIndexCreationSqlScriptOn(netowrkTraceTableName)}
-{nameof(NetworkTraceSqlEntry.AsOfTicks).PrintColumnIndexCreationSqlScriptOn(netowrkTraceTableName)}
-{nameof(NetworkTraceSqlEntry.NetworkTraceProviderID).PrintColumnIndexCreationSqlScriptOn(netowrkTraceTableName)}
-{nameof(NetworkTraceSqlEntry.NetworkTraceProviderIDTag).PrintColumnIndexCreationSqlScriptOn(netowrkTraceTableName)}
-{nameof(NetworkTraceSqlEntry.NetworkTraceProviderDisplayName).PrintColumnIndexCreationSqlScriptOn(netowrkTraceTableName)}
-{nameof(NetworkTraceSqlEntry.IpAddress).PrintColumnIndexCreationSqlScriptOn(netowrkTraceTableName)}
-{nameof(NetworkTraceSqlEntry.NetworkServiceProvider).PrintColumnIndexCreationSqlScriptOn(netowrkTraceTableName)}
-{nameof(NetworkTraceSqlEntry.Organization).PrintColumnIndexCreationSqlScriptOn(netowrkTraceTableName)}
-{nameof(NetworkTraceSqlEntry.ClusterNumber).PrintColumnIndexCreationSqlScriptOn(netowrkTraceTableName)}
-{nameof(NetworkTraceSqlEntry.ClusterName).PrintColumnIndexCreationSqlScriptOn(netowrkTraceTableName)}
-{nameof(NetworkTraceSqlEntry.GeoLocationAddress).PrintColumnIndexCreationSqlScriptOn(netowrkTraceTableName)}
-{nameof(NetworkTraceSqlEntry.GeoLocationGpsPosition).PrintColumnIndexCreationSqlScriptOn(netowrkTraceTableName)}
+{nameof(NetworkTraceSqlEntry.AsOf).PrintColumnIndexCreationSqlScriptOn(networkTraceTableName)}
+{nameof(NetworkTraceSqlEntry.AsOfTicks).PrintColumnIndexCreationSqlScriptOn(networkTraceTableName)}
+{nameof(NetworkTraceSqlEntry.NetworkTraceProviderID).PrintColumnIndexCreationSqlScriptOn(networkTraceTableName)}
+{nameof(NetworkTraceSqlEntry.NetworkTraceProviderIDTag).PrintColumnIndexCreationSqlScriptOn(networkTraceTableName)}
+{nameof(NetworkTraceSqlEntry.NetworkTraceProviderDisplayName).PrintColumnIndexCreationSqlScriptOn(networkTraceTableName)}
+{nameof(NetworkTraceSqlEntry.IpAddress).PrintColumnIndexCreationSqlScriptOn(networkTraceTableName)}
+{nameof(NetworkTraceSqlEntry.NetworkServiceProvider).PrintColumnIndexCreationSqlScriptOn(networkTraceTableName)}
+{nameof(NetworkTraceSqlEntry.Organization).PrintColumnIndexCreationSqlScriptOn(networkTraceTableName)}
+{nameof(NetworkTraceSqlEntry.ClusterNumber).PrintColumnIndexCreationSqlScriptOn(networkTraceTableName)}
+{nameof(NetworkTraceSqlEntry.ClusterName).PrintColumnIndexCreationSqlScriptOn(networkTraceTableName)}
+{nameof(NetworkTraceSqlEntry.GeoLocationAddress).PrintColumnIndexCreationSqlScriptOn(networkTraceTableName)}
+{nameof(NetworkTraceSqlEntry.GeoLocationGpsPosition).PrintColumnIndexCreationSqlScriptOn(networkTraceTableName)}
 
 ",
             },
@@ -57,9 +57,9 @@ ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
                 VersionNumber = new VersionNumber(1, 1),
                 SqlCommand = $@"
 
-ALTER TABLE [dbo].[{netowrkTraceTableName}] ADD [{nameof(NetworkTraceSqlEntry.ConsumerIdentityID)}] [uniqueidentifier] NULL;
+ALTER TABLE [dbo].[{networkTraceTableName}] ADD [{nameof(NetworkTraceSqlEntry.ConsumerIdentityID)}] [uniqueidentifier] NULL;
 
-{nameof(NetworkTraceSqlEntry.ConsumerIdentityID).PrintColumnIndexCreationSqlScriptOn(netowrkTraceTableName)}
+{nameof(NetworkTraceSqlEntry.ConsumerIdentityID).PrintColumnIndexCreationSqlScriptOn(networkTraceTableName)}
 
 ",
             },

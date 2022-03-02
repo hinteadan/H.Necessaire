@@ -85,6 +85,16 @@ ALTER TABLE [dbo].[H.Necessaire.{nameof(ConsumerIdentity)}] ADD [{nameof(Consume
 
 ",
             },
+            new SqlMigration
+            {
+                ResourceIdentifier = nameof(ConsumerIdentity),
+                VersionNumber = new VersionNumber(1, 5),
+                SqlCommand = $@"
+
+ALTER TABLE [dbo].[H.Necessaire.{nameof(ConsumerIdentity)}] ADD [{nameof(ConsumerIdentitySqlEntry.RuntimePlatformJson)}] [ntext] NULL;
+
+",
+            },
         };
     }
 }

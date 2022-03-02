@@ -41,7 +41,7 @@ namespace H.Necessaire.Runtime.QdActions.Processors
             string[] payloadParts = action?.Payload?.Split('|'.AsArray(), StringSplitOptions.RemoveEmptyEntries);
 
             if (!payloadParts?.Any(x => !string.IsNullOrWhiteSpace(x)) ?? true)
-                return OperationResult.Win($"Nothing to process, QdAction Payload is empty ot cannot be parsed. Payload: {action?.Payload ?? "[NULL]"}");
+                return OperationResult.Win($"Nothing to process, QdAction Payload is empty or cannot be parsed. Payload: {action?.Payload ?? "[NULL]"}");
 
             ipAddress = payloadParts[0]?.Trim();
             if (payloadParts.Length > 1)
@@ -62,7 +62,7 @@ namespace H.Necessaire.Runtime.QdActions.Processors
             }
 
             if (networkTrace == null)
-                return OperationResult.Fail($"Couldn't trace {action.Payload} with any of the exisitng IP Tracers");
+                return OperationResult.Fail($"Couldn't trace {action.Payload} with any of the existing IP Tracers");
 
 
             return

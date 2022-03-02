@@ -24,6 +24,11 @@ namespace H.Necessaire
             return UnixEpoch.AddSeconds(unixTimeStamp).ToLocalTime();
         }
 
+        public static DateTime UnixTimeStampToDateTime(this double unixTimeStampInMilliseconds)
+        {
+            return UnixEpoch.AddMilliseconds(unixTimeStampInMilliseconds).ToLocalTime();
+        }
+
         public static DateTime EnsureUtc(this DateTime dateTime)
         {
             if (dateTime.Kind == DateTimeKind.Utc)
@@ -65,6 +70,18 @@ namespace H.Necessaire
 
             int parseResult;
             if (int.TryParse(rawValue, out parseResult))
+                return parseResult;
+
+            return fallbackValue;
+        }
+
+        public static long? ParseToLongOrFallbackTo(this string rawValue, long? fallbackValue = null)
+        {
+            if (string.IsNullOrWhiteSpace(rawValue))
+                return fallbackValue;
+
+            long parseResult;
+            if (long.TryParse(rawValue, out parseResult))
                 return parseResult;
 
             return fallbackValue;

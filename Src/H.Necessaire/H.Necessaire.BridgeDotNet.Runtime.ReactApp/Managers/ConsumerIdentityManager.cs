@@ -1,4 +1,5 @@
-﻿using System;
+﻿using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Core;
+using System;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
@@ -55,8 +56,30 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
             consumerIdentity.Notes = await deviceInfoResource.GetRawProperties();
             consumerIdentity.DisplayName = consumerIdentity.Notes.Get("UserAgent", ignoreCase: true);
+
+            await
+                new Func<Task>(async () =>
+                {
+
+                    OperationResult<ConsumerPlatformInfo> platformDataResult = await UserAgentData.GetPlatformDetails();
+
+                    if (!platformDataResult.IsSuccessful)
+                        return;
+
+                    consumerIdentity.RuntimePlatform = platformDataResult.Payload;
+
+                    consumerIdentity.DisplayName
+                        = !string.IsNullOrWhiteSpace(platformDataResult.Payload?.UserAgent)
+                        ? platformDataResult.Payload.UserAgent
+                        : consumerIdentity.DisplayName
+                        ;
+
+                }).TryOrFailWithGrace(onFail: ex => { });
+
             consumerIdentity.AsOf = DateTime.UtcNow;
+
             httpClient.SetConsumer(consumerIdentity.ID);
+
             CallContext<OperationContext>.SetData(CallContextKey.OperationContext, new OperationContext
             {
                 Consumer = consumerIdentity,

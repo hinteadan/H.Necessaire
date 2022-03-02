@@ -60,6 +60,12 @@ namespace H.Necessaire.Runtime.RavenDB.Core
                 .Register<ImAStorageService<Guid, NetworkTrace>>(() => dependencyRegistry.Get<NetworkTraceRavenDbStorageResource>())
                 .Register<ImAStorageBrowserService<NetworkTrace, IDFilter<Guid>>>(() => dependencyRegistry.Get<NetworkTraceRavenDbStorageResource>())
                 ;
+
+            dependencyRegistry
+                .Register<RuntimeTraceRavenDbStorageResource>(() => new RuntimeTraceRavenDbStorageResource())
+                .Register<ImAStorageService<Guid, RuntimeTrace>>(() => dependencyRegistry.Get<RuntimeTraceRavenDbStorageResource>())
+                .Register<ImAStorageBrowserService<RuntimeTrace, IDFilter<Guid>>>(() => dependencyRegistry.Get<RuntimeTraceRavenDbStorageResource>())
+                ;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using H.Necessaire.Serialization;
+using System;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.Sync.Processors
@@ -16,8 +17,10 @@ namespace H.Necessaire.Runtime.Sync.Processors
         ImAStorageService<Guid, ConsumerIdentity> consumerIdentityStorageService = null;
         ImAnAuditingService auditingService = null;
         ImAnActionQer actionQer = null;
-        public void ReferDependencies(ImADependencyProvider dependencyProvider)
+        public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
+            base.ReferDependencies(dependencyProvider);
+
             consumerIdentityStorageService = dependencyProvider.Get<ImAStorageService<Guid, ConsumerIdentity>>();
             auditingService = dependencyProvider.Get<ImAnAuditingService>();
             actionQer = dependencyProvider.Get<ImAnActionQer>();
@@ -41,7 +44,10 @@ namespace H.Necessaire.Runtime.Sync.Processors
             await auditingService.Append(consumerIdentity.ToAuditMeta<ConsumerIdentity, Guid>(consumerExists ? AuditActionType.Modify : AuditActionType.Create, processorIdentity), consumerIdentity);
 
             if (!string.IsNullOrWhiteSpace(payload.IpAddress))
-                await actionQer.Queue(QdAction.New(WellKnown.QdActionType.ProcessIpAddress, $"{payload.IpAddress}|{payload.ID}" ));
+                await actionQer.Queue(QdAction.New(WellKnown.QdActionType.ProcessIpAddress, $"{payload.IpAddress}|{payload.ID}"));
+
+            if (payload?.RuntimePlatform != null)
+                await actionQer.Queue(QdAction.New(WellKnown.QdActionType.ProcessRuntimePlatform, $"{payload.ToJsonObject()}"));
 
             return result;
         }

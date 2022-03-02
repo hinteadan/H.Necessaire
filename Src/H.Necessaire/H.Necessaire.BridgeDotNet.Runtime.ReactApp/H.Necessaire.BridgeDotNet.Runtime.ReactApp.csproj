@@ -105,6 +105,7 @@
     <Compile Include="Core\UI\Components\ImAUiComponentState.cs" />
     <Compile Include="Core\UI\Navigation\DataContracts\UiNavigationParams.cs" />
     <Compile Include="Core\UI\Navigation\ImAUiNavigator.cs" />
+    <Compile Include="Core\UserAgentData.cs" />
     <Compile Include="Core\Wireup\Abstracts\AppWireupBase.cs" />
     <Compile Include="Core\Wireup\ConcreteCoreAppWireup.cs" />
     <Compile Include="Core\Wireup\ImAnAppWireup.cs" />
@@ -163,12 +164,6 @@
     <None Include="Refs\webfonts\fa-solid-900.woff2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\H.Necessaire.BridgeDotNet\H.Necessaire.BridgeDotNet.csproj">
-      <Project>{72de3916-3d84-4185-8f21-8510e2eb1a6c}</Project>
-      <Name>H.Necessaire.BridgeDotNet</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Bridge">
       <Version>17.10.1</Version>
     </PackageReference>
@@ -208,6 +203,11 @@
     <Content Include="Refs\webfonts\fa-regular-400.svg" />
     <Content Include="Refs\webfonts\fa-solid-900.svg" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\H.Necessaire.BridgeDotNet\H.Necessaire.BridgeDotNet.csproj">
+      <Project>{72de3916-3d84-4185-8f21-8510e2eb1a6c}</Project>
+      <Name>H.Necessaire.BridgeDotNet</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

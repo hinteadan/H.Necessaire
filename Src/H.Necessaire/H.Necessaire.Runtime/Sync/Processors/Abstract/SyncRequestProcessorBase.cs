@@ -7,7 +7,7 @@ namespace H.Necessaire.Runtime
     public abstract class SyncRequestProcessorBase<TEntity> : ImASyncRequestProcessor, ImADependency
     {
         ImALogger logger = null;
-        public void ReferDependencies(ImADependencyProvider dependencyProvider)
+        public virtual void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             logger = dependencyProvider.GetLogger<SyncRequestProcessorBase<TEntity>>();
         }

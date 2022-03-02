@@ -11,7 +11,7 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
     internal partial class NetworkTraceSqlServerStorageResource : DapperStorageServiceBase<Guid, NetworkTrace, NetworkTraceSqlServerStorageResource.NetworkTraceSqlEntry, IDFilter<Guid>>
     {
         #region Construct
-        public NetworkTraceSqlServerStorageResource() : base(connectionString: null, tableName: netowrkTraceTableName, databaseName: "H.Necessaire.Core") { }
+        public NetworkTraceSqlServerStorageResource() : base(connectionString: null, tableName: networkTraceTableName, databaseName: "H.Necessaire.Core") { }
         protected override Task<SqlMigration[]> GetAllMigrations() => sqlMigrations.AsTask();
         #endregion
 
@@ -74,7 +74,7 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
                     .And(x =>
                     {
                         x.AsOfTicks = entity.AsOf.Ticks;
-                        x.NetworkTraceProviderJson = entity.ToJsonObject();
+                        x.NetworkTraceProviderJson = entity.NetworkTraceProvider.ToJsonObject();
                         x.NetworkTraceProviderID = entity.NetworkTraceProvider?.ID;
                         x.NetworkTraceProviderIDTag = entity.NetworkTraceProvider?.IDTag;
                         x.NetworkTraceProviderDisplayName = entity.NetworkTraceProvider?.DisplayName;

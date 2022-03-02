@@ -5,6 +5,7 @@
         public static class QdActionType
         {
             public static string ProcessIpAddress = "ProcessIpAddress";
+            public static string ProcessRuntimePlatform = "ProcessRuntimePlatform";
         }
     }
 }

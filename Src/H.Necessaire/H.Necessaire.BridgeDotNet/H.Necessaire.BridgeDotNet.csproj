@@ -282,6 +282,33 @@
     <Compile Include="..\H.Necessaire\Models\QdAction\QdActionStatus.cs">
       <Link>Models\QdAction\QdActionStatus.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Runtime\ConsumerPlatformInfo.cs">
+      <Link>Models\Runtime\ConsumerPlatformInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Runtime\RuntimeBotInfo.cs">
+      <Link>Models\Runtime\RuntimeBotInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Runtime\RuntimeBrowserAppInfoInfo.cs">
+      <Link>Models\Runtime\RuntimeBrowserAppInfoInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Runtime\RuntimeClientInfo.cs">
+      <Link>Models\Runtime\RuntimeClientInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Runtime\RuntimeDeviceInfo.cs">
+      <Link>Models\Runtime\RuntimeDeviceInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Runtime\RuntimeDeviceType.cs">
+      <Link>Models\Runtime\RuntimeDeviceType.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Runtime\RuntimeOperatingSystemInfo.cs">
+      <Link>Models\Runtime\RuntimeOperatingSystemInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Runtime\RuntimeTimingInfo.cs">
+      <Link>Models\Runtime\RuntimeTimingInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Runtime\RuntimeTrace.cs">
+      <Link>Models\Runtime\RuntimeTrace.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Security\AuthInfo.cs">
       <Link>Models\Security\AuthInfo.cs</Link>
     </Compile>

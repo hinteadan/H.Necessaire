@@ -59,6 +59,12 @@ namespace H.Necessaire.Runtime.Resources
                 .Register<ImAStorageService<Guid, NetworkTrace>>(() => dependencyRegistry.Get<NetworkTraceFileSystemStorageResource>())
                 .Register<ImAStorageBrowserService<NetworkTrace, IDFilter<Guid>>>(() => dependencyRegistry.Get<NetworkTraceFileSystemStorageResource>())
                 ;
+
+            dependencyRegistry
+                .Register<RuntimeTraceFileSystemStorageResource>(() => new RuntimeTraceFileSystemStorageResource())
+                .Register<ImAStorageService<Guid, RuntimeTrace>>(() => dependencyRegistry.Get<RuntimeTraceFileSystemStorageResource>())
+                .Register<ImAStorageBrowserService<RuntimeTrace, IDFilter<Guid>>>(() => dependencyRegistry.Get<RuntimeTraceFileSystemStorageResource>())
+                ;
         }
     }
 }

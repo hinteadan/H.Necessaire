@@ -157,6 +157,19 @@ namespace H.Necessaire
             return array;
         }
 
+        public static T[] Push<T>(this T[] array, IEnumerable<T> items, bool checkDistinct = true)
+        {
+            if (items?.Any() != true)
+                return array;
+
+            if (array == null)
+                array = new T[0];
+
+            array = checkDistinct ? array.Union(items).ToArray() : array.Concat(items).ToArray();
+
+            return array;
+        }
+
         public static T[] Set<T>(this T[] array, Predicate<T> predicate, T item)
         {
             if (array == null)

@@ -9,5 +9,6 @@
         public string AiUserID => Notes?.Get(WellKnownConsumerIdentityNote.AiUserID);
         public string Origin => Notes?.Get(WellKnownConsumerIdentityNote.Origin);
         public string Referer => Notes?.Get(WellKnownConsumerIdentityNote.Referer);
+        public ConsumerPlatformInfo RuntimePlatform { get; set; }
     }
 }

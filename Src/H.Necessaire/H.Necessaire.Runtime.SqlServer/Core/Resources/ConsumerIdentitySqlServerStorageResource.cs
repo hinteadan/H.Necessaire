@@ -48,6 +48,7 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
             public string AiUserID { get; set; }
             public string Origin { get; set; }
             public string Referer { get; set; }
+            public string RuntimePlatformJson { get; set; }
         }
 
         public class ConsumerIdentitySqlEntityMapper : SqlEntityMapperBase<ConsumerIdentity, ConsumerIdentitySqlEntry>
@@ -62,6 +63,7 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
                     {
                         x.Notes = sqlEntity.NotesJson.DeserializeToNotes();
                         x.AsOf = new DateTime(sqlEntity.AsOfTicks);
+                        x.RuntimePlatform = sqlEntity.RuntimePlatformJson.JsonToObject<ConsumerPlatformInfo>();
                     });
             }
 
@@ -73,6 +75,7 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
                     {
                         x.NotesJson = entity.Notes.ToJsonArray();
                         x.AsOfTicks = entity.AsOf.Ticks;
+                        x.RuntimePlatformJson = entity.RuntimePlatform.ToJsonObject();
                     })
                     ;
             }

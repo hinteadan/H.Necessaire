@@ -1,5 +1,6 @@
 ﻿using Bridge.React;
 using H.Necessaire.BridgeDotNet.Runtime.ReactApp;
+using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Core;
 
 namespace H.Necessaire.ReactAppSample.Pages
 {
@@ -21,21 +22,9 @@ namespace H.Necessaire.ReactAppSample.Pages
 
                             OnClick = async () =>
                             {
-                                Navi.ChangeDisplayedHash("test", "hash");
+                                ConsumerPlatformInfo platformDetails = (await UserAgentData.GetPlatformDetails()).Payload;
 
-                                //await Logger.LogDebug("Confirm with Title", (await ConfirmWithTitle("Debug Confirm", "You sure?")).ObjectToJson());
-                                //await Logger.LogDebug("Confirm", (await Confirm("You sure?")).ObjectToJson());
-                                //await AlertWithTitle("Debug Alert", "Alert !!!!");
-                                //await Alert("Debug Alert");
-                                //await
-                                //    Logger.LogTrace("Test Log TRACE")
-                                //    .ContinueWith(x => Logger.LogDebug("Test Log DEBUG"))
-                                //    .ContinueWith(x => Logger.LogInfo("Test Log INFO"))
-                                //    .ContinueWith(x => Logger.LogWarn("Test Log WARN"))
-                                //    .ContinueWith(x => Logger.LogError("Test Log ERROR"))
-                                //    .ContinueWith(x => Logger.LogCritical("Test Log CRITICAL"))
-                                //    .ContinueWith(x => Logger.LogDebug("Test Log DEBUG with payload", new { A = "B" }))
-                                //    ;
+                                await Logger.LogDebug("UserAgentData.platformDetails", platformDetails.ToJson());
                             },
 
                         }, "Debug")
