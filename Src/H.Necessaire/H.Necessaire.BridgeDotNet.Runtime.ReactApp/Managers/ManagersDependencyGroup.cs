@@ -6,6 +6,7 @@
         {
             dependencyRegistry.Register<SecurityManager>(() => new SecurityManager());
             dependencyRegistry.Register<ConsumerIdentityManager>(() => new ConsumerIdentityManager());
+            dependencyRegistry.Register<ClipboardManager>(() => new ClipboardManager());
         }
     }
 }

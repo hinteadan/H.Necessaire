@@ -1,7 +1,6 @@
 ﻿using Bridge;
 using Bridge.Html5;
 using Bridge.React;
-using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Versioning;
 using H.Necessaire.Models.Branding;
 using H.Necessaire.UI;
 using System;
@@ -26,6 +25,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         protected string BaseApiUrl => AppBase.BaseApiUrl;
 
         protected ImALogger Logger { get; private set; }
+        protected ClipboardManager Clipboard { get; private set; }
 
         protected ComponentBase(TProps props, params Union<ReactElement, string>[] children) : base(props, children) { }
         #endregion
@@ -68,6 +68,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             SecurityContext = Get<SecurityContext>();
             runtimeConfig = AppBase.Config;
             Logger = AppBase.GetLoggerFor(this.GetType());
+            Clipboard = Get<ClipboardManager>();
         }
 
         protected override TState GetInitialState()
