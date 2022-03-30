@@ -267,6 +267,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         private static void ReferenceAndSetGlobalCssAndStyles()
         {
+            string animationDuration = "0.4s";
+
             Document.Head.AppendChild(new HTMLLinkElement
             {
                 Href = "/fabric.min.css",
@@ -340,8 +342,86 @@ table tbody tr:hover td {
     background-color: " + branding.PrimaryColorTranslucent.ToCssRGBA() + @";
 }
 
+.underline {
+    text-decoration: underline;
+    text-underline-offset: 10px;
+    text-decoration-style: dotted;
+    text-decoration-thickness: 1px;
+}
+
+.underline-on-hover {
+    transition: " + animationDuration + @";
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 0, 0, 0);
+    text-underline-offset: 10px;
+    text-decoration-style: dotted;
+    text-decoration-thickness: 1px;
+}
+
+.underline-on-hover:hover {
+    text-decoration-color: inherit;
+}
+
+.opaque-on-hover {
+    opacity: 0.63;
+    transition: " + animationDuration + @";
+}
+
+.opaque-on-hover:hover { 
+    opacity: 1;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+h1, h2, h3, h4, h5, h6
+{
+    color: " + Branding.Colors.Primary.Darker(3).ToCssRGBA() + @"
+}
+
+p {
+    margin-top: " + Branding.SizingUnitInPixels + @"px;
+    margin-bottom: " + Branding.SizingUnitInPixels + @"px;
+}
+
+.markdown-view pre {
+    overflow-x: auto;
+}
+
+
+.markdown-view pre code 
+{
+    width: 0;
+    display: inline-block;
+}
+
+.markdown-view pre {
+    background-color: " + Branding.Colors.Complementary.Lighter(1).Clone().And(x => x.Opacity = .83f).ToCssRGBA() + @";
+    padding: " + Branding.SizingUnitInPixels / 2 + @"px;
+    color: " + Branding.TextColor.ToCssRGBA() + @";
+}
+
+.markdown-view code {
+    font-family: 'Fira Code', monospace;
+}
+
+.markdown-view strong {
+    color: " + Branding.Colors.Primary.Color.ToCssRGBA() + @"
+}
+
 ",
             });
+
+            Document.Head.AppendChild(new HTMLLinkElement { Rel = "stylesheet", Type = "text/css", Href = "/highlight.min.css" });
+            Document.Head.AppendChild(new HTMLLinkElement { Rel = "stylesheet", Type = "text/css", Href = "/stackoverflow-light.min.css" });
+            Document.Head.AppendChild(new HTMLLinkElement { Rel = "stylesheet", Type = "text/css", Href = "/fira_code.css" });
         }
 
         private static void DisableMobileResize()
@@ -367,6 +447,8 @@ table tbody tr:hover td {
 
                 await ReferenceLib("/react.production.min.js");
                 await ReferenceLib("/react-dom.production.min.js");
+                await ReferenceLib("/marked.min.js");
+                await ReferenceLib("/highlight.min.js");
 
                 if (extraLibs?.Any() == true)
                 {
