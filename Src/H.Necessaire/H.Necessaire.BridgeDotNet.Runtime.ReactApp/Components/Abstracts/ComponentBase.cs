@@ -144,20 +144,40 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         protected Task Alert(params string[] messages) => AlertWithTitle(title: messages?.Length >= 1 ? messages.First() : string.Empty, descriptionHtml: string.Join("<br /><br />", messages.Jump(1)));
         protected Task<bool> Confirm(params string[] messages) => ConfirmWithTitle(title: messages?.Length >= 1 ? messages.First() : string.Empty, descriptionHtml: string.Join("<br /><br />", messages.Jump(1)));
 
-        protected Task<UserOptionSelectionResult> AskUserForSingleAnswer(Func<UserOptionsContext, ReactElement> userFeedbackRenderer, string title, string descriptionHtml = null, params UserOption[] options)
-            => AskUser(title, descriptionHtml, isMultipleSelection: false, userFeedbackRenderer: userFeedbackRenderer, options: options);
+        protected Task<UserOptionSelectionResult> AskUserForSingleAnswer(Func<UserOptionsContext, ReactElement> userFeedbackRenderer, string title, string descriptionHtml = null, FormLayoutMode? contentFormLayoutMode = null, params UserOption[] options)
+            => AskUser(
+                title,
+                descriptionHtml,
+                isMultipleSelection: false,
+                userFeedbackRenderer: userFeedbackRenderer,
+                contentFormLayoutMode: contentFormLayoutMode,
+                options: options
+            );
 
-        protected Task<UserOptionSelectionResult> AskUserForMultipleAnswers(Func<UserOptionsContext, ReactElement> userFeedbackRenderer, string title, string descriptionHtml = null, params UserOption[] options)
-            => AskUser(title, descriptionHtml, isMultipleSelection: true, userFeedbackRenderer: userFeedbackRenderer, options: options);
+        protected Task<UserOptionSelectionResult> AskUserForMultipleAnswers(Func<UserOptionsContext, ReactElement> userFeedbackRenderer, string title, string descriptionHtml = null, FormLayoutMode? contentFormLayoutMode = null, params UserOption[] options)
+            => AskUser(
+                title,
+                descriptionHtml,
+                isMultipleSelection: true,
+                userFeedbackRenderer: userFeedbackRenderer,
+                contentFormLayoutMode: contentFormLayoutMode,
+                options: options
+            );
 
-        private async Task<UserOptionSelectionResult> AskUser(string title, string descriptionHtml, bool isMultipleSelection, Func<UserOptionsContext, ReactElement> userFeedbackRenderer, params UserOption[] options)
+        private async Task<UserOptionSelectionResult> AskUser(string title, string descriptionHtml, bool isMultipleSelection, Func<UserOptionsContext, ReactElement> userFeedbackRenderer, FormLayoutMode? contentFormLayoutMode = null, params UserOption[] options)
         {
             UserOptionsContext userOptionsContext = new UserOptionsContext(title, descriptionHtml, isMultipleSelection, options);
 
             using (new ScopedRunner(
                     onStart: () => DoAndSetState(_ =>
                     {
-                        React.Render(new CenteredCurtain(userFeedbackRenderer(userOptionsContext)), AppBase.CurtainContainer);
+                        React.Render(new CenteredCurtain(
+                            new CenteredCurtain.Props
+                            {
+                                ContentFormLayoutMode = contentFormLayoutMode ?? FormLayoutMode.OnePerRowSmall
+                            },
+                            userFeedbackRenderer(userOptionsContext)), AppBase.CurtainContainer
+                        );
                     }),
                     onStop: () => DoAndSetState(_ =>
                     {
@@ -169,15 +189,5 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             }
         }
         #endregion
-
-
-
-        //protected async Task CopyToClipboard(string text)
-        //{
-        //    await clipboardResource.Write(text);
-        //}
-
-        //protected Task Alert(params string[] messages) => alertUserFeedback.Go(messages);
-        //protected Task<bool> Confirm(params string[] messages) => confirmUserFeedback.Go(messages);
     }
 }

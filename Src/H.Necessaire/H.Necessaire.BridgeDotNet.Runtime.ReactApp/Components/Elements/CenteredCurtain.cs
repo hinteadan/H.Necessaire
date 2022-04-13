@@ -15,7 +15,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                     new CenteredContent(
 
                         new FormLayout(
-                            new FormLayout.Props { LayoutMode = FormLayoutMode.OnePerRowSmall, RowSpacing = Branding.SizingUnitInPixels * 2 },
+                            new FormLayout.Props { LayoutMode = props?.ContentFormLayoutMode ?? FormLayoutMode.OnePerRowSmall, RowSpacing = Branding.SizingUnitInPixels * 2 },
 
                             DOM.Div(
                                 new Attributes
@@ -31,6 +31,9 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         }
 
         public class State : ComponentStateBase { }
-        public class Props : ComponentPropsBase { }
+        public class Props : ComponentPropsBase
+        {
+            public FormLayoutMode ContentFormLayoutMode { get; set; } = FormLayoutMode.OnePerRowSmall;
+        }
     }
 }
