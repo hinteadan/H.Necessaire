@@ -181,7 +181,7 @@ namespace H.Necessaire
             OperationResult[] failedRules = operationResults.Where(x => !x.IsSuccessful).ToArray();
 
             if (failedRules.Length == 1)
-                return OperationResult.Fail(failedRules.Single().Reason);
+                return OperationResult.Fail(failedRules.Single().Reason, failedRules.Single().Comments);
 
             return OperationResult.Fail(
                 reason: string.IsNullOrWhiteSpace(globalReasonIfNecesarry) ? defaultGlobalReasonForMultipleFailedOperations : globalReasonIfNecesarry,
