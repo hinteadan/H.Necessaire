@@ -113,8 +113,11 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Abstracts
             Table.count().then(x => { countLoader.SetResult((long)x); return x; });
             long allCount = await countLoader.Task;
 
-            return
-                OperationResult.Win().WithPayload(Page<TEntity>.For(filter, allCount, filterResult.Payload.ToArray()));
+            using (filterResult.Payload)
+            {
+                return
+                    OperationResult.Win().WithPayload(Page<TEntity>.For(filter, allCount, filterResult.Payload.ToArray()));
+            }
         }
 
         public virtual async Task<OperationResult<IDisposableEnumerable<TEntity>>> Stream(TFilter filter)
@@ -124,7 +127,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Abstracts
             TaskCompletionSource<object[]> dataLoader = new TaskCompletionSource<object[]>();
             result.toArray().then(x => { dataLoader.SetResult(x.ToArray()); return x; });
             object[] data = await dataLoader.Task;
-            return OperationResult.Win().WithPayload(data.Select(x => x.As<TEntity>()).ToDisposableEnumerable());
+            return OperationResult.Win().WithPayload(data.Select(x => ProjectDexieObject(x)).ToDisposableEnumerable());
         }
 
         public virtual async Task<OperationResult<IDisposableEnumerable<TEntity>>> StreamAll()
@@ -132,7 +135,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Abstracts
             TaskCompletionSource<object[]> dataLoader = new TaskCompletionSource<object[]>();
             Table.toArray().then(x => { dataLoader.SetResult(x.ToArray()); return x; });
             object[] data = await dataLoader.Task;
-            return OperationResult.Win().WithPayload(data.Select(x => x.As<TEntity>()).ToDisposableEnumerable());
+            return OperationResult.Win().WithPayload(data.Select(x => ProjectDexieObject(x)).ToDisposableEnumerable());
         }
 
         protected Dexie.Collection<object, object> ApplyPageFilter(Dexie.Collection<object, object> collection, IPageFilter filter)

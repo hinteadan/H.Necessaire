@@ -16,7 +16,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         }
         #endregion
 
-        Func<object, TEntity, TEntity> jsonParsingDecorator;
+        protected Func<object, TEntity, TEntity> jsonParsingDecorator;
         public void Use(Func<object, TEntity, TEntity> jsonParsingDecorator)
         {
             this.jsonParsingDecorator = jsonParsingDecorator;
@@ -132,13 +132,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 .then(
                     x =>
                     {
-                        var result = x.Select(o =>
-                        {
-                            TEntity res = o.ToType<TEntity>();
-                            res = jsonParsingDecorator == null ? res : jsonParsingDecorator.Invoke(o, res);
-                            return res;
-                        }).ToArray();
-                        taskCompletionSource.SetResult(result);
+                        taskCompletionSource.SetResult(ProjectDexieArray(x));
                         return x;
                     },
                     x =>
@@ -149,6 +143,21 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 );
 
             return taskCompletionSource.Task;
+        }
+
+        protected TEntity[] ProjectDexieArray(Retyped.es5.Array<object> dexieArray)
+        {
+            return
+                dexieArray
+                .Select(ProjectDexieObject)
+                .ToArray();
+        }
+
+        protected TEntity ProjectDexieObject(object dexieObject)
+        {
+            TEntity res = dexieObject.ToType<TEntity>();
+            res = jsonParsingDecorator == null ? res : jsonParsingDecorator.Invoke(dexieObject, res);
+            return res;
         }
 
         protected virtual Task<long> Count(object filter)
