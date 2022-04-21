@@ -29,6 +29,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Abstracts
                 new Func<Task>(async () =>
                 {
                     await base.Delete(Table, id);
+                    result = OperationResult.Win();
                 })
                 .TryOrFailWithGrace(onFail: ex => result = OperationResult.Fail(ex));
 
@@ -96,6 +97,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Abstracts
                 new Func<Task>(async () =>
                 {
                     await base.Save(Table, entity);
+                    result = OperationResult.Win();
                 })
                 .TryOrFailWithGrace(onFail: ex => result = OperationResult.Fail(ex));
 
