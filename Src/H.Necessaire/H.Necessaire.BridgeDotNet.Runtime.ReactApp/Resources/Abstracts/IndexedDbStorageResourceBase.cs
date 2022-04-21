@@ -5,7 +5,7 @@ using static Retyped.dexie;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Abstracts
 {
-    internal abstract class IndexedDbStorageResourceBase<TIndexedDbStorage, TId, TEntity, TFilter>
+    public abstract class IndexedDbStorageResourceBase<TIndexedDbStorage, TId, TEntity, TFilter>
         : IndexedDbResourceBase<TIndexedDbStorage, TEntity, TId>
         , ImAStorageService<TId, TEntity>
         , ImAStorageBrowserService<TEntity, TFilter>
