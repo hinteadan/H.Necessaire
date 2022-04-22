@@ -85,7 +85,7 @@ namespace H.Necessaire
 
         public bool IsEqualWith(VersionNumber other)
         {
-            if (other == null)
+            if ((object)other is null)
                 return false;
 
             return
@@ -124,8 +124,8 @@ namespace H.Necessaire
         public int CompareTo(VersionNumber other) => Comparer.Compare(this, other);
         public override bool Equals(object other) => IsEqualWith(other as VersionNumber);
         public bool Equals(VersionNumber other) => IsEqualWith(other);
-        public static bool operator ==(VersionNumber a, VersionNumber b) => a is null ? b is null : a.Equals(b);
-        public static bool operator !=(VersionNumber a, VersionNumber b) => a is null ? !(b is null) : !a.Equals(b);
+        public static bool operator ==(VersionNumber a, VersionNumber b) => (object)a is null ? (object)b is null : a.Equals(b);
+        public static bool operator !=(VersionNumber a, VersionNumber b) => (object)a is null ? !((object)b is null) : !a.Equals(b);
         public static bool operator >(VersionNumber a, VersionNumber b) => Comparer.Compare(a, b) > 0;
         public static bool operator <(VersionNumber a, VersionNumber b) => Comparer.Compare(a, b) < 0;
         public static bool operator >=(VersionNumber a, VersionNumber b) => Comparer.Compare(a, b) >= 0;

@@ -22,9 +22,7 @@ namespace H.Necessaire.ReactAppSample.Pages
 
                             OnClick = async () =>
                             {
-                                ConsumerPlatformInfo platformDetails = (await UserAgentData.GetPlatformDetails()).Payload;
-
-                                await Logger.LogDebug("UserAgentData.platformDetails", platformDetails.ToJson());
+                                await Logger.LogDebug("VersionNumber Comparison Works", new VersionNumber(1, 1) == VersionNumber.Unknown);
                             },
 
                         }, "Debug")
