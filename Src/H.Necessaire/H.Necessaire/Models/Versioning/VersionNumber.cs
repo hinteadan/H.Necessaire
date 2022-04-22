@@ -122,10 +122,10 @@ namespace H.Necessaire
             return hashCode;
         }
         public int CompareTo(VersionNumber other) => Comparer.Compare(this, other);
-        public override bool Equals(object other) => Equals(other as VersionNumber);
+        public override bool Equals(object other) => IsEqualWith(other as VersionNumber);
         public bool Equals(VersionNumber other) => IsEqualWith(other);
-        public static bool operator ==(VersionNumber a, VersionNumber b) => (a?.Equals(b)) ?? (b is null);
-        public static bool operator !=(VersionNumber a, VersionNumber b) => !(a == b);
+        public static bool operator ==(VersionNumber a, VersionNumber b) => a is null ? b is null : a.Equals(b);
+        public static bool operator !=(VersionNumber a, VersionNumber b) => a is null ? !(b is null) : !a.Equals(b);
         public static bool operator >(VersionNumber a, VersionNumber b) => Comparer.Compare(a, b) > 0;
         public static bool operator <(VersionNumber a, VersionNumber b) => Comparer.Compare(a, b) < 0;
         public static bool operator >=(VersionNumber a, VersionNumber b) => Comparer.Compare(a, b) >= 0;
