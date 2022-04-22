@@ -4,7 +4,7 @@ using System.Text;
 
 namespace H.Necessaire
 {
-    public class VersionNumber
+    public class VersionNumber : IEquatable<VersionNumber>, IComparable<VersionNumber>
     {
         public static readonly IComparer<VersionNumber> Comparer = new VersionNumberComparer();
 
@@ -97,18 +97,6 @@ namespace H.Necessaire
                 ;
         }
 
-        public override int GetHashCode()
-        {
-            int hashCode = 138437857;
-            hashCode = hashCode * -1521134295 + Major.GetHashCode();
-            hashCode = hashCode * -1521134295 + Minor.GetHashCode();
-            hashCode = hashCode * -1521134295 + Patch.GetHashCode();
-            hashCode = hashCode * -1521134295 + Build.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Suffix);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Semantic);
-            return hashCode;
-        }
-
         public VersionNumber Clone()
         {
             return
@@ -122,10 +110,38 @@ namespace H.Necessaire
                 };
         }
 
+        public override int GetHashCode()
+        {
+            int hashCode = 138437857;
+            hashCode = hashCode * -1521134295 + Major.GetHashCode();
+            hashCode = hashCode * -1521134295 + Minor.GetHashCode();
+            hashCode = hashCode * -1521134295 + Patch.GetHashCode();
+            hashCode = hashCode * -1521134295 + Build.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Suffix);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Semantic);
+            return hashCode;
+        }
+        public int CompareTo(VersionNumber other) => Comparer.Compare(this, other);
+        public override bool Equals(object other) => Equals(other as VersionNumber);
+        public bool Equals(VersionNumber other) => IsEqualWith(other);
+        public static bool operator ==(VersionNumber a, VersionNumber b) => (a?.Equals(b)) ?? (b is null);
+        public static bool operator !=(VersionNumber a, VersionNumber b) => !(a == b);
+        public static bool operator >(VersionNumber a, VersionNumber b) => Comparer.Compare(a, b) > 0;
+        public static bool operator <(VersionNumber a, VersionNumber b) => Comparer.Compare(a, b) < 0;
+        public static bool operator >=(VersionNumber a, VersionNumber b) => Comparer.Compare(a, b) >= 0;
+        public static bool operator <=(VersionNumber a, VersionNumber b) => Comparer.Compare(a, b) <= 0;
+
         private class VersionNumberComparer : IComparer<VersionNumber>
         {
             public int Compare(VersionNumber x, VersionNumber y)
             {
+                if (x is null && y is null)
+                    return 0;
+                if (x is null && !(y is null))
+                    return -1;
+                if (!(x is null) && y is null)
+                    return 1;
+
                 if (x.Major < y.Major)
                     return -1;
                 if (x.Major > y.Major)
