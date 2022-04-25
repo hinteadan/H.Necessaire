@@ -113,16 +113,7 @@ namespace H.Necessaire
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                int hash = 3049;
-                hash = hash * 5039 + Major.GetHashCode();
-                hash = hash * 883 + Minor.GetHashCode();
-                hash = hash * 9719 + Patch.GetHashCode();
-                hash = hash * 1607 + Build.GetHashCode();
-                hash = hash * 1543 + EqualityComparer<string>.Default.GetHashCode(Suffix);
-                return hash;
-            }
+            return StringComparer.Ordinal.GetHashCode(Semantic);
         }
         public int CompareTo(VersionNumber other) => Comparer.Compare(this, other);
         public override bool Equals(object other) => IsEqualWith(other as VersionNumber);
