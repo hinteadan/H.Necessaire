@@ -17,6 +17,7 @@ namespace H.Necessaire
             Suffix = null,
         };
 
+        public VersionNumber() { }
         public VersionNumber(int major = 0, int minor = 0, int? patch = null, int? build = null, string suffix = null)
         {
             this.Major = major;
@@ -112,14 +113,16 @@ namespace H.Necessaire
 
         public override int GetHashCode()
         {
-            int hashCode = 138437857;
-            hashCode = hashCode * -1521134295 + Major.GetHashCode();
-            hashCode = hashCode * -1521134295 + Minor.GetHashCode();
-            hashCode = hashCode * -1521134295 + Patch.GetHashCode();
-            hashCode = hashCode * -1521134295 + Build.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Suffix);
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Semantic);
-            return hashCode;
+            unchecked
+            {
+                int hash = 3049;
+                hash = hash * 5039 + Major.GetHashCode();
+                hash = hash * 883 + Minor.GetHashCode();
+                hash = hash * 9719 + Patch.GetHashCode();
+                hash = hash * 1607 + Build.GetHashCode();
+                hash = hash * 1543 + EqualityComparer<string>.Default.GetHashCode(Suffix);
+                return hash;
+            }
         }
         public int CompareTo(VersionNumber other) => Comparer.Compare(this, other);
         public override bool Equals(object other) => IsEqualWith(other as VersionNumber);
