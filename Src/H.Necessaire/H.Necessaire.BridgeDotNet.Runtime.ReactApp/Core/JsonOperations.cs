@@ -21,7 +21,13 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
             new Action(() =>
             {
-                result = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(serializedJson);
+                result = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(
+                    serializedJson,
+                    new Newtonsoft.Json.JsonSerializerSettings
+                    {
+                        ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace,
+                    }
+                );
             })
             .TryOrFailWithGrace(
                 onFail: ex => result = defaultTo
@@ -34,14 +40,27 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         {
             if (obj == null)
                 return null;
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<object>(Newtonsoft.Json.JsonConvert.SerializeObject(obj));
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<object>(
+                Newtonsoft.Json.JsonConvert.SerializeObject(obj),
+                new Newtonsoft.Json.JsonSerializerSettings
+                {
+                    ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace,
+                }
+            );
         }
 
         public static T JsonToObject<T>(this object json)
         {
             if (json == null)
                 return default(T);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(Newtonsoft.Json.JsonConvert.SerializeObject(json));
+            return
+                Newtonsoft.Json.JsonConvert.DeserializeObject<T>(
+                    Newtonsoft.Json.JsonConvert.SerializeObject(json),
+                    new Newtonsoft.Json.JsonSerializerSettings
+                    {
+                        ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace,
+                    }
+                );
         }
     }
 }
