@@ -24,6 +24,12 @@ namespace H.Necessaire.Runtime
             await
                 new Func<Task>(async () =>
                 {
+                    if (syncRequest.SyncStatus == SyncStatus.DeletedAndNotSynced)
+                    {
+                        result = await ProcessPayload(string.IsNullOrWhiteSpace(syncRequest.Payload) ? default(TEntity) : syncRequest.Payload.JsonToObject<TEntity>(), syncRequest);
+                        return;
+                    }
+
                     OperationResult<TEntity> parseOperation = syncRequest.Payload.TryJsonToObject<TEntity>();
 
                     if (!parseOperation.IsSuccessful)
@@ -33,12 +39,11 @@ namespace H.Necessaire.Runtime
                     }
                     if (parseOperation.Payload == null)
                     {
-                        result = OperationResult.Fail("The sync request payload is empty");
+                        result = OperationResult.Fail("The sync request payload is empty and the sync request is not for a delete operation");
                         return;
                     }
 
                     result = await ProcessPayload(parseOperation.Payload, syncRequest);
-
                 })
                 .TryOrFailWithGrace(onFail: async ex =>
                 {

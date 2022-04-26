@@ -90,7 +90,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                                     object actualEntity = (await syncablesBrowser.LoadEntity(syncableType, entityID));
                                     syncRequests.Add(new SyncRequest
                                     {
-                                        Payload = Newtonsoft.Json.JsonConvert.SerializeObject(actualEntity.ObjectToJson()),
+                                        Payload = actualEntity == null ? null : Newtonsoft.Json.JsonConvert.SerializeObject(actualEntity.ObjectToJson()),
                                         PayloadIdentifier = entityID,
                                         PayloadType = syncableType.TypeName(),
                                         SyncStatus = await syncRegistry.StatusFor(syncableType.TypeName(), entityID),
