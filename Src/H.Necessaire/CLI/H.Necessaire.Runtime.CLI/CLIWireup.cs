@@ -23,7 +23,7 @@ namespace H.Necessaire.Runtime.CLI
 
         private static void AddAllUseCasesInAssemblyForType<T>(ImADependencyRegistry registry)
         {
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            Assembly[] assemblies = Assembly.GetExecutingAssembly().AsArray().Union(AppDomain.CurrentDomain.GetAssemblies()).ToArray();
 
             Type useCaseInterfaceType = typeof(ImACliCommand);
             Type[] useCaseTypes = assemblies.SelectMany(assembly => assembly.GetTypes().Where(p => useCaseInterfaceType.IsAssignableFrom(p) && !p.IsAbstract)).ToArray();

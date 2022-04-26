@@ -15,7 +15,7 @@ namespace H.Necessaire
 
         static SyncableBrowser()
         {
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            Assembly[] assemblies = Assembly.GetExecutingAssembly().AsArray().Union(AppDomain.CurrentDomain.GetAssemblies()).ToArray();
             Type[] allTypes = assemblies.SelectMany(assembly => assembly.GetTypes()).Where(x => x != null).ToArray();
 
             Type syncableInterfaceType = typeof(ImSyncable);
