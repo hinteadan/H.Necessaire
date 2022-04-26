@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.Sync.Processors
 {
-    internal class ConsumerIdentityProcessor : SyncRequestProcessorBase<ConsumerIdentity>, ImADependency
+    internal class ConsumerIdentityProcessor : SyncRequestProcessorBase<ConsumerIdentity>
     {
         #region Construct
         static readonly IDentity processorIdentity = new InternalIdentity

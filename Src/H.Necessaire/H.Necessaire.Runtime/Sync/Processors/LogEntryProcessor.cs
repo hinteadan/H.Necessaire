@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.Sync.Processors
 {
-    internal class LogEntryProcessor : SyncRequestProcessorBase<LogEntry>, ImADependency
+    internal class LogEntryProcessor : SyncRequestProcessorBase<LogEntry>
     {
         #region Construct
         ImAStorageService<Guid, LogEntry> logEntryStorageService = null;
-        public void ReferDependencies(ImADependencyProvider dependencyProvider)
+        public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
+            base.ReferDependencies(dependencyProvider);
+
             logEntryStorageService = dependencyProvider.Get<ImAStorageService<Guid, LogEntry>>();
         }
         #endregion
