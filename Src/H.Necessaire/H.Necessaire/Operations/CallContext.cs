@@ -12,6 +12,9 @@ namespace H.Necessaire
 
         public static object GetData(string name) =>
             state.TryGetValue(name, out AsyncLocal<object> data) ? data.Value : null;
+
+        public static object ZapData(string name) =>
+            state.TryRemove(name, out AsyncLocal<object> data) ? data.Value : null;
     }
 
     public static class CallContext<T>
@@ -23,6 +26,9 @@ namespace H.Necessaire
 
         public static T GetData(string name) =>
             state.TryGetValue(name, out AsyncLocal<T> data) ? data.Value : default(T);
+
+        public static T ZapData(string name) =>
+            state.TryRemove(name, out AsyncLocal<T> data) ? data.Value : default(T);
     }
 
 }

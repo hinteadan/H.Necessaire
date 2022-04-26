@@ -9,6 +9,12 @@ namespace H.Necessaire
         public static void SetData(string name, object data) => state.AddOrUpdate(name, data, (a, b) => data);
 
         public static object GetData(string name) => state.ContainsKey(name) ? state[name] : null;
+        public static object ZapData(string name)
+        {
+            object data;
+            state.TryRemove(name, out data);
+            return data;
+        }
     }
 
     public static class CallContext<T>
@@ -18,5 +24,12 @@ namespace H.Necessaire
         public static void SetData(string name, T data) => state.AddOrUpdate(name, data, (a, b) => data);
 
         public static T GetData(string name) => state.ContainsKey(name) ? state[name] : default(T);
+
+        public static T ZapData(string name)
+        {
+            T data;
+            state.TryRemove(name, out data);
+            return data;
+        }
     }
 }
