@@ -114,6 +114,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         {
             if (!props.IsHighlighted) return null;
 
+            string title = state?.ValidationState?.FlattenReasons().Join(Environment.NewLine);
+
             return
                 DOM.Div(
                     new Attributes
@@ -126,7 +128,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                             Bottom = 0,
                             Right = 0,
                             BackgroundColor = GetHighlightColor(),
-                        }
+                        },
+                        Title = string.IsNullOrWhiteSpace(title) ? null : title,
                     }
                 );
         }
