@@ -9,7 +9,7 @@ namespace H.Necessaire
 
         public static readonly Version Unknown = new Version
         {
-            Number = VersionNumber.Unknown,
+            Number = VersionNumber.Unknown.Clone(),
             Timestamp = DateTime.MinValue,
             Branch = "N/A",
             Commit = "N/A",
@@ -31,6 +31,18 @@ namespace H.Necessaire
         public DateTime Timestamp { get; set; }
         public string Branch { get; set; }
         public string Commit { get; set; }
+
+        public Version Clone()
+        {
+            return
+                new Version
+                {
+                    Branch = this.Branch,
+                    Commit = this.Commit,
+                    Timestamp = this.Timestamp,
+                    Number = this.Number?.Clone(),
+                };
+        }
 
         public override string ToString()
         {
