@@ -7,9 +7,11 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     public class SyncDaemon : WebWorkerDaemonBase
     {
-        public SyncDaemon()
+        public SyncDaemon(Func<ImAnAppWireup> webWorkerWireup = null, params string[] scriptsToInclude)
             : base(
-                () => AppBase.Get<Worker>()
+                () => AppBase.Get<Worker>(),
+                webWorkerWireup,
+                scriptsToInclude
             )
         {
         }

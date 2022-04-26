@@ -9,15 +9,12 @@ namespace H.Necessaire
     public class SyncableBrowser : ImADependency, ImASyncableBrowser
     {
         #region Construct
-        private static Type[] syncableTypes = null;
-        private static Dictionary<Type, Type> syncerTypePerSyncableTypeDictionary = new Dictionary<Type, Type>();
+        private static readonly Type[] syncableTypes = new Type[0];
+        private static readonly Dictionary<Type, Type> syncerTypePerSyncableTypeDictionary = new Dictionary<Type, Type>();
         private static Dictionary<Type, ImASyncer> syncerPerSyncableTypeDictionary;
 
-        private static void EnsurePrerequisites()
+        static SyncableBrowser()
         {
-            if (syncableTypes != null)
-                return;
-
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             Type[] allTypes = assemblies.SelectMany(assembly => assembly.GetTypes()).Where(x => x != null).ToArray();
 
@@ -55,8 +52,6 @@ namespace H.Necessaire
 
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
-            EnsurePrerequisites();
-
             if (syncerPerSyncableTypeDictionary == null)
             {
                 syncerPerSyncableTypeDictionary = new Dictionary<Type, ImASyncer>();
