@@ -9,13 +9,16 @@ namespace H.Necessaire
     public class SyncableBrowser : ImADependency, ImASyncableBrowser
     {
         #region Construct
-        private static readonly Type[] syncableTypes = new Type[0];
-        private static readonly Dictionary<Type, Type> syncerTypePerSyncableTypeDictionary = new Dictionary<Type, Type>();
+        private static Type[] syncableTypes = null;
+        private static Dictionary<Type, Type> syncerTypePerSyncableTypeDictionary = new Dictionary<Type, Type>();
         private static Dictionary<Type, ImASyncer> syncerPerSyncableTypeDictionary;
 
-        static SyncableBrowser()
+        private static void EnsurePrerequisites()
         {
-            Assembly[] assemblies = Assembly.GetExecutingAssembly().AsArray().Union(AppDomain.CurrentDomain.GetAssemblies()).ToArray();
+            if (syncableTypes != null)
+                return;
+
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             Type[] allTypes = assemblies.SelectMany(assembly => assembly.GetTypes()).Where(x => x != null).ToArray();
 
             Type syncableInterfaceType = typeof(ImSyncable);
@@ -42,7 +45,7 @@ namespace H.Necessaire
                     ;
 
                 if (identityType == null)
-                    throw new InvalidOperationException($"{syncableType.TypeName()} syncable type has an unsuppoerted ID type.");
+                    throw new InvalidOperationException($"{syncableType.TypeName()} syncable type has an unsupported ID type.");
 
                 Type syncerType = genericSyncerType.MakeGenericType(new Type[] { syncableType, identityType });
 
@@ -52,6 +55,8 @@ namespace H.Necessaire
 
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
+            EnsurePrerequisites();
+
             if (syncerPerSyncableTypeDictionary == null)
             {
                 syncerPerSyncableTypeDictionary = new Dictionary<Type, ImASyncer>();

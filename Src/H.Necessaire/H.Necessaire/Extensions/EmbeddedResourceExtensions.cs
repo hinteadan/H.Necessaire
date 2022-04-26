@@ -12,7 +12,7 @@ namespace H.Necessaire
             Assembly embeddedResourceAssembly = null;
             string embeddedResourceFullName = null;
 
-            foreach (Assembly assembly in Assembly.GetExecutingAssembly().AsArray().Union(AppDomain.CurrentDomain.GetAssemblies()).ToArray())
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 new Action(() =>
                     {
