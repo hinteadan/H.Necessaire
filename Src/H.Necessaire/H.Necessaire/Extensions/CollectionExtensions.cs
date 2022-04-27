@@ -1,5 +1,6 @@
 ﻿using H.Necessaire.Operations.Concrete;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -122,6 +123,9 @@ namespace H.Necessaire
 
         public static IDisposableEnumerable<T> ToDisposableEnumerable<T>(this IEnumerable<T> collection) => new DataStream<T>(collection);
 
+        public static IDisposableEnumerable<TProjection> ProjectTo<TProjection, T>(this IDisposableEnumerable<T> disposableCollection, Func<T, TProjection> projector)
+            => new ProjectedDisposableEnumerable<TProjection, T>(disposableCollection, projector);
+
         public static T[] AsArray<T>(this T value) => new T[] { value };
 
         public static string[] ToStringArray<T>(this T[] array) => array?.Select(x => x?.ToString()).ToArray();
@@ -243,6 +247,35 @@ namespace H.Necessaire
                 .Where(x => x != null)
                 .OrderByDescending(x => x.HappenedAt)
                 .FirstOrDefault();
+        }
+
+
+        sealed class ProjectedDisposableEnumerable<TProjection, T> : IDisposableEnumerable<TProjection>
+        {
+            readonly IDisposableEnumerable<T> source;
+            readonly Func<T, TProjection> projector;
+            readonly IEnumerable<TProjection> projection;
+            public ProjectedDisposableEnumerable(IDisposableEnumerable<T> source, Func<T, TProjection> projector)
+            {
+                this.source = source;
+                this.projector = projector;
+                this.projection = source.Select(projector);
+            }
+
+            public void Dispose()
+            {
+                source.Dispose();
+            }
+
+            public IEnumerator<TProjection> GetEnumerator()
+            {
+                return projection.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return projection.GetEnumerator();
+            }
         }
     }
 }
