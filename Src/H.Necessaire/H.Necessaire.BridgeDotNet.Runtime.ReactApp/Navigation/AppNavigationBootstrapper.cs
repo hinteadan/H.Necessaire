@@ -44,6 +44,11 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         private void HandleHashChange(string currentLocation)
         {
+            PreNavigationEventArgs preNavigationEventArgs = new PreNavigationEventArgs();
+            OnPreNavigation?.Invoke(this, preNavigationEventArgs);
+            if (preNavigationEventArgs.IsNavigationCancelled)
+                return;
+
             if (isHashNavigationDisabled)
                 return;
 
@@ -54,11 +59,6 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 return;
 
             if ((requestedHash ?? AppBase.BaseHostPath).Equals(currentLocation ?? AppBase.BaseHostPath, StringComparison.InvariantCultureIgnoreCase))
-                return;
-
-            PreNavigationEventArgs preNavigationEventArgs = new PreNavigationEventArgs();
-            OnPreNavigation?.Invoke(this, preNavigationEventArgs);
-            if (preNavigationEventArgs.IsNavigationCancelled)
                 return;
 
             if (requestedHash.IsIndexPath())
