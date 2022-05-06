@@ -11,6 +11,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     public class AppNavigationBootstrapper
     {
+        public static event EventHandler<PreNavigationEventArgs> OnPreNavigation;
+
         #region Construct
         static bool isHashNavigationDisabled = false;
         readonly AppNavigationRegistryBase appNavigationRegistry;
@@ -40,7 +42,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 HandleHashChange(historyHandler.CurrentLocation?.ToString());
         }
 
-        private static void HandleHashChange(string currentLocation)
+        private void HandleHashChange(string currentLocation)
         {
             if (isHashNavigationDisabled)
                 return;
@@ -52,6 +54,11 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 return;
 
             if ((requestedHash ?? AppBase.BaseHostPath).Equals(currentLocation ?? AppBase.BaseHostPath, StringComparison.InvariantCultureIgnoreCase))
+                return;
+
+            PreNavigationEventArgs preNavigationEventArgs = new PreNavigationEventArgs();
+            OnPreNavigation?.Invoke(this, preNavigationEventArgs);
+            if (preNavigationEventArgs.IsNavigationCancelled)
                 return;
 
             if (requestedHash.IsIndexPath())

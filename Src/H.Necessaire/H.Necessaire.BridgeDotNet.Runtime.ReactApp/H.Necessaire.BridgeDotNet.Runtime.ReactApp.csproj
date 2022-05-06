@@ -124,6 +124,7 @@
     <Compile Include="Navigation\AppNavigationRegistryBase.cs" />
     <Compile Include="Navigation\AppPageDispatcherAction.cs" />
     <Compile Include="Navigation\Navi.cs" />
+    <Compile Include="Navigation\PreNavigationEventArgs.cs" />
     <Compile Include="Pages\Abstracts\PageBase.cs" />
     <Compile Include="Pages\Abstracts\PagePropsBase.cs" />
     <Compile Include="Pages\Abstracts\PageStateBase.cs" />
