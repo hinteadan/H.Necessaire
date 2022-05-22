@@ -30,6 +30,10 @@ namespace H.Necessaire.Runtime.CLI.Builders
                         },
                     },
                 }
+                .And(x =>
+                {
+                    x.OperationContext = new OperationContext { User = x.SecurityContext.User };
+                })
                 ;
         }
     }

@@ -38,7 +38,11 @@ namespace H.Necessaire.Runtime.Integration.NetCore.Concrete
                 {
                     SecurityContext = await BuildSecurityContext(),
                     OperationContext = await BuildOperationContext(),
-                };
+                }
+                .And(x =>
+                {
+                    x.OperationContext.User = x.SecurityContext?.User;
+                });
         }
 
         private async Task<OperationContext> BuildOperationContext()
