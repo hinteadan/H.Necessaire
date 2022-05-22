@@ -93,6 +93,12 @@
     <Compile Include="..\H.Necessaire\IoC\IoC.cs">
       <Link>IoC\IoC.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Attributes\AliasAttribute.cs">
+      <Link>Models\Attributes\AliasAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Attributes\IDAttribute.cs">
+      <Link>Models\Attributes\IDAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Auditing\AuditActionType.cs">
       <Link>Models\Auditing\AuditActionType.cs</Link>
     </Compile>

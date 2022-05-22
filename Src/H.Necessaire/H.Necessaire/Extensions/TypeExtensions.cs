@@ -50,5 +50,19 @@ namespace H.Necessaire
 
         public static RuntimeConfig GetRuntimeConfig(this ImADependencyProvider dependencyProvider)
             => dependencyProvider?.Get<ImAConfigProvider>()?.GetRuntimeConfig() ?? dependencyProvider?.Get<RuntimeConfig>() ?? RuntimeConfig.Empty;
+
+        public static string GetID(this Type type)
+        {
+            return
+                (type?.GetCustomAttributes(typeof(IDAttribute), false)?.SingleOrDefault() as IDAttribute)?.ID
+                ;
+        }
+
+        public static string[] GetAliases(this Type type)
+        {
+            return
+                (type?.GetCustomAttributes(typeof(AliasAttribute), false)?.SingleOrDefault() as AliasAttribute)?.Aliases
+                ;
+        }
     }
 }
