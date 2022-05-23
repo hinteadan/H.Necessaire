@@ -64,5 +64,22 @@ namespace H.Necessaire
                 (type?.GetCustomAttributes(typeof(AliasAttribute), false)?.SingleOrDefault() as AliasAttribute)?.Aliases
                 ;
         }
+
+        public static bool IsMatch(this Type type, string identifier)
+        {
+            if (type == null || string.IsNullOrWhiteSpace(identifier))
+                return false;
+
+            if (type.Name?.StartsWith(identifier, StringComparison.InvariantCultureIgnoreCase) ?? false)
+                return true;
+
+            if (string.Equals(identifier, type.GetID(), StringComparison.InvariantCultureIgnoreCase))
+                return true;
+
+            if (type.GetAliases()?.Any(alias => string.Equals(identifier, alias, StringComparison.InvariantCultureIgnoreCase)) ?? false)
+                return true;
+
+            return false;
+        }
     }
 }

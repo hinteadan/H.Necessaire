@@ -57,6 +57,9 @@
     <Compile Include="..\H.Necessaire\Extensions\FileSystemExtensions.cs">
       <Link>Extensions\FileSystemExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Extensions\IoCExtensions.cs">
+      <Link>Extensions\IoCExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Extensions\NotificationExtensions.cs">
       <Link>Extensions\NotificationExtensions.cs</Link>
     </Compile>
