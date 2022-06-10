@@ -102,6 +102,9 @@
     <Compile Include="..\H.Necessaire\Models\Attributes\IDAttribute.cs">
       <Link>Models\Attributes\IDAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Attributes\NoteAttribute.cs">
+      <Link>Models\Attributes\NoteAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Auditing\AuditActionType.cs">
       <Link>Models\Auditing\AuditActionType.cs</Link>
     </Compile>

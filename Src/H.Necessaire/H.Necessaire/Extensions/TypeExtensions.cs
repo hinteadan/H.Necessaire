@@ -61,8 +61,28 @@ namespace H.Necessaire
         public static string[] GetAliases(this Type type)
         {
             return
-                (type?.GetCustomAttributes(typeof(AliasAttribute), false)?.SingleOrDefault() as AliasAttribute)?.Aliases
+                type?.GetCustomAttributes(typeof(AliasAttribute), false)?.SelectMany(aliasAttr => (aliasAttr as AliasAttribute)?.Aliases)?.Distinct()?.ToArray()
                 ;
+        }
+
+        public static Note[] GetNotes(this Type type)
+        {
+            return
+                type?.GetCustomAttributes(typeof(NoteAttribute), true)?.SelectMany(noteAttr => (noteAttr as NoteAttribute)?.Notes)?.ToArray()
+                ;
+        }
+
+        public static Note[] GetNotes(this Type type, string noteID, bool isCaseInsensitive = false)
+        {
+            return
+                type
+                ?.GetNotes()
+                ?.Where(note => string.Equals(note.ID, noteID, isCaseInsensitive ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))
+                .ToArray()
+                ??
+                new Note[0]
+                ;
+
         }
 
         public static bool IsMatch(this Type type, string identifier)
