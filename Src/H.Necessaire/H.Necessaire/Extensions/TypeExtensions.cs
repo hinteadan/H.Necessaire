@@ -65,24 +65,11 @@ namespace H.Necessaire
                 ;
         }
 
-        public static Note[] GetNotes(this Type type)
+        public static string[] GetCategories(this Type type)
         {
             return
-                type?.GetCustomAttributes(typeof(NoteAttribute), true)?.SelectMany(noteAttr => (noteAttr as NoteAttribute)?.Notes)?.ToArray()
+                type?.GetCustomAttributes(typeof(CategoryAttribute), true)?.SelectMany(noteAttr => (noteAttr as CategoryAttribute)?.Categories)?.Distinct()?.ToArray()
                 ;
-        }
-
-        public static Note[] GetNotes(this Type type, string noteID, bool isCaseInsensitive = false)
-        {
-            return
-                type
-                ?.GetNotes()
-                ?.Where(note => string.Equals(note.ID, noteID, isCaseInsensitive ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))
-                .ToArray()
-                ??
-                new Note[0]
-                ;
-
         }
 
         public static bool IsMatch(this Type type, string identifier)
