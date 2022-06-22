@@ -6,6 +6,8 @@
 
         Create = 0,
 
+        Read = 1,
+
         Modify = 10,
     }
 }
