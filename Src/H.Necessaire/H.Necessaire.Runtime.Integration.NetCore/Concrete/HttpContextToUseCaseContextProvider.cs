@@ -124,15 +124,15 @@ namespace H.Necessaire.Runtime.Integration.NetCore.Concrete
                     .AndAsync(async ctx =>
                     {
                         string consumerIDString
-                            = ctx?.Parameters?.Get("Request.Header.X-H.Necessaire.ConsumerID")
-                            ?? ctx?.Parameters?.Get("Request.Header.X-ConsumerID")
-                            ?? ctx?.Parameters?.Get("Request.Header.ConsumerID")
-                            ?? ctx?.Parameters?.Get("Request.Query.X-H.Necessaire.ConsumerID")
-                            ?? ctx?.Parameters?.Get("Request.Query.X-ConsumerID")
-                            ?? ctx?.Parameters?.Get("Request.Query.ConsumerID")
-                            ?? ctx?.Parameters?.Get("Request.Form.X-H.Necessaire.ConsumerID")
-                            ?? ctx?.Parameters?.Get("Request.Form.X-ConsumerID")
-                            ?? ctx?.Parameters?.Get("Request.Form.ConsumerID")
+                            = ctx?.Parameters?.Get("Request.Header.X-H.Necessaire.ConsumerID", ignoreCase: true)
+                            ?? ctx?.Parameters?.Get("Request.Header.X-ConsumerID", ignoreCase: true)
+                            ?? ctx?.Parameters?.Get("Request.Header.ConsumerID", ignoreCase: true)
+                            ?? ctx?.Parameters?.Get("Request.Query.X-H.Necessaire.ConsumerID", ignoreCase: true)
+                            ?? ctx?.Parameters?.Get("Request.Query.X-ConsumerID", ignoreCase: true)
+                            ?? ctx?.Parameters?.Get("Request.Query.ConsumerID", ignoreCase: true)
+                            ?? ctx?.Parameters?.Get("Request.Form.X-H.Necessaire.ConsumerID", ignoreCase: true)
+                            ?? ctx?.Parameters?.Get("Request.Form.X-ConsumerID", ignoreCase: true)
+                            ?? ctx?.Parameters?.Get("Request.Form.ConsumerID", ignoreCase: true)
                             ;
 
                         if (string.IsNullOrWhiteSpace(consumerIDString))
