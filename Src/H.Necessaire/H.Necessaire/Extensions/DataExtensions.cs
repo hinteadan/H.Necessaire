@@ -111,6 +111,18 @@ namespace H.Necessaire
             return fallbackValue;
         }
 
+        public static decimal? ParseToDecimalOrFallbackTo(this string rawValue, decimal? fallbackValue = null)
+        {
+            if (string.IsNullOrWhiteSpace(rawValue))
+                return fallbackValue;
+
+            decimal parseResult;
+            if (decimal.TryParse(rawValue, out parseResult))
+                return parseResult;
+
+            return fallbackValue;
+        }
+
         public static bool IsBetweenInclusive(this DateTime dateTime, DateTime? from, DateTime? to)
         {
             return
