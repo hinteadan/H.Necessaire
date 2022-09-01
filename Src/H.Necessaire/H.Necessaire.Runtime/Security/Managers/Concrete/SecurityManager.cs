@@ -10,6 +10,7 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
         #region Construct
         ImAUserInfoStorageResource userInfoStorageResource;
         ImAUserCredentialsStorageResource userCredentialsStorageResource;
+        ImTheIronManProviderResource ironManProviderResource;
         ImAHasherEngine hasher;
         ImAUserAuthAggregatorEngine userAuthAggregatorEngine;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
@@ -18,6 +19,7 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
             userCredentialsStorageResource = dependencyProvider.Get<ImAUserCredentialsStorageResource>();
             userInfoStorageResource = dependencyProvider.Get<ImAUserInfoStorageResource>();
             userAuthAggregatorEngine = dependencyProvider.Get<ImAUserAuthAggregatorEngine>();
+            ironManProviderResource = dependencyProvider.Get<ImTheIronManProviderResource>();
         }
         #endregion
 
@@ -36,18 +38,43 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
                 return OperationResult.Fail("Invalid Credentials").WithoutPayload<SecurityContext>();
 
-            UserInfo user
-                = (await userInfoStorageResource.SearchUsers(new UserInfoSearchCriteria { Usernames = username?.AsArray() }))?.SingleOrDefault();
+            UserInfo ironMan =
+                (await ironManProviderResource.SearchIronMen(new UserInfoSearchCriteria
+                {
+                    Usernames = username?.AsArray()
+                }))
+                ?.SingleOrDefault()
+                ;
+
+            UserInfo user =
+                ironMan
+                ??
+                (
+                    (await userInfoStorageResource.SearchUsers(new UserInfoSearchCriteria
+                    {
+                        Usernames = username?.AsArray()
+                    }))
+                    ?.SingleOrDefault()
+                )
+                ;
 
             if (user == null)
                 return OperationResult.Fail("Invalid Credentials").WithoutPayload<SecurityContext>();
 
-            string passwordHash = await userCredentialsStorageResource.GetPasswordFor(user.ID);
+            string ironManPassword = await ironManProviderResource.GetPasswordFor(user.ID);
 
-            if (string.IsNullOrWhiteSpace(passwordHash))
+            if(ironMan != null && string.IsNullOrWhiteSpace(ironManPassword))
                 return OperationResult.Fail("Invalid Credentials").WithoutPayload<SecurityContext>();
 
-            OperationResult matchResult = await hasher.VerifyMatch(password, SecuredHash.TryParse(passwordHash).ThrowOnFailOrReturn());
+            string passwordHash = ironMan != null ? null : await userCredentialsStorageResource.GetPasswordFor(user.ID);
+
+            if (ironMan == null && string.IsNullOrWhiteSpace(passwordHash))
+                return OperationResult.Fail("Invalid Credentials").WithoutPayload<SecurityContext>();
+
+            OperationResult matchResult = 
+                ironMan != null
+                ? (new OperationResult { IsSuccessful = string.Equals(ironManPassword, password, StringComparison.InvariantCulture) }.And(x => x.Reason = x.IsSuccessful ? null : "Invalid username or password"))
+                : (await hasher.VerifyMatch(password, SecuredHash.TryParse(passwordHash).ThrowOnFailOrReturn()));
 
             if (!matchResult.IsSuccessful)
                 return OperationResult.Fail("Invalid Credentials").WithoutPayload<SecurityContext>();

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace H.Necessaire
 {
+    [DataContract]
     public class RefreshTokenJwtPayload : JwtPayload
     {
-        public Guid AccessTokenID { get; set; }
+        [DataMember] public Guid AccessTokenID { get; set; }
     }
 }

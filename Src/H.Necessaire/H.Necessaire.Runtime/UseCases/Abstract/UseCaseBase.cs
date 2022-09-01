@@ -114,5 +114,32 @@ namespace H.Necessaire.Runtime
 
             return result.And(x => x.ThrowOnFail());
         }
+
+        protected async Task<OperationResult<UseCaseContext>> EnsureAuthenticationAndPermissions(params PermissionClaim[] permissionClaims)
+        {
+            OperationResult<UseCaseContext> authResult = await EnsureAuthentication();
+            if (!authResult.IsSuccessful)
+                return authResult;
+
+            return CheckPermissions(authResult.Payload?.SecurityContext, permissionClaims).WithPayload(authResult.Payload);
+        }
+
+        protected async Task<OperationResult<UseCaseContext>> EnsureAuthenticationTypeAndPermissions(string[] acceptedAuthTypes, params PermissionClaim[] permissionClaims)
+        {
+            OperationResult<UseCaseContext> authResult = await EnsureAuthenticationType(acceptedAuthTypes);
+            if (!authResult.IsSuccessful)
+                return authResult;
+
+            return CheckPermissions(authResult.Payload?.SecurityContext, permissionClaims).WithPayload(authResult.Payload);
+        }
+
+        private OperationResult CheckPermissions(SecurityContext securityContext, params PermissionClaim[] permissionClaims)
+        {
+            bool hasPermission = securityContext?.HasPermission(permissionClaims) == true;
+            if (!hasPermission)
+                return OperationResult.Fail($"{securityContext?.User?.Username} doesn't have permissions to execute this operation");
+
+            return OperationResult.Win();
+        }
     }
 }

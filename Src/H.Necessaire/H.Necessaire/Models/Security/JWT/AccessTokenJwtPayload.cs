@@ -1,8 +1,11 @@
-﻿namespace H.Necessaire
+﻿using System.Runtime.Serialization;
+
+namespace H.Necessaire
 {
+    [DataContract]
     public class AccessTokenJwtPayload : JwtPayload
     {
-        public UserInfo UserInfo { get; set; }
-        public Role[] Roles { get; set; }
+        [DataMember] public UserInfo UserInfo { get; set; }
+        [DataMember] public Role[] Roles { get; set; }
     }
 }

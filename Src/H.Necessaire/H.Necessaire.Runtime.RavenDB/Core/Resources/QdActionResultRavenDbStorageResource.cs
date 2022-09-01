@@ -31,6 +31,30 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
 
             return result;
         }
+        protected override IDocumentQuery<QdActionResult> ApplyFilterSync(IDocumentQuery<QdActionResult> result, QdActionResultFilter filter)
+        {
+            if (filter?.IDs?.Any() ?? false)
+            {
+                result = result.WhereIn(nameof(QdActionResult.ID), filter.IDs.ToStringArray());
+            }
+
+            if (filter?.QdActionIDs?.Any() ?? false)
+            {
+                result = result.WhereIn(nameof(QdActionResult.QdActionID), filter.QdActionIDs.ToStringArray());
+            }
+
+            if (filter?.FromInclusive != null)
+            {
+                result = result.WhereGreaterThanOrEqual(nameof(QdActionResult.HappenedAt), filter.FromInclusive.Value);
+            }
+
+            if (filter?.ToInclusive != null)
+            {
+                result = result.WhereLessThanOrEqual(nameof(QdActionResult.HappenedAt), filter.ToInclusive.Value);
+            }
+
+            return result;
+        }
 
         public class QdActionResultFilterIndex : AbstractIndexCreationTask<QdActionResult>
         {

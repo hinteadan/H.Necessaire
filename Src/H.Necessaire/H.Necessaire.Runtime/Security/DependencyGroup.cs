@@ -14,6 +14,7 @@ namespace H.Necessaire.Runtime.Security
                 .Register<ImAUserAuthInfoStorageResource>(() => new UserAuthInfoFileSystemStorageResource())
                 .Register<ImAUserCredentialsStorageResource>(() => new UserCredentialsFileSystemStorageResource())
                 .Register<ImAUserInfoStorageResource>(() => new UserInfoFileSystemStorageResource())
+                .Register<ImTheIronManProviderResource>(() => new IronManFileSystemProviderResource())
                 ;
 
             dependencyRegistry

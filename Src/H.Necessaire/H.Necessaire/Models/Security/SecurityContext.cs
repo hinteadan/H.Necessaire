@@ -13,6 +13,9 @@ namespace H.Necessaire
 
         public bool HasPermission(Guid id, PermissionLevel permissionLevel = PermissionLevel.Locked)
         {
+            if (User?.IsIronMan() == true)
+                return true;
+
             if (!Roles?.Any() ?? true)
                 return false;
 
@@ -21,6 +24,9 @@ namespace H.Necessaire
 
         public bool HasPermission(string idTag, PermissionLevel permissionLevel = PermissionLevel.Locked)
         {
+            if (User?.IsIronMan() == true)
+                return true;
+
             if (!Roles?.Any() ?? true)
                 return false;
 
@@ -29,6 +35,9 @@ namespace H.Necessaire
 
         public bool HasPermission(params PermissionClaim[] permissionClaims)
         {
+            if (User?.IsIronMan() == true)
+                return true;
+
             if (!permissionClaims?.Any(x => x != null) ?? true)
                 return true;
 

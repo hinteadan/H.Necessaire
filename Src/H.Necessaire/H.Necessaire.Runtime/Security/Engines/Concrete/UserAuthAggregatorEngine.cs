@@ -13,17 +13,20 @@ namespace H.Necessaire.Runtime.Security.Engines.Concrete
         ImAHasherEngine hasher;
         ImAUserAuthInfoStorageResource userAuthInfoStorageResource;
         ImAUserInfoStorageResource userInfoStorageResource;
+        ImTheIronManProviderResource ironManProviderResource;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             hasher = dependencyProvider.Get<HasherFactory>().GetDefaultHasher();
             userAuthInfoStorageResource = dependencyProvider.Get<ImAUserAuthInfoStorageResource>();
             userInfoStorageResource = dependencyProvider.Get<ImAUserInfoStorageResource>();
+            ironManProviderResource = dependencyProvider.Get<ImTheIronManProviderResource>();
         }
         #endregion
 
         public async Task<AuthInfo> AggregateBrandNewAuthInfoForUser(Guid userID)
         {
-            UserInfo userInfo = (await userInfoStorageResource.GetUsersByIds(userID))?.SingleOrDefault();
+            UserInfo ironMan = (await ironManProviderResource.GetIronMenByIds(userID))?.SingleOrDefault();
+            UserInfo userInfo = ironMan ?? (await userInfoStorageResource.GetUsersByIds(userID))?.SingleOrDefault();
             if (userInfo == null)
                 OperationResult.Fail($"The user ({userID}) doesn't exist").ThrowOnFail();
 

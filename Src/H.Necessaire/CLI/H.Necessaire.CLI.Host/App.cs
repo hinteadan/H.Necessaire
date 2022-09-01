@@ -10,7 +10,7 @@ namespace H.Necessaire.CLI
             return
                 base
                 .WithEverything()
-                .With(x => x.Register<Runtime.SqlServer.SqlServerRuntimeDependencyGroup>(() => new Runtime.SqlServer.SqlServerRuntimeDependencyGroup()))
+                //.With(x => x.Register<Runtime.SqlServer.SqlServerRuntimeDependencyGroup>(() => new Runtime.SqlServer.SqlServerRuntimeDependencyGroup()))
                 ;
         }
     }

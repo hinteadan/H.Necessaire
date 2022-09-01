@@ -53,8 +53,6 @@ namespace H.Necessaire.Runtime.SqlServer.Core.Resources
                         }
                     ).ToArray()
                 ));
-
-                result.Add(new SqlFilterCriteria(columnName: nameof(ExiledSyncRequestSqlEntity.SyncRequestJson), parameterName: nameof(filter.PayloadTypes), @operator: "IN"));
             }
 
             if (filter?.FromInclusive != null)

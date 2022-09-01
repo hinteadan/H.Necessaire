@@ -17,6 +17,16 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
             return result;
         }
 
+        protected override IDocumentQuery<NetworkTrace> ApplyFilterSync(IDocumentQuery<NetworkTrace> result, IDFilter<Guid> filter)
+        {
+            if (filter?.IDs?.Any() ?? false)
+            {
+                result = result.WhereIn(nameof(NetworkTrace.ID), filter.IDs.ToStringArray());
+            }
+
+            return result;
+        }
+
         public class NetworkTraceFilterIndex : AbstractIndexCreationTask<NetworkTrace>
         {
             public NetworkTraceFilterIndex()

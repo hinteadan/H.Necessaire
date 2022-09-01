@@ -12,6 +12,7 @@ namespace H.Necessaire.Runtime.RavenDB
             dependencyRegistry
                 .Register<Core.DependencyGroup>(() => new Core.DependencyGroup())
                 .Register<Security.DependencyGroup>(() => new Security.DependencyGroup())
+                .Register<Analytics.DependencyGroup>(() => new Analytics.DependencyGroup())
                 ;
         }
         #endregion

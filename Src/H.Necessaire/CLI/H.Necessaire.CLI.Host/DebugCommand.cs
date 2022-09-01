@@ -3,16 +3,27 @@ using DeviceDetectorNET.Parser;
 using DeviceDetectorNET.Results;
 using DeviceDetectorNET.Results.Client;
 using H.Necessaire.Runtime.CLI.Commands;
+using H.Necessaire.Runtime.Security.Managers;
+using H.Necessaire.Serialization;
 
 namespace H.Necessaire.CLI.Host
 {
     internal class DebugCommand : CommandBase
     {
-        public override Task<OperationResult> Run()
+        ImASecurityManager securityManager;
+        public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
+            base.ReferDependencies(dependencyProvider);
+            securityManager = dependencyProvider.Get<ImASecurityManager>();
+        }
+
+        public override async Task<OperationResult> Run()
+        {
+            OperationResult<SecurityContext> loginResult = await securityManager.AuthenticateCredentials("ironman", "123qwe");
+
             ConsumerInfo consumerInfo = Parse("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62");
 
-            return OperationResult.Win().AsTask();
+            return OperationResult.Win();
         }
 
         private ConsumerInfo Parse(string userAgent)

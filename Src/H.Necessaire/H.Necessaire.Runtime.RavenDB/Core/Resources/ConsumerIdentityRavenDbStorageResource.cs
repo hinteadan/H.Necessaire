@@ -17,6 +17,16 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
             return result;
         }
 
+        protected override IDocumentQuery<ConsumerIdentity> ApplyFilterSync(IDocumentQuery<ConsumerIdentity> result, IDFilter<Guid> filter)
+        {
+            if (filter?.IDs?.Any() ?? false)
+            {
+                result = result.WhereIn(nameof(ConsumerIdentity.ID), filter.IDs.ToStringArray());
+            }
+
+            return result;
+        }
+
         public class ConsumerIdentityFilterIndex : AbstractIndexCreationTask<ConsumerIdentity>
         {
             public ConsumerIdentityFilterIndex()

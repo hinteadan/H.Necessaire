@@ -17,6 +17,16 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
             return result;
         }
 
+        protected override IDocumentQuery<RuntimeTrace> ApplyFilterSync(IDocumentQuery<RuntimeTrace> result, IDFilter<Guid> filter)
+        {
+            if (filter?.IDs?.Any() ?? false)
+            {
+                result = result.WhereIn(nameof(RuntimeTrace.ID), filter.IDs.ToStringArray());
+            }
+
+            return result;
+        }
+
         public class RuntimeTraceFilterIndex : AbstractIndexCreationTask<RuntimeTrace>
         {
             public RuntimeTraceFilterIndex()

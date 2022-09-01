@@ -163,10 +163,33 @@ namespace H.Necessaire.RavenDB
                                 );
         }
 
+        protected IDocumentSession NewSyncWriteSession()
+        {
+            return ravenDbDocumentStore.Store
+                                .OpenSession(
+                                    new SessionOptions
+                                    {
+                                        Database = DatabaseName
+                                    }
+                                );
+        }
+
         protected IAsyncDocumentSession NewReadSession()
         {
             return ravenDbDocumentStore.Store
                                 .OpenAsyncSession(
+                                    new SessionOptions
+                                    {
+                                        Database = DatabaseName,
+                                        NoTracking = true,
+                                    }
+                                );
+        }
+
+        protected IDocumentSession NewSyncReadSession()
+        {
+            return ravenDbDocumentStore.Store
+                                .OpenSession(
                                     new SessionOptions
                                     {
                                         Database = DatabaseName,

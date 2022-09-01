@@ -10,6 +10,7 @@ namespace H.Necessaire.Runtime.UseCases
                 .RegisterAlwaysNew<ImAPingUseCase>(() => new PingUseCase())
                 .RegisterAlwaysNew<ImASecurityUseCase>(() => new SecurityUseCase())
                 .RegisterAlwaysNew<ImASyncUseCase>(() => new SyncUseCase())
+                .RegisterAlwaysNew<ImAnAnalyticsUseCase>(() => new AnalyticsUseCase())
                 .RegisterAlwaysNew<ImAVersionUseCase>(() => new VersionUseCase())
             ;
         }

@@ -8,6 +8,7 @@ namespace H.Necessaire.Runtime.Validation.Engines.Concrete
     class UserInfoValidationEngine : ValidationEngineBase<UserInfo>, ImADependency
     {
         ImAUserInfoStorageResource userIdentityStorageResource;
+        ImTheIronManProviderResource ironManProviderResource;
         readonly Func<UserInfo, Task<OperationResult>>[] customRules;
 
         public UserInfoValidationEngine()
@@ -21,6 +22,7 @@ namespace H.Necessaire.Runtime.Validation.Engines.Concrete
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             userIdentityStorageResource = dependencyProvider.Get<ImAUserInfoStorageResource>();
+            ironManProviderResource = dependencyProvider.Get<ImTheIronManProviderResource>();
         }
         protected override Func<UserInfo, Task<OperationResult>>[] CustomRules => customRules;
 
@@ -29,11 +31,24 @@ namespace H.Necessaire.Runtime.Validation.Engines.Concrete
             if (string.IsNullOrWhiteSpace(userInfo?.Username))
                 return OperationResult.Fail($"Username cannot be empty");
 
-            UserInfo existingUser = (await userIdentityStorageResource.SearchUsers(new UserInfoSearchCriteria
-            {
-                Usernames = userInfo.Username.AsArray()
-            }))
-            ?.SingleOrDefault();
+            UserInfo existingIronMan =
+                (await ironManProviderResource.SearchIronMen(new UserInfoSearchCriteria
+                {
+                    Usernames = userInfo.Username.AsArray(),
+                }))
+                ?.SingleOrDefault()
+                ;
+
+            UserInfo existingUser = 
+                existingIronMan 
+                ?? 
+                (
+                    (await userIdentityStorageResource.SearchUsers(new UserInfoSearchCriteria
+                    {
+                        Usernames = userInfo.Username.AsArray()
+                    }))
+                    ?.SingleOrDefault()
+                );
 
             if (existingUser == null)
                 return OperationResult.Win();

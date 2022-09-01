@@ -32,6 +32,8 @@ namespace H.Necessaire.Runtime.RavenDB
 
         protected abstract IAsyncDocumentQuery<TEntity> ApplyFilter(IAsyncDocumentQuery<TEntity> query, TFilter filter);
 
+        protected abstract IDocumentQuery<TEntity> ApplyFilterSync(IDocumentQuery<TEntity> query, TFilter filter);
+
         public override async Task<TEntity[]> Search(TFilter filter)
         {
             await EnsureIndexes();
@@ -172,11 +174,11 @@ namespace H.Necessaire.Runtime.RavenDB
                     {
                         await EnsureIndexes();
 
-                        IAsyncDocumentSession session = NewReadSession();
+                        IDocumentSession session = NewSyncReadSession();
 
                         result =
                             OperationResult.Win().WithPayload(
-                                new RavenStream<TEntity>(session, ApplyFilter(session.Advanced.AsyncDocumentQuery<TEntity, TFilterIndex>(), filter).ApplyRavenDbSortAndPageFilterIfAny(filter).ToQueryable()) as IDisposableEnumerable<TEntity>
+                                new RavenStream<TEntity>(session, ApplyFilterSync(session.Advanced.DocumentQuery<TEntity, TFilterIndex>(), filter).ApplySyncRavenDbSortAndPageFilterIfAny(filter).ToQueryable()) as IDisposableEnumerable<TEntity>
                             );
                     }
                 )
@@ -197,11 +199,11 @@ namespace H.Necessaire.Runtime.RavenDB
                     {
                         await EnsureIndexes();
 
-                        IAsyncDocumentSession session = NewReadSession();
+                        IDocumentSession session = NewSyncReadSession();
 
                         result =
                             OperationResult.Win().WithPayload(
-                                new RavenStream<TEntity>(session, session.Advanced.AsyncDocumentQuery<TEntity, TFilterIndex>().ToQueryable()) as IDisposableEnumerable<TEntity>
+                                new RavenStream<TEntity>(session, session.Advanced.DocumentQuery<TEntity, TFilterIndex>().ToQueryable()) as IDisposableEnumerable<TEntity>
                             );
                     }
                 )

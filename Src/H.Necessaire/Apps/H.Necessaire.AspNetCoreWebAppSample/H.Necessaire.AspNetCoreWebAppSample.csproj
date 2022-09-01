@@ -12,6 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="ironmen.json" />
+    <Content Remove="ironmen.pass.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="free.hinteadan.client.certificate.with.password.pfx" />
   </ItemGroup>
 
@@ -21,6 +26,10 @@
 
     <ItemGroup>
 	    <EmbeddedResource Include="free.hinteadan.client.certificate.with.password.pfx" />
+	    <None Include="ironmen.json">
+	      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    </None>
+	    <None Include="ironmen.pass.json" />
 	    <EmbeddedResource Include="version.txt" />
     </ItemGroup>
 

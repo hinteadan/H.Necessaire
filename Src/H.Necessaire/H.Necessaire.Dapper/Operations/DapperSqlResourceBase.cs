@@ -68,7 +68,7 @@ namespace H.Necessaire.Dapper
 
             using (DapperSqlContext dapper = NewDbContext(tableName))
             {
-                return await dapper.LoadEntityByID<TSqlEntity>(id, idColumnName);
+                return await dapper.LoadEntityByID<TSqlEntity>(id, tableName, idColumnName);
             }
         }
 
