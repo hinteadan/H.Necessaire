@@ -99,6 +99,11 @@ namespace H.Necessaire.Runtime.RavenDB.Analytics.Resources.Concrete
                 result = result.WhereIn(x => x.IpAddresses, filter.IpAddresses);
             }
 
+            if (filter?.NetworkServiceProviders?.Any() == true)
+            {
+                result = result.WhereIn(x => x.NetworkServiceProviders, filter.NetworkServiceProviders);
+            }
+
             if (filter?.Countries?.Any() == true)
             {
                 result = result.WhereIn(x => x.GeoLocationAddresses, filter.Countries);
@@ -151,6 +156,11 @@ namespace H.Necessaire.Runtime.RavenDB.Analytics.Resources.Concrete
                 result = result.WhereIn(x => x.IpAddresses, filter.IpAddresses);
             }
 
+            if (filter?.NetworkServiceProviders?.Any() == true)
+            {
+                result = result.WhereIn(x => x.NetworkServiceProviders, filter.NetworkServiceProviders);
+            }
+
             if (filter?.Countries?.Any() == true)
             {
                 result = result.WhereIn(x => x.GeoLocationAddresses, filter.Countries);
@@ -167,6 +177,7 @@ namespace H.Necessaire.Runtime.RavenDB.Analytics.Resources.Concrete
         public class ConsumerNetworkTraceWithSearchFields : ConsumerNetworkTrace
         {
             public string IpAddresses { get; set; }
+            public string NetworkServiceProviders { get; set; }
             public string GeoLocationAddresses { get; set; }
         }
 
@@ -184,6 +195,7 @@ namespace H.Necessaire.Runtime.RavenDB.Analytics.Resources.Concrete
                         OldestVisit = doc.AsOf,
 
                         IpAddresses = doc.IpAddress,
+                        NetworkServiceProviders = doc.NetworkServiceProvider,
                         GeoLocationAddresses = doc.GeoLocation.Address.City.Value.Name + " " + doc.GeoLocation.Address.City.Value.Code + " " + doc.GeoLocation.Address.Country.Value.Name + " " + doc.GeoLocation.Address.Country.Value.Code,
 
                         NetworkTraces = new ConsumerNetworkTraceEntry[] {
@@ -192,6 +204,7 @@ namespace H.Necessaire.Runtime.RavenDB.Analytics.Resources.Concrete
                                 ID = doc.ID,
                                 AsOf = doc.AsOf,
                                 IpAddress = doc.IpAddress,
+                                NetworkServiceProvider = doc.NetworkServiceProvider,
                                 LocationLabel = doc.GeoLocation.Address.City.Value.Name + ", " + doc.GeoLocation.Address.Country.Value.Name + " (" + doc.GeoLocation.Address.Country.Value.Code + ")",
                                 Location = new NetworkTraceGeoLocation
                                 {
@@ -217,6 +230,7 @@ namespace H.Necessaire.Runtime.RavenDB.Analytics.Resources.Concrete
                             OldestVisit = agg.Min(x => x.OldestVisit),
 
                             IpAddresses = agg.Select(x => x.IpAddresses).Distinct().Aggregate((a, b) => a + "," + b),
+                            NetworkServiceProviders = agg.Select(x => x.NetworkServiceProviders).Distinct().Aggregate((a, b) => a + "," + b),
                             GeoLocationAddresses = agg.Select(x => x.GeoLocationAddresses).Distinct().Aggregate((a, b) => a + "," + b),
 
                             NetworkTraces = agg.SelectMany(x => x.NetworkTraces).GroupBy(x => x.ID).Select(x => x.First()).OrderByDescending(x => x.AsOf).ToArray()

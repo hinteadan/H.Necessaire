@@ -83,6 +83,28 @@ namespace H.Necessaire.Runtime.SqlServer.Analytics.Resources.Concrete
                     ));
             }
 
+            if (filter?.NetworkServiceProviders?.Any() == true)
+            {
+                result.Add(new ComposedSqlFilterCriteria(
+                    filter
+                    .NetworkServiceProviders
+                    .Select(
+                        (searchKey, index) =>
+                        {
+                            string paramName = $"{nameof(ConsumerNetworkTraceSqlEntry.NetworkServiceProviders)}{index}";
+                            sqlParams.Add(paramName, searchKey?.ToString() ?? "null");
+                            return
+                                new SqlFilterCriteria(
+                                    columnName: nameof(ConsumerNetworkTraceSqlEntry.NetworkServiceProviders),
+                                    parameterName: paramName,
+                                    @operator: "like"
+                                );
+                        }
+                    )
+                    .ToArray()
+                ));
+            }
+
             if (filter?.IpAddresses?.Any() == true)
             {
                 result.Add(new ComposedSqlFilterCriteria(
@@ -172,6 +194,7 @@ namespace H.Necessaire.Runtime.SqlServer.Analytics.Resources.Concrete
             public long LatestVisitTicks { get; set; }
             public long OldestVisitTicks { get; set; }
             public string IpAddresses { get; set; }
+            public string NetworkServiceProviders { get; set; }
             public string GeoLocationAddresses { get; set; }
             public string NetworkTracesJson { get; set; }
         }
@@ -197,6 +220,7 @@ namespace H.Necessaire.Runtime.SqlServer.Analytics.Resources.Concrete
                                 ID = t.ID,
                                 AsOf = new DateTime(t.AsOfTicks),
                                 IpAddress = t.IpAddress,
+                                NetworkServiceProvider = t.NetworkServiceProvider,
                                 LocationLabel = t.LocationLabel,
                                 Location = new NetworkTraceGeoLocation
                                 {
@@ -215,6 +239,7 @@ namespace H.Necessaire.Runtime.SqlServer.Analytics.Resources.Concrete
                 public Guid ID { get; set; }
                 public long AsOfTicks { get; set; }
                 public string IpAddress { get; set; }
+                public string NetworkServiceProvider { get; set; }
                 public string LocationLabel { get; set; }
                 public GeoLocation Location { get; set; }
             }

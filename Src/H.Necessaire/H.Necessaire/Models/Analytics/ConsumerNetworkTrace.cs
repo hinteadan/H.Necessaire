@@ -17,6 +17,7 @@ namespace H.Necessaire.Analytics
     {
         public Guid ID { get; set; }
         public string IpAddress { get; set; }
+        public string NetworkServiceProvider { get; set; }
         public DateTime AsOf { get; set; }
         public string LocationLabel { get; set; }
         public NetworkTraceGeoLocation Location { get; set; }

@@ -15,6 +15,7 @@ namespace H.Necessaire.Analytics
         public string[] ConsumerDisplayNames { get; set; }
         public DateTime? FromInclusive { get; set; }
         public DateTime? ToInclusive { get; set; }
+        public string[] NetworkServiceProviders { get; set; }
         public string[] IpAddresses { get; set; }
         public string[] Countries { get; set; }
         public string[] Cities { get; set; }
@@ -31,6 +32,7 @@ namespace H.Necessaire.Analytics
                     ConsumerDisplayNames = ConsumerDisplayNames,
                     FromInclusive = FromInclusive,
                     ToInclusive = ToInclusive,
+                    NetworkServiceProviders = NetworkServiceProviders,
                     IpAddresses = IpAddresses,
                     Countries = Countries,
                     Cities = Cities,

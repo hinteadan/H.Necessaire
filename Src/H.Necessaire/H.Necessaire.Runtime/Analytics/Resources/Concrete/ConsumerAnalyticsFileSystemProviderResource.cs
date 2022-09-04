@@ -135,6 +135,7 @@ namespace H.Necessaire.Runtime.Analytics.Resources.Concrete
                         g => new ConsumerNetworkTraceEntry
                         {
                             AsOf = g.AsOf,
+                            NetworkServiceProvider = g.NetworkServiceProvider,
                             IpAddress = g.IpAddress,
                             Location = new NetworkTraceGeoLocation
                             {
