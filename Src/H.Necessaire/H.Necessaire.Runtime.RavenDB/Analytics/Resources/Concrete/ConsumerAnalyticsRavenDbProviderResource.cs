@@ -69,7 +69,7 @@ namespace H.Necessaire.Runtime.RavenDB.Analytics.Resources.Concrete
 
             if (filter?.ConsumerDisplayNames?.Any() == true)
             {
-                result = result.Search(x => x.ConsumerDisplayName, string.Join(" ", filter.ConsumerDisplayNames));
+                result = result.Search(x => x.ConsumerDisplayName, string.Join(" ", filter.ConsumerDisplayNames.Select(s => $"*{s}*")));
             }
 
             if (filter?.FromInclusive != null)
@@ -96,22 +96,22 @@ namespace H.Necessaire.Runtime.RavenDB.Analytics.Resources.Concrete
 
             if (filter?.IpAddresses?.Any() == true)
             {
-                result = result.Search(x => x.IpAddresses, string.Join(" ", filter.IpAddresses));
+                result = result.Search(x => x.IpAddresses, string.Join(" ", filter.IpAddresses.Select(s => $"*{s}*")));
             }
 
             if (filter?.NetworkServiceProviders?.Any() == true)
             {
-                result = result.Search(x => x.NetworkServiceProviders, string.Join(" ", filter.NetworkServiceProviders));
+                result = result.Search(x => x.NetworkServiceProviders, string.Join(" ", filter.NetworkServiceProviders.Select(s => $"*{s}*")));
             }
 
             if (filter?.Countries?.Any() == true)
             {
-                result = result.Search(x => x.GeoLocationAddresses, string.Join(" ", filter.Countries));
+                result = result.Search(x => x.GeoLocationAddresses, string.Join(" ", filter.Countries.Select(s => $"*{s}*")));
             }
 
             if (filter?.Cities?.Any() == true)
             {
-                result = result.Search(x => x.GeoLocationAddresses, string.Join(" ", filter.Cities));
+                result = result.Search(x => x.GeoLocationAddresses, string.Join(" ", filter.Cities.Select(s => $"*{s}*")));
             }
 
             return result;
@@ -126,7 +126,7 @@ namespace H.Necessaire.Runtime.RavenDB.Analytics.Resources.Concrete
 
             if (filter?.ConsumerDisplayNames?.Any() == true)
             {
-                result = result.Search(x => x.ConsumerDisplayName, string.Join(" ", filter.ConsumerDisplayNames));
+                result = result.Search(x => x.ConsumerDisplayName, string.Join(" ", filter.ConsumerDisplayNames.Select(s => $"*{s}*")));
             }
 
             if (filter?.FromInclusive != null)
@@ -153,22 +153,22 @@ namespace H.Necessaire.Runtime.RavenDB.Analytics.Resources.Concrete
 
             if (filter?.IpAddresses?.Any() == true)
             {
-                result = result.Search(x => x.IpAddresses, string.Join(" ", filter.IpAddresses));
+                result = result.Search(x => x.IpAddresses, string.Join(" ", filter.IpAddresses.Select(s => $"*{s}*")));
             }
 
             if (filter?.NetworkServiceProviders?.Any() == true)
             {
-                result = result.Search(x => x.NetworkServiceProviders, string.Join(" ", filter.NetworkServiceProviders));
+                result = result.Search(x => x.NetworkServiceProviders, string.Join(" ", filter.NetworkServiceProviders.Select(s => $"*{s}*")));
             }
 
             if (filter?.Countries?.Any() == true)
             {
-                result = result.Search(x => x.GeoLocationAddresses, string.Join(" ", filter.Countries));
+                result = result.Search(x => x.GeoLocationAddresses, string.Join(" ", filter.Countries.Select(s => $"*{s}*")));
             }
 
             if (filter?.Cities?.Any() == true)
             {
-                result = result.Search(x => x.GeoLocationAddresses, string.Join(" ", filter.Cities));
+                result = result.Search(x => x.GeoLocationAddresses, string.Join(" ", filter.Cities.Select(s => $"*{s}*")));
             }
 
             return result;
