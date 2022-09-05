@@ -91,22 +91,22 @@ namespace H.Necessaire.Runtime.RavenDB.Analytics.Resources.Concrete
 
             if (filter?.NetworkServiceProviders?.Any() == true)
             {
-                result = result.WhereIn(x => x.NetworkServiceProviders, filter.NetworkServiceProviders);
+                result = result.Search(x => x.NetworkServiceProviders, string.Join(" ", filter.NetworkServiceProviders));
             }
 
             if (filter?.ConsumerIdentityIDs?.Any() == true)
             {
-                result = result.WhereIn(x => x.ConsumerIdentityIDs, filter.ConsumerIdentityIDs.ToStringArray());
+                result = result.Search(x => x.ConsumerIdentityIDs, string.Join(" ", filter.ConsumerIdentityIDs.ToStringArray()));
             }
 
             if (filter?.Countries?.Any() == true)
             {
-                result = result.WhereIn(x => x.GeoLocationAddresses, filter.Countries);
+                result = result.Search(x => x.GeoLocationAddresses, string.Join(" ", filter.Countries));
             }
 
             if (filter?.Cities?.Any() == true)
             {
-                result = result.WhereIn(x => x.GeoLocationAddresses, filter.Cities);
+                result = result.Search(x => x.GeoLocationAddresses, string.Join(" ", filter.Cities));
             }
 
             return result;
@@ -143,22 +143,22 @@ namespace H.Necessaire.Runtime.RavenDB.Analytics.Resources.Concrete
 
             if (filter?.NetworkServiceProviders?.Any() == true)
             {
-                result = result.WhereIn(x => x.NetworkServiceProviders, filter.NetworkServiceProviders);
+                result = result.Search(x => x.NetworkServiceProviders, string.Join(" ", filter.NetworkServiceProviders));
             }
 
             if (filter?.ConsumerIdentityIDs?.Any() == true)
             {
-                result = result.WhereIn(x => x.ConsumerIdentityIDs, filter.ConsumerIdentityIDs.ToStringArray());
+                result = result.Search(x => x.ConsumerIdentityIDs, string.Join(" ", filter.ConsumerIdentityIDs.ToStringArray()));
             }
 
             if (filter?.Countries?.Any() == true)
             {
-                result = result.WhereIn(x => x.GeoLocationAddresses, filter.Countries);
+                result = result.Search(x => x.GeoLocationAddresses, string.Join(" ", filter.Countries));
             }
 
             if (filter?.Cities?.Any() == true)
             {
-                result = result.WhereIn(x => x.GeoLocationAddresses, filter.Cities);
+                result = result.Search(x => x.GeoLocationAddresses, string.Join(" ", filter.Cities));
             }
 
             return result;
