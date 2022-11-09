@@ -18,10 +18,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
