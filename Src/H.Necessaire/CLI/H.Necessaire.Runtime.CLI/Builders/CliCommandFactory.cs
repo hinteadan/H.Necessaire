@@ -37,14 +37,14 @@ namespace H.Necessaire.Runtime.CLI.Builders
                 =
                 dependencyBrowser
                 .GetAllAlwaysNewTypes()
-                .SingleOrDefault(x => IsCommandNameMatch(commandName, x.Key.Name))
+                .SingleOrDefault(x => IsCommandNameMatch(commandName, x.Key.Name) || x.Key.IsMatch(commandName))
                 .Key
 
                 ??
 
                 dependencyBrowser
                 .GetAllOneTimeTypes()
-                .SingleOrDefault(x => IsCommandNameMatch(commandName, x.Key.Name))
+                .SingleOrDefault(x => IsCommandNameMatch(commandName, x.Key.Name) || x.Key.IsMatch(commandName))
                 .Key
                 ;
 
