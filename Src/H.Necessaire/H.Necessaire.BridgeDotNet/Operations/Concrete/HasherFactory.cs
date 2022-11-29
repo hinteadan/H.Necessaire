@@ -6,18 +6,19 @@ namespace H.Necessaire
 {
     public class HasherFactory : ImADependency
     {
-        public const string SimpleSecureHasher = nameof(SimpleSecureHasher);
         public const string MD5Hasher = nameof(MD5Hasher);
 
         #region Construct
         const string configKeyDefaultHasher = "DefaultHasher";
 
         static readonly ConcurrentDictionary<string, KeyValuePair<Type, ImAHasherEngine>> knownHashers
-            = new ConcurrentDictionary<string, KeyValuePair<Type, ImAHasherEngine>>(new Dictionary<string, KeyValuePair<Type, ImAHasherEngine>>{
-                { SimpleSecureHasher, new KeyValuePair<Type, ImAHasherEngine>(typeof(SimpleSecureHasher), new SimpleSecureHasher()) },
-                { MD5Hasher, new KeyValuePair<Type, ImAHasherEngine>(typeof(MD5Hasher), new MD5Hasher()) },
-            });
-        string defaultHasher = nameof(SimpleSecureHasher);
+            = new ConcurrentDictionary<string, KeyValuePair<Type, ImAHasherEngine>>()
+            .And(x =>
+            {
+                x.Add(MD5Hasher, new KeyValuePair<Type, ImAHasherEngine>(typeof(MD5Hasher), new MD5Hasher()));
+            })
+            ;
+        string defaultHasher = nameof(MD5Hasher);
 
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
@@ -25,7 +26,7 @@ namespace H.Necessaire
 
             defaultHasher = config?.Get(configKeyDefaultHasher)?.Value?.ToString() ?? defaultHasher;
             if (!knownHashers.ContainsKey(defaultHasher))
-                defaultHasher = nameof(SimpleSecureHasher);
+                defaultHasher = nameof(MD5Hasher);
         }
         #endregion
 
@@ -43,7 +44,7 @@ namespace H.Necessaire
         {
             KeyValuePair<Type, ImAHasherEngine> entryValue
                 = new KeyValuePair<Type, ImAHasherEngine>(hasherEngine.GetType(), hasherEngine);
-            knownHashers.AddOrUpdate(hasherName, key => entryValue, (key, existing) => entryValue);
+            knownHashers.AddOrUpdate(hasherName, entryValue, (key, existing) => entryValue);
             return this;
         }
     }
