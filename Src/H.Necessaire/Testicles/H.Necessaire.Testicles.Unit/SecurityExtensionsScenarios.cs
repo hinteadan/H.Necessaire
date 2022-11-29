@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using H.Necessaire.Runtime.Security;
 using System.Security.Cryptography;
 using Xunit;
 

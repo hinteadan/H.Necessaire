@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using H.Necessaire.Runtime.Security;
 using System;
 using System.Security.Cryptography;
 using System.Text;
