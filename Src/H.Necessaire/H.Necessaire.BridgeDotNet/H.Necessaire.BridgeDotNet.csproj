@@ -429,6 +429,9 @@
     <Compile Include="..\H.Necessaire\Operations\Concrete\DataStream.cs">
       <Link>Operations\Concrete\DataStream.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Concrete\MD5Hasher.cs">
+      <Link>Operations\Concrete\MD5Hasher.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Operations\Config\ImAConfigProvider.cs">
       <Link>Operations\Config\ImAConfigProvider.cs</Link>
     </Compile>
@@ -600,6 +603,7 @@
     <Compile Include="Models\LazyThreadSafetyMode.cs" />
     <Compile Include="Operations\CallContext.cs" />
     <Compile Include="Operations\ConcreteFactory.cs" />
+    <Compile Include="Operations\Concrete\HasherFactory.cs" />
     <Compile Include="Operations\Concrete\JsPeriodicAction.cs" />
     <Compile Include="Operations\Logging\Concrete\ConsoleLogProcessor.cs" />
     <Compile Include="Operations\Logging\Concrete\LogEntryDecorator.cs" />
