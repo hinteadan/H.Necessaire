@@ -2,7 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 
-namespace H.Necessaire
+namespace H.Necessaire.Runtime.Security
 {
     public static class SecurityExtensions
     {
@@ -141,6 +141,57 @@ namespace H.Necessaire
             })
             .TryOrFailWithGrace(
                 onFail: x => result = OperationResult.Fail(x).WithoutPayload<string>()
+            );
+
+            return result;
+        }
+
+        public static OperationResult<RSACryptoServiceProvider> ImportAsPEMPrivateRsaKey(this string pem)
+        {
+            OperationResult<RSACryptoServiceProvider> result = OperationResult.Fail().WithoutPayload<RSACryptoServiceProvider>();
+
+            new Action(() =>
+            {
+                using (StringReader pemStringReader = new StringReader(pem))
+                {
+                    Org.BouncyCastle.OpenSsl.PemReader pemReader = new Org.BouncyCastle.OpenSsl.PemReader(new StringReader(pem));
+
+                    Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair KeyPair = (Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair)pemReader.ReadObject();
+                    RSAParameters rsaParams = Org.BouncyCastle.Security.DotNetUtilities.ToRSAParameters((Org.BouncyCastle.Crypto.Parameters.RsaPrivateCrtKeyParameters)KeyPair.Private);
+
+                    RSACryptoServiceProvider cryptoServiceProvider = new RSACryptoServiceProvider();// cspParams);
+                    cryptoServiceProvider.ImportParameters(rsaParams);
+
+                    result = OperationResult.Win().WithPayload(cryptoServiceProvider);
+                }
+            })
+            .TryOrFailWithGrace(
+                onFail: x => result = OperationResult.Fail(x).WithoutPayload<RSACryptoServiceProvider>()
+            );
+
+            return result;
+        }
+
+        public static OperationResult<RSACryptoServiceProvider> ImportAsPEMPublicRsaKey(this string pem)
+        {
+            OperationResult<RSACryptoServiceProvider> result = OperationResult.Fail().WithoutPayload<RSACryptoServiceProvider>();
+
+            new Action(() =>
+            {
+                using (StringReader pemStringReader = new StringReader(pem))
+                {
+                    Org.BouncyCastle.OpenSsl.PemReader pr = new Org.BouncyCastle.OpenSsl.PemReader(pemStringReader);
+                    Org.BouncyCastle.Crypto.AsymmetricKeyParameter publicKey = (Org.BouncyCastle.Crypto.AsymmetricKeyParameter)pr.ReadObject();
+                    RSAParameters rsaParams = Org.BouncyCastle.Security.DotNetUtilities.ToRSAParameters((Org.BouncyCastle.Crypto.Parameters.RsaKeyParameters)publicKey);
+
+                    RSACryptoServiceProvider cryptoServiceProvider = new RSACryptoServiceProvider();// cspParams);
+                    cryptoServiceProvider.ImportParameters(rsaParams);
+
+                    result = OperationResult.Win().WithPayload(cryptoServiceProvider);
+                }
+            })
+            .TryOrFailWithGrace(
+                onFail: x => result = OperationResult.Fail(x).WithoutPayload<RSACryptoServiceProvider>()
             );
 
             return result;

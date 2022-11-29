@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace H.Necessaire
@@ -11,10 +12,10 @@ namespace H.Necessaire
         #region Construct
         const string configKeyDefaultHasher = "DefaultHasher";
 
-        static Dictionary<string, KeyValuePair<Type, ImAHasherEngine>> knownHashers = new Dictionary<string, KeyValuePair<Type, ImAHasherEngine>> {
-            { SimpleSecureHasher, new KeyValuePair<Type, ImAHasherEngine>(typeof(SimpleSecureHasher), new SimpleSecureHasher()) },
-            { RS512Hasher, new KeyValuePair<Type, ImAHasherEngine>(typeof(RS512Hasher), new RS512Hasher()) },
-        };
+        static readonly ConcurrentDictionary<string, KeyValuePair<Type, ImAHasherEngine>> knownHashers
+            = new ConcurrentDictionary<string, KeyValuePair<Type, ImAHasherEngine>>(new Dictionary<string, KeyValuePair<Type, ImAHasherEngine>>{
+                { SimpleSecureHasher, new KeyValuePair<Type, ImAHasherEngine>(typeof(SimpleSecureHasher), new SimpleSecureHasher()) },
+            });
         string defaultHasher = nameof(SimpleSecureHasher);
 
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
@@ -35,6 +36,14 @@ namespace H.Necessaire
                 return OperationResult.Fail($"Hasher '{hasherName}' is unknown").WithoutPayload<ImAHasherEngine>();
 
             return OperationResult.Win().WithPayload(knownHashers[hasherName].Value);
+        }
+
+        public HasherFactory RegisterOrUpdateHasher(string hasherName, ImAHasherEngine hasherEngine)
+        {
+            KeyValuePair<Type, ImAHasherEngine> entryValue
+                = new KeyValuePair<Type, ImAHasherEngine>(hasherEngine.GetType(), hasherEngine);
+            knownHashers.AddOrUpdate(hasherName, key => entryValue, (key, existing) => entryValue);
+            return this;
         }
     }
 }

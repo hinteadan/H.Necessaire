@@ -1,4 +1,6 @@
-﻿namespace H.Necessaire.Runtime
+﻿using H.Necessaire.Runtime.Security;
+
+namespace H.Necessaire.Runtime
 {
     public class RuntimeDependencyGroup : ImADependencyGroup
     {
@@ -6,7 +8,7 @@
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry
-                .Register<HasherFactory>(() => new HasherFactory())
+                .Register<HasherFactory>(() => new HasherFactory().RegisterOrUpdateHasher(nameof(RS512Hasher), new RS512Hasher()))
                 ;
 
             dependencyRegistry
