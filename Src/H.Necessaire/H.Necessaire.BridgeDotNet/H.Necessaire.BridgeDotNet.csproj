@@ -207,6 +207,12 @@
     <Compile Include="..\H.Necessaire\Models\Config\RuntimeConfig.cs">
       <Link>Models\Config\RuntimeConfig.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\EphemeralType.cs">
+      <Link>Models\EphemeralType.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\EphemeralTypeBase.cs">
+      <Link>Models\EphemeralTypeBase.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Geography\GeoAddress.cs">
       <Link>Models\Geography\GeoAddress.cs</Link>
     </Compile>
@@ -230,6 +236,9 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Models\IDentityType.cs">
       <Link>Models\IDentityType.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\IEphemeralType.cs">
+      <Link>Models\IEphemeralType.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Models\IGuidIdentity.cs">
       <Link>Models\IGuidIdentity.cs</Link>
