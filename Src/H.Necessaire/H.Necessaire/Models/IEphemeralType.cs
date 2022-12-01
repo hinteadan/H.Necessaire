@@ -18,7 +18,7 @@ namespace H.Necessaire
         void ExpireIn(TimeSpan timeSpan);
     }
 
-    public interface IEphemeralType<TPayload>
+    public interface IEphemeralType<TPayload> : IEphemeralType
     {
         TPayload Payload { get; }
     }
