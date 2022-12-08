@@ -7,11 +7,24 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
-    public class HttpClient : ImADependency
+    public class HttpClient
     {
-        public void ReferDependencies(ImADependencyProvider dependencyProvider) { }
-
         private readonly Dictionary<string, string> customHeaders = new Dictionary<string, string>();
+
+        public HttpClient SetHeader(string name, string value)
+        {
+            customHeaders[name] = value;
+            return this;
+        }
+
+        public HttpClient ZapHeader(string name)
+        {
+            if (!customHeaders.ContainsKey(name))
+                return this;
+
+            customHeaders.Remove(name);
+            return this;
+        }
 
         public HttpClient SetAuth(string type, string token)
         {
