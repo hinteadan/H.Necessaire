@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Dapper.Operations.Concrete
 {
-    class DapperSqlContext : IDisposable
+    public class DapperSqlContext : IDisposable
     {
         #region Construct
         readonly IDbConnection dbConnection;
