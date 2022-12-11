@@ -184,9 +184,29 @@ namespace H.Necessaire.Runtime.Integration.NetCore.Concrete
         {
             string authToken = ExtractAccessTokenPartFromAuthHeader(WellKnownAccessTokenType.Bearer, authHeader);
 
-            SecurityContext securityContext = (await securityManager.AuthenticateAccessToken(authToken)).ThrowOnFailOrReturn();
+            OperationResult<SecurityContext> securityContextResult = OperationResult.Fail("Not yet started").WithoutPayload<SecurityContext>();
 
-            return securityContext;
+            await
+                new Func<Task>(async () =>
+                {
+                    securityContextResult = await securityManager.AuthenticateAccessToken(authToken);
+                })
+                .TryOrFailWithGrace(
+                    onFail: async ex =>
+                    {
+                        string message = $"Error occurred while trying to construct SecurityContext from Bearer Token Auth Header";
+                        await logger.LogError(message, ex);
+                        securityContextResult = OperationResult.Fail(ex, message).WithoutPayload<SecurityContext>();
+                    }
+                );
+
+            if (!securityContextResult.IsSuccessful)
+            {
+                await logger.LogError($"SecurityManager.AuthenticateAccessToken failed to authenticate the Bearer Token Auth Header", new OperationResultException(securityContextResult));
+                return null;
+            }
+
+            return securityContextResult.Payload;
         }
 
         private async Task<SecurityContext> BuildSecurityContextFromBasicAuth(string authHeader)
@@ -195,10 +215,30 @@ namespace H.Necessaire.Runtime.Integration.NetCore.Concrete
 
             Note credentials = ParseCredentialsFromBasicAuthHeader(authToken).ThrowOnFailOrReturn();
 
-            SecurityContext securityContext = (await securityManager.AuthenticateCredentials(credentials.ID, credentials.Value)).ThrowOnFailOrReturn();
+            OperationResult<SecurityContext> securityContextResult = OperationResult.Fail("Not yet started").WithoutPayload<SecurityContext>();
+            await
+                new Func<Task>(async () =>
+                {
+                    securityContextResult = await securityManager.AuthenticateCredentials(credentials.ID, credentials.Value);
+                })
+                .TryOrFailWithGrace(
+                    onFail: async ex =>
+                    {
+                        string message = $"Error occurred while trying to construct SecurityContext from Basic Auth Header";
+                        await logger.LogError(message, ex);
+                        securityContextResult = OperationResult.Fail(ex, message).WithoutPayload<SecurityContext>();
+                    }
+                );
+
+            if (!securityContextResult.IsSuccessful)
+            {
+                await logger.LogError($"SecurityManager.AuthenticateCredentials failed to authenticate the Basic Auth Header", new OperationResultException(securityContextResult));
+                return null;
+            }
 
             return
-                securityContext
+                securityContextResult
+                .Payload
                 .And(x =>
                 {
                     x.Auth = new AuthInfo
