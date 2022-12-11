@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace H.Necessaire.Dapper.Operations.Concrete
 {
-    class DapperCustomQueryResult<T> : ILimitedEnumerable<T>
+    public class DapperCustomQueryResult<T> : ILimitedEnumerable<T>
     {
         readonly IEnumerable<T> entries;
 

@@ -274,7 +274,7 @@ namespace H.Necessaire.Dapper
             }
         }
 
-        private DapperSqlContext NewDbContext(string tableName = null)
+        protected virtual DapperSqlContext NewDbContext(string tableName = null)
         {
             return new DapperSqlContext(connectionString, tableName ?? this.tableName);
         }
