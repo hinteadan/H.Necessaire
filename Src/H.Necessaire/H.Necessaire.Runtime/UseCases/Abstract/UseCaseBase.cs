@@ -10,7 +10,6 @@ namespace H.Necessaire.Runtime
         const int httpStatusCodeUnauthorized = 401;
 
         const string noAuthReason = "This use case requires authentication. The current request is anonymous. Please authenticate and try again.";
-        private UseCaseContext currentContext = null;
         private ImAUseCaseContextProvider contextProvider;
         private ImALogger logger;
         public virtual void ReferDependencies(ImADependencyProvider dependencyProvider)
@@ -30,12 +29,8 @@ namespace H.Necessaire.Runtime
             if (contextProvider == null)
                 return null;
 
-            if (currentContext != null)
-                return currentContext;
-
-            currentContext = await contextProvider.GetCurrentContext();
-
-            return currentContext;
+            return
+                await contextProvider.GetCurrentContext();
         }
 
         protected async Task<OperationResult<UseCaseContext>> EnsureAuthentication()
@@ -56,7 +51,7 @@ namespace H.Necessaire.Runtime
                 )
                 : OperationResult.Win().WithPayload(useCaseContext);
 
-            return result.And(x => x.ThrowOnFail());
+            return result;
         }
 
         protected async Task<OperationResult<UseCaseContext>> EnsureAuthenticationType(params string[] acceptedAuthTypes)
@@ -76,7 +71,7 @@ namespace H.Necessaire.Runtime
                             ReasonPhrase = "Accepted auth types are NOT specified, therefore any auth type is denied.",
                         })
                     );
-                return result.And(x => x.ThrowOnFail());
+                return result;
             }
 
             if (result?.Payload?.SecurityContext?.Auth?.AccessTokenType == null)
@@ -92,7 +87,7 @@ namespace H.Necessaire.Runtime
                             ReasonPhrase = "Access token type is NOT specfied in the current context, therefore access is denied",
                         })
                     );
-                return result.And(x => x.ThrowOnFail());
+                return result;
             }
 
             if (!acceptedAuthTypes.Any(x => string.Equals(x, result.Payload.SecurityContext.Auth.AccessTokenType, StringComparison.InvariantCultureIgnoreCase)))
@@ -109,10 +104,10 @@ namespace H.Necessaire.Runtime
                             ReasonPhrase = reason,
                         })
                     );
-                return result.And(x => x.ThrowOnFail());
+                return result;
             }
 
-            return result.And(x => x.ThrowOnFail());
+            return result;
         }
 
         protected async Task<OperationResult<UseCaseContext>> EnsureAuthenticationAndPermissions(params PermissionClaim[] permissionClaims)
