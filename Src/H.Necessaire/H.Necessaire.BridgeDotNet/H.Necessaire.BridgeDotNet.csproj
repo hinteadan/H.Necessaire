@@ -417,6 +417,9 @@
     <Compile Include="..\H.Necessaire\Models\Security\WellKnownPermissionIDTag.cs">
       <Link>Models\Security\WellKnownPermissionIDTag.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\TaggedValue.cs">
+      <Link>Models\TaggedValue.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Versioning\Version.cs">
       <Link>Models\Versioning\Version.cs</Link>
     </Compile>
