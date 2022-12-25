@@ -296,5 +296,39 @@ namespace H.Necessaire
             => data.ToAuditMeta(data.ID?.ToString() ?? Guid.Empty.ToString(), auditActionType, doneBy);
 
         public static OperationResult<T> ToWinResult<T>(this T payload, string reason = null, params string[] comments) => OperationResult.Win(reason, comments).WithPayload(payload);
+
+        public static DataBinMeta ToMeta(this DataBin dataBin)
+        {
+            if (dataBin is null)
+                return null;
+
+            return
+                new DataBinMeta
+                {
+                    AsOf = dataBin.AsOf,
+                    Description = dataBin.Description,
+                    Format = dataBin.Format,
+                    ID = dataBin.ID,
+                    Name = dataBin.Name,
+                    Notes = dataBin.Notes,
+                };
+        }
+
+        public static DataBin ToBin(this DataBinMeta dataBinMeta, Func<Task<Stream>> streamFactory)
+        {
+            if (dataBinMeta is null)
+                return null;
+
+            return
+                new DataBin(streamFactory)
+                {
+                    AsOf = dataBinMeta.AsOf,
+                    Description = dataBinMeta.Description,
+                    Format = dataBinMeta.Format,
+                    ID = dataBinMeta.ID,
+                    Name = dataBinMeta.Name,
+                    Notes = dataBinMeta.Notes,
+                };
+        }
     }
 }
