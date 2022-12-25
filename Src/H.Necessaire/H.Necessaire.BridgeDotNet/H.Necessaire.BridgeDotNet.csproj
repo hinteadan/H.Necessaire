@@ -207,6 +207,15 @@
     <Compile Include="..\H.Necessaire\Models\Config\RuntimeConfig.cs">
       <Link>Models\Config\RuntimeConfig.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\DataBin.cs">
+      <Link>Models\DataBin.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\DataBinFormatInfo.cs">
+      <Link>Models\DataBinFormatInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\DataBinMeta.cs">
+      <Link>Models\DataBinMeta.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\EphemeralType.cs">
       <Link>Models\EphemeralType.cs</Link>
     </Compile>
@@ -425,6 +434,9 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Models\Versioning\VersionNumber.cs">
       <Link>Models\Versioning\VersionNumber.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\WellKnownDataBinFormat.cs">
+      <Link>Models\WellKnownDataBinFormat.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\Analytics\ImAConsumerAnalyticsProvider.cs">
       <Link>Operations\Analytics\ImAConsumerAnalyticsProvider.cs</Link>
