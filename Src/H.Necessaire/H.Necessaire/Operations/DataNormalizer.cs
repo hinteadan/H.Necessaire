@@ -1,4 +1,6 @@
-﻿namespace H.Necessaire
+﻿using System;
+
+namespace H.Necessaire
 {
     public class DataNormalizer
     {
@@ -10,16 +12,28 @@
             this.To = toInterval;
         }
 
-        public double Do(double value)
+        public decimal Do(decimal value)
         {
-            double locationPercent =
-                value <= From.Min
-                ? 0
-                : value >= From.Max
-                ? 1
-                : (value - From.Min) / (From.Max - From.Min);
+            if (From.IsInfinite)
+                throw new InvalidOperationException("From interval is infinite");
 
-            double targetValue = (locationPercent * (To.Max - To.Min)) + To.Min;
+            if (To.IsInfinite)
+                throw new InvalidOperationException("To interval is infinite");
+
+            if (From.IsSingle)
+                return From.Min.Value;
+
+            if (To.IsSingle)
+                return To.Min.Value;
+
+            decimal locationPercent =
+                value <= From.Min.Value
+                ? 0
+                : value >= From.Max.Value
+                ? 1
+                : (value - From.Min.Value) / (From.Max.Value - From.Min.Value);
+
+            decimal targetValue = (locationPercent * (To.Max.Value - To.Min.Value)) + To.Min.Value;
 
             return targetValue;
         }
