@@ -66,6 +66,14 @@ namespace H.Necessaire.Runtime.RavenDB.Core
                 .Register<ImAStorageService<Guid, RuntimeTrace>>(() => dependencyRegistry.Get<RuntimeTraceRavenDbStorageResource>())
                 .Register<ImAStorageBrowserService<RuntimeTrace, IDFilter<Guid>>>(() => dependencyRegistry.Get<RuntimeTraceRavenDbStorageResource>())
                 ;
+
+            dependencyRegistry
+                .Register<DataBinRavenDbStorageResource>(() => new DataBinRavenDbStorageResource())
+                .Register<ImAStorageService<Guid, DataBinMeta>>(() => dependencyRegistry.Get<DataBinRavenDbStorageResource>())
+                .Register<ImAStorageBrowserService<DataBinMeta, DataBinFilter>>(() => dependencyRegistry.Get<DataBinRavenDbStorageResource>())
+                .Register<ImAStorageService<Guid, DataBin>>(() => dependencyRegistry.Get<DataBinRavenDbStorageResource>())
+                .Register<ImAStorageBrowserService<DataBin, DataBinFilter>>(() => dependencyRegistry.Get<DataBinRavenDbStorageResource>())
+                ;
         }
     }
 }

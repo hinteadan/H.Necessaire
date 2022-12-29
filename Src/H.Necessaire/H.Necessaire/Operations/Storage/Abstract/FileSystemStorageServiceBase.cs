@@ -151,7 +151,7 @@ namespace H.Necessaire
             }
         }
 
-        private Task<OperationResult> EnsureEntityStorageFolder()
+        protected Task<OperationResult> EnsureEntityStorageFolder()
         {
             if (entityStorageFolder.Exists)
                 return OperationResult.Win().AsTask();

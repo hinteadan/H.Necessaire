@@ -25,7 +25,7 @@ namespace H.Necessaire
         public string GenerateHumanFriendlyFileName()
         {
             StringBuilder printer
-                = new StringBuilder($"{(string.IsNullOrWhiteSpace(Name) ? ID.ToString() : Name)}_AsOf_{AsOf.PrintTimeStampAsIdentifier()}".ToSafeFileName(maxLength: 200));
+                = new StringBuilder($"{(string.IsNullOrWhiteSpace(Name) ? ID.ToString() : Name)}_AsOf_{AsOf.PrintTimeStampAsIdentifier()}".ToSafeFileName());
 
             if (!string.IsNullOrWhiteSpace(Format?.Extension))
                 printer.Append(".").Append(Format.Extension);

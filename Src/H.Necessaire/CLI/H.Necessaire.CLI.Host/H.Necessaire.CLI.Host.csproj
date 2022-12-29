@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\H.Necessaire.Dapper\H.Necessaire.Dapper.csproj" />
+    <ProjectReference Include="..\..\H.Necessaire.Runtime.RavenDB\H.Necessaire.Runtime.RavenDB.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime.SqlServer\H.Necessaire.Runtime.SqlServer.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime\H.Necessaire.Runtime.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Serialization\H.Necessaire.Serialization.csproj" />

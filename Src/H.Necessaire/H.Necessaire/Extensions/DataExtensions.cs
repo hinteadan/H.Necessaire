@@ -314,7 +314,7 @@ namespace H.Necessaire
                 };
         }
 
-        public static DataBin ToBin(this DataBinMeta dataBinMeta, Func<Task<Stream>> streamFactory)
+        public static DataBin ToBin(this DataBinMeta dataBinMeta, Func<DataBinMeta, Task<ImADataBinStream>> streamFactory)
         {
             if (dataBinMeta is null)
                 return null;
@@ -329,6 +329,12 @@ namespace H.Necessaire
                     Name = dataBinMeta.Name,
                     Notes = dataBinMeta.Notes,
                 };
+        }
+
+        public static ImADataBinStream ToDataBinStream(this Stream stream, params IDisposable[] otherDisposables)
+        {
+            return
+                new DefaultDataBinStream(stream, otherDisposables);
         }
     }
 }

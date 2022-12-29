@@ -1,5 +1,4 @@
 ﻿using H.Necessaire.Runtime;
-using H.Necessaire.Runtime.CLI;
 
 namespace H.Necessaire.CLI
 {
@@ -10,7 +9,9 @@ namespace H.Necessaire.CLI
             return
                 base
                 .WithEverything()
+                .WithDefaultRuntimeConfig()
                 //.With(x => x.Register<Runtime.SqlServer.SqlServerRuntimeDependencyGroup>(() => new Runtime.SqlServer.SqlServerRuntimeDependencyGroup()))
+                //.With(x => x.Register<Runtime.RavenDB.RavenDbRuntimeDependencyGroup>(() => new Runtime.RavenDB.RavenDbRuntimeDependencyGroup()))
                 ;
         }
     }

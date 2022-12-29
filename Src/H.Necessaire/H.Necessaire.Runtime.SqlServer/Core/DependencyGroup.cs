@@ -61,6 +61,14 @@ namespace H.Necessaire.Runtime.SqlServer.Core
                 .Register<ImAStorageService<Guid, RuntimeTrace>>(() => dependencyRegistry.Get<RuntimeTraceSqlServerStorageResource>())
                 .Register<ImAStorageBrowserService<RuntimeTrace, IDFilter<Guid>>>(() => dependencyRegistry.Get<RuntimeTraceSqlServerStorageResource>())
                 ;
+
+            dependencyRegistry
+               .Register<DataBinSqlServerStorageResource>(() => new DataBinSqlServerStorageResource())
+               .Register<ImAStorageService<Guid, DataBinMeta>>(() => dependencyRegistry.Get<DataBinSqlServerStorageResource>())
+               .Register<ImAStorageBrowserService<DataBinMeta, DataBinFilter>>(() => dependencyRegistry.Get<DataBinSqlServerStorageResource>())
+               .Register<ImAStorageService<Guid, DataBin>>(() => dependencyRegistry.Get<DataBinSqlServerStorageResource>())
+               .Register<ImAStorageBrowserService<DataBin, DataBinFilter>>(() => dependencyRegistry.Get<DataBinSqlServerStorageResource>())
+               ;
         }
     }
 }
