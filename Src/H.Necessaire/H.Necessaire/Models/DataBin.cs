@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace H.Necessaire
@@ -7,20 +6,20 @@ namespace H.Necessaire
     public class DataBin : DataBinMeta
     {
         #region Construct
-        private readonly Func<Task<Stream>> streamFactory;
+        private readonly Func<DataBinMeta, Task<ImADataBinStream>> streamFactory;
 
-        public DataBin(Func<Task<Stream>> streamFactory)
+        public DataBin(Func<DataBinMeta, Task<ImADataBinStream>> streamFactory)
         {
             this.streamFactory = streamFactory;
         }
         #endregion
 
-        public virtual async Task<Stream> OpenDataStream()
+        public virtual async Task<ImADataBinStream> OpenDataBinStream()
         {
             if (streamFactory is null)
                 return null;
 
-            return await streamFactory();
+            return await streamFactory(this);
         }
     }
 }

@@ -4,24 +4,53 @@ using DeviceDetectorNET.Results;
 using DeviceDetectorNET.Results.Client;
 using H.Necessaire.Runtime.CLI.Commands;
 using H.Necessaire.Runtime.Security.Managers;
-using H.Necessaire.Serialization;
 
 namespace H.Necessaire.CLI.Host
 {
     internal class DebugCommand : CommandBase
     {
         ImASecurityManager securityManager;
+        ImAStorageService<Guid, DataBin> dataBinStorageService;
+        ImAStorageBrowserService<DataBin, DataBinFilter> dataBinBrowserService;
         public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             base.ReferDependencies(dependencyProvider);
             securityManager = dependencyProvider.Get<ImASecurityManager>();
+            dataBinStorageService = dependencyProvider.Get<ImAStorageService<Guid, DataBin>>();
+            dataBinBrowserService = dependencyProvider.Get<ImAStorageBrowserService<DataBin, DataBinFilter>>();
         }
 
         public override async Task<OperationResult> Run()
         {
-            OperationResult<SecurityContext> loginResult = await securityManager.AuthenticateCredentials("ironman", "123qwe");
+            //DataBin[] dataBins = (await dataBinBrowserService.LoadPage(new DataBinFilter { })).ThrowOnFailOrReturn().Content;
 
-            ConsumerInfo consumerInfo = Parse("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62");
+            //using (CollectionOfDisposables<ImADataBinStream> dataBinStreams = new CollectionOfDisposables<ImADataBinStream>(await Task.WhenAll(dataBins.Select(x => x.OpenDataBinStream()))))
+            //{
+            //    string[] contents = await Task.WhenAll(dataBinStreams.Select(x => x.DataStream.ReadAsStringAsync(isStreamLeftOpen: false)));
+            //}
+
+            //DataBin dataBin = new DataBin(async m => (await new MemoryStream().AndAsync(async x => (await "I'm just a dummy content".WriteToStreamAsync(x)).And(x => x.Position = 0))).ToDataBinStream())
+            //{
+            //    Name = "Dummy Data Bin",
+            //    Format = WellKnownDataBinFormat.PlainTextUTF8,
+            //};
+
+            //OperationResult saveResult = await dataBinStorageService.Save(dataBin);
+            //saveResult = await dataBinStorageService.Save(dataBin);
+            //saveResult = await dataBinStorageService.Save(dataBin);
+
+            //OperationResult<DataBin> dataBinLoadResult = await dataBinStorageService.LoadByID(dataBin.ID);
+
+            //using (ImADataBinStream dataBinStream = await dataBinLoadResult.Payload.OpenDataBinStream())
+            //{
+            //    string readContent = await dataBinStream.DataStream.ReadAsStringAsync();
+            //}
+
+
+
+            //OperationResult<SecurityContext> loginResult = await securityManager.AuthenticateCredentials("ironman", "123qwe");
+
+            //ConsumerInfo consumerInfo = Parse("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62");
 
             return OperationResult.Win();
         }

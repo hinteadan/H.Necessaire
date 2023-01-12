@@ -65,6 +65,18 @@ namespace H.Necessaire.Runtime.Resources
                 .Register<ImAStorageService<Guid, RuntimeTrace>>(() => dependencyRegistry.Get<RuntimeTraceFileSystemStorageResource>())
                 .Register<ImAStorageBrowserService<RuntimeTrace, IDFilter<Guid>>>(() => dependencyRegistry.Get<RuntimeTraceFileSystemStorageResource>())
                 ;
+
+            dependencyRegistry
+                .Register<DataBinMetaFileSystemStorageResource>(() => new DataBinMetaFileSystemStorageResource())
+                .Register<ImAStorageService<Guid, DataBinMeta>>(() => dependencyRegistry.Get<DataBinMetaFileSystemStorageResource>())
+                .Register<ImAStorageBrowserService<DataBinMeta, DataBinFilter>>(() => dependencyRegistry.Get<DataBinMetaFileSystemStorageResource>())
+                ;
+
+            dependencyRegistry
+                .Register<DataBinFileSystemStorageResource>(() => new DataBinFileSystemStorageResource())
+                .Register<ImAStorageService<Guid, DataBin>>(() => dependencyRegistry.Get<DataBinFileSystemStorageResource>())
+                .Register<ImAStorageBrowserService<DataBin, DataBinFilter>>(() => dependencyRegistry.Get<DataBinFileSystemStorageResource>())
+                ;
         }
     }
 }

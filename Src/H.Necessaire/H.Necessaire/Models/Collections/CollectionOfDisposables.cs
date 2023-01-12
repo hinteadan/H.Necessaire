@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace H.Necessaire
 {
@@ -18,6 +19,9 @@ namespace H.Necessaire
 
         public void Dispose()
         {
+            if (disposables?.Any() != true)
+                return;
+
             foreach (IDisposable disposable in disposables)
             {
                 try { disposable.Dispose(); } catch (ObjectDisposedException) { }

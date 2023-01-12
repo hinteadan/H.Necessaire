@@ -18,7 +18,7 @@ namespace H.Necessaire.CLI
                         "SqlConnections".ConfigWith(
                             "DefaultConnectionString".ConfigWith(ReadConnectionStringFromFile("DebugConnectionString.txt")),
                             "DatabaseNames".ConfigWith(
-                                "Core".ConfigWith("H.Necessaire.Core.Debug")
+                                "Core".ConfigWith("H.Necessaire.CLI.Local.Core.Debug")
                             )
                         ),
                     },
