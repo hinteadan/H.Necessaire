@@ -3,24 +3,12 @@ using System.Text;
 
 namespace H.Necessaire
 {
-    public class DataBinFormatInfo : IStringIdentity, ICloneable
+    public class DataBinFormatInfo : IStringIdentity
     {
         public string ID { get; set; }
         public string Extension { get; set; }
         public string MimeType { get; set; } = "application/octet-stream";
         public string Encoding { get; set; } = "utf-8";
-
-        public DataBinFormatInfo Clone()
-        {
-            return
-                new DataBinFormatInfo
-                {
-                    ID = ID,
-                    Encoding = Encoding,
-                    Extension = Extension,
-                    MimeType = MimeType,
-                };
-        }
         public Encoding ParseEncoding(Encoding defaultTo = null)
         {
             if (string.IsNullOrWhiteSpace(Encoding))
@@ -38,7 +26,5 @@ namespace H.Necessaire
 
             return result;
         }
-
-        object ICloneable.Clone() => Clone();
     }
 }

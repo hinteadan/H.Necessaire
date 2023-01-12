@@ -1,4 +1,5 @@
 ﻿using Raven.Client.Documents;
+using Raven.Client.Json.Serialization.NewtonsoftJson;
 using System;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -47,7 +48,15 @@ namespace H.Necessaire.RavenDB
                 Conventions =
                 {
                     MaxNumberOfRequestsPerSession = 10,
-                    UseOptimisticConcurrency = true
+                    UseOptimisticConcurrency = true,
+                    Serialization = new NewtonsoftJsonSerializationConventions {
+                        CustomizeJsonDeserializer = x => {
+                            x.ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace;
+                        },
+                        CustomizeJsonSerializer = x => {
+                            x.ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace;
+                        }
+                    }
                 },
 
                 // Define a default database (optional)
