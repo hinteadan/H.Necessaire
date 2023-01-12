@@ -307,7 +307,7 @@ namespace H.Necessaire
                 {
                     AsOf = dataBin.AsOf,
                     Description = dataBin.Description,
-                    Format = dataBin.Format,
+                    Format = dataBin.Format.Clone(),
                     ID = dataBin.ID,
                     Name = dataBin.Name,
                     Notes = dataBin.Notes,
@@ -324,7 +324,7 @@ namespace H.Necessaire
                 {
                     AsOf = dataBinMeta.AsOf,
                     Description = dataBinMeta.Description,
-                    Format = dataBinMeta.Format,
+                    Format = dataBinMeta.Format.Clone(),
                     ID = dataBinMeta.ID,
                     Name = dataBinMeta.Name,
                     Notes = dataBinMeta.Notes,
