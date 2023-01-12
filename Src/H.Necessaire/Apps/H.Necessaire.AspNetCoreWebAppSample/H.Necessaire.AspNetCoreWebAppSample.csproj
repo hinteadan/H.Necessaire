@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,11 +44,11 @@
 
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
 		<Exec Command="del /f &quot;$(SolutionDir)\Apps\H.Necessaire.AspNetCoreWebAppSample\version.txt&quot;" />
-		<Exec Command="&quot;$(SolutionDir)\CLI\H.Necessaire.CLI.Host\bin\$(Configuration)\net6.0\H.Necessaire.CLI.Host.exe&quot; version &gt; &quot;$(SolutionDir)\Apps\H.Necessaire.AspNetCoreWebAppSample\version.txt&quot;" />
+		<Exec Command="&quot;$(SolutionDir)\CLI\H.Necessaire.CLI.Host\bin\$(Configuration)\net7.0\H.Necessaire.CLI.Host.exe&quot; version &gt; &quot;$(SolutionDir)\Apps\H.Necessaire.AspNetCoreWebAppSample\version.txt&quot;" />
 	</Target>
 
 	<Target Name="PostBuild" BeforeTargets="PostBuildEvent">
-		<Exec Command="&quot;$(SolutionDir)\CLI\H.Necessaire.CLI.Host\bin\$(Configuration)\net6.0\H.Necessaire.CLI.Host.exe&quot; bridgedotnet copy &quot;Src=$(SolutionDir)\Apps\H.Necessaire.ReactAppSample&quot; &quot;Dst=$(SolutionDir)\Apps\H.Necessaire.AspNetCoreWebAppSample&quot;" />
+		<Exec Command="&quot;$(SolutionDir)\CLI\H.Necessaire.CLI.Host\bin\$(Configuration)\net7.0\H.Necessaire.CLI.Host.exe&quot; bridgedotnet copy &quot;Src=$(SolutionDir)\Apps\H.Necessaire.ReactAppSample&quot; &quot;Dst=$(SolutionDir)\Apps\H.Necessaire.AspNetCoreWebAppSample&quot;" />
 	</Target>
 
 </Project>
