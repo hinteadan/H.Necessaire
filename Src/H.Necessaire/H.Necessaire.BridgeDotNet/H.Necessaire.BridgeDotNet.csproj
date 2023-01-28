@@ -324,6 +324,9 @@
     <Compile Include="..\H.Necessaire\Models\OperationResultGeneric.cs">
       <Link>Models\OperationResultGeneric.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\PartialDataTime.cs">
+      <Link>Models\PartialDataTime.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\PeriodOfTime.cs">
       <Link>Models\PeriodOfTime.cs</Link>
     </Compile>

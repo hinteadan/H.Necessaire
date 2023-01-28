@@ -40,6 +40,21 @@ namespace H.Necessaire
             return dateTime.ToUniversalTime();
         }
 
+        public static PartialDataTime ToPartialDateTime(this DateTime dateTime)
+        {
+            return
+                new PartialDataTime
+                {
+                    Year = dateTime.Year,
+                    Month = dateTime.Month,
+                    DayOfMonth = dateTime.Day,
+                    Hour = dateTime.Hour,
+                    Minute = dateTime.Minute,
+                    Second = dateTime.Second,
+                    DateTimeKind = dateTime.Kind,
+                };
+        }
+
         public static float TrimToPercent(this float value)
         {
             return
