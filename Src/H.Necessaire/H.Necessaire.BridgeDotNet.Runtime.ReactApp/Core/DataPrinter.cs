@@ -15,7 +15,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         static string timeStampOtherYearFormat => AppBase.Config.Get("Formatting")?.Get("TimeStampOtherYear")?.ToString() ?? "MMM dd, yyyy 'at' HH:mm";
         static string timeStampIdentifierFormat => AppBase.Config.Get("Formatting")?.Get("TimeStampIdentifier")?.ToString() ?? "yyyyMMdd_HHmmss_'UTC'";
 
-        public static string PrintDateTimeAsOfNow(DateTime dateTime)
+        public static string PrintDateTimeAsOfNow(this DateTime dateTime)
         {
             TimeSpan life = TimeSpan.FromTicks(DateTime.UtcNow.Ticks - dateTime.EnsureUtc().Ticks);
             DateTime localTime = dateTime.EnsureUtc().ToLocalTime();
@@ -37,36 +37,43 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
             return localTime.PrintTimeStamp();
         }
+        public static string PrintDateTimeAsOfNow(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintDateTimeAsOfNow();
 
         public static string PrintDateAndTime(this DateTime dateTime)
         {
             return dateTime.EnsureUtc().ToLocalTime().ToString(dateTimeFormat);
         }
+        public static string PrintDateAndTime(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintDateAndTime();
 
         public static string PrintMonth(this DateTime dateTime)
         {
             return dateTime.ToString(monthFormat);
         }
+        public static string PrintMonth(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintMonth();
 
         public static string PrintDate(this DateTime dateTime)
         {
             return dateTime.EnsureUtc().ToLocalTime().ToString(dateFormat);
         }
+        public static string PrintDate(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintDate();
 
         public static string PrintTime(this DateTime dateTime)
         {
             return dateTime.EnsureUtc().ToLocalTime().ToString(timeFormat);
         }
+        public static string PrintTime(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintTime();
 
         public static string PrintDayOfWeek(this DateTime dateTime)
         {
             return dateTime.EnsureUtc().ToLocalTime().ToString(dayOfWeekFormat);
         }
+        public static string PrintDayOfWeek(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintDayOfWeek();
 
         public static string PrintTimeStampAsIdentifier(this DateTime dateTime)
         {
             return dateTime.EnsureUtc().ToString(timeStampIdentifierFormat);
         }
+        public static string PrintTimeStampAsIdentifier(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintTimeStampAsIdentifier();
 
         public static string PrintTimeStamp(this DateTime dateTime)
         {
@@ -75,18 +82,29 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             string format = isThisYear ? timeStampThisYearFormat : timeStampOtherYearFormat;
             return localTime.ToString(format);
         }
+        public static string PrintTimeStamp(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintTimeStamp();
 
-        
+
 
         public static string Print(this PeriodOfTime happening)
         {
-            StringBuilder printer = new StringBuilder(happening.From.PrintDate());
+            if (happening.IsTimeless)
+                return "Timeless";
+
+            if (happening.IsInfinite && happening.IsSinceForever)
+                return $"Since Forever - {happening.To.Value.ToLocalTime().PrintDate()} {happening.To.Value.ToLocalTime().PrintTime()}";
+
+            if (happening.IsInfinite && happening.IsUntilForever)
+                return $"{happening.From.Value.ToLocalTime().PrintDate()} {happening.From.Value.ToLocalTime().PrintTime()} - Until Forever";
+
+            StringBuilder printer = new StringBuilder();
+            printer.Append(happening.From.Value.PrintDate());
 
             if (happening.Duration <= TimeSpan.Zero)
                 return printer.ToString();
 
-            DateTime beginAt = happening.From.ToLocalTime();
-            DateTime endAt = happening.To.ToLocalTime();
+            DateTime beginAt = happening.From.Value.ToLocalTime();
+            DateTime endAt = happening.To.Value.ToLocalTime();
             bool endSameDay = beginAt.Date == endAt.Date;
 
             if (endSameDay)

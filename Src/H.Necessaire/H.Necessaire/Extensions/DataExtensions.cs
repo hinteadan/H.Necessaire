@@ -40,10 +40,10 @@ namespace H.Necessaire
             return dateTime.ToUniversalTime();
         }
 
-        public static PartialDataTime ToPartialDateTime(this DateTime dateTime)
+        public static PartialDateTime ToPartialDateTime(this DateTime dateTime)
         {
             return
-                new PartialDataTime
+                new PartialDateTime
                 {
                     Year = dateTime.Year,
                     Month = dateTime.Month,
