@@ -249,6 +249,38 @@ namespace H.Necessaire
                 .FirstOrDefault();
         }
 
+        public static T[] NullIfEmpty<T>(this T[] value)
+        {
+            if (value?.Any() != true)
+                return null;
+
+            return value;
+        }
+
+        public static string NullIfEmpty(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return null;
+
+            return value;
+        }
+
+        public static T[] ToArrayNullIfEmpty<T>(this IEnumerable<T> value)
+        {
+            if (value?.Any() != true)
+                return null;
+
+            return value.ToArray();
+        }
+
+        public static T[] ToNoNullsArray<T>(this IEnumerable<T> values, bool nullIfEmpty = true)
+        {
+            return
+                nullIfEmpty
+                ? values?.Where(x => x != null).ToArrayNullIfEmpty()
+                : values?.Where(x => x != null).ToArray()
+                ;
+        }
 
         sealed class ProjectedDisposableEnumerable<TProjection, T> : IDisposableEnumerable<TProjection>
         {

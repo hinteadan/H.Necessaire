@@ -19,8 +19,8 @@
 
   <ItemGroup>
     <PackageReference Include="BouncyCastle.Cryptography" Version="2.1.1" />
-    <PackageReference Include="DeviceDetector.NET" Version="4.3.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="DeviceDetector.NET" Version="6.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="UrlBase64" Version="0.1.2" />
   </ItemGroup>
 
