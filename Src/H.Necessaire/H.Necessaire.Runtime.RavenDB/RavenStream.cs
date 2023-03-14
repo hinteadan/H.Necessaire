@@ -22,14 +22,12 @@ namespace H.Necessaire.Runtime.RavenDB
 
         public int Count()
         {
-            ravenQueryableEnumeration.Statistics(out QueryStatistics stats);
-            return stats.TotalResults;
+            return Raven.Client.Documents.LinqExtensions.CountLazily(ravenQueryableEnumeration).Value;
         }
 
         public long LongCount()
         {
-            ravenQueryableEnumeration.Statistics(out QueryStatistics stats);
-            return stats.LongTotalResults;
+            return Raven.Client.Documents.LinqExtensions.LongCount(ravenQueryableEnumeration);
         }
 
         public IEnumerator<TEntity> GetEnumerator()
