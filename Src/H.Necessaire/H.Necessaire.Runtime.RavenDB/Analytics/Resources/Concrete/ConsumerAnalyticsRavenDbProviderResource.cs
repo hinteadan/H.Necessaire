@@ -57,7 +57,7 @@ namespace H.Necessaire.Runtime.RavenDB.Analytics.Resources.Concrete
                 ;
 
             return
-                new RavenStream<ConsumerNetworkTrace>(session, documentQuery.ToQueryable());
+                new RavenStream<ConsumerNetworkTraceWithSearchFields>(session, documentQuery.ToQueryable()).ProjectTo(x => x as ConsumerNetworkTrace);
         }
 
         IAsyncDocumentQuery<ConsumerNetworkTraceWithSearchFields> ApplyFilter(IAsyncDocumentQuery<ConsumerNetworkTraceWithSearchFields> result, ConsumerNetworkTracePageFilter filter)

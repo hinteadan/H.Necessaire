@@ -294,6 +294,28 @@ namespace H.Necessaire
                 this.projection = source.Select(projector);
             }
 
+            public int Count()
+            {
+                MethodInfo ownMethod = source.GetType().GetMethod(nameof(Count), BindingFlags.Public);
+                if (ownMethod != null)
+                {
+                    return (int)ownMethod.Invoke(source, null);
+                }
+
+                return source.Count();
+            }
+
+            public long LongCount()
+            {
+                MethodInfo ownMethod = source.GetType().GetMethod(nameof(LongCount), BindingFlags.Public);
+                if (ownMethod != null)
+                {
+                    return (long)ownMethod.Invoke(source, null);
+                }
+
+                return source.LongCount();
+            }
+
             public void Dispose()
             {
                 source.Dispose();
