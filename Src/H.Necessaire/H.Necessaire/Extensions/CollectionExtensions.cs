@@ -296,7 +296,7 @@ namespace H.Necessaire
 
             public int Count()
             {
-                MethodInfo ownMethod = source.GetType().GetMethod(nameof(Count), BindingFlags.Public);
+                MethodInfo ownMethod = source.GetType().GetMethod(nameof(Count));
                 if (ownMethod != null)
                 {
                     return (int)ownMethod.Invoke(source, null);
@@ -307,7 +307,7 @@ namespace H.Necessaire
 
             public long LongCount()
             {
-                MethodInfo ownMethod = source.GetType().GetMethod(nameof(LongCount), BindingFlags.Public);
+                MethodInfo ownMethod = source.GetType().GetMethod(nameof(LongCount));
                 if (ownMethod != null)
                 {
                     return (long)ownMethod.Invoke(source, null);
