@@ -1,4 +1,5 @@
-﻿using Raven.Client.Documents.Linq;
+﻿using Raven.Client.Documents.Commands;
+using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,7 +23,8 @@ namespace H.Necessaire.Runtime.RavenDB
 
         public int Count()
         {
-            return Raven.Client.Documents.LinqExtensions.CountLazily(ravenQueryableEnumeration).Value;
+            GetRavenStream(out StreamQueryStatistics streamQueryStats);
+            return streamQueryStats.TotalResults;
         }
 
         public long LongCount()
@@ -32,12 +34,40 @@ namespace H.Necessaire.Runtime.RavenDB
 
         public IEnumerator<TEntity> GetEnumerator()
         {
-            return ravenQueryableEnumeration.GetEnumerator();
+            return GetRavenStream(out StreamQueryStatistics streamQueryStats);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ravenQueryableEnumeration.GetEnumerator();
+            return GetRavenStream(out StreamQueryStatistics streamQueryStats);
         }
+
+        private IEnumerator<TEntity> GetRavenStream(out StreamQueryStatistics streamQueryStats)
+        {
+            IEnumerator<StreamResult<TEntity>> ravenStreamEnumerator
+                = ravenSession.Advanced.Stream<TEntity>(ravenQueryableEnumeration, out streamQueryStats);
+
+            return new RavenStreamEnumerator(ravenStreamEnumerator);
+        }
+
+        private class RavenStreamEnumerator : IEnumerator<TEntity>
+        {
+            readonly IEnumerator<StreamResult<TEntity>> ravenStreamEnumerator;
+            public RavenStreamEnumerator(IEnumerator<StreamResult<TEntity>> ravenStreamEnumerator)
+            {
+                this.ravenStreamEnumerator = ravenStreamEnumerator;
+            }
+
+            public TEntity Current => ravenStreamEnumerator.Current.Document;
+
+            object IEnumerator.Current => ravenStreamEnumerator.Current.Document;
+
+            public void Dispose() => ravenStreamEnumerator.Dispose();
+
+            public bool MoveNext() => ravenStreamEnumerator.MoveNext();
+
+            public void Reset() => ravenStreamEnumerator.Reset();
+        }
+
     }
 }
