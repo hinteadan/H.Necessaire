@@ -372,9 +372,14 @@ namespace H.Necessaire
         public static bool IsEmpty(this GeoAddressArea geoAddressArea)
         {
             return
-                string.IsNullOrWhiteSpace(geoAddressArea.Code)
-                && string.IsNullOrWhiteSpace(geoAddressArea.Name)
+                geoAddressArea.Code.IsEmpty()
+                && geoAddressArea.Name.IsEmpty()
                 ;
+        }
+
+        public static GeoAddressArea? NullIfEmpty(this GeoAddressArea geoAddressArea)
+        {
+            return geoAddressArea.IsEmpty() ? null : geoAddressArea;
         }
 
         public static bool IsEmpty(this GeoAddressArea? geoAddressArea)
@@ -382,6 +387,11 @@ namespace H.Necessaire
             return
                 geoAddressArea is null
                 || geoAddressArea.Value.IsEmpty();
+        }
+
+        public static GeoAddressArea? NullIfEmpty(this GeoAddressArea? geoAddressArea)
+        {
+            return geoAddressArea.IsEmpty() ? null : geoAddressArea;
         }
 
         public static bool IsEmpty(this GeoAddress geoAddress)
@@ -405,6 +415,26 @@ namespace H.Necessaire
         public static GeoAddress NullIfEmpty(this GeoAddress geoAddress)
         {
             return geoAddress.IsEmpty() ? null : geoAddress;
+        }
+
+        public static GeoAddress Curate(this GeoAddress geoAddress, bool nullIfEmpty = true)
+        {
+            if (geoAddress.IsEmpty() && nullIfEmpty)
+            {
+                return null;
+            }
+
+            geoAddress.Continent = geoAddress.Continent.NullIfEmpty();
+            geoAddress.Country = geoAddress.Country.NullIfEmpty();
+            geoAddress.State = geoAddress.State.NullIfEmpty();
+            geoAddress.County = geoAddress.County.NullIfEmpty();
+            geoAddress.City = geoAddress.City.NullIfEmpty();
+            geoAddress.CityArea = geoAddress.CityArea.NullIfEmpty();
+            geoAddress.ZipCode = geoAddress.ZipCode.NullIfEmpty();
+            geoAddress.StreetAddress = geoAddress.StreetAddress.NullIfEmpty();
+            geoAddress.Notes = geoAddress.Notes?.Where(n => !n.IsEmpty()).ToArrayNullIfEmpty();
+
+            return geoAddress;
         }
     }
 }
