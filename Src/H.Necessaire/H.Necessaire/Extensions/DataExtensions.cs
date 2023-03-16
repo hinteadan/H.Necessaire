@@ -363,5 +363,48 @@ namespace H.Necessaire
             return
                 new DefaultDataBinStream(stream, otherDisposables);
         }
+
+        public static bool IsEmpty(this string stringValue)
+        {
+            return string.IsNullOrWhiteSpace(stringValue);
+        }
+
+        public static bool IsEmpty(this GeoAddressArea geoAddressArea)
+        {
+            return
+                string.IsNullOrWhiteSpace(geoAddressArea.Code)
+                && string.IsNullOrWhiteSpace(geoAddressArea.Name)
+                ;
+        }
+
+        public static bool IsEmpty(this GeoAddressArea? geoAddressArea)
+        {
+            return
+                geoAddressArea is null
+                || geoAddressArea.Value.IsEmpty();
+        }
+
+        public static bool IsEmpty(this GeoAddress geoAddress)
+        {
+            if (geoAddress is null)
+                return true;
+
+            return
+                geoAddress.Continent.IsEmpty()
+                && geoAddress.Country.IsEmpty()
+                && geoAddress.State.IsEmpty()
+                && geoAddress.County.IsEmpty()
+                && geoAddress.City.IsEmpty()
+                && geoAddress.CityArea.IsEmpty()
+                && geoAddress.ZipCode.IsEmpty()
+                && geoAddress.StreetAddress.IsEmpty()
+                && (geoAddress.Notes is null || geoAddress.Notes.All(n => n.IsEmpty()))
+                ;
+        }
+
+        public static GeoAddress NullIfEmpty(this GeoAddress geoAddress)
+        {
+            return geoAddress.IsEmpty() ? null : geoAddress;
+        }
     }
 }
