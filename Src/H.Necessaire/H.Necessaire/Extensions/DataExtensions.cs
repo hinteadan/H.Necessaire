@@ -394,12 +394,12 @@ namespace H.Necessaire
             return geoAddressArea.IsEmpty() ? null : geoAddressArea;
         }
 
-        public static bool IsEmpty(this GeoAddress geoAddress)
+        public static bool IsEmpty(this GeoAddress geoAddress, bool excludeNotes = false)
         {
             if (geoAddress is null)
                 return true;
 
-            return
+            bool result =
                 geoAddress.Continent.IsEmpty()
                 && geoAddress.Country.IsEmpty()
                 && geoAddress.State.IsEmpty()
@@ -408,18 +408,22 @@ namespace H.Necessaire
                 && geoAddress.CityArea.IsEmpty()
                 && geoAddress.ZipCode.IsEmpty()
                 && geoAddress.StreetAddress.IsEmpty()
-                && (geoAddress.Notes is null || geoAddress.Notes.All(n => n.IsEmpty()))
                 ;
+
+            if (!excludeNotes)
+                result = result && (geoAddress.Notes is null || geoAddress.Notes.All(n => n.IsEmpty()));
+
+            return result;
         }
 
-        public static GeoAddress NullIfEmpty(this GeoAddress geoAddress)
+        public static GeoAddress NullIfEmpty(this GeoAddress geoAddress, bool excludeNotes = false)
         {
-            return geoAddress.IsEmpty() ? null : geoAddress;
+            return geoAddress.IsEmpty(excludeNotes) ? null : geoAddress;
         }
 
-        public static GeoAddress Curate(this GeoAddress geoAddress, bool nullIfEmpty = true)
+        public static GeoAddress Curate(this GeoAddress geoAddress, bool nullIfEmpty = true, bool excludeNotes = false)
         {
-            if (geoAddress.IsEmpty() && nullIfEmpty)
+            if (geoAddress.IsEmpty(excludeNotes) && nullIfEmpty)
             {
                 return null;
             }
