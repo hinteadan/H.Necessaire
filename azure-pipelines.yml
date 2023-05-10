@@ -10,7 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 jobs:
-- job: Run Qodana Scan
+- job: 'Run Qodana Scan'
   steps:
   - task: QodanaScan@2023
     env:
