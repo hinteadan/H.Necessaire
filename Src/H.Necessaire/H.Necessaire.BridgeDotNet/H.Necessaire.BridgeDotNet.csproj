@@ -639,6 +639,7 @@
     <Compile Include="..\H.Necessaire\UI\UserInput\UserOptionSelectionResult.cs">
       <Link>UI\UserInput\UserOptionSelectionResult.cs</Link>
     </Compile>
+    <Compile Include="Extensions\BridgeDotNetExtensions.cs" />
     <Compile Include="Models\ConcurrentDictionary.cs" />
     <Compile Include="Models\ConcurrentQueue.cs" />
     <Compile Include="Models\Lazy.cs" />
