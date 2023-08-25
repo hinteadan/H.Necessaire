@@ -9,7 +9,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         public override ReactElement Render()
         {
             return
-                new Elevation(new Elevation.Props { Depth = ElevationDepthLevel.Hihghest, StyleDecorator = x => x.FlexNode(isVerticalFlow: true).And(s => s.Padding = Branding.SizingUnitInPixels) },
+                new Elevation(new Elevation.Props { ClassName = "animate morph-in", Depth = ElevationDepthLevel.Hihghest, StyleDecorator = x => x.FlexNode(isVerticalFlow: true).And(s => s.Padding = Branding.SizingUnitInPixels) },
 
                     new FormLayout
                     (

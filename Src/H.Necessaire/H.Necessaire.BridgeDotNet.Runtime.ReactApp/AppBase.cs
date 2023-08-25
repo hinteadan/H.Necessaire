@@ -268,6 +268,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         private static void ReferenceAndSetGlobalCssAndStyles()
         {
             string animationDuration = "0.4s";
+            string blurAmount = "2px";
 
             Document.Head.AppendChild(new HTMLLinkElement
             {
@@ -414,6 +415,31 @@ p {
 
 .markdown-view strong {
     color: " + Branding.Colors.Primary.Color.ToCssRGBA() + @"
+}
+
+@keyframes morph-in {
+    from {
+        scale: 1.05; 
+        opacity: .1;
+        -webkit-filter: blur(" + blurAmount + @");
+        -moz-filter: blur(" + blurAmount + @");
+        -o-filter: blur(" + blurAmount + @");
+        -ms-filter: blur(" + blurAmount + @");
+        filter: blur(" + blurAmount + @");
+    }
+}
+
+.animate {
+    animation-duration: " + animationDuration + @";
+    animation-timing-function: ease;
+}
+
+.animate.morph-in {
+    animation-name: morph-in;
+}
+
+.blur-underneath {
+    backdrop-filter: blur(" + blurAmount + @");
 }
 
 ",

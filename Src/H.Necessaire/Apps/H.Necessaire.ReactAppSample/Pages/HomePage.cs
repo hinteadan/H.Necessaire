@@ -23,6 +23,8 @@ namespace H.Necessaire.ReactAppSample.Pages
                             OnClick = async () =>
                             {
                                 await Logger.LogDebug("VersionNumber Comparison Works", new VersionNumber(1, 1) == VersionNumber.Unknown);
+                                await Alert("Test Alert");
+                                await Confirm("Test confirm");
                             },
 
                         }, "Debug")
