@@ -3,6 +3,7 @@ using Bridge.Html5;
 using Bridge.jQuery2;
 using Bridge.React;
 using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Components;
+using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Core.Model.AppState.Abstract;
 using H.Necessaire.Models.Branding;
 using System;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         static ImALogger appLogger = null;
         static ImAnAppWireup appWireup;
 
+        static bool isSecurityContextRestoreDisabled = false;
         static Func<Task> appInitializer;
 
         static Func<IDispatcher, AppNavigationRegistryBase> navigationRegistryFactory;
@@ -64,7 +66,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             Func<IDispatcher, AppNavigationRegistryBase> navigationRegistryFactory,
             Func<Task> appInitializer,
             BrandingStyle branding = null,
-            string[] extraLibs = null
+            string[] extraLibs = null,
+            bool isSecurityContextRestoreDisabled = false
         )
         {
             AppBase.branding = branding ?? BrandingStyle.Default;
@@ -72,6 +75,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             AppBase.appWireup = appWireup;
             AppBase.navigationRegistryFactory = navigationRegistryFactory;
             AppBase.extraLibs = extraLibs;
+            AppBase.isSecurityContextRestoreDisabled = isSecurityContextRestoreDisabled;
         }
 
         public static async void MainAsWebWorker(ImAnAppWireup webWorkerWireup)
@@ -108,6 +112,14 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 if (appInitializer != null)
                 {
                     await appInitializer();
+                }
+
+                if (isSecurityContextRestoreDisabled != true)
+                {
+                    using (new TimeMeasurement(x => AppLogger.LogInfo($"DONE restoring security context in {x}")))
+                    {
+                        await RestoreSecurityContextFromSessionIfAny();
+                    }
                 }
 
                 await StartDaemons();
@@ -493,6 +505,20 @@ p {
                 new Action(() => Console.WriteLine($"Loaded {lib}")),
                 new Action(() => Console.WriteLine($"Error loading {lib}"))
             );
+        }
+
+        protected static async Task RestoreSecurityContextFromSessionIfAny()
+        {
+            jQuery appContainer = jQuery.Select("#AppContainer");
+
+            using (new ScopedRunner(
+                onStart: () => appContainer.Hide(),
+                onStop: () => appContainer.Show()
+                ))
+            {
+                await Get<SecurityManager>().RestoreSecurityContextIfPossible();
+                Navi.GoHome();
+            }
         }
     }
 }

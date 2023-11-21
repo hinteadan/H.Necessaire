@@ -1,4 +1,5 @@
-﻿using System;
+﻿using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Core.Model.AppState;
+using System;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
@@ -8,11 +9,13 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         #region Construct
         protected string BaseAiUrl = string.Empty;
         protected HttpClient httpClient;
+        protected ImAStorageService<string, SecurityContextAppStateEntry> securityContextStorage;
 
         public virtual void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             httpClient = dependencyProvider.Get<HttpClient>();
             BaseAiUrl = AppBase.BaseApiUrl;
+            securityContextStorage = dependencyProvider.Get<ImAStorageService<string, SecurityContextAppStateEntry>>();
         }
         #endregion
 
@@ -23,6 +26,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             await
                 new Func<Task>(async () =>
                 {
+                    await EnsurePrerequsites();
+
                     HttpResponse<T> httpResponse = await request();
                     if (!httpResponse.IsSuccessful)
                     {
@@ -46,6 +51,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             await
                 new Func<Task>(async () =>
                 {
+                    await EnsurePrerequsites();
+
                     HttpResponse httpResponse = await request();
                     if (!httpResponse.IsSuccessful)
                     {
@@ -60,6 +67,28 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 );
 
             return result;
+        }
+
+        protected virtual async Task EnsurePrerequsites()
+        {
+            SecurityContext securityContext = await GetCurrentSecurityContext();
+            string token = securityContext?.Auth?.AccessToken;
+            if (!string.IsNullOrWhiteSpace(token))
+                httpClient.SetAuth(securityContext.Auth.AccessTokenType, token);
+            else
+                httpClient.ZapAuth();
+        }
+
+        protected async Task<SecurityContext> GetCurrentSecurityContext()
+        {
+            SecurityContextAppStateEntry securityContextState = (await securityContextStorage?.LoadByID(SecurityContextAppStateEntry.DefaultID))?.Payload;
+
+            if (securityContextState?.IsActive() != true)
+            {
+                return null;
+            }
+
+            return securityContextState.Payload;
         }
     }
 }
