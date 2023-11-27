@@ -117,6 +117,9 @@
     <Compile Include="..\H.Necessaire\Models\Analytics\NetworkTraceGeoLocation.cs">
       <Link>Models\Analytics\NetworkTraceGeoLocation.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\ApproximatePeriodOfTime.cs">
+      <Link>Models\ApproximatePeriodOfTime.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Attributes\AliasAttribute.cs">
       <Link>Models\Attributes\AliasAttribute.cs</Link>
     </Compile>
@@ -323,6 +326,12 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Models\OperationResultGeneric.cs">
       <Link>Models\OperationResultGeneric.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\PartialDateTime.cs">
+      <Link>Models\PartialDateTime.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\PartialPeriodOfTime.cs">
+      <Link>Models\PartialPeriodOfTime.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Models\PeriodOfTime.cs">
       <Link>Models\PeriodOfTime.cs</Link>
@@ -630,6 +639,7 @@
     <Compile Include="..\H.Necessaire\UI\UserInput\UserOptionSelectionResult.cs">
       <Link>UI\UserInput\UserOptionSelectionResult.cs</Link>
     </Compile>
+    <Compile Include="Extensions\BridgeDotNetExtensions.cs" />
     <Compile Include="Models\ConcurrentDictionary.cs" />
     <Compile Include="Models\ConcurrentQueue.cs" />
     <Compile Include="Models\Lazy.cs" />

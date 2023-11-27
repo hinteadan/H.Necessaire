@@ -57,7 +57,7 @@ namespace H.Necessaire.Runtime.RavenDB.Analytics.Resources.Concrete
                 ;
 
             return
-                new RavenStream<IpAddressNetworkTrace>(session, documentQuery.ToQueryable());
+                new RavenStream<IpAddressNetworkTraceWithSearchFields>(session, documentQuery.ToQueryable()).ProjectTo(x => x as IpAddressNetworkTrace);
         }
 
         IAsyncDocumentQuery<IpAddressNetworkTraceWithSearchFields> ApplyFilter(IAsyncDocumentQuery<IpAddressNetworkTraceWithSearchFields> result, IpAddressNetworkTracePageFilter filter)

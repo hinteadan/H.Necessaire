@@ -1,12 +1,4 @@
 {
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:61431/",
-      "sslPort": 44301
-    }
-  },
   "profiles": {
     "H.Necessaire.AspNetCoreWebAppSample": {
       "commandName": "Project",
@@ -16,13 +8,6 @@
       },
       "applicationUrl": "http://localhost:5257",
       "dotnetRunMessages": true
-    },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Local"
-      }
     }
   }
 }

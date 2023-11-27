@@ -84,6 +84,7 @@
     <Compile Include="Components\StyleExtensions.cs" />
     <Compile Include="Core\ActionRepeater.cs" />
     <Compile Include="Core\Clipboard.cs" />
+    <Compile Include="Core\Daemons\SecurityContextUpdateDaemon.cs" />
     <Compile Include="Core\Daemons\SyncDaemon.cs" />
     <Compile Include="Core\DataPrinter.cs" />
     <Compile Include="Core\CoreDependencyGroup.cs" />
@@ -96,10 +97,13 @@
     <Compile Include="Core\JsonOperations.cs" />
     <Compile Include="Core\JsURL.cs" />
     <Compile Include="Core\MarkedJs.cs" />
+    <Compile Include="Core\Model\AppState\Abstract\AppStateEntryBase.cs" />
+    <Compile Include="Core\Model\AppState\SecurityContextAppStateEntry.cs" />
     <Compile Include="Core\Model\Security\LoginCommand.cs" />
     <Compile Include="Core\Model\Security\RefreshAccessTokenCommand.cs" />
     <Compile Include="Core\Storage\Abstract\ImAnIndexedDBStorage.cs" />
     <Compile Include="Core\Storage\Abstract\IndexedDBStorageBase.cs" />
+    <Compile Include="Core\Storage\AppStateIndexedDBStorage.cs" />
     <Compile Include="Core\Storage\HNecessaireIndexedDBStorage.cs" />
     <Compile Include="Core\Storage\Models\IndexedDBVersionInfo.cs" />
     <Compile Include="Core\UI\Components\Abstracts\ComponentPropsBase.cs" />
@@ -140,6 +144,9 @@
     <Compile Include="Resources\Abstracts\HttpApiResourceBase.cs" />
     <Compile Include="Resources\Abstracts\IndexedDbResourceBase.cs" />
     <Compile Include="Resources\Abstracts\IndexedDbStorageResourceBase.cs" />
+    <Compile Include="Resources\AppState\DependencyGroup.cs" />
+    <Compile Include="Resources\AppState\SecurityContextAppStateResource.cs" />
+    <Compile Include="Resources\ImAUserPrivateDataStorage.cs" />
     <Compile Include="Resources\Logging\LogEntryLocalStorageResource.cs" />
     <Compile Include="Resources\SyncRequestResource.cs" />
     <Compile Include="Resources\Sync\BffApiSyncRegistryResource.cs" />

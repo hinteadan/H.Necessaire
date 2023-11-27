@@ -249,6 +249,38 @@ namespace H.Necessaire
                 .FirstOrDefault();
         }
 
+        public static T[] NullIfEmpty<T>(this T[] value)
+        {
+            if (value?.Any() != true)
+                return null;
+
+            return value;
+        }
+
+        public static string NullIfEmpty(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                return null;
+
+            return value;
+        }
+
+        public static T[] ToArrayNullIfEmpty<T>(this IEnumerable<T> value)
+        {
+            if (value?.Any() != true)
+                return null;
+
+            return value.ToArray();
+        }
+
+        public static T[] ToNoNullsArray<T>(this IEnumerable<T> values, bool nullIfEmpty = true)
+        {
+            return
+                nullIfEmpty
+                ? values?.Where(x => x != null).ToArrayNullIfEmpty()
+                : values?.Where(x => x != null).ToArray()
+                ;
+        }
 
         sealed class ProjectedDisposableEnumerable<TProjection, T> : IDisposableEnumerable<TProjection>
         {
@@ -260,6 +292,28 @@ namespace H.Necessaire
                 this.source = source;
                 this.projector = projector;
                 this.projection = source.Select(projector);
+            }
+
+            public int Count()
+            {
+                MethodInfo ownMethod = source.GetType().GetMethod(nameof(Count));
+                if (ownMethod != null)
+                {
+                    return (int)ownMethod.Invoke(source, null);
+                }
+
+                return source.Count();
+            }
+
+            public long LongCount()
+            {
+                MethodInfo ownMethod = source.GetType().GetMethod(nameof(LongCount));
+                if (ownMethod != null)
+                {
+                    return (long)ownMethod.Invoke(source, null);
+                }
+
+                return source.LongCount();
             }
 
             public void Dispose()

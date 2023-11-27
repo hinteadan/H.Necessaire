@@ -81,6 +81,7 @@ namespace H.Necessaire
 
             return $"{timeSpan.Days} days & {timeSpan.Hours}h{timeSpan.Minutes}m";
         }
+        public static string PrintTimeSpan(this TimeSpan? timeSpan) => timeSpan is null ? "Never" : timeSpan.Value.PrintTimeSpan();
 
         public static string PrintDateTimeAsOfNow(this DateTime dateTime)
         {
@@ -104,36 +105,43 @@ namespace H.Necessaire
 
             return localTime.PrintTimeStamp();
         }
+        public static string PrintDateTimeAsOfNow(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintDateTimeAsOfNow();
 
         public static string PrintDateAndTime(this DateTime dateTime)
         {
             return dateTime.EnsureUtc().ToLocalTime().ToString(DateTimeFormat);
         }
+        public static string PrintDateAndTime(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintDateAndTime();
 
         public static string PrintMonth(this DateTime dateTime)
         {
             return dateTime.ToString(MonthFormat);
         }
+        public static string PrintMonth(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintMonth();
 
         public static string PrintDate(this DateTime dateTime)
         {
             return dateTime.EnsureUtc().ToLocalTime().ToString(DateFormat);
         }
+        public static string PrintDate(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintDate();
 
         public static string PrintTime(this DateTime dateTime)
         {
             return dateTime.EnsureUtc().ToLocalTime().ToString(TimeFormat);
         }
+        public static string PrintTime(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintTime();
 
         public static string PrintDayOfWeek(this DateTime dateTime)
         {
             return dateTime.EnsureUtc().ToLocalTime().ToString(DayOfWeekFormat);
         }
+        public static string PrintDayOfWeek(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintDayOfWeek();
 
         public static string PrintTimeStampAsIdentifier(this DateTime dateTime)
         {
             return dateTime.EnsureUtc().ToString(TimeStampIdentifierFormat);
         }
+        public static string PrintTimeStampAsIdentifier(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintTimeStampAsIdentifier();
 
         public static string PrintTimeStamp(this DateTime dateTime)
         {
@@ -142,5 +150,6 @@ namespace H.Necessaire
             string format = isThisYear ? TimeStampThisYearFormat : TimeStampOtherYearFormat;
             return localTime.ToString(format);
         }
+        public static string PrintTimeStamp(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintTimeStamp();
     }
 }

@@ -37,14 +37,14 @@ namespace H.Necessaire.Runtime.CLI.Builders
                 =
                 dependencyBrowser
                 .GetAllAlwaysNewTypes()
-                .SingleOrDefault(x => IsCommandNameMatch(commandName, x.Key.Name) || x.Key.IsMatch(commandName))
+                .SingleOrDefault(x => IsCommandNameMatch(commandName, x.Key) || x.Key.IsMatch(commandName))
                 .Key
 
                 ??
 
                 dependencyBrowser
                 .GetAllOneTimeTypes()
-                .SingleOrDefault(x => IsCommandNameMatch(commandName, x.Key.Name) || x.Key.IsMatch(commandName))
+                .SingleOrDefault(x => IsCommandNameMatch(commandName, x.Key) || x.Key.IsMatch(commandName))
                 .Key
                 ;
 
@@ -80,11 +80,14 @@ namespace H.Necessaire.Runtime.CLI.Builders
             return OperationResult.Win().WithPayload(commandName);
         }
 
-        private bool IsCommandNameMatch(string commandName, string typeName)
+        private bool IsCommandNameMatch(string commandName, Type type)
         {
+            if (type.IsMatch(commandName))
+                return true;
+
             string[] possibleTypeNames = commandName.AsArray().Concat(commandTypeNameEndings.Select(x => $"{commandName}{x}")).ToArray();
 
-            return possibleTypeNames.Any(x => string.Equals(x, typeName, StringComparison.InvariantCultureIgnoreCase));
+            return possibleTypeNames.Any(x => string.Equals(x, type.Name, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

@@ -33,6 +33,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                     new Attributes
                     {
                         Style = reactStyle,
+                        ClassName = "blur-underneath",
                     },
 
                     Children

@@ -31,6 +31,20 @@ namespace H.Necessaire
         public static implicit operator MultiType<TFirst, TSecond>(TFirst value) => new MultiType<TFirst, TSecond>(value);
 
         public static implicit operator MultiType<TFirst, TSecond>(TSecond value) => new MultiType<TFirst, TSecond>(value);
+
+        public static explicit operator TFirst(MultiType<TFirst, TSecond> value)
+        {
+            TFirst result = default(TFirst);
+            value.Read(a => result = a, null);
+            return result;
+        }
+
+        public static explicit operator TSecond(MultiType<TFirst, TSecond> value)
+        {
+            TSecond result = default(TSecond);
+            value.Read(null, b => result = b);
+            return result;
+        }
         #endregion
 
         public void Read(Action<TFirst> readFirstType = null, Action<TSecond> readSecondType = null)

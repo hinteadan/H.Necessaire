@@ -16,6 +16,7 @@ namespace H.Necessaire.ReactAppSample
                     new ImADaemon[] {
                         //dependencyRegistry.Get<ConsolePingDaemon>(),
                         dependencyRegistry.Get<SyncDaemon>(),
+                        dependencyRegistry.Get<SecurityContextUpdateDaemon>(),
                     }
                 );
         }

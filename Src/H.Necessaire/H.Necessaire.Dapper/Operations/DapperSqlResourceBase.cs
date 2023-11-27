@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using H.Necessaire.Dapper.Operations.Concrete;
+using Microsoft.Data.SqlClient;
 using System;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Reflection;
