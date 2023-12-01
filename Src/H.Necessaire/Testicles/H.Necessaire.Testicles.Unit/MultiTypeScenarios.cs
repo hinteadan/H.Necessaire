@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using System;
 using Xunit;
+using H.Necessaire.Serialization;
 
 namespace H.Necessaire.Testicles.Unit
 {
@@ -33,6 +34,26 @@ namespace H.Necessaire.Testicles.Unit
 
             composedMultitype.ToObject().Should().Be(17);
             composedMultitype.Read(readFirstType: x => x.Should().Be(17));
+        }
+
+        [Fact(DisplayName = "MultiType Manipulated Via Public Props Works As Expected")]
+        public void MultiType_Manipulated_Via_Public_Props_Works_As_Expected()
+        {
+            MultiType<string, int> subject = new MultiType<string, int>();
+
+            subject.A = "hintee";
+
+            subject.HasA.Should().BeTrue();
+            subject.HasB.Should().BeFalse();
+            subject.ToString().Should().Be("hintee");
+            subject.ToObject().Should().Be("hintee");
+
+            subject.B = 42;
+
+            subject.HasA.Should().BeFalse();
+            subject.HasB.Should().BeTrue();
+            subject.ToString().Should().Be("42");
+            subject.ToObject().Should().Be(42);
         }
     }
 }

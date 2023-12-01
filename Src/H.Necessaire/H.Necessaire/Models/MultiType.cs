@@ -10,11 +10,13 @@ namespace H.Necessaire
     public class MultiType<TFirst, TSecond> : ImAMultiType
     {
         #region Construct
-        readonly TFirst valueForFirst;
-        readonly bool hasFirstValue = false;
+        TFirst valueForFirst;
+        bool hasFirstValue = false;
 
-        readonly TSecond valueForSecond;
-        readonly bool hasSecondValue = false;
+        TSecond valueForSecond;
+        bool hasSecondValue = false;
+
+        public MultiType() { }
 
         private MultiType(TFirst valueForFirst)
         {
@@ -46,6 +48,47 @@ namespace H.Necessaire
             return result;
         }
         #endregion
+
+        public TFirst A
+        {
+            get => valueForFirst;
+            set
+            {
+                valueForFirst = value;
+                hasFirstValue = true;
+                hasSecondValue = false;
+            }
+        }
+
+        public TSecond B
+        {
+            get => valueForSecond;
+            set
+            {
+                valueForSecond = value;
+                hasFirstValue = false;
+                hasSecondValue = true;
+            }
+        }
+
+        public bool HasA
+        {
+            get => hasFirstValue;
+            set
+            {
+                hasFirstValue = value;
+                hasSecondValue = !hasFirstValue;
+            }
+        }
+        public bool HasB
+        {
+            get => hasSecondValue;
+            set
+            {
+                hasSecondValue = value;
+                hasFirstValue = !hasSecondValue;
+            }
+        }
 
         public void Read(Action<TFirst> readFirstType = null, Action<TSecond> readSecondType = null)
         {
