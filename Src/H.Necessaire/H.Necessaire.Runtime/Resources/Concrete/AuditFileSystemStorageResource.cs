@@ -31,9 +31,9 @@ namespace H.Necessaire.Runtime.Resources.Concrete
 
         public override async Task<OperationResult<IDisposableEnumerable<ImAnAuditEntry>>> Stream(AuditSearchFilter filter)
         {
-            OperationResult<IDisposableEnumerable<ImAnAuditEntry>> metadataResult = await base.Stream(filter);
+            OperationResult<IDisposableEnumerable<AuditMetadataEntry>> metadataResult = await auditMetadataStorageResource.Stream(filter);
             if (!metadataResult.IsSuccessful || !(metadataResult.Payload?.Any() ?? false))
-                return metadataResult;
+                return metadataResult.WithoutPayload<IDisposableEnumerable<ImAnAuditEntry>>();
 
             return
                 OperationResult
