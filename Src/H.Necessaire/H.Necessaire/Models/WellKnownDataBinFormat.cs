@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace H.Necessaire
+﻿namespace H.Necessaire
 {
     public static class WellKnownDataBinFormat
     {
-        public static readonly DataBinFormatInfo
-            GenericByteStream = new DataBinFormatInfo
+        public static DataBinFormatInfo
+            GenericByteStream => new DataBinFormatInfo
             {
                 ID = nameof(GenericByteStream),
                 Extension = null,
@@ -15,8 +11,8 @@ namespace H.Necessaire
                 Encoding = null,
             };
 
-        public static readonly DataBinFormatInfo
-            PlainTextUTF8 = new DataBinFormatInfo
+        public static DataBinFormatInfo
+            PlainTextUTF8 => new DataBinFormatInfo
             {
                 ID = nameof(PlainTextUTF8),
                 Extension = "txt",
@@ -24,8 +20,8 @@ namespace H.Necessaire
                 Encoding = "utf-8",
             };
 
-        public static readonly DataBinFormatInfo
-            JsonUTF8 = new DataBinFormatInfo
+        public static DataBinFormatInfo
+            JsonUTF8 => new DataBinFormatInfo
             {
                 ID = nameof(JsonUTF8),
                 Extension = "json",

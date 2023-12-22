@@ -117,7 +117,7 @@ namespace H.Necessaire.Runtime.Analytics.Resources.Concrete
             return resultStream;
         }
 
-        private IEnumerable<ConsumerNetworkTrace> AggregateIpAddressNetworkTrace(IEnumerable<NetworkTrace> traces, IDictionary<Guid, ConsumerIdentity> consumerDictionary)
+        private static IEnumerable<ConsumerNetworkTrace> AggregateIpAddressNetworkTrace(IEnumerable<NetworkTrace> traces, IDictionary<Guid, ConsumerIdentity> consumerDictionary)
         {
             if (traces?.Any() != true)
                 return Enumerable.Empty<ConsumerNetworkTrace>();

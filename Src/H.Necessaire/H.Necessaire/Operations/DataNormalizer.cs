@@ -37,5 +37,7 @@ namespace H.Necessaire
 
             return targetValue;
         }
+
+        public static DataNormalizer Percent(NumberInterval fromInterval) => new DataNormalizer(fromInterval, NumberInterval.Percent);
     }
 }

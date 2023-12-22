@@ -81,8 +81,9 @@ namespace H.Necessaire.Runtime.QdActions.Processors
                 .TryOrFailWithGrace(
                     onFail: async ex =>
                     {
-                        await logger.LogError(ex);
-                        result = OperationResult.Fail(ex).WithoutPayload<NetworkTrace>();
+                        string message = $"Error occurred while trying to trace IP Address {ipAddress} via {networkTraceProvider.GetType().Name}. Reason: {ex.Message}";
+                        await logger.LogError(message, ex, ipAddress);
+                        result = OperationResult.Fail(ex, message).WithoutPayload<NetworkTrace>();
                     }
                 );
 

@@ -1,5 +1,6 @@
 ﻿using H.Necessaire.CLI;
 using H.Necessaire.Runtime.CLI;
+using System.Threading.Tasks;
 
 public static class Program
 {

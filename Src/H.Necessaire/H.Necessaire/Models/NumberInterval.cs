@@ -5,6 +5,8 @@ namespace H.Necessaire
 {
     public struct NumberInterval
     {
+        public static readonly NumberInterval Percent = new NumberInterval(0, 100);
+
         public NumberInterval(decimal? min, decimal? max, bool isMinIncluded = true, bool isMaxIncluded = true)
         {
             if (min != null && max != null && min > max)

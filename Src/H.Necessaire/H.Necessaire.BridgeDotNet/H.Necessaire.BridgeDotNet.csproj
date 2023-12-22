@@ -120,6 +120,9 @@
     <Compile Include="..\H.Necessaire\Models\ApproximatePeriodOfTime.cs">
       <Link>Models\ApproximatePeriodOfTime.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\AsyncEventHandler.cs">
+      <Link>Models\AsyncEventHandler.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Attributes\AliasAttribute.cs">
       <Link>Models\Attributes\AliasAttribute.cs</Link>
     </Compile>
@@ -275,6 +278,9 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Models\Logging\LogEntry.cs">
       <Link>Models\Logging\LogEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\Logging\LogEntryExceptionInfo.cs">
+      <Link>Models\Logging\LogEntryExceptionInfo.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Models\Logging\LogEntryLevel.cs">
       <Link>Models\Logging\LogEntryLevel.cs</Link>
@@ -527,6 +533,12 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\Logging\LoggingDependencyGroup.cs">
       <Link>Operations\Logging\LoggingDependencyGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\ProgressiveScope.cs">
+      <Link>Operations\ProgressiveScope.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\ProgressReporter.cs">
+      <Link>Operations\ProgressReporter.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\QdAction\Abstract\QdActionProcessorBase.cs">
       <Link>Operations\QdAction\Abstract\QdActionProcessorBase.cs</Link>

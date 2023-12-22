@@ -459,6 +459,11 @@ namespace H.Necessaire
                 new DefaultDataBinStream(stream, otherDisposables);
         }
 
+        public static bool Is(this string stringValue, string comparedTo, bool isCaseSensitive = false)
+        {
+            return string.Equals(stringValue, comparedTo, isCaseSensitive ? StringComparison.InvariantCulture : StringComparison.InvariantCultureIgnoreCase);
+        }
+
         public static bool IsEmpty(this string stringValue)
         {
             return string.IsNullOrWhiteSpace(stringValue);
