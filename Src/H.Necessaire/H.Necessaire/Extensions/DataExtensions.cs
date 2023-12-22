@@ -9,6 +9,7 @@ namespace H.Necessaire
 {
     public static class DataExtensions
     {
+        const string ellipseSymbol = " ... ";
         const string defaultGlobalReasonForMultipleFailedOperations = "There are multiple failure reasons; see comments for details.";
         static Dictionary<string, string> diacriticsDictionaryBulk = new Dictionary<string, string>
         {
@@ -458,6 +459,11 @@ namespace H.Necessaire
                 new DefaultDataBinStream(stream, otherDisposables);
         }
 
+        public static bool Is(this string stringValue, string comparedTo, bool isCaseSensitive = false)
+        {
+            return string.Equals(stringValue, comparedTo, isCaseSensitive ? StringComparison.InvariantCulture : StringComparison.InvariantCultureIgnoreCase);
+        }
+
         public static bool IsEmpty(this string stringValue)
         {
             return string.IsNullOrWhiteSpace(stringValue);
@@ -554,6 +560,20 @@ namespace H.Necessaire
             }
 
             return resultBuilder.ToString();
+        }
+
+        public static string EllipsizeIfNecessary(this string value, int maxLength = 30)
+        {
+            if (string.IsNullOrEmpty(value))
+                return value;
+
+            if (value.Length <= maxLength)
+                return value;
+
+            if (maxLength <= ellipseSymbol.Length)
+                return ellipseSymbol;
+
+            return $"{value.Substring(0, maxLength - ellipseSymbol.Length)}{ellipseSymbol}";
         }
     }
 }

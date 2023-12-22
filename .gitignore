@@ -351,6 +351,7 @@ MigrationBackup/
 **/H.Necessaire.AspNetCoreWebAppSample/Content/
 **/ConnectionString.txt
 **/DebugConnectionString.txt
+**/*.cfg.txt
 **/appsettings.Local.json
 **/version.txt
 **/ironmen*.json

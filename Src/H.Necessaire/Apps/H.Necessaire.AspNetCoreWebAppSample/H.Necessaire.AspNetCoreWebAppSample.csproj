@@ -34,6 +34,7 @@
     </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\H.Necessaire.Runtime.Azure.CosmosDB\H.Necessaire.Runtime.Azure.CosmosDB.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime.Integration.NetCore\H.Necessaire.Runtime.Integration.NetCore.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime.RavenDB\H.Necessaire.Runtime.RavenDB.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime.SqlServer\H.Necessaire.Runtime.SqlServer.csproj" />

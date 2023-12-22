@@ -1,4 +1,6 @@
 ﻿using H.Necessaire.Runtime;
+using System;
+using System.IO;
 using System.Reflection;
 
 namespace H.Necessaire.CLI
@@ -15,12 +17,22 @@ namespace H.Necessaire.CLI
                 {
                     Values = new[] {
                         "NuSpecRootFolderPath".ConfigWith(GetCodebaseFolderPath()),
-                        "SqlConnections".ConfigWith(
-                            "DefaultConnectionString".ConfigWith(ReadConnectionStringFromFile("DebugConnectionString.txt")),
-                            "DatabaseNames".ConfigWith(
-                                "Core".ConfigWith("H.Necessaire.CLI.Local.Core.Debug")
-                            )
-                        ),
+                        //"SqlConnections".ConfigWith(
+                        //    "DefaultConnectionString".ConfigWith(ReadConnectionStringFromFile("DebugConnectionString.txt")),
+                        //    "DatabaseNames".ConfigWith(
+                        //        "Core".ConfigWith("H.Necessaire.CLI.Local.Core.Debug")
+                        //    )
+                        //),
+                        "AzureCosmosDB".ConfigWith(
+                            //"URL".ConfigWith(ReadConnectionStringFromFile("AzureCosmosDB.URL.cfg.txt")),
+                            "URL".ConfigWith("https://localhost:8081"),
+                            "Keys".ConfigWith(
+                                //"Primary".ConfigWith(ReadConnectionStringFromFile("AzureCosmosDB.Key.cfg.txt"))
+                                "Primary".ConfigWith("C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==")
+                            ),
+                            "DatabaseID".ConfigWith("FreePlayDB"),
+                            "ContainerID".ConfigWith("FreePlayContainer")
+                        )
                     },
                 }));
             ;
@@ -33,7 +45,7 @@ namespace H.Necessaire.CLI
             if (!fileInfo.Exists)
                 return null;
 
-            string? result = null;
+            string result = null;
 
             new Action(() =>
             {

@@ -12,6 +12,7 @@ namespace H.Necessaire.CLI
                 .WithDefaultRuntimeConfig()
                 //.With(x => x.Register<Runtime.SqlServer.SqlServerRuntimeDependencyGroup>(() => new Runtime.SqlServer.SqlServerRuntimeDependencyGroup()))
                 //.With(x => x.Register<Runtime.RavenDB.RavenDbRuntimeDependencyGroup>(() => new Runtime.RavenDB.RavenDbRuntimeDependencyGroup()))
+                .With(x => x.Register<Runtime.Azure.CosmosDB.AzureCosmosDbRuntimeDependencyGroup>(() => new Runtime.Azure.CosmosDB.AzureCosmosDbRuntimeDependencyGroup()))
                 ;
         }
     }
