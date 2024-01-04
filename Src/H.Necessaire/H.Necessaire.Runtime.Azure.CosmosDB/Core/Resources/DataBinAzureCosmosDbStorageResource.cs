@@ -82,7 +82,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core.Resources
                             {
                                 lastBytesRead = await stream.ReadAsync(batch, bytesRead, maxDataSizeInBytes - bytesRead);
                                 bytesRead += lastBytesRead;
-                            } while (lastBytesRead == 0 || bytesRead == maxDataSizeInBytes);
+                            } while (lastBytesRead > 0 && bytesRead < maxDataSizeInBytes);
 
                             if (bytesRead == 0)
                                 break;
