@@ -75,9 +75,18 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core.Resources
                         do
                         {
                             batchIndex++;
-                            bytesRead = await stream.ReadAsync(batch, 0, maxDataSizeInBytes);
+
+                            bytesRead = 0;
+                            int lastBytesRead = 0;
+                            do
+                            {
+                                lastBytesRead = await stream.ReadAsync(batch, bytesRead, maxDataSizeInBytes - bytesRead);
+                                bytesRead += lastBytesRead;
+                            } while (lastBytesRead == 0 || bytesRead == maxDataSizeInBytes);
+
                             if (bytesRead == 0)
                                 break;
+
                             sizeInBytes += bytesRead;
                             string bytesReadAsString = Convert.ToBase64String(batch, 0, bytesRead);
                             DataBinPayload dataBinPayload = new DataBinPayload
