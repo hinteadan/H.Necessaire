@@ -88,7 +88,7 @@ namespace H.Necessaire.Runtime.Google.FirestoreDB.Core
                 case JTokenType.Boolean:
                     return jToken.Value<bool?>();
                 case JTokenType.Date:
-                    return jToken.Value<DateTime?>();
+                    return jToken.Value<DateTime?>()?.EnsureUtc();
 
                 case JTokenType.Guid:
                     return jToken.Value<Guid?>()?.ToString();
