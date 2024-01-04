@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE" Link="LICENSE">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Cloud.Firestore" Version="3.4.0" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\H.Necessaire.Runtime\H.Necessaire.Runtime.csproj" />
+		<ProjectReference Include="..\H.Necessaire.Serialization\H.Necessaire.Serialization.csproj" />
+		<ProjectReference Include="..\H.Necessaire\H.Necessaire.csproj" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <None Update="IconLogo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	<Content Remove="free-tier-playground-409721-6f5f5d8af5a6.cfg.json" />
     <Content Remove="ironmen.json" />
     <Content Remove="ironmen.pass.json" />
   </ItemGroup>
@@ -26,6 +27,9 @@
 
     <ItemGroup>
 	    <EmbeddedResource Include="free.hinteadan.client.certificate.with.password.pfx" />
+	    <None Include="free-tier-playground-409721-6f5f5d8af5a6.cfg.json">
+	      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    </None>
 	    <None Include="ironmen.json">
 	      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	    </None>
@@ -35,6 +39,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\H.Necessaire.Runtime.Azure.CosmosDB\H.Necessaire.Runtime.Azure.CosmosDB.csproj" />
+    <ProjectReference Include="..\..\H.Necessaire.Runtime.Google.FirestoreDB\H.Necessaire.Runtime.Google.FirestoreDB.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime.Integration.NetCore\H.Necessaire.Runtime.Integration.NetCore.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime.RavenDB\H.Necessaire.Runtime.RavenDB.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime.SqlServer\H.Necessaire.Runtime.SqlServer.csproj" />

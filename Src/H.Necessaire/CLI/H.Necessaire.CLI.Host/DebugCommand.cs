@@ -1,26 +1,21 @@
-﻿using DeviceDetectorNET;
-using DeviceDetectorNET.Parser;
-using DeviceDetectorNET.Results;
-using DeviceDetectorNET.Results.Client;
-using H.Necessaire.Runtime.Azure.CosmosDB.Core;
-using H.Necessaire.Runtime.CLI.Commands;
-using H.Necessaire.Runtime.Security.Managers;
+﻿using H.Necessaire.Runtime.CLI.Commands;
+using H.Necessaire.Runtime.Google.FirestoreDB.Core;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Host
 {
     internal class DebugCommand : CommandBase
     {
-        HsCosmosDebugger cosmosDebugger;
+        HsFirestoreDebugger debugger;
         public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             base.ReferDependencies(dependencyProvider);
-            cosmosDebugger = dependencyProvider.Get<HsCosmosDebugger>();
+            debugger = dependencyProvider.Get<HsFirestoreDebugger>();
         }
 
         public override async Task<OperationResult> Run()
         {
-            await cosmosDebugger.Debug();
+            await debugger.Debug();
             return OperationResult.Win();
         }
     }

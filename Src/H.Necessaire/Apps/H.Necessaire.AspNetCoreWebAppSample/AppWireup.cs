@@ -3,6 +3,7 @@ using H.Necessaire.Runtime.Integration.NetCore;
 using H.Necessaire.Runtime.SqlServer;
 using H.Necessaire.Runtime.RavenDB;
 using H.Necessaire.Runtime.Azure.CosmosDB;
+using H.Necessaire.Runtime.Google.FirestoreDB;
 
 namespace H.Necessaire.AspNetCoreWebAppSample
 {
@@ -15,7 +16,8 @@ namespace H.Necessaire.AspNetCoreWebAppSample
                 .WithEverything()
                 //.With(x => x.Register<SqlServerRuntimeDependencyGroup>(() => new SqlServerRuntimeDependencyGroup()))
                 //.With(x => x.Register<RavenDbRuntimeDependencyGroup>(() => new RavenDbRuntimeDependencyGroup()))
-                .With(x => x.Register<AzureCosmosDbRuntimeDependencyGroup>(() => new AzureCosmosDbRuntimeDependencyGroup()))
+                //.With(x => x.Register<AzureCosmosDbRuntimeDependencyGroup>(() => new AzureCosmosDbRuntimeDependencyGroup()))
+                .With(x => x.Register<GoogleFirestoreDbRuntimeDependencyGroup>(() => new GoogleFirestoreDbRuntimeDependencyGroup()))
                 ;
         }
     }

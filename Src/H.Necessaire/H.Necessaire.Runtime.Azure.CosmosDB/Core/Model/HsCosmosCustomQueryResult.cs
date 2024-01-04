@@ -7,7 +7,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core.Model
     {
         readonly IEnumerable<T> entries;
 
-        public HsCosmosCustomQueryResult(int offset, int length, int totalNumberOfItems, params T[] entries)
+        public HsCosmosCustomQueryResult(int offset, int length, long totalNumberOfItems, params T[] entries)
         {
             this.entries = entries;
             Offset = offset;
@@ -17,7 +17,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core.Model
 
         public int Offset { get; }
         public int Length { get; }
-        public int TotalNumberOfItems { get; }
+        public long TotalNumberOfItems { get; }
 
         public IEnumerator<T> GetEnumerator()
         {

@@ -14,7 +14,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core.Resources
         , ImAStorageBrowserService<DataBin, DataBinFilter>
     {
         #region Construct
-        int maxDataSizeInBytes = 1440 * 1000; //1.44MB
+        const int maxDataSizeInBytes = 1440 * 1000; //1.44MB
         ImALogger logger;
         HsCosmosStorageService cosmosDataBinStorageService;
         public override void ReferDependencies(ImADependencyProvider dependencyProvider)
@@ -360,7 +360,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core.Resources
                 .TryOrFailWithGrace(
                     onFail: async ex =>
                     {
-                        await logger.LogError($"Error occurred while trying to open DataBin content stream for {meta.ID}. Message: {ex.Message}", ex, meta);
+                        await logger.LogError($"Error occurred while trying to open DataBin content stream for {meta.ID} from CosmosDB. Message: {ex.Message}", ex, meta);
                         result = null;
                     }
                 );

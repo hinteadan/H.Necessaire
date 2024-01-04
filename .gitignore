@@ -352,6 +352,7 @@ MigrationBackup/
 **/ConnectionString.txt
 **/DebugConnectionString.txt
 **/*.cfg.txt
+**/*.cfg.json
 **/appsettings.Local.json
 **/version.txt
 **/ironmen*.json

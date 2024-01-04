@@ -60,7 +60,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core
                 .Register<ImAStorageBrowserService<DataBin, DataBinFilter>>(() => dependencyRegistry.Get<DataBinAzureCosmosDbStorageResource>())
 
 
-                .Register<HsCosmosDebugger>(() => new HsCosmosDebugger())
+                //.Register<HsCosmosDebugger>(() => new HsCosmosDebugger())
 
                 ;
         }
