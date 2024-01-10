@@ -33,23 +33,27 @@ namespace H.Necessaire
             return value.ToString();
         }
 
-        public static string PrintSize(this long sizeInBytes)
+        public static string PrintSize(this long sizeInBytes, uint factor = 1024, string suffix = "iB")
         {
-            float sizeInKiloBytes = sizeInBytes / 1024f;
-            if (sizeInKiloBytes < 1024 / 2)
-                return $"{Math.Round(sizeInKiloBytes, 2)} KiB";
+            if (sizeInBytes < factor / 2)
+                return $"{sizeInBytes} B";
 
-            float sizeInMegaBytes = sizeInKiloBytes / 1024f;
-            if (sizeInMegaBytes < 1024 / 2)
-                return $"{Math.Round(sizeInMegaBytes, 2)} MiB";
+            double factorAsDouble = (double)factor;
+            double sizeInKiBytes = sizeInBytes / factorAsDouble;
+            if (sizeInKiBytes < factor / 2)
+                return $"{Math.Round(sizeInKiBytes, 2)} K{suffix}";
 
-            float sizeInGigaBytes = sizeInMegaBytes / 1024f;
-            if (sizeInGigaBytes < 1024 / 2)
-                return $"{Math.Round(sizeInGigaBytes, 2)} GiB";
+            double sizeInMeBytes = sizeInKiBytes / factorAsDouble;
+            if (sizeInMeBytes < factor / 2)
+                return $"{Math.Round(sizeInMeBytes, 2)} M{suffix}";
 
-            float sizeInTeraBytes = sizeInGigaBytes / 1024f;
+            double sizeInGiBytes = sizeInMeBytes / factorAsDouble;
+            if (sizeInGiBytes < factor / 2)
+                return $"{Math.Round(sizeInGiBytes, 2)} G{suffix}";
 
-            return $"{Math.Round(sizeInTeraBytes, 2)} TiB";
+            double sizeInTeBytes = sizeInGiBytes / factorAsDouble;
+
+            return $"{Math.Round(sizeInTeBytes, 2)} T{suffix}";
         }
 
         public static string Print(this decimal number, int numberOfDecimals = 2)

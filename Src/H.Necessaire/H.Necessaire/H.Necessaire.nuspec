@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>H.Necessaire</id>
-    <version>2.34.4</version>
+    <version>2.34.5</version>
     <title>H's Necessaire of various data and operation extensions for .NET</title>
     <projectUrl>https://h.necessaire.dev</projectUrl>
     <repository type="git" url="https://github.com/hinteadan/H.Necessaire.git" branch="master" />
