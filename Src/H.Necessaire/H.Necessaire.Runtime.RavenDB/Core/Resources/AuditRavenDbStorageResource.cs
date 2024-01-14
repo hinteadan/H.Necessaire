@@ -54,17 +54,7 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
 
     internal class AuditPayloadRavenDbStorageResource : RavenDbStorageServiceBase<string, AuditPayloadRavenDbStorageResource.AuditPayloadEntry, IDFilter<string>, AuditPayloadRavenDbStorageResource.AuditPayloadFilterIndex>
     {
-        protected override IAsyncDocumentQuery<AuditPayloadEntry> ApplyFilter(IAsyncDocumentQuery<AuditPayloadEntry> result, IDFilter<string> filter)
-        {
-            if (filter?.IDs?.Any() ?? false)
-            {
-                result = result.WhereIn(nameof(AuditMetadataEntry.ID), filter.IDs.ToStringArray());
-            }
-
-            return result;
-        }
-
-        protected override IDocumentQuery<AuditPayloadEntry> ApplyFilterSync(IDocumentQuery<AuditPayloadEntry> result, IDFilter<string> filter)
+        protected override TDocQuery ApplyFilterGeneric<TDocQuery>(TDocQuery result, IDFilter<string> filter)
         {
             if (filter?.IDs?.Any() ?? false)
             {
@@ -94,57 +84,7 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
 
     internal class AuditMetadataRavenDbStorageResource : RavenDbStorageServiceBase<Guid, AuditMetadataEntry, AuditSearchFilter, AuditMetadataRavenDbStorageResource.AuditSearchFilterIndex>
     {
-        protected override IAsyncDocumentQuery<AuditMetadataEntry> ApplyFilter(IAsyncDocumentQuery<AuditMetadataEntry> result, AuditSearchFilter filter)
-        {
-            if (filter?.IDs?.Any() ?? false)
-            {
-                result = result.WhereIn(nameof(AuditMetadataEntry.ID), filter.IDs.ToStringArray());
-            }
-
-            if (filter?.AuditedObjectTypes?.Any() ?? false)
-            {
-                result = result.WhereIn(nameof(AuditMetadataEntry.AuditedObjectType), filter.AuditedObjectTypes);
-            }
-
-            if (filter?.AuditedObjectIDs?.Any() ?? false)
-            {
-                result = result.WhereIn(nameof(AuditMetadataEntry.AuditedObjectID), filter.AuditedObjectIDs);
-            }
-
-            if (filter?.DoneBy?.IDs?.Any() ?? false)
-            {
-                result = result.WhereIn(nameof(AuditMetadataEntry.DoneBy.ID), filter.DoneBy.IDs.ToStringArray());
-            }
-
-            if (filter?.DoneBy?.IDTags?.Any() ?? false)
-            {
-                result = result.WhereIn(nameof(AuditMetadataEntry.DoneBy.IDTag), filter.DoneBy.IDTags);
-            }
-
-            if (filter?.DoneBy?.DisplayNames?.Any() ?? false)
-            {
-                result = result.WhereIn(nameof(AuditMetadataEntry.DoneBy.DisplayName), filter.DoneBy.DisplayNames);
-            }
-
-            if (filter?.ActionTypes?.Any() ?? false)
-            {
-                result = result.WhereIn(nameof(AuditMetadataEntry.ActionType), filter.ActionTypes.ToStringArray());
-            }
-
-            if (filter?.FromInclusive != null)
-            {
-                result = result.WhereGreaterThanOrEqual(nameof(AuditMetadataEntry.HappenedAt), filter.FromInclusive.Value);
-            }
-
-            if (filter?.ToInclusive != null)
-            {
-                result = result.WhereLessThanOrEqual(nameof(AuditMetadataEntry.HappenedAt), filter.ToInclusive.Value);
-            }
-
-            return result;
-        }
-
-        protected override IDocumentQuery<AuditMetadataEntry> ApplyFilterSync(IDocumentQuery<AuditMetadataEntry> result, AuditSearchFilter filter)
+        protected override TDocQuery ApplyFilterGeneric<TDocQuery>(TDocQuery result, AuditSearchFilter filter)
         {
             if (filter?.IDs?.Any() ?? false)
             {

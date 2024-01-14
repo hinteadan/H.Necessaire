@@ -1,4 +1,5 @@
 ﻿using H.Necessaire.RavenDB;
+using LiteDB;
 using Raven.Client.Documents.Commands;
 using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Linq;
@@ -30,9 +31,13 @@ namespace H.Necessaire.Runtime.RavenDB
 
         protected override IRavenQueryable<TEntity> ApplyFilter(IRavenQueryable<TEntity> query, TFilter filter) => query;
 
-        protected abstract IAsyncDocumentQuery<TEntity> ApplyFilter(IAsyncDocumentQuery<TEntity> query, TFilter filter);
+        protected virtual IAsyncDocumentQuery<TEntity> ApplyFilter(IAsyncDocumentQuery<TEntity> query, TFilter filter)
+            => ApplyFilterGeneric(query, filter);
 
-        protected abstract IDocumentQuery<TEntity> ApplyFilterSync(IDocumentQuery<TEntity> query, TFilter filter);
+        protected virtual IDocumentQuery<TEntity> ApplyFilterSync(IDocumentQuery<TEntity> query, TFilter filter)
+            => ApplyFilterGeneric(query, filter);
+
+        protected abstract TDocQuery ApplyFilterGeneric<TDocQuery>(TDocQuery result, TFilter filter) where TDocQuery : IDocumentQueryBase<TEntity, TDocQuery>;
 
         public override async Task<TEntity[]> Search(TFilter filter)
         {
