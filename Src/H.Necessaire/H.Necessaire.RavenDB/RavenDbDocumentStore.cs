@@ -52,9 +52,11 @@ namespace H.Necessaire.RavenDB
                     Serialization = new NewtonsoftJsonSerializationConventions {
                         CustomizeJsonDeserializer = x => {
                             x.ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace;
+                            x.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.None;
                         },
                         CustomizeJsonSerializer = x => {
                             x.ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace;
+                            x.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.None;
                         }
                     }
                 },
