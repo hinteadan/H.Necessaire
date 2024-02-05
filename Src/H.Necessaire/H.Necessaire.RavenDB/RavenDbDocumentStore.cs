@@ -24,12 +24,12 @@ namespace H.Necessaire.RavenDB
         {
             RuntimeConfig runtimeConfig = dependencyProvider?.GetRuntimeConfig();
 
-            this.clientCertificateName = runtimeConfig?.Get("RavenDbConnections")?.Get("ClientCertificateName")?.ToString();
+            this.clientCertificateName = runtimeConfig?.Get("RavenDbConnections")?.Get("ClientCertificateName")?.ToString()?.NullIfEmpty();
             this.databaseUrls = runtimeConfig?.Get("RavenDbConnections")?.Get("DatabaseUrls")?.GetAllStrings() ?? this.databaseUrls ?? Array.Empty<string>();
-            this.clientCertificatePassword = runtimeConfig?.Get("RavenDbConnections")?.Get("ClientCertificatePassword")?.ToString();
+            this.clientCertificatePassword = runtimeConfig?.Get("RavenDbConnections")?.Get("ClientCertificatePassword")?.ToString()?.NullIfEmpty();
 
-            if (string.IsNullOrWhiteSpace(clientCertificateName) || databaseUrls?.Any() != true)
-                throw new InvalidOperationException("The RavenDB configuration is invalid. Missing database urls and/or client certificate");
+            if (databaseUrls?.Any() != true)
+                throw new InvalidOperationException("The RavenDB configuration is invalid. Missing database urls");
         }
         #endregion
 
@@ -76,6 +76,9 @@ namespace H.Necessaire.RavenDB
 
         X509Certificate2 LoadRavenCertificate()
         {
+            if (clientCertificateName.IsEmpty())
+                return null;
+            
             using (System.IO.Stream stream = clientCertificateName.OpenEmbeddedResource())
             {
                 byte[] bytes = new byte[stream.Length];
