@@ -1,15 +1,17 @@
 ﻿using Bridge;
-using Bridge.Html5;
 using Bridge.React;
-using H.Necessaire.Models.Branding;
-using H.Necessaire.UI;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
-    public abstract class DataEditComponentBase
+    public abstract class DataEditComponentBase<TData, TProps, TState>
+        : ComponentBase<TProps, TState>
+        where TState : ImAUiComponentState, new()
     {
+        protected DataEditComponentBase(TProps props, params Union<ReactElement, string>[] children) : base(props, children) { }
+
+        public override ReactElement Render()
+        {
+            return null;
+        }
     }
 }
