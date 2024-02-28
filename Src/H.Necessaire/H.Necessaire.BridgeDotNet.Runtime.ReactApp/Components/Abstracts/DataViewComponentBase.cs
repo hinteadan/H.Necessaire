@@ -1,4 +1,5 @@
 ﻿using Bridge;
+using Bridge.Html5;
 using Bridge.React;
 using System.Threading.Tasks;
 
@@ -96,8 +97,23 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         protected virtual ReactElement RenderNoDataValue()
         {
             return
-                DOM.Em(
-                    "😔 No Data..."
+                DOM.Span(
+                    new Attributes
+                    {
+                        Style = new ReactStyle
+                        {
+                            Display = Display.Flex,
+                            Color = Branding.WarningColor.ToCssRGBA(),
+                            VerticalAlign = VerticalAlign.Middle,
+                            AlignItems = AlignItems.Center,
+                        }
+                    }
+                    ,
+                    DOM.Span("😔")
+                    ,
+                    DOM.Span(new Attributes { Style = new ReactStyle { MarginRight = Branding.SizingUnitInPixels / 3 } })
+                    ,
+                    DOM.Em("No Data")
                 );
         }
 
