@@ -113,6 +113,8 @@
     <Content Include="Refs\webfonts\fa-regular-400.svg" />
     <Content Include="Refs\webfonts\fa-solid-900.svg" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Components\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

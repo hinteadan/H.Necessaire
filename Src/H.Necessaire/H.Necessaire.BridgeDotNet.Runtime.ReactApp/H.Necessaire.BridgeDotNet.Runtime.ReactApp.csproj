@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="AppBase.cs" />
     <Compile Include="Components\Abstracts\ComponentBase.cs" />
+    <Compile Include="Components\Abstracts\DataEditComponentBase.cs" />
+    <Compile Include="Components\Abstracts\DataViewComponentBase.cs" />
     <Compile Include="Components\AppLoadIndicator.cs" />
     <Compile Include="Components\Chromes\DefaultChrome.cs" />
     <Compile Include="Components\Controls\Button.cs" />
