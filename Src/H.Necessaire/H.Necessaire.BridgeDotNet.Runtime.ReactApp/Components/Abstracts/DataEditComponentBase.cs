@@ -16,6 +16,13 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         }
     }
 
-    public abstract class DataEditComponentState<TData> : ComponentStateBase { }
-    public abstract class DataEditComponentProps<TData> : ComponentPropsBase { }
+    public abstract class DataEditComponentState<TData> : ComponentStateBase 
+    {
+        public TData DataBeingEdited { get; set; }
+    }
+
+    public abstract class DataEditComponentProps<TData> : ComponentPropsBase
+    {
+        public TData DataToEdit { get; set; }
+    }
 }

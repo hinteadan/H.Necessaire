@@ -17,7 +17,7 @@ namespace H.Necessaire.AspNetCoreWebAppSample
                 //.With(x => x.Register<SqlServerRuntimeDependencyGroup>(() => new SqlServerRuntimeDependencyGroup()))
                 //.With(x => x.Register<RavenDbRuntimeDependencyGroup>(() => new RavenDbRuntimeDependencyGroup()))
                 //.With(x => x.Register<AzureCosmosDbRuntimeDependencyGroup>(() => new AzureCosmosDbRuntimeDependencyGroup()))
-                .With(x => x.Register<GoogleFirestoreDbRuntimeDependencyGroup>(() => new GoogleFirestoreDbRuntimeDependencyGroup()))
+                //.With(x => x.Register<GoogleFirestoreDbRuntimeDependencyGroup>(() => new GoogleFirestoreDbRuntimeDependencyGroup()))
                 ;
         }
     }
