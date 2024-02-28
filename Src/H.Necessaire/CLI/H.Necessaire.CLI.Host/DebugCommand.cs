@@ -15,7 +15,7 @@ namespace H.Necessaire.CLI.Host
 
         public override async Task<OperationResult> Run()
         {
-            await debugger.Debug();
+            //await debugger.Debug();
             return OperationResult.Win();
         }
     }
