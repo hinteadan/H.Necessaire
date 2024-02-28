@@ -39,6 +39,7 @@
     <Compile Include="AppConfig.cs" />
     <Compile Include="AppNavigationRegistry.cs" />
     <Compile Include="AppWireup.cs" />
+    <Compile Include="Components\DataViewComponent.cs" />
     <Compile Include="Daemons\Abstracts\DaemonBase.cs" />
     <Compile Include="Daemons\ConsolePingDaemon.cs" />
     <Compile Include="Daemons\DaemonsDependencyGroup.cs" />
@@ -113,8 +114,6 @@
     <Content Include="Refs\webfonts\fa-regular-400.svg" />
     <Content Include="Refs\webfonts\fa-solid-900.svg" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Components\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
