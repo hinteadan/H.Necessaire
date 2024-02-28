@@ -106,12 +106,13 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                             Color = Branding.WarningColor.ToCssRGBA(),
                             VerticalAlign = VerticalAlign.Middle,
                             AlignItems = AlignItems.Center,
+                            FontSize = Branding.Typography.FontSizeSmall.EmsCss,
                         }
                     }
                     ,
                     DOM.Span("😔")
                     ,
-                    DOM.Span(new Attributes { Style = new ReactStyle { MarginRight = Branding.SizingUnitInPixels / 3 } })
+                    DOM.Span(new Attributes { Style = new ReactStyle { MarginRight = Branding.SizingUnitInPixels / 4 } })
                     ,
                     DOM.Em("No Data")
                 );
