@@ -10,7 +10,7 @@ namespace H.Necessaire.ReactAppSample.Components
         public DataViewComponent(Props props, params Union<ReactElement, string>[] children) : base(props, children) { }
 
 
-        public class State : ComponentStateBase { }
-        public class Props : ComponentPropsBase { }
+        public class State : DataViewComponentState { }
+        public class Props : DataViewComponentProps { }
     }
 }
