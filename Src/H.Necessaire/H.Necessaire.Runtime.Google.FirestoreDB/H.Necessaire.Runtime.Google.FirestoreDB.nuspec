@@ -20,7 +20,7 @@
       <dependency id="H.Necessaire" version="2.34.13" />
       <dependency id="H.Necessaire.Runtime" version="2.34.13" />
       <dependency id="H.Necessaire.Serialization" version="2.34.13" />
-      <dependency id="Google.Cloud.Firestore" version="3.5.0" />
+      <dependency id="Google.Cloud.Firestore" version="3.5.1" />
     </dependencies>
   </metadata>
   <files>
