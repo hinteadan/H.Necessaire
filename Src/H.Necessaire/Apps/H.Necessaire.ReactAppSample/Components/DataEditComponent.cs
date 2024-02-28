@@ -8,7 +8,7 @@ namespace H.Necessaire.ReactAppSample.Components
     {
         public DataEditComponent(Props props, params Union<ReactElement, string>[] children) : base(props, children) { }
 
-        public class State : DataEditComponentState { }
-        public class Props : DataEditComponentProps { }
+        public class State : DataEditComponentState<string> { }
+        public class Props : DataEditComponentProps<string> { }
     }
 }
