@@ -39,6 +39,7 @@
     <Compile Include="AppConfig.cs" />
     <Compile Include="AppNavigationRegistry.cs" />
     <Compile Include="AppWireup.cs" />
+    <Compile Include="Components\DataEditComponent.cs" />
     <Compile Include="Components\DataViewComponent.cs" />
     <Compile Include="Daemons\Abstracts\DaemonBase.cs" />
     <Compile Include="Daemons\ConsolePingDaemon.cs" />
