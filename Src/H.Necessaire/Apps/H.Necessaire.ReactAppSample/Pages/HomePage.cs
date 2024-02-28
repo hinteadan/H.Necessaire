@@ -1,6 +1,5 @@
 ﻿using Bridge.React;
 using H.Necessaire.BridgeDotNet.Runtime.ReactApp;
-using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Core;
 using H.Necessaire.ReactAppSample.Components;
 
 namespace H.Necessaire.ReactAppSample.Pages
@@ -31,6 +30,10 @@ namespace H.Necessaire.ReactAppSample.Pages
                         }, "Debug")
                         ,
                         new FontIcon(new FontIcon.Props { Provider = FontIcon.Provider.FontAwesome, IconName = "user" })
+                        ,
+                        new DataViewComponent(new DataViewComponent.Props { })
+                        ,
+                        new DataEditComponent(new DataEditComponent.Props { })
                     )
 
                 );
