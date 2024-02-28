@@ -26,12 +26,14 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             else
                 style.Width = size;
 
-            style.Display = Bridge.Html5.Display.Flex;
+            style.Display = Display.Flex;
             style.MinHeight = 0;
             if (isVerticalFlow)
-                style.FlexDirection = Bridge.Html5.FlexDirection.Column;
+                style.FlexDirection = FlexDirection.Column;
 
             return style;
         }
+        public static ReactStyle FlexNodeH(this ReactStyle style, Union<string, int> size = null) => style.FlexNode(isVerticalFlow: false, size: size);
+        public static ReactStyle FlexNodeV(this ReactStyle style, Union<string, int> size = null) => style.FlexNode(isVerticalFlow: true, size: size);
     }
 }
