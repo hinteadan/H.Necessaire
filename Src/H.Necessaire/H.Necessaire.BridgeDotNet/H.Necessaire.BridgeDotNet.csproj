@@ -471,6 +471,21 @@
     <Compile Include="..\H.Necessaire\Operations\Auditing\ImAnAuditingService.cs">
       <Link>Operations\Auditing\ImAnAuditingService.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Caching\CachingDependencyGroup.cs">
+      <Link>Operations\Caching\CachingDependencyGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Caching\Concrete\CacherFactory.cs">
+      <Link>Operations\Caching\Concrete\CacherFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Caching\Concrete\InMemoryCacher.cs">
+      <Link>Operations\Caching\Concrete\InMemoryCacher.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Caching\ImACacher.cs">
+      <Link>Operations\Caching\ImACacher.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Caching\ImACacherFactory.cs">
+      <Link>Operations\Caching\ImACacherFactory.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Operations\CallContextKey.cs">
       <Link>Operations\CallContextKey.cs</Link>
     </Compile>
