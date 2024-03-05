@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.Operations.Caching.Concrete
 {
-    internal class InMemoryCacher<T> : ImACacher<T>
+    public class InMemoryCacher<T> : ImACacher<T>
     {
-        readonly ConcurrentDictionary<string, ImCachebale<T>> cacheRegistry = new ConcurrentDictionary<string, ImCachebale<T>>();
+        protected readonly ConcurrentDictionary<string, ImCachebale<T>> cacheRegistry = new ConcurrentDictionary<string, ImCachebale<T>>();
 
-        public async Task<T> GetOrAdd(string id, Func<string, Task<ImCachebale<T>>> cacheableItemFactory)
+        public virtual async Task<T> GetOrAdd(string id, Func<string, Task<ImCachebale<T>>> cacheableItemFactory)
         {
             DateTime now = DateTime.UtcNow;
             ImCachebale<T> cachedItem = null;
@@ -32,15 +33,32 @@ namespace H.Necessaire.Operations.Caching.Concrete
             return cachedItem.Payload;
         }
 
-        public Task ClearAll()
+        public virtual Task ClearAll()
         {
             cacheRegistry.Clear();
             return true.AsTask();
         }
 
-        public Task RunHousekeepingSession()
+        public virtual Task RunHousekeepingSession()
         {
-            throw new NotImplementedException();
+            DateTime now = DateTime.UtcNow;
+
+            ImCachebale<T>[] expiredItems
+                = cacheRegistry
+                .Values
+                .Where(x => x.IsExpired(now))
+                .ToArray();
+
+            if (expiredItems.Any() != true)
+                return true.AsTask();
+
+            foreach(ImCachebale<T> expiredItem in expiredItems)
+            {
+                ImCachebale<T> removedItem = null;
+                cacheRegistry.TryRemove(expiredItem.ID, out removedItem);
+            }
+
+            return true.AsTask();
         }
     }
 }
