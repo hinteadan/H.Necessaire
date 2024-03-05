@@ -18,7 +18,7 @@ namespace H.Necessaire.Operations.Caching.Concrete
             ImCachebale<T> cachedItem = null;
             if(cacheRegistry.TryGetValue(id, out cachedItem) && !cachedItem.IsExpired(now))
             {                
-                cachedItem.MarkAccess(now);
+                cachedItem.PinAccess(now);
                 if (!cachedItem.IsSlidingExpirationDisabled && cachedItem.ValidFor != null)
                 {
                     cachedItem.ActiveAsOf(now);
@@ -51,7 +51,7 @@ namespace H.Necessaire.Operations.Caching.Concrete
                 return OperationResult.Fail($"{typeof(T).Name} {id} is not cached or cached value has expired").WithoutPayload<T>().AsTask();
             }
 
-            cachedItem.MarkAccess(now);
+            cachedItem.PinAccess(now);
             if (!cachedItem.IsSlidingExpirationDisabled && cachedItem.ValidFor != null)
             {
                 cachedItem.ActiveAsOf(now);

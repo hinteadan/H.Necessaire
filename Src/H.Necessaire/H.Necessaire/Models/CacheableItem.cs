@@ -10,6 +10,6 @@ namespace H.Necessaire
 
         public bool IsSlidingExpirationDisabled { get; set; } = false;
 
-        public void MarkAccess(DateTime? at = null) => AsOf = at ?? DateTime.UtcNow;
+        public void PinAccess(DateTime? at = null) => AsOf = at ?? DateTime.UtcNow;
     }
 }

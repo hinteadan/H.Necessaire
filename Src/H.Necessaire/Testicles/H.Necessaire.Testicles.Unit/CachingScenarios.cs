@@ -40,20 +40,47 @@ namespace H.Necessaire.Testicles.Unit
             cachedValue.Should().Be(-10, because: "we cleared the entire cache and added the new value");
         }
 
-        [Fact(DisplayName = "Caching Correctly Handles Cached Items With Expiration Policy")]
-        public async Task Caching_Correctly_Handles_Cached_Items_With_Expiration_Policy()
+        [Fact(DisplayName = "Caching Correctly Handles Cached Items With Sliding Expiration Policy")]
+        public async Task Caching_Correctly_Handles_Cached_Items_With_Sliding_Expiration_Policy()
         {
             ImACacher<int> cacher = dependencyRegistry.GetCacher<int>();
 
             int value = 42;
             await cacher.GetOrAdd("IntCacheTest", id => value.ToCacheableItem(id, cacheDuration: TimeSpan.FromSeconds(3)).AsTask());
             int cachedValue = (await cacher.TryGet("IntCacheTest")).ThrowOnFailOrReturn();
-            cachedValue.Should().Be(42, because: "we just cached the value 42 for 1 second");
+            cachedValue.Should().Be(42, because: "we just cached the value 42 for 3 seconds");
+
+            await Task.Delay(TimeSpan.FromSeconds(2.7));
+            cachedValue = (await cacher.TryGet("IntCacheTest")).ThrowOnFailOrReturn();
+            cachedValue.Should().Be(42, because: "The cached value of 42 hasn't expired yet");
+
+            await Task.Delay(TimeSpan.FromSeconds(2.7));
+            cachedValue = (await cacher.TryGet("IntCacheTest")).ThrowOnFailOrReturn();
+            cachedValue.Should().Be(42, because: "The cached value of 42 hasn't expired yet because it was slided");
 
             await Task.Delay(housekeepingInterval);
 
             OperationResult cachedValueResult = await cacher.TryGet("IntCacheTest");
-            cachedValueResult.IsSuccessful.Should().BeFalse(because: "the cached item should have been removed from cache during a housekeeping session");
+            cachedValueResult.IsSuccessful.Should().BeFalse(because: "the cached item should have been removed from cache during a housekeeping session as it was not accessed and therefore not slided");
+        }
+
+        [Fact(DisplayName = "Caching Correctly Handles Cached Items With NO Sliding Expiration Policy")]
+        public async Task Caching_Correctly_Handles_Cached_Items_With_NO_Sliding_Expiration_Policy()
+        {
+            ImACacher<int> cacher = dependencyRegistry.GetCacher<int>();
+
+            int value = 42;
+            await cacher.GetOrAdd("IntCacheTest", id => value.ToCacheableItem(id, cacheDuration: TimeSpan.FromSeconds(3)).And(x => x.IsSlidingExpirationDisabled = true).AsTask());
+            int cachedValue = (await cacher.TryGet("IntCacheTest")).ThrowOnFailOrReturn();
+            cachedValue.Should().Be(42, because: "we just cached the value 42 for 3 seconds");
+
+            await Task.Delay(TimeSpan.FromSeconds(2.7));
+            cachedValue = (await cacher.TryGet("IntCacheTest")).ThrowOnFailOrReturn();
+            cachedValue.Should().Be(42, because: "The cached value of 42 hasn't expired yet");
+
+            await Task.Delay(TimeSpan.FromSeconds(2.7));
+            OperationResult cachedValueResult = await cacher.TryGet("IntCacheTest");
+            cachedValueResult.IsSuccessful.Should().BeFalse(because: "the cached item should have been removed from cache during a housekeeping session as even though it was accessed, it has sliding expiration disabled");
         }
     }
 }

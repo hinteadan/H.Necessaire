@@ -7,6 +7,6 @@ namespace H.Necessaire
         DateTime LastAccessedAt { get; }
         bool IsSlidingExpirationDisabled { get; set; }
 
-        void MarkAccess(DateTime? at = null);
+        void PinAccess(DateTime? at = null);
     }
 }
