@@ -42,6 +42,9 @@
     <Compile Include="..\H.Necessaire\Extensions\AzureExtensions.cs">
       <Link>Extensions\AzureExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Extensions\CachingExtensions.cs">
+      <Link>Extensions\CachingExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Extensions\CollectionExtensions.cs">
       <Link>Extensions\CollectionExtensions.cs</Link>
     </Compile>
@@ -177,6 +180,9 @@
     <Compile Include="..\H.Necessaire\Models\Branding\TypographySize.cs">
       <Link>Models\Branding\TypographySize.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\CacheableItem.cs">
+      <Link>Models\CacheableItem.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Collections\CollectionOfDisposables.cs">
       <Link>Models\Collections\CollectionOfDisposables.cs</Link>
     </Compile>
@@ -269,6 +275,9 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Models\ImADataBinStream.cs">
       <Link>Models\ImADataBinStream.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Models\ImCachebale.cs">
+      <Link>Models\ImCachebale.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Models\IStringIdentity.cs">
       <Link>Models\IStringIdentity.cs</Link>

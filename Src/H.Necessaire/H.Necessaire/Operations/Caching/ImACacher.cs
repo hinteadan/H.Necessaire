@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace H.Necessaire
 {
@@ -10,5 +11,6 @@ namespace H.Necessaire
 
     public interface ImACacher<T> : ImACacher
     {
+        Task<T> GetOrAdd(string id, Func<string, Task<ImCachebale<T>>> cacheableItemFactory);
     }
 }
