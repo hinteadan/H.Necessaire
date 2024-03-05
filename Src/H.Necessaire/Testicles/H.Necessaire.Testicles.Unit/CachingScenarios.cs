@@ -26,6 +26,11 @@ namespace H.Necessaire.Testicles.Unit
             value = -1;
             cachedValue = await cacher.GetOrAdd("IntCacheTest", id => value.ToCacheableItem(id).AsTask());
             cachedValue.Should().Be(0, because: "we cached the initial value of 0, not the -1");
+
+            await cacher.Clear("IntCacheTest");
+
+            cachedValue = await cacher.GetOrAdd("IntCacheTest", id => value.ToCacheableItem(id).AsTask());
+            cachedValue.Should().Be(-1, because: "we cleared the cached item and added the new value");
         }
     }
 }
