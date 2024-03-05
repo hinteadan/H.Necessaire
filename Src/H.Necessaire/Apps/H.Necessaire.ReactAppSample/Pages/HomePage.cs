@@ -31,7 +31,7 @@ namespace H.Necessaire.ReactAppSample.Pages
                         ,
                         new FontIcon(new FontIcon.Props { Provider = FontIcon.Provider.FontAwesome, IconName = "user" })
                         ,
-                        new DataViewComponent(new DataViewComponent.Props { })
+                        new DataViewComponent(new DataViewComponent.Props { Data = "Hintee" })
                         ,
                         new DataEditComponent(new DataEditComponent.Props { })
                     )
