@@ -15,7 +15,8 @@ namespace H.Necessaire
                     CreatedAt = now,
                     ValidFrom = now,
                     AsOf = now,
-                }.And(x => { 
+                }.And(x =>
+                {
                     x.ValidFor = cacheDuration;
                 });
         }
@@ -31,9 +32,12 @@ namespace H.Necessaire
                     CreatedAt = now,
                     ValidFrom = now,
                     AsOf = now,
-                }.And(x => {
+                }.And(x =>
+                {
                     x.ExpiresAt = expiresAt;
                 });
         }
+
+        public static ImCachebale<T> ToCacheableItem<T>(this T data, string identifier = null) => data.ToCacheableItem(identifier, expiresAt: null);
     }
 }
