@@ -51,6 +51,9 @@ namespace H.Necessaire
         public static RuntimeConfig GetRuntimeConfig(this ImADependencyProvider dependencyProvider)
             => dependencyProvider?.Get<ImAConfigProvider>()?.GetRuntimeConfig() ?? dependencyProvider?.Get<RuntimeConfig>() ?? RuntimeConfig.Empty;
 
+        public static ImACacher<T> GetCacher<T>(this ImADependencyProvider dependencyProvider, string cacherID = "InMemory")
+            => dependencyProvider?.Get<ImACacherFactory>()?.BuildCacher<T>(cacherID);
+
         public static string GetID(this Type type)
         {
             return

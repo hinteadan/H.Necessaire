@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace H.Necessaire
+﻿namespace H.Necessaire
 {
     public interface ImACacherFactory
     {
+        ImACacher<T> BuildCacher<T>(string cacherID = "InMemory");
     }
 }

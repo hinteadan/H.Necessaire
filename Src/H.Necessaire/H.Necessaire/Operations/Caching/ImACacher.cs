@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace H.Necessaire
 {
-    public interface ImACacher<T>
+    public interface ImACacher
     {
         Task ClearAll();
+    }
+
+    public interface ImACacher<T> : ImACacher
+    {
     }
 }
