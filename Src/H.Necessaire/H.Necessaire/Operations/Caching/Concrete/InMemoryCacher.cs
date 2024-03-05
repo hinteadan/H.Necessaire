@@ -11,6 +11,9 @@ namespace H.Necessaire.Operations.Caching.Concrete
 
         public virtual async Task<T> GetOrAdd(string id, Func<string, Task<ImCachebale<T>>> cacheableItemFactory)
         {
+            if(id.IsEmpty())
+                OperationResult.Fail($"ID cannot be empty").ThrowOnFail();
+
             DateTime now = DateTime.UtcNow;
             ImCachebale<T> cachedItem = null;
             if(cacheRegistry.TryGetValue(id, out cachedItem) && !cachedItem.IsExpired(now))
@@ -33,12 +36,6 @@ namespace H.Necessaire.Operations.Caching.Concrete
             return cachedItem.Payload;
         }
 
-        public virtual Task ClearAll()
-        {
-            cacheRegistry.Clear();
-            return true.AsTask();
-        }
-
         public virtual Task RunHousekeepingSession()
         {
             DateTime now = DateTime.UtcNow;
@@ -56,6 +53,29 @@ namespace H.Necessaire.Operations.Caching.Concrete
             {
                 ImCachebale<T> removedItem = null;
                 cacheRegistry.TryRemove(expiredItem.ID, out removedItem);
+            }
+
+            return true.AsTask();
+        }
+
+        public virtual Task ClearAll()
+        {
+            cacheRegistry.Clear();
+            return true.AsTask();
+        }
+
+        public virtual Task Clear(params string[] ids)
+        {
+            if (ids?.Any() != true)
+                return true.AsTask();
+
+            foreach(string id in ids)
+            {
+                if (id.IsEmpty())
+                    continue;
+
+                ImCachebale<T> removedItem = null;
+                cacheRegistry.TryRemove(id, out removedItem);
             }
 
             return true.AsTask();

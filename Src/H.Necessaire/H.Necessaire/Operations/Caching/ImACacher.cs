@@ -7,6 +7,7 @@ namespace H.Necessaire
     {
         Task RunHousekeepingSession();
         Task ClearAll();
+        Task Clear(params string[] ids);
     }
 
     public interface ImACacher<T> : ImACacher
