@@ -7,9 +7,9 @@ namespace H.Necessaire.Operations.Caching.Concrete
     internal class CacherManager : ImACacherFactory, ImACacherRegistry, ImADependency
     {
 #if DEBUG
-        static readonly TimeSpan housekeepingInterval = TimeSpan.FromSeconds(5);
+        TimeSpan housekeepingInterval = TimeSpan.FromSeconds(10);
 #else
-        static readonly TimeSpan housekeepingInterval = TimeSpan.FromMinutes(1);
+        TimeSpan housekeepingInterval = TimeSpan.FromMinutes(1);
 #endif
         ImAPeriodicAction housekeeping;
         ImADependencyProvider dependencyProvider;
@@ -20,6 +20,9 @@ namespace H.Necessaire.Operations.Caching.Concrete
             this.dependencyProvider = dependencyProvider;
             housekeeping = dependencyProvider.Get<ImAPeriodicAction>();
             logger = dependencyProvider.GetLogger(nameof(CacherManager));
+            double? housekeepingIntervalFromConfig = dependencyProvider.GetRuntimeConfig()?.Get("CachingHousekeepingIntervalInSeconds")?.ToString()?.ParseToDoubleOrFallbackTo(null);
+            if (housekeepingIntervalFromConfig != null)
+                housekeepingInterval = TimeSpan.FromSeconds(housekeepingIntervalFromConfig.Value);
         }
 
         public ImACacher<T> BuildCacher<T>(string cacherID = "InMemory")
@@ -55,7 +58,7 @@ namespace H.Necessaire.Operations.Caching.Concrete
 
         private async Task RunHousekeepingSession()
         {
-            foreach(ImACacher cacher in cacherRegistry.Values)
+            foreach (ImACacher cacher in cacherRegistry.Values)
             {
                 await RunHousekeepingSessionFor(cacher);
             }
@@ -71,7 +74,8 @@ namespace H.Necessaire.Operations.Caching.Concrete
 
                 })
                 .TryOrFailWithGrace(
-                    onFail: async ex => {
+                    onFail: async ex =>
+                    {
                         await logger.LogError($"Error occurred while trying to Run Housekeeping Session For {cacher?.GetType()?.Name}. Message: {ex.Message}", ex);
                     }
                 );
@@ -82,7 +86,7 @@ namespace H.Necessaire.Operations.Caching.Concrete
             if (cacherRegistry.Count == 0)
                 return;
 
-            foreach(ImACacher cacher in cacherRegistry.Values)
+            foreach (ImACacher cacher in cacherRegistry.Values)
             {
                 await cacher.ClearAll();
             }
