@@ -9,5 +9,7 @@ namespace H.Necessaire
         public DateTime LastAccessedAt => AsOf;
 
         public bool IsSlidingExpirationDisabled { get; set; } = false;
+
+        public void MarkAccess(DateTime? at = null) => AsOf = at ?? DateTime.UtcNow;
     }
 }
