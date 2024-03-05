@@ -1,15 +1,33 @@
-﻿namespace H.Necessaire.Operations.Caching.Concrete
+﻿using System;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
+
+namespace H.Necessaire.Operations.Caching.Concrete
 {
     internal class CacherFactory : ImACacherFactory, ImADependency
     {
+#if DEBUG
+        static readonly TimeSpan housekeepingInterval = TimeSpan.FromSeconds(15);
+#else
+        static readonly TimeSpan housekeepingInterval = TimeSpan.FromMinutes(3);
+#endif
+        ImAPeriodicAction housekeeping;
         ImADependencyProvider dependencyProvider;
+        readonly ConcurrentDictionary<Type, ImACacher> cacherRegistry = new ConcurrentDictionary<Type, ImACacher>();
+        ImALogger logger;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             this.dependencyProvider = dependencyProvider;
+            housekeeping = dependencyProvider.Get<ImAPeriodicAction>();
+            logger = dependencyProvider.GetLogger(nameof(CacherFactory));
         }
 
         public ImACacher<T> BuildCacher<T>(string cacherID = "InMemory")
         {
+            ImACacher existingCacher = null;
+            if (cacherRegistry.TryGetValue(typeof(ImACacher<T>), out existingCacher))
+                return existingCacher as ImACacher<T>;
+
             ImACacher<T> cacher =
                 cacherID.IsEmpty()
                 ? dependencyProvider?.Get<ImACacher<T>>()
@@ -19,7 +37,35 @@
             if (cacher == null)
                 return null;
 
+            cacherRegistry.TryAdd(typeof(ImACacher<T>), cacher);
+
+            housekeeping.StartDelayed(housekeepingInterval, housekeepingInterval, RunHousekeepingSession);
+
             return cacher;
+        }
+
+        private async Task RunHousekeepingSession()
+        {
+            foreach(ImACacher cacher in cacherRegistry.Values)
+            {
+                await RunHousekeepingSessionFor(cacher);
+            }
+        }
+
+        private async Task RunHousekeepingSessionFor(ImACacher cacher)
+        {
+            await
+                new Func<Task>(async () =>
+                {
+
+                    await cacher.RunHousekeepingSession();
+
+                })
+                .TryOrFailWithGrace(
+                    onFail: async ex => {
+                        await logger.LogError($"Error occurred while trying to Run Housekeeping Session For {cacher?.GetType()?.Name}. Message: {ex.Message}", ex);
+                    }
+                );
         }
     }
 }

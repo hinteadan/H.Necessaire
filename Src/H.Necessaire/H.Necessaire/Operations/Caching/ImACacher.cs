@@ -4,6 +4,7 @@ namespace H.Necessaire
 {
     public interface ImACacher
     {
+        Task RunHousekeepingSession();
         Task ClearAll();
     }
 
