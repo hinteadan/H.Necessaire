@@ -7,9 +7,9 @@ namespace H.Necessaire.Operations.Caching.Concrete
     internal class CacherManager : ImACacherFactory, ImACacherRegistry, ImADependency
     {
 #if DEBUG
-        static readonly TimeSpan housekeepingInterval = TimeSpan.FromSeconds(15);
+        static readonly TimeSpan housekeepingInterval = TimeSpan.FromSeconds(5);
 #else
-        static readonly TimeSpan housekeepingInterval = TimeSpan.FromMinutes(3);
+        static readonly TimeSpan housekeepingInterval = TimeSpan.FromMinutes(1);
 #endif
         ImAPeriodicAction housekeeping;
         ImADependencyProvider dependencyProvider;

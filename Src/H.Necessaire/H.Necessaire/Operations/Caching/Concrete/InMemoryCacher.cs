@@ -36,6 +36,30 @@ namespace H.Necessaire.Operations.Caching.Concrete
             return cachedItem.Payload;
         }
 
+        public Task<OperationResult<T>> TryGet(string id)
+        {
+            if (id.IsEmpty())
+                return OperationResult.Fail($"ID cannot be empty").WithoutPayload<T>().AsTask();
+
+            ImCachebale<T> cachedItem = null;
+            DateTime now = DateTime.UtcNow;
+            if (!cacheRegistry.TryGetValue(id, out cachedItem) || cachedItem.IsExpired(now))
+            {
+                ImCachebale<T> removedItem = null;
+                cacheRegistry.TryRemove(id, out removedItem);
+
+                return OperationResult.Fail($"{typeof(T).Name} {id} is not cached or cached value has expired").WithoutPayload<T>().AsTask();
+            }
+
+            cachedItem.MarkAccess(now);
+            if (!cachedItem.IsSlidingExpirationDisabled && cachedItem.ValidFor != null)
+            {
+                cachedItem.ActiveAsOf(now);
+            }
+
+            return cachedItem.Payload.ToWinResult().AsTask();
+        }
+
         public virtual Task RunHousekeepingSession()
         {
             DateTime now = DateTime.UtcNow;
