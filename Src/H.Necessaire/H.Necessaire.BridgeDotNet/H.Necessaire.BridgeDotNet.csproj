@@ -483,8 +483,8 @@
     <Compile Include="..\H.Necessaire\Operations\Caching\CachingDependencyGroup.cs">
       <Link>Operations\Caching\CachingDependencyGroup.cs</Link>
     </Compile>
-    <Compile Include="..\H.Necessaire\Operations\Caching\Concrete\CacherFactory.cs">
-      <Link>Operations\Caching\Concrete\CacherFactory.cs</Link>
+    <Compile Include="..\H.Necessaire\Operations\Caching\Concrete\CacherManager.cs">
+      <Link>Operations\Caching\Concrete\CacherManager.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\Caching\Concrete\InMemoryCacher.cs">
       <Link>Operations\Caching\Concrete\InMemoryCacher.cs</Link>
@@ -494,6 +494,9 @@
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\Caching\ImACacherFactory.cs">
       <Link>Operations\Caching\ImACacherFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Caching\ImACacherRegistry.cs">
+      <Link>Operations\Caching\ImACacherRegistry.cs</Link>
     </Compile>
     <Compile Include="..\H.Necessaire\Operations\CallContextKey.cs">
       <Link>Operations\CallContextKey.cs</Link>

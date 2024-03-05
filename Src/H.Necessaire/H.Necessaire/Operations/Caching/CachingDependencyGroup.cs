@@ -7,7 +7,9 @@ namespace H.Necessaire
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry
-                .Register<ImACacherFactory>(() => new CacherFactory())
+                .Register<CacherManager>(() => new CacherManager())
+                .Register<ImACacherFactory>(() => dependencyRegistry.Get<CacherManager>())
+                .Register<ImACacherRegistry>(() => dependencyRegistry.Get<CacherManager>())
                 ;
         }
     }

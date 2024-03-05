@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Operations.Caching.Concrete
 {
-    internal class CacherFactory : ImACacherFactory, ImADependency
+    internal class CacherManager : ImACacherFactory, ImACacherRegistry, ImADependency
     {
 #if DEBUG
         static readonly TimeSpan housekeepingInterval = TimeSpan.FromSeconds(15);
@@ -19,7 +19,7 @@ namespace H.Necessaire.Operations.Caching.Concrete
         {
             this.dependencyProvider = dependencyProvider;
             housekeeping = dependencyProvider.Get<ImAPeriodicAction>();
-            logger = dependencyProvider.GetLogger(nameof(CacherFactory));
+            logger = dependencyProvider.GetLogger(nameof(CacherManager));
         }
 
         public ImACacher<T> BuildCacher<T>(string cacherID = "InMemory")
@@ -75,6 +75,28 @@ namespace H.Necessaire.Operations.Caching.Concrete
                         await logger.LogError($"Error occurred while trying to Run Housekeeping Session For {cacher?.GetType()?.Name}. Message: {ex.Message}", ex);
                     }
                 );
+        }
+
+        public async Task ClearAll()
+        {
+            if (cacherRegistry.Count == 0)
+                return;
+
+            foreach(ImACacher cacher in cacherRegistry.Values)
+            {
+                await cacher.ClearAll();
+            }
+        }
+
+        public async Task Clear(params string[] ids)
+        {
+            if (cacherRegistry.Count == 0)
+                return;
+
+            foreach (ImACacher cacher in cacherRegistry.Values)
+            {
+                await cacher.Clear(ids);
+            }
         }
     }
 }
