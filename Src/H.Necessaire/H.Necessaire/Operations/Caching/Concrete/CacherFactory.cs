@@ -29,9 +29,12 @@ namespace H.Necessaire.Operations.Caching.Concrete
                 return existingCacher as ImACacher<T>;
 
             ImACacher<T> cacher =
-                cacherID.IsEmpty()
+                (cacherID.IsEmpty()
                 ? dependencyProvider?.Get<ImACacher<T>>()
                 : dependencyProvider?.Build<ImACacher<T>>(cacherID, dependencyProvider?.Get<ImACacher<T>>())
+                )
+                ??
+                BuildNewInMemoryCacher<T>()
                 ;
 
             if (cacher == null)
@@ -42,6 +45,12 @@ namespace H.Necessaire.Operations.Caching.Concrete
             housekeeping.StartDelayed(housekeepingInterval, housekeepingInterval, RunHousekeepingSession);
 
             return cacher;
+        }
+
+        private ImACacher<T> BuildNewInMemoryCacher<T>()
+        {
+            return
+                new InMemoryCacher<T>();
         }
 
         private async Task RunHousekeepingSession()
