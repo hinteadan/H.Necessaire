@@ -34,7 +34,8 @@ namespace H.Necessaire.Operations.Caching.Concrete
 
         public Task ClearAll()
         {
-            throw new NotImplementedException();
+            cacheRegistry.Clear();
+            return true.AsTask();
         }
 
         public Task RunHousekeepingSession()
