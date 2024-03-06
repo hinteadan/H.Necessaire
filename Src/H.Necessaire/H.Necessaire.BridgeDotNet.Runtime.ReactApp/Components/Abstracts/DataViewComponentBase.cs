@@ -29,6 +29,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             await DoAndSetStateAsync(state =>
             {
                 state.Data = props == null ? GetDefaultDataValue() : props.Data;
+                state.Label = props?.Label;
+                state.Description = props?.Description;
             });
         }
 
@@ -46,7 +48,31 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                         ClassName = $"{typeof(TData).Name}-View-Chrome",
                     }
                     ,
-                    !HasValue() ? RenderNoDataView() : RenderDataView()
+                    RenderLabelIfNecessary()
+                    ,
+                    (!HasValue() ? RenderNoDataView() : RenderDataView())
+                );
+        }
+
+        protected virtual ReactElement RenderLabelIfNecessary()
+        {
+            if(state.Label == null)
+                return null;
+
+            return
+                DOM.Div(
+                    new Attributes
+                    {
+                        Style = new ReactStyle
+                        {
+                            Display = Display.Flex,
+                            FontSize = Branding.Typography.FontSizeSmaller.EmsCss,
+                            Color = Branding.Colors.Primary.Lighter().ToCssRGBA(),
+                        },
+                        ClassName = $"{typeof(TData).Name}-LabelChrome",
+                    }
+                    ,
+                    state.Label
                 );
         }
 
@@ -125,10 +151,14 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     public abstract class DataViewComponentState<TData> : ComponentStateBase
     {
         public TData Data { get; set; }
+        public Union<ReactElement, string> Label { get; set; }
+        public Union<ReactElement, string> Description { get; set; }
     }
 
     public abstract class DataViewComponentProps<TData> : ComponentPropsBase
     {
         public TData Data { get; set; }
+        public Union<ReactElement, string> Label { get; set; }
+        public Union<ReactElement, string> Description { get; set; }
     }
 }
