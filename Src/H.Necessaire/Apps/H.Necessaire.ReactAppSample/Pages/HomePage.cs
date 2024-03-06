@@ -33,7 +33,7 @@ namespace H.Necessaire.ReactAppSample.Pages
                         ,
                         new DataViewComponent(new DataViewComponent.Props { Data = "Hin", Label = "First Name" })
                         ,
-                        new DataViewComponent(new DataViewComponent.Props { Data = "Tee", Label = "Last Name" })
+                        new DataViewComponent(new DataViewComponent.Props { Data = "Tee", Label = "Last Name", Description = "asf sadf a sdf as df as df sa f sad f" })
                         ,
                         new DataEditComponent(new DataEditComponent.Props { })
                     )

@@ -1,6 +1,7 @@
 ﻿using Bridge;
 using Bridge.Html5;
 using Bridge.React;
+using System;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
@@ -51,6 +52,30 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                     RenderLabelIfNecessary()
                     ,
                     (!HasValue() ? RenderNoDataView() : RenderDataView())
+                    ,
+                    RenderDescriptionIfNecessary()
+                );
+        }
+
+        protected virtual ReactElement RenderDescriptionIfNecessary()
+        {
+            if (state.Description == null)
+                return null;
+
+            return
+                DOM.Div(
+                    new Attributes
+                    {
+                        Style = new ReactStyle
+                        {
+                            Display = Display.Flex,
+                            FontSize = Branding.Typography.FontSizeSmaller.EmsCss,
+                            Color = Branding.Colors.PrimaryIsh().Lighter().ToCssRGBA(),
+                        },
+                        ClassName = $"{typeof(TData).Name}-DescriptionChrome",
+                    }
+                    ,
+                    state.Description
                 );
         }
 
@@ -84,7 +109,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                     {
                         Style = new ReactStyle
                         {
-
+                            JustifyContent = JustifyContent.Center,
                         }
                         .FlexNode(isVerticalFlow: true),
                         ClassName = $"{typeof(TData).Name}-Viewer",
@@ -102,7 +127,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                     {
                         Style = new ReactStyle
                         {
-
+                            JustifyContent = JustifyContent.Center,
                         }
                         .FlexNode(isVerticalFlow: true),
                         ClassName = $"{typeof(TData).Name}-Viewer-NoData",
