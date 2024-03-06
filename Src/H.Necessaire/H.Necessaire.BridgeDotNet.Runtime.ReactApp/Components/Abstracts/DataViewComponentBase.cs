@@ -141,7 +141,12 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         {
             return
                 DOM.Span(
-                    state.Data.ToString()
+                    new Attributes
+                    {
+
+                    }
+                    ,
+                    RenderData()
                 );
         }
 
@@ -171,6 +176,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         protected virtual TData GetDefaultDataValue() => default(TData);
         protected virtual bool HasValue() => state.Data != null;
+        protected virtual Union<ReactElement, string> RenderData() => state.Data.ToString();
     }
 
     public abstract class DataViewComponentState<TData> : ComponentStateBase
