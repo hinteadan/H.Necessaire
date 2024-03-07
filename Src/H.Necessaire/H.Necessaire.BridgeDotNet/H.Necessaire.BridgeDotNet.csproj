@@ -597,6 +597,12 @@
     <Compile Include="..\H.Necessaire\Operations\Storage\Concrete\InMemoryTableStore.cs">
       <Link>Operations\Storage\Concrete\InMemoryTableStore.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Storage\ImAnAttachmentStore.cs">
+      <Link>Operations\Storage\ImAnAttachmentStore.cs</Link>
+    </Compile>
+    <Compile Include="..\H.Necessaire\Operations\Storage\ImAPageByPageStreamer.cs">
+      <Link>Operations\Storage\ImAPageByPageStreamer.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Operations\Storage\ImAStorageBrowserService.cs">
       <Link>Operations\Storage\ImAStorageBrowserService.cs</Link>
     </Compile>
