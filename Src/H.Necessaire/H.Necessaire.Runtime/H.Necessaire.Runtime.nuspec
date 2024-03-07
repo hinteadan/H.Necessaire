@@ -22,7 +22,7 @@
       <dependency id="Newtonsoft.Json" version="13.0.3" />
       <dependency id="StandardSocketsHttpHandler" version="2.2.0.8" />
       <dependency id="UrlBase64" version="1.0.1" />
-      <dependency id="DeviceDetector.NET" version="6.3.0" />
+      <dependency id="DeviceDetector.NET" version="6.3.1" />
       <dependency id="BouncyCastle.Cryptography" version="2.3.0" />
     </dependencies>
   </metadata>

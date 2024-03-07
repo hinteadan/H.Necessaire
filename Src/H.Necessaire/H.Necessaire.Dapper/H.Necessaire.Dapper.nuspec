@@ -18,8 +18,8 @@
     <tags>hintea dan alexandru dapper data access layer dal sql .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections task array</tags>
     <dependencies>
       <dependency id="H.Necessaire" version="2.34.13" />
-      <dependency id="Dapper" version="2.1.28" />
-      <dependency id="Microsoft.Data.SqlClient" version="5.2.0-preview5.24024.3" />
+      <dependency id="Dapper" version="2.1.35" />
+      <dependency id="Microsoft.Data.SqlClient" version="5.2.0" />
     </dependencies>
   </metadata>
   <files>
