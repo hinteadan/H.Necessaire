@@ -94,7 +94,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                         {
                             Display = Display.Flex,
                             FontSize = Branding.Typography.FontSizeSmaller.EmsCss,
-                            Color = Branding.Colors.Primary.Lighter().ToCssRGBA(),
+                            Color = Branding.Colors.Primary.Lighter(2).ToCssRGBA(),
                         },
                         ClassName = $"{typeof(TData).Name}-LabelChrome",
                     }

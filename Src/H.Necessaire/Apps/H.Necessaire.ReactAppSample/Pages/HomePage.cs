@@ -13,8 +13,11 @@ namespace H.Necessaire.ReactAppSample.Pages
             return
                 new DefaultChrome(
 
-                    new CenteredContent(
-
+                    new FormLayout(
+                        new FormLayout.Props { 
+                            LayoutMode = FormLayoutMode.OnePerRow,
+                        }
+                        ,
                         DOM.H1("Hello there !")
 
                         , new Button(new Button.Props
