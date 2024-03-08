@@ -43,6 +43,8 @@ namespace H.Necessaire.ReactAppSample.Pages
                         ,
                         new NumericDataViewComponent<int>(new NumericDataViewProps<int> { Data = -17, Label = "Integer", NumberOfDecimals = 0 })
                         ,
+                        new DefaultDataViewComponent<Guid>(new DefaultDataViewComponentProps<Guid> { Data = Guid.NewGuid(), Label = "Guid via DefaultView" })
+                        ,
                         new DataEditComponent(new DataEditComponent.Props { })
                     )
 
