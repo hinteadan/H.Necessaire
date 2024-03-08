@@ -48,6 +48,7 @@
     <Compile Include="Components\AppLoadIndicator.cs" />
     <Compile Include="Components\Chromes\DefaultChrome.cs" />
     <Compile Include="Components\Controls\Button.cs" />
+    <Compile Include="Components\Controls\DataView\AsStringDataViewComponent.cs" />
     <Compile Include="Components\Controls\ListItem.cs" />
     <Compile Include="Components\Controls\ListOfProperties.cs" />
     <Compile Include="Components\Controls\LongTextInput.cs" />
@@ -244,5 +245,6 @@
       <Name>H.Necessaire.BridgeDotNet</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
