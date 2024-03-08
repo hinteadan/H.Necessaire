@@ -11,6 +11,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         where TState : DataViewComponentState<TData>, new()
         where TProps : DataViewComponentProps<TData>
     {
+        const int defaultMaxLength = 150;
+
         protected DataViewComponentBase(TProps props, params Union<ReactElement, string>[] children) : base(props, children) { }
 
         public override async Task RunAtStartup()
@@ -143,7 +145,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 DOM.Span(
                     new Attributes
                     {
-
+                        Title = RenderTooltipText(),
                     }
                     ,
                     RenderData()
@@ -176,7 +178,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         protected virtual TData GetDefaultDataValue() => default(TData);
         protected virtual bool HasValue() => state.Data != null;
-        protected virtual Union<ReactElement, string> RenderData() => state.Data.ToString();
+        protected virtual Union<ReactElement, string> RenderData() => state.Data.ToString().EllipsizeIfNecessary(maxLength: props?.MaxLength ?? defaultMaxLength);
+        protected virtual string RenderTooltipText() => state.Data.ToString();
     }
 
     public abstract class DataViewComponentState<TData> : ComponentStateBase
@@ -188,6 +191,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
     public abstract class DataViewComponentProps<TData> : ComponentPropsBase
     {
+        public int? MaxLength { get; set; }
         public TData Data { get; set; }
         public Union<ReactElement, string> Label { get; set; }
         public Union<ReactElement, string> Description { get; set; }
