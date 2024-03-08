@@ -1,6 +1,7 @@
 ﻿using Bridge.React;
 using H.Necessaire.BridgeDotNet.Runtime.ReactApp;
 using H.Necessaire.ReactAppSample.Components;
+using System;
 
 namespace H.Necessaire.ReactAppSample.Pages
 {
@@ -37,6 +38,10 @@ namespace H.Necessaire.ReactAppSample.Pages
                         new StringDataViewComponent(new StringDataViewComponent.Props { Data = "Hin", Label = "First Name" })
                         ,
                         new DefaultDataViewComponent<string>(new DefaultDataViewComponentProps<string> { Data = "Tee", Label = "Last Name", Description = "asf sadf a sdf as df as df sa f sad f" })
+                        ,
+                        new NumericDataViewComponent<decimal>(new NumericDataViewProps<decimal> { Data = 17.1234123412m, Label = "Number with decimals" })
+                        ,
+                        new NumericDataViewComponent<int>(new NumericDataViewProps<int> { Data = -17, Label = "Integer", NumberOfDecimals = 0 })
                         ,
                         new DataEditComponent(new DataEditComponent.Props { })
                     )
