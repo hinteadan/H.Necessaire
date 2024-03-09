@@ -8,78 +8,68 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         static readonly Type[] numericTypes = new Type[] { 
             typeof(float), typeof(double), typeof(decimal)
         };
+        static readonly DataViewConfig defaultConfig = new DataViewConfig();
 
         public static ReactElement BuildViewerFor(
             Type type, 
             object value, 
-            string label = null, 
-            string description = null,
-            int? maxValueLength = null,
-            int? numberOfDecimals = null
+            DataViewConfig dataViewConfig = null
         )
         {
             if (type == typeof(sbyte))
-                return BuildNumericDataViewerComponent((sbyte)value, label, description, maxValueLength, numberOfDecimals);
+                return BuildNumericDataViewerComponent((sbyte)value, dataViewConfig);
             if (type == typeof(byte))
-                return BuildNumericDataViewerComponent((byte)value, label, description, maxValueLength, numberOfDecimals);
+                return BuildNumericDataViewerComponent((byte)value, dataViewConfig);
 
             if (type == typeof(ushort))
-                return BuildNumericDataViewerComponent((ushort)value, label, description, maxValueLength, numberOfDecimals);
+                return BuildNumericDataViewerComponent((ushort)value, dataViewConfig);
             if (type == typeof(short))
-                return BuildNumericDataViewerComponent((short)value, label, description, maxValueLength, numberOfDecimals);
+                return BuildNumericDataViewerComponent((short)value, dataViewConfig);
 
             if (type == typeof(uint))
-                return BuildNumericDataViewerComponent((uint)value, label, description, maxValueLength, numberOfDecimals);
+                return BuildNumericDataViewerComponent((uint)value, dataViewConfig);
             if (type == typeof(int))
-                return BuildNumericDataViewerComponent((int)value, label, description, maxValueLength, numberOfDecimals);
+                return BuildNumericDataViewerComponent((int)value, dataViewConfig);
 
             if (type == typeof(ulong))
-                return BuildNumericDataViewerComponent((ulong)value, label, description, maxValueLength, numberOfDecimals);
+                return BuildNumericDataViewerComponent((ulong)value, dataViewConfig);
             if (type == typeof(long))
-                return BuildNumericDataViewerComponent((long)value, label, description, maxValueLength, numberOfDecimals);
+                return BuildNumericDataViewerComponent((long)value, dataViewConfig);
 
             if (type == typeof(float))
-                return BuildNumericDataViewerComponent((float)value, label, description, maxValueLength, numberOfDecimals);
+                return BuildNumericDataViewerComponent((float)value, dataViewConfig);
             if (type == typeof(double))
-                return BuildNumericDataViewerComponent((double)value, label, description, maxValueLength, numberOfDecimals);
+                return BuildNumericDataViewerComponent((double)value, dataViewConfig);
             if (type == typeof(decimal))
-                return BuildNumericDataViewerComponent((decimal)value, label, description, maxValueLength, numberOfDecimals);
+                return BuildNumericDataViewerComponent((decimal)value, dataViewConfig);
 
-            return BuildDefaultDataViewerComponent(value, label, description, maxValueLength);
+            return BuildDefaultDataViewerComponent(value, dataViewConfig);
         }
 
         public static ReactElement BuildViewerFor<T>(
             T value,
-            string label = null,
-            string description = null,
-            int? maxValueLength = null,
-            int? numberOfDecimals = null
+            DataViewConfig dataViewConfig = null
         ) 
-            => BuildViewerFor(typeof(T), value, label, description, maxValueLength, numberOfDecimals);
+            => BuildViewerFor(typeof(T), value, dataViewConfig);
 
         private static ReactElement BuildDefaultDataViewerComponent(
-            object value, 
-            string label, 
-            string description, 
-            int? maxValueLength
+            object value,
+            DataViewConfig dataViewConfig = null
         )
         {
             return
                 new DefaultDataViewComponent<object>(new DefaultDataViewComponentProps<object>
                 {
                     Data = value,
-                    Label = label,
-                    Description = description,
-                    MaxLength = maxValueLength,
+                    Label = (dataViewConfig ?? defaultConfig).Label,
+                    Description = (dataViewConfig ?? defaultConfig).Description,
+                    MaxLength = (dataViewConfig ?? defaultConfig).MaxValueDisplayLength,
                 });
         }
 
         private static ReactElement BuildNumericDataViewerComponent<T>(
-            T value, 
-            string label, 
-            string description, 
-            int? maxValueLength,
-            int? numberOfDecimals
+            T value,
+            DataViewConfig dataViewConfig = null
         )
             where T : struct, IComparable, IFormattable, IComparable<T>, IEquatable<T>
         {
@@ -87,10 +77,10 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 new NumericDataViewComponent<T>(new NumericDataViewProps<T>
                 {
                     Data = value,
-                    Label = label,
-                    Description = description,
-                    MaxLength = maxValueLength,
-                    NumberOfDecimals = numberOfDecimals ?? 2,
+                    Label = (dataViewConfig ?? defaultConfig).Label,
+                    Description = (dataViewConfig ?? defaultConfig).Description,
+                    MaxLength = (dataViewConfig ?? defaultConfig).MaxValueDisplayLength,
+                    NumberOfDecimals = (dataViewConfig?.Numeric ?? defaultConfig.Numeric).NumberOfDecimals,
                 });
         }
     }
