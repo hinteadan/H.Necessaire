@@ -185,7 +185,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             if (typeof(TData) == typeof(object))
                 return state.Data?.GetType().Name ?? "Object";
 
-            return GetDataTypeName();
+            return typeof(TData).Name;
         }
     }
 
