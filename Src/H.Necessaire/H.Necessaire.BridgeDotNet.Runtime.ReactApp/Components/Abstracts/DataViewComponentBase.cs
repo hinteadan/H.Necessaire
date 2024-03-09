@@ -48,7 +48,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
                         }
                         .FlexNode(isVerticalFlow: true),
-                        ClassName = $"{typeof(TData).Name}-View-Chrome",
+                        ClassName = $"{GetDataTypeName()}-View-Chrome",
                     }
                     ,
                     RenderLabelIfNecessary()
@@ -74,7 +74,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                             FontSize = Branding.Typography.FontSizeSmaller.EmsCss,
                             Color = Branding.Colors.PrimaryIsh().Lighter().ToCssRGBA(),
                         },
-                        ClassName = $"{typeof(TData).Name}-DescriptionChrome",
+                        ClassName = $"{GetDataTypeName()}-DescriptionChrome",
                     }
                     ,
                     state.Description
@@ -96,7 +96,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                             FontSize = Branding.Typography.FontSizeSmaller.EmsCss,
                             Color = Branding.Colors.Primary.Lighter(2).ToCssRGBA(),
                         },
-                        ClassName = $"{typeof(TData).Name}-LabelChrome",
+                        ClassName = $"{GetDataTypeName()}-LabelChrome",
                     }
                     ,
                     state.Label
@@ -114,7 +114,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                             JustifyContent = JustifyContent.Center,
                         }
                         .FlexNode(isVerticalFlow: true),
-                        ClassName = $"{typeof(TData).Name}-Viewer",
+                        ClassName = $"{GetDataTypeName()}-Viewer",
                     }
                     ,
                     RenderDataValue()
@@ -132,7 +132,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                             JustifyContent = JustifyContent.Center,
                         }
                         .FlexNode(isVerticalFlow: true),
-                        ClassName = $"{typeof(TData).Name}-Viewer-NoData",
+                        ClassName = $"{GetDataTypeName()}-Viewer-NoData",
                     }
                     ,
                     RenderNoDataValue()
@@ -180,6 +180,13 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         protected virtual bool HasValue() => state.Data != null;
         protected virtual Union<ReactElement, string> RenderData() => state.Data.ToString().EllipsizeIfNecessary(maxLength: props?.MaxLength ?? defaultMaxLength);
         protected virtual string RenderTooltipText() => state.Data.ToString();
+        protected virtual string GetDataTypeName()
+        {
+            if (typeof(TData) == typeof(object))
+                return state.Data?.GetType().Name ?? "Object";
+
+            return GetDataTypeName();
+        }
     }
 
     public abstract class DataViewComponentState<TData> : ComponentStateBase

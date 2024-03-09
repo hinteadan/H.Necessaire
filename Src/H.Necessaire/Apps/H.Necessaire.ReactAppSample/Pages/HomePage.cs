@@ -39,8 +39,9 @@ namespace H.Necessaire.ReactAppSample.Pages
                         ,
                         new DefaultDataViewComponent<string>(new DefaultDataViewComponentProps<string> { Data = "Tee", Label = "Last Name", Description = "asf sadf a sdf as df as df sa f sad f" })
                         ,
-                        new NumericDataViewComponent<decimal>(new NumericDataViewProps<decimal> { Data = 17.1234123412m, Label = "Number with decimals" })
+                        DataViewComponentFactory.BuildViewerFor(17.1234123412m, label: "Number with decimals")
                         ,
+                        DataViewComponentFactory.BuildViewerFor(-17, label: "Integer")
                         new NumericDataViewComponent<int>(new NumericDataViewProps<int> { Data = -17, Label = "Integer", NumberOfDecimals = 0 })
                         ,
                         new DefaultDataViewComponent<Guid>(new DefaultDataViewComponentProps<Guid> { Data = Guid.NewGuid(), Label = "Guid via DefaultView" })
