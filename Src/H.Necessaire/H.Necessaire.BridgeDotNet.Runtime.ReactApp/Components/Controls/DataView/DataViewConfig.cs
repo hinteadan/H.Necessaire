@@ -1,9 +1,12 @@
-﻿namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
+﻿using Bridge.React;
+using Bridge;
+
+namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     public class DataViewConfig
     {
-        public string Label { get; set; }
-        public string Description { get; set; }
+        public Union<ReactElement, string> Label { get; set; }
+        public Union<ReactElement, string> Description { get; set; }
         public int? MaxValueDisplayLength { get; set; }
         
         public NumericDataViewConfig Numeric { get; set; } = new NumericDataViewConfig();
