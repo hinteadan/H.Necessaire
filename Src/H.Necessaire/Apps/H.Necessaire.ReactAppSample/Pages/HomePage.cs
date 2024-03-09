@@ -39,12 +39,11 @@ namespace H.Necessaire.ReactAppSample.Pages
                         ,
                         new DefaultDataViewComponent<string>(new DefaultDataViewComponentProps<string> { Data = "Tee", Label = "Last Name", Description = "asf sadf a sdf as df as df sa f sad f" })
                         ,
-                        DataViewComponentFactory.BuildViewerFor(17.1234123412m, label: "Number with decimals")
+                        DataViewComponentFactory.BuildViewerFor(17.1234123412m, x => x.Label = "Number with decimals")
                         ,
-                        DataViewComponentFactory.BuildViewerFor(-17, label: "Integer")
-                        new NumericDataViewComponent<int>(new NumericDataViewProps<int> { Data = -17, Label = "Integer", NumberOfDecimals = 0 })
+                        DataViewComponentFactory.BuildViewerFor(-17, x => { x.Label = "Integer"; x.Numeric.NumberOfDecimals = 0; })
                         ,
-                        new DefaultDataViewComponent<Guid>(new DefaultDataViewComponentProps<Guid> { Data = Guid.NewGuid(), Label = "Guid via DefaultView" })
+                        DataViewComponentFactory.BuildViewerFor(Guid.NewGuid(), x => { x.Label = "Guid via DefaultView"; })
                         ,
                         new DataEditComponent(new DataEditComponent.Props { })
                     )

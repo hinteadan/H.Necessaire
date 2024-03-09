@@ -5,52 +5,49 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     public static class DataViewComponentFactory
     {
-        static readonly Type[] numericTypes = new Type[] { 
-            typeof(float), typeof(double), typeof(decimal)
-        };
         static readonly DataViewConfig defaultConfig = new DataViewConfig();
 
         public static ReactElement BuildViewerFor(
             Type type, 
             object value, 
-            DataViewConfig dataViewConfig = null
+            Action<DataViewConfig> configure = null
         )
         {
             if (type == typeof(sbyte))
-                return BuildNumericDataViewerComponent((sbyte)value, dataViewConfig);
+                return BuildNumericDataViewerComponent((sbyte)value, BuildConfig(configure));
             if (type == typeof(byte))
-                return BuildNumericDataViewerComponent((byte)value, dataViewConfig);
+                return BuildNumericDataViewerComponent((byte)value, BuildConfig(configure));
 
             if (type == typeof(ushort))
-                return BuildNumericDataViewerComponent((ushort)value, dataViewConfig);
+                return BuildNumericDataViewerComponent((ushort)value, BuildConfig(configure));
             if (type == typeof(short))
-                return BuildNumericDataViewerComponent((short)value, dataViewConfig);
+                return BuildNumericDataViewerComponent((short)value, BuildConfig(configure));
 
             if (type == typeof(uint))
-                return BuildNumericDataViewerComponent((uint)value, dataViewConfig);
+                return BuildNumericDataViewerComponent((uint)value, BuildConfig(configure));
             if (type == typeof(int))
-                return BuildNumericDataViewerComponent((int)value, dataViewConfig);
+                return BuildNumericDataViewerComponent((int)value, BuildConfig(configure));
 
             if (type == typeof(ulong))
-                return BuildNumericDataViewerComponent((ulong)value, dataViewConfig);
+                return BuildNumericDataViewerComponent((ulong)value, BuildConfig(configure));
             if (type == typeof(long))
-                return BuildNumericDataViewerComponent((long)value, dataViewConfig);
+                return BuildNumericDataViewerComponent((long)value, BuildConfig(configure));
 
             if (type == typeof(float))
-                return BuildNumericDataViewerComponent((float)value, dataViewConfig);
+                return BuildNumericDataViewerComponent((float)value, BuildConfig(configure));
             if (type == typeof(double))
-                return BuildNumericDataViewerComponent((double)value, dataViewConfig);
+                return BuildNumericDataViewerComponent((double)value, BuildConfig(configure));
             if (type == typeof(decimal))
-                return BuildNumericDataViewerComponent((decimal)value, dataViewConfig);
+                return BuildNumericDataViewerComponent((decimal)value, BuildConfig(configure));
 
-            return BuildDefaultDataViewerComponent(value, dataViewConfig);
+            return BuildDefaultDataViewerComponent(value, BuildConfig(configure));
         }
 
         public static ReactElement BuildViewerFor<T>(
             T value,
-            DataViewConfig dataViewConfig = null
+            Action<DataViewConfig> configure = null
         ) 
-            => BuildViewerFor(typeof(T), value, dataViewConfig);
+            => BuildViewerFor(typeof(T), value, configure);
 
         private static ReactElement BuildDefaultDataViewerComponent(
             object value,
@@ -82,6 +79,11 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                     MaxLength = (dataViewConfig ?? defaultConfig).MaxValueDisplayLength,
                     NumberOfDecimals = (dataViewConfig?.Numeric ?? defaultConfig.Numeric).NumberOfDecimals,
                 });
+        }
+
+        private static DataViewConfig BuildConfig(Action<DataViewConfig> configure)
+        {
+            return new DataViewConfig().And(cfg => { if (configure != null) configure(cfg); });
         }
     }
 }
