@@ -180,13 +180,14 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         protected virtual bool HasValue() => state.Data != null;
         protected virtual Union<ReactElement, string> RenderData() => state.Data.ToString().EllipsizeIfNecessary(maxLength: props?.MaxLength ?? defaultMaxLength);
         protected virtual string RenderTooltipText() => state.Data.ToString();
-        protected virtual string GetDataTypeName()
+        protected virtual Type GetDataType()
         {
             if (typeof(TData) == typeof(object))
-                return state.Data?.GetType().Name ?? "Object";
+                return state.Data?.GetType();
 
-            return typeof(TData).Name;
+            return typeof(TData);
         }
+        protected virtual string GetDataTypeName() => GetDataType()?.Name ?? "Object";
     }
 
     public abstract class DataViewComponentState<TData> : ComponentStateBase

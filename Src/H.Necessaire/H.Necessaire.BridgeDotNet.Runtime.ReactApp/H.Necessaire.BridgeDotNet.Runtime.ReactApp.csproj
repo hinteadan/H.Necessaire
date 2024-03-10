@@ -52,6 +52,7 @@
     <Compile Include="Components\Controls\DataView\DataViewConfig.cs" />
     <Compile Include="Components\Controls\DataView\DefaultDataViewComponent.cs" />
     <Compile Include="Components\Controls\DataView\NumericDataViewComponent.cs" />
+    <Compile Include="Components\Controls\DataView\ObjectDataViewComponent.cs" />
     <Compile Include="Components\Controls\DataView\StringDataViewComponent.cs" />
     <Compile Include="Components\Controls\ListItem.cs" />
     <Compile Include="Components\Controls\ListOfProperties.cs" />
