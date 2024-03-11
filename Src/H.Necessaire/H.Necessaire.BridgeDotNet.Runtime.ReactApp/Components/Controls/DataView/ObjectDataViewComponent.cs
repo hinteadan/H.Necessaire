@@ -57,20 +57,34 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 );
         }
 
-        protected virtual ReactElement RenderProperty(PropertyInfo propertyInfo)
+        protected virtual ReactElement RenderProperty(PropertyInfo propertyInfo, int index)
         {
-            return DataViewComponentFactory.BuildViewerFor(
-                propertyInfo.PropertyType,
-                state.Data == null ? null : propertyInfo.GetValue(state.Data),
-                cfg =>
-                {
-                    cfg.Label = GetPropertyLabel(propertyInfo);
-                    cfg.Description = GetPropertyDescription(propertyInfo);
-                    cfg.MaxValueDisplayLength = state.DataViewConfig?.MaxValueDisplayLength ?? cfg.MaxValueDisplayLength;
-                    cfg.Numeric = state.DataViewConfig?.Numeric ?? cfg.Numeric;
-                    cfg.Object = state.DataViewConfig?.Object ?? cfg.Object;
-                }
-            );
+            return
+                DOM.Div(
+                    new Attributes
+                    {
+                        Style = new ReactStyle
+                        {
+                            MarginTop = index == 0 ? 0 : state.DataViewConfig?.SpacingSize ?? Branding.SizingUnitInPixels,
+                            JustifyContent = JustifyContent.Center,
+                        }
+                        .FlexNode(isVerticalFlow: true),
+                        ClassName = $"{GetDataTypeName()}-Property-{propertyInfo.Name}",
+                    }
+                    ,
+                    DataViewComponentFactory.BuildViewerFor(
+                        propertyInfo.PropertyType,
+                        state.Data == null ? null : propertyInfo.GetValue(state.Data),
+                        cfg =>
+                        {
+                            cfg.Label = GetPropertyLabel(propertyInfo);
+                            cfg.Description = GetPropertyDescription(propertyInfo);
+                            cfg.MaxValueDisplayLength = state.DataViewConfig?.MaxValueDisplayLength ?? cfg.MaxValueDisplayLength;
+                            cfg.Numeric = state.DataViewConfig?.Numeric ?? cfg.Numeric;
+                            cfg.Object = state.DataViewConfig?.Object ?? cfg.Object;
+                        }
+                    )
+                );
         }
 
         private Union<ReactElement, string> GetPropertyLabel(PropertyInfo propertyInfo)

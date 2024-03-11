@@ -9,6 +9,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         public Union<ReactElement, string> Label { get; set; }
         public Union<ReactElement, string> Description { get; set; }
         public int? MaxValueDisplayLength { get; set; }
+        public int? SpacingSize { get; set; } = AppBase.Branding.SizingUnitInPixels;
         
         public NumericDataViewConfig Numeric { get; set; } = new NumericDataViewConfig();
         public ObjectDataViewConfig Object { get; set; } = new ObjectDataViewConfig();
