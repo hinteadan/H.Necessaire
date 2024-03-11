@@ -18,6 +18,9 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         {
             DataViewConfig config = BuildConfig(configure);
 
+            if (type == typeof(string))
+                return new StringDataViewComponent(new DataViewComponentProps<string> { Data = (string)value, DataViewConfig = config });
+
             if (type == typeof(sbyte))
                 return BuildNumericDataViewerComponent((sbyte)value, config);
             if (type == typeof(byte))
@@ -66,13 +69,6 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         private static ReactElement BuildObjectDataViewerComponent(Type type, object value, DataViewConfig dataViewConfig)
         {
-            //Type viewComponentType = typeof(ObjectDataViewComponent<>).MakeGenericType(type.AsArray());
-            //object viewComponentInstance = Activator.CreateInstance(viewComponentType, null, null);
-            //MethodInfo builderMethod = viewComponentType.GetMethod(nameof(ImADataViewComponent<object>.New));
-            //ReactElement viewComponentAsReactElement = builderMethod.Invoke(viewComponentInstance, value, dataViewConfig) as ReactElement;
-
-            //return viewComponentAsReactElement;
-
             return
                 new ObjectDataViewComponent<object>(new DataViewComponentProps<object>
                 {
