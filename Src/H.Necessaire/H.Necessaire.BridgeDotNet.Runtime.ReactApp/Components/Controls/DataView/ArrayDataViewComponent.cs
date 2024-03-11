@@ -105,7 +105,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             if (state.DataViewConfig?.Array?.LabelPrinter != null)
                 return state.DataViewConfig.Array.LabelPrinter.Invoke(index);
 
-            return $"{GetDataType()?.Name} {index + 1}".Trim();
+            return $"{index + 1}";
         }
 
         protected override bool HasValue() => base.HasValue() && state.Data.Any();

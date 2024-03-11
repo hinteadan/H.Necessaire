@@ -1,6 +1,7 @@
 ﻿using Bridge;
 using Bridge.React;
 using System;
+using System.Collections;
 using System.Linq;
 using System.Reflection;
 
@@ -56,9 +57,27 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             if(IsObjectDataViewCandidate(type, config))
                 return BuildObjectDataViewerComponent(type, value, config);
 
-            //Render Arrays
+            if (IsArrayDataViewCandidate(type, config))
+                return BuildArrayDataViewerComponent(type, value, config);
 
             return BuildDefaultDataViewerComponent(type, value, config);
+        }
+
+        private static ReactElement BuildArrayDataViewerComponent(Type type, object value, DataViewConfig dataViewConfig)
+        {
+            Type elementType = type.GetElementType();
+            return
+                new ArrayDataViewComponent<object>(new DataViewComponentProps<object[]>
+                {
+                    Data = (value as Array)?.Cast<object>()?.Select(x => Convert.ChangeType(x, elementType)).ToNoNullsArray(),
+                    DataType = elementType,
+                    DataViewConfig = (dataViewConfig ?? defaultConfig),
+                });
+        }
+
+        private static bool IsArrayDataViewCandidate(Type type, DataViewConfig dataViewConfig)
+        {
+            return type.IsArray;
         }
 
         public static ReactElement BuildViewerFor<T>(

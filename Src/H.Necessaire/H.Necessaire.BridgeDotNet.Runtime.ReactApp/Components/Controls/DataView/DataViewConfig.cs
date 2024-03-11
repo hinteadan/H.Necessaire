@@ -79,12 +79,12 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 new ObjectDataViewConfig
                 {
                     UseDefaultDataViewer = UseDefaultDataViewer,
-                    PropertyNamesToIgnore = PropertyNamesToIgnore.ToArray(),
-                    Path = Path.ToArray(),
+                    PropertyNamesToIgnore = PropertyNamesToIgnore?.ToArray(),
+                    Path = Path?.ToArray(),
                     CurrentDepth = CurrentDepth,
                     MaxDepth = MaxDepth,
-                    PropertyLabels = PropertyLabels.ToDictionary(x => x.Key, x => x.Value),
-                    PropertyDescriptions = PropertyDescriptions.ToDictionary(x => x.Key, x => x.Value),
+                    PropertyLabels = PropertyLabels?.ToDictionary(x => x.Key, x => x.Value),
+                    PropertyDescriptions = PropertyDescriptions?.ToDictionary(x => x.Key, x => x.Value),
                 };
         }
     }
