@@ -6,8 +6,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     public class StringDataViewComponent : DataViewComponentBase<string, DataViewComponentProps<string>, StringDataViewComponent.State>
     {
         public StringDataViewComponent(DataViewComponentProps<string> props, params Union<ReactElement, string>[] children) : base(props, children) { }
-        public override ReactElement New(string data, DataViewConfig config)
-            => new StringDataViewComponent(new DataViewComponentProps<string> { Data = data, DataViewConfig = config });
+        protected override ReactElement New(DataViewComponentProps<string> props) => new StringDataViewComponent(props);
 
         public class State : DataViewComponentState<string> { }
     }

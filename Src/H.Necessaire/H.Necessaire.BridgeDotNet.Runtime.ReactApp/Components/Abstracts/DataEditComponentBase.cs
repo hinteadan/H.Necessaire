@@ -6,7 +6,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     public abstract class DataEditComponentBase<TData, TProps, TState>
         : ComponentBase<TProps, TState>
         where TState : DataEditComponentState<TData>, new()
-        where TProps : DataEditComponentProps<TData>
+        where TProps : DataEditComponentProps<TData>, new()
     {
         protected DataEditComponentBase(TProps props, params Union<ReactElement, string>[] children) : base(props, children) { }
 

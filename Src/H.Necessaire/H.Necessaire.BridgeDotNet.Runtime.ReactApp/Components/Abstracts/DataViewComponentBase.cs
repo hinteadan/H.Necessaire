@@ -9,9 +9,13 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     public abstract class DataViewComponentBase<TData, TProps, TState>
         : ComponentBase<TProps, TState>, ImADataViewComponent<TData>
         where TState : DataViewComponentState<TData>, new()
-        where TProps : DataViewComponentProps<TData>
+        where TProps : DataViewComponentProps<TData>, new()
     {
-        public abstract ReactElement New(TData data, DataViewConfig config);
+        #region Factory Stuff
+        protected abstract ReactElement New(TProps props);
+        public virtual ReactElement New(TData data, DataViewConfig config) => New(NewProps(data, config));
+        protected virtual TProps NewProps(TData data, DataViewConfig config) => new TProps { Data = data, DataViewConfig = config };
+        #endregion
 
         protected const int defaultMaxLength = 150;
 

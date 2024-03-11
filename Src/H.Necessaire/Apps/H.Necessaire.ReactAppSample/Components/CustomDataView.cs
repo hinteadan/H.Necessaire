@@ -8,8 +8,7 @@ namespace H.Necessaire.ReactAppSample.Components
     public class CustomDataView : DataViewComponentBase<TimeSpan, DataViewComponentProps<TimeSpan>, CustomDataView.State>
     {
         public CustomDataView(DataViewComponentProps<TimeSpan> props, params Union<ReactElement, string>[] children) : base(props, children) { }
-        public override ReactElement New(TimeSpan data, DataViewConfig config)
-            => new CustomDataView(new DataViewComponentProps<TimeSpan> { Data = data, DataViewConfig = config });
+        protected override ReactElement New(DataViewComponentProps<TimeSpan> props) => new CustomDataView(props);
 
         protected override Union<ReactElement, string> RenderData() => $"RenderData from CustomDataView for Timespan: {state.Data}";
 
