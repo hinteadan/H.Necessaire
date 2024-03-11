@@ -52,6 +52,7 @@
     <Compile Include="Components\Controls\DataView\ArrayDataViewComponent.cs" />
     <Compile Include="Components\Controls\DataView\DataViewComponentFactory.cs" />
     <Compile Include="Components\Controls\DataView\DataViewConfig.cs" />
+    <Compile Include="Components\Controls\DataView\DateTimeViewComponent.cs" />
     <Compile Include="Components\Controls\DataView\DefaultDataViewComponent.cs" />
     <Compile Include="Components\Controls\DataView\NumericDataViewComponent.cs" />
     <Compile Include="Components\Controls\DataView\ObjectDataViewComponent.cs" />

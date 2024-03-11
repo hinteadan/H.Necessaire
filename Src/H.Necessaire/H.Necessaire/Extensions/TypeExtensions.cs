@@ -75,6 +75,13 @@ namespace H.Necessaire
                 ;
         }
 
+        public static int GetPriority(this Type type)
+        {
+            return
+                (type?.GetCustomAttributes(typeof(PriorityAttribute), false)?.SingleOrDefault() as PriorityAttribute)?.Priority ?? 0;
+                ;
+        }
+
         public static bool IsMatch(this Type type, string identifier)
         {
             if (type == null || string.IsNullOrWhiteSpace(identifier))

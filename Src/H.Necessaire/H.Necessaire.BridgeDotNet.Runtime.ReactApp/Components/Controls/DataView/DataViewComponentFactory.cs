@@ -22,32 +22,37 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             if (type == typeof(string))
                 return new StringDataViewComponent(new DataViewComponentProps<string> { Data = (string)value, DataViewConfig = config });
 
-            if (type == typeof(sbyte))
-                return BuildNumericDataViewerComponent((sbyte)value, config);
-            if (type == typeof(byte))
-                return BuildNumericDataViewerComponent((byte)value, config);
+            if (type == typeof(DateTime))
+                return new DateTimeViewComponent(new DataViewComponentProps<DateTime?> { Data = (DateTime)value, DataViewConfig = config });
+            if (type == typeof(DateTime?))
+                return new DateTimeViewComponent(new DataViewComponentProps<DateTime?> { Data = (DateTime?)value, DataViewConfig = config });
 
-            if (type == typeof(ushort))
-                return BuildNumericDataViewerComponent((ushort)value, config);
-            if (type == typeof(short))
-                return BuildNumericDataViewerComponent((short)value, config);
+            if (type == typeof(sbyte)) return BuildNumericDataViewerComponent((sbyte)value, config);
+            if (type == typeof(sbyte?)) return BuildNumericDataViewerComponent((sbyte?)value, config);
+            if (type == typeof(byte)) return BuildNumericDataViewerComponent((byte)value, config);
+            if (type == typeof(byte?)) return BuildNumericDataViewerComponent((byte?)value, config);
 
-            if (type == typeof(uint))
-                return BuildNumericDataViewerComponent((uint)value, config);
-            if (type == typeof(int))
-                return BuildNumericDataViewerComponent((int)value, config);
+            if (type == typeof(ushort)) return BuildNumericDataViewerComponent((ushort)value, config);
+            if (type == typeof(ushort?)) return BuildNumericDataViewerComponent((ushort?)value, config);
+            if (type == typeof(short)) return BuildNumericDataViewerComponent((short)value, config);
+            if (type == typeof(short?)) return BuildNumericDataViewerComponent((short?)value, config);
 
-            if (type == typeof(ulong))
-                return BuildNumericDataViewerComponent((ulong)value, config);
-            if (type == typeof(long))
-                return BuildNumericDataViewerComponent((long)value, config);
+            if (type == typeof(uint)) return BuildNumericDataViewerComponent((uint)value, config);
+            if (type == typeof(uint?)) return BuildNumericDataViewerComponent((uint?)value, config);
+            if (type == typeof(int)) return BuildNumericDataViewerComponent((int)value, config);
+            if (type == typeof(int?)) return BuildNumericDataViewerComponent((int?)value, config);
 
-            if (type == typeof(float))
-                return BuildNumericDataViewerComponent((float)value, config);
-            if (type == typeof(double))
-                return BuildNumericDataViewerComponent((double)value, config);
-            if (type == typeof(decimal))
-                return BuildNumericDataViewerComponent((decimal)value, config);
+            if (type == typeof(ulong)) return BuildNumericDataViewerComponent((ulong)value, config);
+            if (type == typeof(ulong?)) return BuildNumericDataViewerComponent((ulong?)value, config);
+            if (type == typeof(long)) return BuildNumericDataViewerComponent((long)value, config);
+            if (type == typeof(long?)) return BuildNumericDataViewerComponent((long?)value, config);
+
+            if (type == typeof(float)) return BuildNumericDataViewerComponent((float)value, config);
+            if (type == typeof(float?)) return BuildNumericDataViewerComponent((float?)value, config);
+            if (type == typeof(double)) return BuildNumericDataViewerComponent((double)value, config);
+            if (type == typeof(double?)) return BuildNumericDataViewerComponent((double?)value, config);
+            if (type == typeof(decimal)) return BuildNumericDataViewerComponent((decimal)value, config);
+            if (type == typeof(decimal?)) return BuildNumericDataViewerComponent((decimal?)value, config);
 
             OperationResult<ReactElement> dedicatedViewerResult = TryToBuildDedicatedViewerForDataType(type, value, config);
             if(dedicatedViewerResult.IsSuccessful)
@@ -133,7 +138,6 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             T value,
             DataViewConfig dataViewConfig = null
         )
-            where T : struct, IComparable, IFormattable, IComparable<T>, IEquatable<T>
         {
             return
                 new NumericDataViewComponent<T>(new DataViewComponentProps<T>
@@ -157,7 +161,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             {
 
                 Type viewComponentInterfaceType = typeof(ImADataViewComponent<>).MakeGenericType(dataType.AsArray());
-                Type viewComponentConcreteType = viewComponentInterfaceType.GetAllImplementations()?.LastOrDefault();
+                Type viewComponentConcreteType = viewComponentInterfaceType.GetAllImplementations()?.OrderByDescending(t => t.GetPriority())?.FirstOrDefault();
 
                 if (viewComponentConcreteType == null)
                 {

@@ -6,7 +6,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     public static class DataPrinter
     {
-        static string dateTimeFormat => AppBase.Config.Get("Formatting")?.Get("DateAndTime")?.ToString() ?? "ddd, MMM dd, yyyy 'at' HH:mm 'UTC'";
+        static string dateTimeFormat => AppBase.Config.Get("Formatting")?.Get("DateAndTime")?.ToString() ?? "ddd, MMM dd, yyyy 'at' HH:mm";
         static string dateFormat => AppBase.Config.Get("Formatting")?.Get("Date")?.ToString() ?? "ddd, MMM dd, yyyy";
         static string timeFormat => AppBase.Config.Get("Formatting")?.Get("Time")?.ToString() ?? "HH:mm";
         static string monthFormat => AppBase.Config.Get("Formatting")?.Get("Month")?.ToString() ?? "yyyy MMM";

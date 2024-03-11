@@ -45,16 +45,17 @@ namespace H.Necessaire.ReactAppSample.Pages
                         ,
                         DataViewComponentFactory.BuildViewerFor(Guid.NewGuid(), x => { x.Label = "Guid via DefaultView"; })
                         ,
-                        DataViewComponentFactory.BuildViewerFor(TimeSpan.FromDays(42.33), x => { x.Label = "Test dataView builder for timespan"; })
+                        DataViewComponentFactory.BuildViewerFor(TimeSpan.FromDays(42.33), x => { x.Label = "Timespan"; })
                         ,
                         DataViewComponentFactory.BuildViewerFor(DateTime.Now, x => { 
-                            x.Label = "Test dataView builder for datetime";
+                            x.Label = "Date Time";
                             x.Object.UseDefaultDataViewer = true;
                             x.Numeric.NumberOfDecimals = 0;
+                            x.DateTime.IsAsOfNow = true;
                         })
                         ,
                         DataViewComponentFactory.BuildViewerFor(new int[] {11, 12, 13 }, x => {
-                            x.Label = "Test dataView builder for array";
+                            x.Label = "Array";
                             x.Numeric.NumberOfDecimals = 0;
                             x.Array.LabelPrinter = i => $"Element {i + 1}";
                         })

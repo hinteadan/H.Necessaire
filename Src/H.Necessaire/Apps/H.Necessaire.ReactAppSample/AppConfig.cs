@@ -14,7 +14,7 @@
                 //, "BaseApiUrl".ConfigWith("https://localhost")
 
                 , "Formatting".ConfigWith(
-                      "DateAndTime".ConfigWith("ddd, MMM dd, yyyy 'at' HH:mm 'UTC'")
+                      "DateAndTime".ConfigWith("ddd, MMM dd, yyyy 'at' HH:mm")
                     , "Date".ConfigWith("ddd, MMM dd, yyyy")
                     , "Time".ConfigWith("HH:mm")
                     , "Month".ConfigWith("yyyy MMM")

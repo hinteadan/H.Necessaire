@@ -12,10 +12,11 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         public Union<ReactElement, string> Description { get; set; }
         public int? MaxValueDisplayLength { get; set; }
         public int? SpacingSize { get; set; } = AppBase.Branding.SizingUnitInPixels;
-        
+
         public NumericDataViewConfig Numeric { get; set; } = new NumericDataViewConfig();
         public ObjectDataViewConfig Object { get; set; } = new ObjectDataViewConfig();
         public ArrayDataViewConfig Array { get; set; } = new ArrayDataViewConfig();
+        public DateTimeViewConfig DateTime { get; set; } = new DateTimeViewConfig();
 
         public DataViewConfig Clone()
         {
@@ -29,6 +30,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                     Numeric = Numeric?.Clone(),
                     Object = Object?.Clone(),
                     Array = Array?.Clone(),
+                    DateTime = DateTime?.Clone(),
                 };
         }
 
@@ -44,6 +46,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             Numeric = other.Numeric?.Clone();
             Object = other.Object?.Clone();
             Array = other.Array?.Clone();
+            DateTime = other.DateTime?.Clone();
 
             return this;
         }
@@ -101,6 +104,24 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 {
                     LabelPrinter = LabelPrinter,
                     DescriptionPrinter = DescriptionPrinter,
+                };
+        }
+    }
+
+    public class DateTimeViewConfig
+    {
+        public bool IsAsOfNow { get; set; } = false;
+        public string Format { get; set; }
+        public DateTimeKind Kind { get; set; } = DateTimeKind.Local;
+
+        public DateTimeViewConfig Clone()
+        {
+            return
+                new DateTimeViewConfig
+                {
+                    Format = Format,
+                    Kind = Kind,
+                    IsAsOfNow = IsAsOfNow,
                 };
         }
     }
