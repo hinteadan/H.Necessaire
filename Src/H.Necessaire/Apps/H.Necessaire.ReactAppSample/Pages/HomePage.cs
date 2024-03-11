@@ -45,6 +45,10 @@ namespace H.Necessaire.ReactAppSample.Pages
                         ,
                         DataViewComponentFactory.BuildViewerFor(Guid.NewGuid(), x => { x.Label = "Guid via DefaultView"; })
                         ,
+                        DataViewComponentFactory.BuildViewerFor(TimeSpan.FromDays(42.33), x => { x.Label = "Test dataView builder for timespan"; })
+                        ,
+                        DataViewComponentFactory.BuildViewerFor(DateTime.UtcNow, x => { x.Label = "Test dataView builder for datetime"; })
+                        ,
                         new DataEditComponent(new DataEditComponent.Props { })
                     )
 

@@ -105,17 +105,9 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                     result = OperationResult.Fail($"Cannot find any dedicated viewer for DataType {dataType.Name}").WithoutPayload<ReactElement>();
                     return;
                 }
-
-                Type propsType = typeof(DataViewComponentProps<>).MakeGenericType(dataType.AsArray());
-                PropertyInfo dataProperty = propsType.GetProperty(nameof(DataViewComponentProps<object>.Data));
-                PropertyInfo dataViewConfigProperty = propsType.GetProperty(nameof(DataViewComponentProps<object>.DataViewConfig));
-                object props = Activator.CreateInstance(propsType);
-                dataProperty.SetValue(props, dataValue);
-                dataViewConfigProperty.SetValue(props, dataViewConfig);
-
-                object viewComponentInstance = viewComponentConcreteType == null ? null : Activator.CreateInstance(viewComponentConcreteType, props, new Union<ReactElement, string>[0]);
-
-                ReactElement viewComponentAsReactElement = (ReactElement)viewComponentInstance;
+                object viewComponentInstance = Activator.CreateInstance(viewComponentConcreteType, null, null);
+                MethodInfo builderMethod = viewComponentConcreteType.GetMethod(nameof(ImADataViewComponent<object>.New));
+                ReactElement viewComponentAsReactElement = builderMethod.Invoke(viewComponentInstance, dataValue, dataViewConfig) as ReactElement;
 
                 result = viewComponentAsReactElement.ToWinResult();
 

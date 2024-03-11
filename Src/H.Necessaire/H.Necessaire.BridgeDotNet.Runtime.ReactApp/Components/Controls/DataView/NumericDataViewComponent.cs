@@ -9,6 +9,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         where TNumber : struct, IComparable, IFormattable, IComparable<TNumber>, IEquatable<TNumber>
     {
         public NumericDataViewComponent(DataViewComponentProps<TNumber> props, params Union<ReactElement, string>[] children) : base(props, children) { }
+        public override ReactElement New(TNumber data, DataViewConfig config)
+            => new NumericDataViewComponent<TNumber>(new DataViewComponentProps<TNumber> { Data = data, DataViewConfig = config });
 
         protected override Union<ReactElement, string> RenderData()
             => Convert.ToDecimal(state.Data).Print(GetNumberOfDecimals()).EllipsizeIfNecessary(maxLength: state.DataViewConfig?.MaxValueDisplayLength ?? defaultMaxLength);

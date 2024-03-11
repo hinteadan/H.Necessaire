@@ -11,6 +11,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         where TState : DataViewComponentState<TData>, new()
         where TProps : DataViewComponentProps<TData>
     {
+        public abstract ReactElement New(TData data, DataViewConfig config);
+
         protected const int defaultMaxLength = 150;
 
         protected DataViewComponentBase(TProps props, params Union<ReactElement, string>[] children) : base(props, children) { }

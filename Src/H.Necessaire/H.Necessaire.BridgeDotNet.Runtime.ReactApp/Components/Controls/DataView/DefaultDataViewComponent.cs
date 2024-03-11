@@ -6,6 +6,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     public class DefaultDataViewComponent<TData> : DataViewComponentBase<TData, DataViewComponentProps<TData>, DefaultDataViewComponentState<TData>>
     {
         public DefaultDataViewComponent(DataViewComponentProps<TData> props, params Union<ReactElement, string>[] children) : base(props, children) { }
+        public override ReactElement New(TData data, DataViewConfig config)
+            => new DefaultDataViewComponent<TData>(new DataViewComponentProps<TData> { Data = data, DataViewConfig = config });
     }
 
     public class DefaultDataViewComponentState<TData> : DataViewComponentState<TData>
