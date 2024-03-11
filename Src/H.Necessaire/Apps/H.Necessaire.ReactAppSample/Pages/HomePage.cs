@@ -50,6 +50,7 @@ namespace H.Necessaire.ReactAppSample.Pages
                         DataViewComponentFactory.BuildViewerFor(DateTime.Now, x => { 
                             x.Label = "Test dataView builder for datetime";
                             x.Object.PropertyNamesToIgnore = new string[] { nameof(DateTime.Date) };
+                            x.Numeric.NumberOfDecimals = 0;
                         })
                         ,
                         new ObjectDataViewComponent<DateTime>(new DataViewComponentProps<DateTime> { Data = DateTime.Now, DataViewConfig = new DataViewConfig { Label = "Object view for datetime" }.And(x => x.Object.PropertyNamesToIgnore = new string[] { nameof(DateTime.Date) }) })
