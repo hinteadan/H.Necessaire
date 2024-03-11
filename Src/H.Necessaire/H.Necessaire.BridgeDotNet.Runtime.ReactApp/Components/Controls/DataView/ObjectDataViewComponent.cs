@@ -1,5 +1,6 @@
 ﻿using Bridge;
 using Bridge.Html5;
+using Bridge.jQuery2;
 using Bridge.React;
 using System;
 using System.Collections.Concurrent;
@@ -120,6 +121,18 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         protected virtual PropertyInfo[] GetDataTypeProperties()
         {
             PropertyInfo[] result = propertiesPerType.GetOrAdd(GetDataType(), BuildPropertyInfos());
+            if (result == null)
+                return null;
+
+            if (state.DataViewConfig?.Object?.PropertyNamesToIgnore?.Any() == true)
+            {
+                result
+                    = result
+                    .Where(p => p.Name.NotIn(state.DataViewConfig.Object.PropertyNamesToIgnore))
+                    .ToArrayNullIfEmpty();
+                    ;
+            }
+
             return result;
         }
 
@@ -130,14 +143,6 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .Where(p => p.GetGetMethod() != null)
                 ;
-
-            if(state.DataViewConfig?.Object?.PropertyNamesToIgnore?.Any() == true)
-            {
-                query
-                    = query
-                    .Where(p => p.Name.NotIn(state.DataViewConfig.Object.PropertyNamesToIgnore))
-                    ;
-            }
 
             return query.ToArrayNullIfEmpty();
         }
