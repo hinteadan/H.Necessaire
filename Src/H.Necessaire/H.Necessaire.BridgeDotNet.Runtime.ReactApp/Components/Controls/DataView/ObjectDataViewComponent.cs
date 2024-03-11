@@ -25,7 +25,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                     {
                         Style = new ReactStyle
                         {
-
+                            MarginLeft = (state.DataViewConfig?.Object?.CurrentDepth ?? 0) == 0 ? 0 : (state.DataViewConfig?.SpacingSize ?? Branding.SizingUnitInPixels),
                         }
                         .FlexNode(isVerticalFlow: true),
                         ClassName = $"{GetDataTypeName()}-ObjectView-Chrome",
@@ -85,7 +85,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                             cfg.MaxValueDisplayLength = state.DataViewConfig?.MaxValueDisplayLength ?? cfg.MaxValueDisplayLength;
                             cfg.Numeric = state.DataViewConfig?.Numeric ?? cfg.Numeric;
                             cfg.Object = ((state.DataViewConfig?.Object ?? cfg.Object)?.DeepClone() ?? new ObjectDataViewConfig()).And(x => {
-                                x.CurrentDepth = x.CurrentDepth + 1;
+                                x.CurrentDepth += 1;
                                 x.Path = x.Path.Push(propertyInfo.Name);
                             });
                         }
