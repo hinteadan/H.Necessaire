@@ -38,6 +38,9 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             await DoAndSetStateAsync(state =>
             {
                 state.Data = props == null ? GetDefaultDataValue() : props.Data;
+                state.DataType = props == null ? typeof(TData) : props.DataType;
+                if (state.DataType == typeof(object))
+                    state.DataType = state.Data?.GetType();
                 state.DataViewConfig = props?.DataViewConfig == null ? new DataViewConfig() : props.DataViewConfig;
             });
         }
@@ -185,25 +188,21 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         protected virtual bool HasValue() => state.Data != null;
         protected virtual Union<ReactElement, string> RenderData() => state.Data.ToString().EllipsizeIfNecessary(maxLength: state.DataViewConfig?.MaxValueDisplayLength ?? defaultMaxLength);
         protected virtual string RenderTooltipText() => state.Data.ToString();
-        protected virtual Type GetDataType()
-        {
-            if (typeof(TData) == typeof(object))
-                return state.Data?.GetType();
-
-            return typeof(TData);
-        }
+        protected virtual Type GetDataType() => state.DataType;
         protected virtual string GetDataTypeName() => GetDataType()?.Name ?? "Object";
     }
 
     public abstract class DataViewComponentState<TData> : ComponentStateBase
     {
         public TData Data { get; set; }
+        public Type DataType { get; set; } = typeof(TData);
         public DataViewConfig DataViewConfig { get; set; } = new DataViewConfig();
     }
 
     public class DataViewComponentProps<TData> : ComponentPropsBase
     {
         public TData Data { get; set; }
+        public Type DataType { get; set; } = typeof(TData);
         public DataViewConfig DataViewConfig { get; set; } = new DataViewConfig();
     }
 }

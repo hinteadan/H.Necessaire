@@ -13,8 +13,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         public static ReactElement BuildViewerFor(
             Type type, 
             object value, 
-            Action<DataViewConfig> configure = null,
-            bool fallbackToDefault = true
+            Action<DataViewConfig> configure = null
         )
         {
             if (type == typeof(sbyte))
@@ -48,17 +47,20 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             if(dedicatedViewerResult.IsSuccessful)
                 return dedicatedViewerResult.Payload;
 
-            return fallbackToDefault ? BuildDefaultDataViewerComponent(value, BuildConfig(configure)) : null;
+            //Render Objects
+            //Render Arrays
+
+            return BuildDefaultDataViewerComponent(type, value, BuildConfig(configure));
         }
 
         public static ReactElement BuildViewerFor<T>(
             T value,
-            Action<DataViewConfig> configure = null,
-            bool fallbackToDefault = true
+            Action<DataViewConfig> configure = null
         ) 
-            => BuildViewerFor(typeof(T), value, configure, fallbackToDefault);
+            => BuildViewerFor(typeof(T), value, configure);
 
         private static ReactElement BuildDefaultDataViewerComponent(
+            Type type,
             object value,
             DataViewConfig dataViewConfig = null
         )
@@ -67,6 +69,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 new DefaultDataViewComponent<object>(new DataViewComponentProps<object>
                 {
                     Data = value,
+                    DataType = type,
                     DataViewConfig = (dataViewConfig ?? defaultConfig),
                 });
         }
@@ -81,6 +84,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 new NumericDataViewComponent<T>(new DataViewComponentProps<T>
                 {
                     Data = value,
+                    DataType = typeof(T),
                     DataViewConfig = (dataViewConfig ?? defaultConfig),
                 });
         }

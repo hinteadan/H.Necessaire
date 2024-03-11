@@ -47,7 +47,9 @@ namespace H.Necessaire.ReactAppSample.Pages
                         ,
                         DataViewComponentFactory.BuildViewerFor(TimeSpan.FromDays(42.33), x => { x.Label = "Test dataView builder for timespan"; })
                         ,
-                        DataViewComponentFactory.BuildViewerFor(DateTime.UtcNow, x => { x.Label = "Test dataView builder for datetime"; })
+                        DataViewComponentFactory.BuildViewerFor(DateTime.Now, x => { x.Label = "Test dataView builder for datetime"; })
+                        ,
+                        new ObjectDataViewComponent<DateTime>(new DataViewComponentProps<DateTime> { Data = DateTime.Now, DataViewConfig = new DataViewConfig { Label = "Object view for datetime" } })
                         ,
                         new DataEditComponent(new DataEditComponent.Props { })
                     )
