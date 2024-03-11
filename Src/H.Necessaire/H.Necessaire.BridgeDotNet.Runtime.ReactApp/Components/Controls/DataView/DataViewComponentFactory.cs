@@ -66,10 +66,17 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         private static ReactElement BuildObjectDataViewerComponent(Type type, object value, DataViewConfig dataViewConfig)
         {
+            //Type viewComponentType = typeof(ObjectDataViewComponent<>).MakeGenericType(type.AsArray());
+            //object viewComponentInstance = Activator.CreateInstance(viewComponentType, null, null);
+            //MethodInfo builderMethod = viewComponentType.GetMethod(nameof(ImADataViewComponent<object>.New));
+            //ReactElement viewComponentAsReactElement = builderMethod.Invoke(viewComponentInstance, value, dataViewConfig) as ReactElement;
+
+            //return viewComponentAsReactElement;
+
             return
                 new ObjectDataViewComponent<object>(new DataViewComponentProps<object>
                 {
-                    Data = value,
+                    Data = Convert.ChangeType(value, type),
                     DataType = type,
                     DataViewConfig = (dataViewConfig ?? defaultConfig),
                 });

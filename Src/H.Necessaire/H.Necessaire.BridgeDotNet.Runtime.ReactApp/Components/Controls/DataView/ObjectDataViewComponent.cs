@@ -41,6 +41,9 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         protected override ReactElement RenderDataValue()
         {
+            if ((state.DataViewConfig?.Object?.CurrentDepth ?? 0) >= (state.DataViewConfig?.Object?.MaxDepth ?? 0))
+                return base.RenderDataValue();
+
             return
                 DOM.Div(
                     new Attributes
@@ -81,7 +84,10 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                             cfg.Description = GetPropertyDescription(propertyInfo);
                             cfg.MaxValueDisplayLength = state.DataViewConfig?.MaxValueDisplayLength ?? cfg.MaxValueDisplayLength;
                             cfg.Numeric = state.DataViewConfig?.Numeric ?? cfg.Numeric;
-                            cfg.Object = state.DataViewConfig?.Object ?? cfg.Object;
+                            cfg.Object = ((state.DataViewConfig?.Object ?? cfg.Object)?.DeepClone() ?? new ObjectDataViewConfig()).And(x => {
+                                x.CurrentDepth = x.CurrentDepth + 1;
+                                x.Path = x.Path.Push(propertyInfo.Name);
+                            });
                         }
                     )
                 );
@@ -113,14 +119,14 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         protected virtual PropertyInfo[] GetDataTypeProperties()
         {
-            PropertyInfo[] result = propertiesPerType.GetOrAdd(typeof(TData), BuildPropertyInfos());
+            PropertyInfo[] result = propertiesPerType.GetOrAdd(GetDataType(), BuildPropertyInfos());
             return result;
         }
 
         private PropertyInfo[] BuildPropertyInfos()
         {
             IEnumerable<PropertyInfo> query
-                = typeof(TData)
+                = GetDataType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .Where(p => p.GetGetMethod() != null)
                 ;

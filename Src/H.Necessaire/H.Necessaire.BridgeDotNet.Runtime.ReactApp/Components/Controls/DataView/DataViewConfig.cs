@@ -24,6 +24,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     {
         public string[] PropertyNamesToIgnore { get; set; } = null;
         public string[] Path { get; set; } = null;
+        public int CurrentDepth { get; set; } = 0;
+        public int MaxDepth { get; set; } = 5;
         public IReadOnlyDictionary<string, Union<ReactElement, string>> PropertyLabels { get; set; }
         public IReadOnlyDictionary<string, Union<ReactElement, string>> PropertyDescriptions { get; set; }
     }
