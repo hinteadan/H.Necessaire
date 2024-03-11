@@ -16,42 +16,46 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             Action<DataViewConfig> configure = null
         )
         {
+            DataViewConfig config = BuildConfig(configure);
+
             if (type == typeof(sbyte))
-                return BuildNumericDataViewerComponent((sbyte)value, BuildConfig(configure));
+                return BuildNumericDataViewerComponent((sbyte)value, config);
             if (type == typeof(byte))
-                return BuildNumericDataViewerComponent((byte)value, BuildConfig(configure));
+                return BuildNumericDataViewerComponent((byte)value, config);
 
             if (type == typeof(ushort))
-                return BuildNumericDataViewerComponent((ushort)value, BuildConfig(configure));
+                return BuildNumericDataViewerComponent((ushort)value, config);
             if (type == typeof(short))
-                return BuildNumericDataViewerComponent((short)value, BuildConfig(configure));
+                return BuildNumericDataViewerComponent((short)value, config);
 
             if (type == typeof(uint))
-                return BuildNumericDataViewerComponent((uint)value, BuildConfig(configure));
+                return BuildNumericDataViewerComponent((uint)value, config);
             if (type == typeof(int))
-                return BuildNumericDataViewerComponent((int)value, BuildConfig(configure));
+                return BuildNumericDataViewerComponent((int)value, config);
 
             if (type == typeof(ulong))
-                return BuildNumericDataViewerComponent((ulong)value, BuildConfig(configure));
+                return BuildNumericDataViewerComponent((ulong)value, config);
             if (type == typeof(long))
-                return BuildNumericDataViewerComponent((long)value, BuildConfig(configure));
+                return BuildNumericDataViewerComponent((long)value, config);
 
             if (type == typeof(float))
-                return BuildNumericDataViewerComponent((float)value, BuildConfig(configure));
+                return BuildNumericDataViewerComponent((float)value, config);
             if (type == typeof(double))
-                return BuildNumericDataViewerComponent((double)value, BuildConfig(configure));
+                return BuildNumericDataViewerComponent((double)value, config);
             if (type == typeof(decimal))
-                return BuildNumericDataViewerComponent((decimal)value, BuildConfig(configure));
+                return BuildNumericDataViewerComponent((decimal)value, config);
 
-            OperationResult<ReactElement> dedicatedViewerResult = TryToBuildDedicatedViewerForDataType(type, value, BuildConfig(configure));
+            OperationResult<ReactElement> dedicatedViewerResult = TryToBuildDedicatedViewerForDataType(type, value, config);
             if(dedicatedViewerResult.IsSuccessful)
                 return dedicatedViewerResult.Payload;
 
 
-            //Render Objects
+            if(IsObjectDataViewCandidate(type, config))
+                return BuildObjectDataViewerComponent(type, value, config);
+
             //Render Arrays
 
-            return BuildDefaultDataViewerComponent(type, value, BuildConfig(configure));
+            return BuildDefaultDataViewerComponent(type, value, config);
         }
 
         public static ReactElement BuildViewerFor<T>(
@@ -59,6 +63,28 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             Action<DataViewConfig> configure = null
         ) 
             => BuildViewerFor(typeof(T), value, configure);
+
+        private static ReactElement BuildObjectDataViewerComponent(Type type, object value, DataViewConfig dataViewConfig)
+        {
+            return
+                new ObjectDataViewComponent<object>(new DataViewComponentProps<object>
+                {
+                    Data = value,
+                    DataType = type,
+                    DataViewConfig = (dataViewConfig ?? defaultConfig),
+                });
+        }
+
+        private static bool IsObjectDataViewCandidate(Type type, DataViewConfig dataViewConfig = null)
+        {
+            return
+                type
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(p => p.GetGetMethod() != null)
+                .Where(p => dataViewConfig?.Object?.PropertyNamesToIgnore?.Any() != true ? true : p.Name.NotIn(dataViewConfig.Object.PropertyNamesToIgnore))
+                .Any()
+                ;
+        }
 
         private static ReactElement BuildDefaultDataViewerComponent(
             Type type,
