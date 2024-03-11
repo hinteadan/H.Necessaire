@@ -35,9 +35,9 @@ namespace H.Necessaire.ReactAppSample.Pages
                         ,
                         new FontIcon(new FontIcon.Props { Provider = FontIcon.Provider.FontAwesome, IconName = "user" })
                         ,
-                        new StringDataViewComponent(new StringDataViewComponent.Props { Data = "Hin", Label = "First Name" })
+                        new StringDataViewComponent(new DataViewComponentProps<string> { Data = "Hin", DataViewConfig = new DataViewConfig { Label = "First Name" } })
                         ,
-                        new DefaultDataViewComponent<string>(new DefaultDataViewComponentProps<string> { Data = "Tee", Label = "Last Name", Description = "asf sadf a sdf as df as df sa f sad f" })
+                        new DefaultDataViewComponent<string>(new DataViewComponentProps<string> { Data = "Tee", DataViewConfig = new DataViewConfig { Label = "Last Name", Description = "asf sadf a sdf as df as df sa f sad f" } })
                         ,
                         DataViewComponentFactory.BuildViewerFor(17.1234123412m, x => x.Label = "Number with decimals")
                         ,

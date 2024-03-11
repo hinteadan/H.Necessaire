@@ -1,5 +1,8 @@
-﻿using Bridge.React;
+﻿using Bridge;
+using Bridge.React;
 using System;
+using System.Linq;
+using System.Reflection;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
@@ -10,7 +13,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         public static ReactElement BuildViewerFor(
             Type type, 
             object value, 
-            Action<DataViewConfig> configure = null
+            Action<DataViewConfig> configure = null,
+            bool fallbackToDefault = true
         )
         {
             if (type == typeof(sbyte))
@@ -40,14 +44,19 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             if (type == typeof(decimal))
                 return BuildNumericDataViewerComponent((decimal)value, BuildConfig(configure));
 
-            return BuildDefaultDataViewerComponent(value, BuildConfig(configure));
+            OperationResult<ReactElement> dedicatedViewerResult = TryToBuildDedicatedViewerForDataType(type, value, BuildConfig(configure));
+            if(dedicatedViewerResult.IsSuccessful)
+                return dedicatedViewerResult.Payload;
+
+            return fallbackToDefault ? BuildDefaultDataViewerComponent(value, BuildConfig(configure)) : null;
         }
 
         public static ReactElement BuildViewerFor<T>(
             T value,
-            Action<DataViewConfig> configure = null
+            Action<DataViewConfig> configure = null,
+            bool fallbackToDefault = true
         ) 
-            => BuildViewerFor(typeof(T), value, configure);
+            => BuildViewerFor(typeof(T), value, configure, fallbackToDefault);
 
         private static ReactElement BuildDefaultDataViewerComponent(
             object value,
@@ -55,12 +64,10 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         )
         {
             return
-                new DefaultDataViewComponent<object>(new DefaultDataViewComponentProps<object>
+                new DefaultDataViewComponent<object>(new DataViewComponentProps<object>
                 {
                     Data = value,
-                    Label = (dataViewConfig ?? defaultConfig).Label,
-                    Description = (dataViewConfig ?? defaultConfig).Description,
-                    MaxLength = (dataViewConfig ?? defaultConfig).MaxValueDisplayLength,
+                    DataViewConfig = (dataViewConfig ?? defaultConfig),
                 });
         }
 
@@ -71,19 +78,51 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             where T : struct, IComparable, IFormattable, IComparable<T>, IEquatable<T>
         {
             return
-                new NumericDataViewComponent<T>(new NumericDataViewProps<T>
+                new NumericDataViewComponent<T>(new DataViewComponentProps<T>
                 {
                     Data = value,
-                    Label = (dataViewConfig ?? defaultConfig).Label,
-                    Description = (dataViewConfig ?? defaultConfig).Description,
-                    MaxLength = (dataViewConfig ?? defaultConfig).MaxValueDisplayLength,
-                    NumberOfDecimals = (dataViewConfig?.Numeric ?? defaultConfig.Numeric).NumberOfDecimals,
+                    DataViewConfig = (dataViewConfig ?? defaultConfig),
                 });
         }
 
         private static DataViewConfig BuildConfig(Action<DataViewConfig> configure)
         {
             return new DataViewConfig().And(cfg => { if (configure != null) configure(cfg); });
+        }
+
+        private static OperationResult<ReactElement> TryToBuildDedicatedViewerForDataType(Type dataType, object dataValue, DataViewConfig dataViewConfig)
+        {
+            OperationResult<ReactElement> result = OperationResult.Fail("Not yet started").WithoutPayload<ReactElement>();
+
+            new Action(() =>
+            {
+
+                Type viewComponentInterfaceType = typeof(ImADataViewComponent<>).MakeGenericType(dataType.AsArray());
+                Type viewComponentConcreteType = viewComponentInterfaceType.GetAllImplementations()?.LastOrDefault();
+
+                if (viewComponentConcreteType == null)
+                {
+                    result = OperationResult.Fail($"Cannot find any dedicated viewer for DataType {dataType.Name}").WithoutPayload<ReactElement>();
+                    return;
+                }
+
+                Type propsType = typeof(DataViewComponentProps<>).MakeGenericType(dataType.AsArray());
+                PropertyInfo dataProperty = propsType.GetProperty(nameof(DataViewComponentProps<object>.Data));
+                PropertyInfo dataViewConfigProperty = propsType.GetProperty(nameof(DataViewComponentProps<object>.DataViewConfig));
+                object props = Activator.CreateInstance(propsType);
+                dataProperty.SetValue(props, dataValue);
+                dataViewConfigProperty.SetValue(props, dataViewConfig);
+
+                object viewComponentInstance = viewComponentConcreteType == null ? null : Activator.CreateInstance(viewComponentConcreteType, props, new Union<ReactElement, string>[0]);
+
+                ReactElement viewComponentAsReactElement = (ReactElement)viewComponentInstance;
+
+                result = viewComponentAsReactElement.ToWinResult();
+
+            })
+            .TryOrFailWithGrace(onFail: ex => result = OperationResult.Fail(ex, $"Error occurred while trying to Build Dedicated Viewer For DataType {dataType.Name}. Message: {ex.Message}").WithoutPayload<ReactElement>());
+
+            return result;
         }
     }
 }

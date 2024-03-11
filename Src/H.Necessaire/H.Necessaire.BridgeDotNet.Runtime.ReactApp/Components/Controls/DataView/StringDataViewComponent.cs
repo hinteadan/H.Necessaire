@@ -3,11 +3,10 @@ using Bridge;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
-    public class StringDataViewComponent : DataViewComponentBase<string, StringDataViewComponent.Props, StringDataViewComponent.State>
+    public class StringDataViewComponent : DataViewComponentBase<string, DataViewComponentProps<string>, StringDataViewComponent.State>
     {
-        public StringDataViewComponent(Props props, params Union<ReactElement, string>[] children) : base(props, children) { }
+        public StringDataViewComponent(DataViewComponentProps<string> props, params Union<ReactElement, string>[] children) : base(props, children) { }
 
         public class State : DataViewComponentState<string> { }
-        public class Props : DataViewComponentProps<string> { }
     }
 }

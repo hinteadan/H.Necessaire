@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     public abstract class DataViewComponentBase<TData, TProps, TState>
-        : ComponentBase<TProps, TState>
+        : ComponentBase<TProps, TState>, ImADataViewComponent<TData>
         where TState : DataViewComponentState<TData>, new()
         where TProps : DataViewComponentProps<TData>
     {
@@ -32,8 +32,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             await DoAndSetStateAsync(state =>
             {
                 state.Data = props == null ? GetDefaultDataValue() : props.Data;
-                state.Label = props?.Label;
-                state.Description = props?.Description;
+                state.DataViewConfig = props?.DataViewConfig == null ? new DataViewConfig() : props.DataViewConfig;
             });
         }
 
@@ -61,7 +60,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         protected virtual ReactElement RenderDescriptionIfNecessary()
         {
-            if (state.Description == null)
+            if (state.DataViewConfig?.Description == null)
                 return null;
 
             return
@@ -77,13 +76,13 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                         ClassName = $"{GetDataTypeName()}-DescriptionChrome",
                     }
                     ,
-                    state.Description
+                    state.DataViewConfig.Description
                 );
         }
 
         protected virtual ReactElement RenderLabelIfNecessary()
         {
-            if(state.Label == null)
+            if(state.DataViewConfig?.Label == null)
                 return null;
 
             return
@@ -99,7 +98,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                         ClassName = $"{GetDataTypeName()}-LabelChrome",
                     }
                     ,
-                    state.Label
+                    state.DataViewConfig.Label
                 );
         }
 
@@ -178,7 +177,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         protected virtual TData GetDefaultDataValue() => default(TData);
         protected virtual bool HasValue() => state.Data != null;
-        protected virtual Union<ReactElement, string> RenderData() => state.Data.ToString().EllipsizeIfNecessary(maxLength: props?.MaxLength ?? defaultMaxLength);
+        protected virtual Union<ReactElement, string> RenderData() => state.Data.ToString().EllipsizeIfNecessary(maxLength: state.DataViewConfig?.MaxValueDisplayLength ?? defaultMaxLength);
         protected virtual string RenderTooltipText() => state.Data.ToString();
         protected virtual Type GetDataType()
         {
@@ -193,15 +192,12 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     public abstract class DataViewComponentState<TData> : ComponentStateBase
     {
         public TData Data { get; set; }
-        public Union<ReactElement, string> Label { get; set; }
-        public Union<ReactElement, string> Description { get; set; }
+        public DataViewConfig DataViewConfig { get; set; } = new DataViewConfig();
     }
 
-    public abstract class DataViewComponentProps<TData> : ComponentPropsBase
+    public class DataViewComponentProps<TData> : ComponentPropsBase
     {
-        public int? MaxLength { get; set; }
         public TData Data { get; set; }
-        public Union<ReactElement, string> Label { get; set; }
-        public Union<ReactElement, string> Description { get; set; }
+        public DataViewConfig DataViewConfig { get; set; } = new DataViewConfig();
     }
 }

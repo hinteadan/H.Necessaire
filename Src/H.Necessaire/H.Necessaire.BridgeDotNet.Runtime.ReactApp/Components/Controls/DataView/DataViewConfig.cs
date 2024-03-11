@@ -1,5 +1,5 @@
-﻿using Bridge.React;
-using Bridge;
+﻿using Bridge;
+using Bridge.React;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
@@ -10,10 +10,16 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         public int? MaxValueDisplayLength { get; set; }
         
         public NumericDataViewConfig Numeric { get; set; } = new NumericDataViewConfig();
+        public ObjectDataViewConfig Object { get; set; } = new ObjectDataViewConfig();
     }
 
     public class NumericDataViewConfig
     {
         public int NumberOfDecimals { get; set; } = 2;
+    }
+
+    public class ObjectDataViewConfig
+    {
+        public string[] PropertyNamesToIgnore { get; set; } = null;
     }
 }
