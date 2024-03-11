@@ -72,7 +72,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                     {
                         Style = new ReactStyle
                         {
-                            MarginTop = index == 0 ? 0 : state.DataViewConfig?.SpacingSize ?? Branding.SizingUnitInPixels,
+                            MarginTop = (index == 0 && state.DataViewConfig?.Label == null && state.DataViewConfig?.Description == null) ? 0 : state.DataViewConfig?.SpacingSize ?? Branding.SizingUnitInPixels,
                             JustifyContent = JustifyContent.Center,
                         }
                         .FlexNode(isVerticalFlow: true),
@@ -84,11 +84,12 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                         state.Data == null ? null : propertyInfo.GetValue(state.Data),
                         cfg =>
                         {
+                            cfg.CopyFrom(state.DataViewConfig);
+
                             cfg.Label = GetPropertyLabel(propertyInfo);
                             cfg.Description = GetPropertyDescription(propertyInfo);
-                            cfg.MaxValueDisplayLength = state.DataViewConfig?.MaxValueDisplayLength ?? cfg.MaxValueDisplayLength;
-                            cfg.Numeric = state.DataViewConfig?.Numeric ?? cfg.Numeric;
-                            cfg.Object = ((state.DataViewConfig?.Object ?? cfg.Object)?.DeepClone() ?? new ObjectDataViewConfig()).And(x => {
+
+                            cfg.Object = (cfg.Object ?? new ObjectDataViewConfig()).And(x => {
                                 x.CurrentDepth += 1;
                                 x.Path = x.Path.Push(propertyInfo.Name);
                             });
