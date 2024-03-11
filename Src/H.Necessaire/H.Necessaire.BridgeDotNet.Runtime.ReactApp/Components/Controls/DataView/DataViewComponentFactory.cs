@@ -47,6 +47,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             if(dedicatedViewerResult.IsSuccessful)
                 return dedicatedViewerResult.Payload;
 
+
             //Render Objects
             //Render Arrays
 

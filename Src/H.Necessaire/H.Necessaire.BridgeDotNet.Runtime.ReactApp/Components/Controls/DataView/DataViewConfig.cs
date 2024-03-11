@@ -1,5 +1,6 @@
 ﻿using Bridge;
 using Bridge.React;
+using System.Collections.Generic;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
@@ -21,5 +22,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     public class ObjectDataViewConfig
     {
         public string[] PropertyNamesToIgnore { get; set; } = null;
+        public string[] Path { get; set; } = null;
+        public IReadOnlyDictionary<string, Union<ReactElement, string>> PropertyLabels { get; set; }
+        public IReadOnlyDictionary<string, Union<ReactElement, string>> PropertyDescriptions { get; set; }
     }
 }

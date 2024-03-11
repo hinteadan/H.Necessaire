@@ -59,21 +59,40 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         protected virtual ReactElement RenderProperty(PropertyInfo propertyInfo)
         {
-            string label = propertyInfo.Name;//Convert to proper name via config mapping or camelCase parsing
-            string description = null;//Fetch from config
-            object value = state.Data == null ? null : propertyInfo.GetValue(state.Data);
-
             return DataViewComponentFactory.BuildViewerFor(
-                propertyInfo.PropertyType, 
-                value, 
-                cfg => { 
-                    cfg.Label = label;
-                    cfg.Description = description;
+                propertyInfo.PropertyType,
+                state.Data == null ? null : propertyInfo.GetValue(state.Data),
+                cfg =>
+                {
+                    cfg.Label = GetPropertyLabel(propertyInfo);
+                    cfg.Description = GetPropertyDescription(propertyInfo);
                     cfg.MaxValueDisplayLength = state.DataViewConfig?.MaxValueDisplayLength ?? cfg.MaxValueDisplayLength;
                     cfg.Numeric = state.DataViewConfig?.Numeric ?? cfg.Numeric;
                     cfg.Object = state.DataViewConfig?.Object ?? cfg.Object;
                 }
             );
+        }
+
+        private Union<ReactElement, string> GetPropertyLabel(PropertyInfo propertyInfo)
+        {
+            string propertyFullName = GetPropertyFullName(propertyInfo);
+
+            Union<ReactElement, string> labelFromConfigMapping = null;
+            if (state.DataViewConfig?.Object?.PropertyLabels?.TryGetValue(propertyFullName, out labelFromConfigMapping) == true)
+                return labelFromConfigMapping;
+
+            return propertyInfo.Name.ToDisplayLabel();
+        }
+
+        private Union<ReactElement, string> GetPropertyDescription(PropertyInfo propertyInfo)
+        {
+            string propertyFullName = GetPropertyFullName(propertyInfo);
+
+            Union<ReactElement, string> descriptionFromConfigMapping = null;
+            if (state.DataViewConfig?.Object?.PropertyDescriptions?.TryGetValue(propertyFullName, out descriptionFromConfigMapping) == true)
+                return descriptionFromConfigMapping;
+
+            return null;
         }
 
         protected override bool HasValue() => GetDataTypeProperties()?.Any() == true && base.HasValue();
@@ -101,6 +120,14 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             }
 
             return query.ToArrayNullIfEmpty();
+        }
+
+        private string GetPropertyFullName(PropertyInfo propertyInfo)
+        {
+            string propertyFullName = propertyInfo.Name;
+            if (state.DataViewConfig?.Object?.Path?.Any() == true)
+                propertyFullName = $"{string.Join(".", state.DataViewConfig.Object.Path)}.{propertyFullName}";
+            return propertyFullName;
         }
     }
 
