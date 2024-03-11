@@ -92,6 +92,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     public class ArrayDataViewConfig
     {
         public Func<int, Union<ReactElement, string>> LabelPrinter { get; set; }
+        public Func<int, Union<ReactElement, string>> DescriptionPrinter { get; set; }
 
         public ArrayDataViewConfig Clone()
         {
@@ -99,6 +100,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 new ArrayDataViewConfig
                 {
                     LabelPrinter = LabelPrinter,
+                    DescriptionPrinter = DescriptionPrinter,
                 };
         }
     }

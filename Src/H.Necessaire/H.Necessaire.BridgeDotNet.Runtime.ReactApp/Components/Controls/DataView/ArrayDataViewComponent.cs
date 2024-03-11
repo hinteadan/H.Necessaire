@@ -89,7 +89,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                             cfg.CopyFrom(state.DataViewConfig);
 
                             cfg.Label = GetElementLabel(data, index);
-                            cfg.Description = null;
+                            cfg.Description = GetDescriptionLabel(data, index); ;
 
                             cfg.Object = (cfg.Object ?? new ObjectDataViewConfig()).And(x => {
                                 x.CurrentDepth += 1;
@@ -98,6 +98,14 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                         }
                     )
                 );
+        }
+
+        private Union<ReactElement, string> GetDescriptionLabel(TData data, int index)
+        {
+            if (state.DataViewConfig?.Array?.DescriptionPrinter != null)
+                return state.DataViewConfig.Array.DescriptionPrinter.Invoke(index);
+
+            return null;
         }
 
         private Union<ReactElement, string> GetElementLabel(TData data, int index)

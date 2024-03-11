@@ -56,6 +56,7 @@ namespace H.Necessaire.ReactAppSample.Pages
                         DataViewComponentFactory.BuildViewerFor(new int[] {11, 12, 13 }, x => {
                             x.Label = "Test dataView builder for array";
                             x.Numeric.NumberOfDecimals = 0;
+                            x.Array.LabelPrinter = i => $"Element {i + 1}";
                         })
                         ,
                         new DataEditComponent(new DataEditComponent.Props { })
