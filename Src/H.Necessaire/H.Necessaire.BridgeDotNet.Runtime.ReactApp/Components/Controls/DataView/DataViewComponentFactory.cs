@@ -84,6 +84,12 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         private static bool IsObjectDataViewCandidate(Type type, DataViewConfig dataViewConfig = null)
         {
+            if ((dataViewConfig?.Object?.CurrentDepth ?? 0) >= (dataViewConfig?.Object?.MaxDepth ?? 0))
+                return false;
+
+            if (dataViewConfig?.Object?.UseDefaultDataViewer == true)
+                return false;
+
             return
                 type
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)

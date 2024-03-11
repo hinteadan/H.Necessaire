@@ -42,6 +42,9 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         protected override ReactElement RenderDataValue()
         {
+            if (state.DataViewConfig?.Object?.UseDefaultDataViewer == true)
+                return base.RenderDataValue();
+
             if ((state.DataViewConfig?.Object?.CurrentDepth ?? 0) >= (state.DataViewConfig?.Object?.MaxDepth ?? 0))
                 return base.RenderDataValue();
 

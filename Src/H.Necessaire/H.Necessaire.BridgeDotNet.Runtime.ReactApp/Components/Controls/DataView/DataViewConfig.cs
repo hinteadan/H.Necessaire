@@ -22,6 +22,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
     public class ObjectDataViewConfig
     {
+        public bool UseDefaultDataViewer { get; set; } = false;
         public string[] PropertyNamesToIgnore { get; set; } = null;
         public string[] Path { get; set; } = null;
         public int CurrentDepth { get; set; } = 0;
