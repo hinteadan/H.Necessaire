@@ -1,4 +1,5 @@
-﻿using Bridge.React;
+﻿using Bridge;
+using Bridge.React;
 using H.Necessaire.BridgeDotNet.Runtime.ReactApp;
 using H.Necessaire.ReactAppSample.Components;
 using System;
@@ -45,7 +46,11 @@ namespace H.Necessaire.ReactAppSample.Pages
                         ,
                         DataViewComponentFactory.BuildViewerFor(Guid.NewGuid(), x => { x.Label = "Guid via DefaultView"; })
                         ,
-                        DataViewComponentFactory.BuildViewerFor(TimeSpan.FromDays(42.33), x => { x.Label = "Timespan"; })
+                        DataViewComponentFactory.BuildViewerFor(TimeSpan.FromDays(42.33), x => { 
+                            x.Label = "Timespan"; 
+                            x.Object.UseDefaultDataViewer = true;
+                            x.DataPrinter = data => ((TimeSpan)data).PrintTimeSpan().ToReact().ToWinResult();
+                        })
                         ,
                         DataViewComponentFactory.BuildViewerFor(DateTime.Now, x => { 
                             x.Label = "Date Time";
