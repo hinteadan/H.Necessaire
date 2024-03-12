@@ -85,13 +85,13 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                         ClassName = $"{GetDataTypeName()}-DescriptionChrome",
                     }
                     ,
-                    state.DataViewConfig.Description
+                    RenderDescriptionValue()
                 );
         }
 
         protected virtual ReactElement RenderLabelIfNecessary()
         {
-            if(state.DataViewConfig?.Label == null)
+            if (state.DataViewConfig?.Label == null)
                 return null;
 
             return
@@ -107,7 +107,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                         ClassName = $"{GetDataTypeName()}-LabelChrome",
                     }
                     ,
-                    state.DataViewConfig.Label
+                    RenderLabelValue()
                 );
         }
 
@@ -183,6 +183,9 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                     DOM.Em("No Data")
                 );
         }
+
+        protected virtual Union<ReactElement, string> RenderLabelValue() => state.DataViewConfig.Label;
+        protected virtual Union<ReactElement, string> RenderDescriptionValue() => state.DataViewConfig.Description;
 
         protected virtual TData GetDefaultDataValue() => default(TData);
         protected virtual bool HasValue() => state.Data != null;

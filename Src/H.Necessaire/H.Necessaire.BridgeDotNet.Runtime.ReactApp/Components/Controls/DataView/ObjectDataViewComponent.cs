@@ -64,6 +64,29 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 );
         }
 
+        protected override Union<ReactElement, string> RenderLabelValue()
+        {
+            return
+                DOM.Span(
+                    new Attributes
+                    {
+                        Style = new ReactStyle
+                        {
+                            FontSize = "1.2em",
+                        }
+                    }
+                    ,
+                    DOM.Strong(
+                        new Attributes
+                        {
+
+                        }
+                        ,
+                        base.RenderLabelValue()
+                    )
+                );
+        }
+
         protected virtual ReactElement RenderProperty(PropertyInfo propertyInfo, int index)
         {
             return
