@@ -10,6 +10,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     {
         public Union<ReactElement, string> Label { get; set; }
         public Union<ReactElement, string> Description { get; set; }
+        public Func<object, OperationResult<Union<ReactElement, string>>> DataPrinter { get; set; }
         public int? MaxValueDisplayLength { get; set; }
         public int? SpacingSize { get; set; } = AppBase.Branding.SizingUnitInPixels;
 
@@ -25,6 +26,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 {
                     Label = Label,
                     Description = Description,
+                    DataPrinter = DataPrinter,
                     MaxValueDisplayLength = MaxValueDisplayLength,
                     SpacingSize = SpacingSize,
                     Numeric = Numeric?.Clone(),
@@ -41,6 +43,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
             Label = other.Label;
             Description = other.Description;
+            DataPrinter = other.DataPrinter;
             MaxValueDisplayLength = other.MaxValueDisplayLength;
             SpacingSize = other.SpacingSize;
             Numeric = other.Numeric?.Clone();

@@ -186,7 +186,18 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         protected virtual TData GetDefaultDataValue() => default(TData);
         protected virtual bool HasValue() => state.Data != null;
-        protected virtual Union<ReactElement, string> RenderData() => state.Data.ToString().EllipsizeIfNecessary(maxLength: state.DataViewConfig?.MaxValueDisplayLength ?? defaultMaxLength);
+        protected virtual Union<ReactElement, string> RenderData() 
+        { 
+            if(state.DataViewConfig?.DataPrinter != null)
+            {
+                OperationResult<Union<ReactElement, string>> printResult = state.DataViewConfig.DataPrinter.Invoke(state.Data);
+                if (printResult.IsSuccessful)
+                    return printResult.Payload;
+            }
+
+            return
+                state.Data.ToString().EllipsizeIfNecessary(maxLength: state.DataViewConfig?.MaxValueDisplayLength ?? defaultMaxLength);
+        }
         protected virtual string RenderTooltipText() => state.Data.ToString();
         protected virtual Type GetDataType() => state.DataType;
         protected virtual string GetDataTypeName() => GetDataType()?.Name ?? "Object";
