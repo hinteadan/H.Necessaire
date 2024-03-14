@@ -19,12 +19,6 @@
     <dependencies>
       <dependency id="H.Necessaire" version="2.34.13" />
       <dependency id="H.Necessaire.Runtime" version="2.34.13" />
-      <dependency id="Microsoft.AspNetCore.HttpsPolicy" version="2.2.0" />
-      <dependency id="Microsoft.AspNetCore.Mvc.Core" version="2.2.5" />
-      <dependency id="Microsoft.AspNetCore.Mvc.Cors" version="2.2.0" />
-      <dependency id="Microsoft.AspNetCore.Routing" version="2.2.2" />
-      <dependency id="Microsoft.AspNetCore.Routing.Abstractions" version="2.2.0" />
-      <dependency id="Microsoft.AspNetCore.StaticFiles" version="2.2.0" />
       <dependency id="Microsoft.Extensions.FileProviders.Physical" version="8.0.0" />
       <dependency id="Microsoft.Extensions.Hosting.Abstractions" version="8.0.0" />
       <dependency id="Microsoft.Extensions.Logging" version="8.0.0" />
