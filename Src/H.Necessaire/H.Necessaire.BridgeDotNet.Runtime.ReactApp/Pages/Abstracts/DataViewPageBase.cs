@@ -98,9 +98,11 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                         ClassName = "DataViewer-Chrome",
                     }
                     ,
-                    DataViewComponentFactory.BuildViewerFor<TData>(state.Data, x => x.CopyFrom(state.DataViewConfig))
+                    RenderViewer()
                 );
         }
+
+        protected virtual ReactElement RenderViewer() => DataViewComponentFactory.BuildViewerFor<TData>(state.Data, x => x.CopyFrom(state.DataViewConfig));
 
         protected virtual ReactElement RenderPageChrome(params Union<ReactElement, string>[] children)
         {
