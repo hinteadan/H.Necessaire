@@ -43,6 +43,7 @@
     <Compile Include="Daemons\Abstracts\DaemonBase.cs" />
     <Compile Include="Daemons\ConsolePingDaemon.cs" />
     <Compile Include="Daemons\DaemonsDependencyGroup.cs" />
+    <Compile Include="Pages\DataViewPage.cs" />
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
