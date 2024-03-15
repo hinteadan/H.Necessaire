@@ -195,7 +195,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                             OnClick = () => FlySafe(() => Navi.GoBack()),
                         }
                         ,
-                        "🔙 Back"
+                        "⬅️ Back"
                     )
                 );
         }
