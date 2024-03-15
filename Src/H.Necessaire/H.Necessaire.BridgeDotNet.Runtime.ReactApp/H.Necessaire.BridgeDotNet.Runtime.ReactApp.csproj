@@ -81,6 +81,7 @@
     <Compile Include="Components\Elements\LabeledContent.cs" />
     <Compile Include="Components\Elements\MarkdownView.cs" />
     <Compile Include="Components\Elements\OperationResultCard.cs" />
+    <Compile Include="Components\Elements\TimeoutProgressIndicator.cs" />
     <Compile Include="Components\Layout\CenteredContent.cs" />
     <Compile Include="Components\Layout\FabricUiGridColumn.cs" />
     <Compile Include="Components\Layout\FabricUiGridLayout.cs" />

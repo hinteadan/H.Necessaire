@@ -11,6 +11,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         where TState : DataViewPageState<TData>, new()
         where TProps : DataViewPageProps, new()
     {
+        #region Construct
         static readonly string[] dataIDParamNames = new string[] { "id", "ID", "Id", "dataID", "DataID", "dataId", "data-id" };
         ImAStorageService<TDataID, TData> dataStorageService;
         protected override void EnsureDependencies()
@@ -56,9 +57,120 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 });
             }
         }
+        #endregion
+
+
+        public override ReactElement Render()
+        {
+            return
+                RenderPageChrome(
+                    RenderPageLayout(
+                        RenderPreDataView()
+                        ,
+                        (
+                            state.IsLoadingData 
+                            ? RenderLoadingIndicator() 
+                            : RenderDataViewer()
+                        )
+                        ,
+                        RenderPostDataView()
+                        ,
+                        (
+                            state.OperationResult?.IsSuccessful == false
+                            ? RenderOperationResult()
+                            : null
+                        )
+                    )
+                );
+        }
+
+        protected virtual ReactElement RenderDataViewer()
+        {
+            return
+                DOM.Div(
+                    new Attributes
+                    {
+                        Style = new ReactStyle
+                        {
+
+                        }
+                        .FlexNode(isVerticalFlow: true),
+                        ClassName = "DataViewer-Chrome",
+                    }
+                    ,
+                    DataViewComponentFactory.BuildViewerFor<TData>(state.Data, x => x.CopyFrom(state.DataViewConfig))
+                );
+        }
+
+        protected virtual ReactElement RenderPageChrome(params Union<ReactElement, string>[] children)
+        {
+            return
+                new DefaultChrome(children);
+        }
+
+        protected virtual ReactElement RenderPageLayout(params Union<ReactElement, string>[] children)
+        {
+            return
+                new FormLayout(
+                    new FormLayout.Props
+                    {
+                        LayoutMode = FormLayoutMode.OnePerRow,
+                    }
+                    ,
+                    children
+                );
+        }        
+
+        protected virtual ReactElement RenderLoadingIndicator()
+        {
+            return
+                DOM.Div(
+                    new Attributes
+                    {
+                        Style = new ReactStyle
+                        {
+
+                        }
+                        .FlexNode(isVerticalFlow: true),
+                        ClassName = "LoadingIndicator-Chrome",
+                    }
+                    ,
+                    new TimeoutProgressIndicator(new TimeoutProgressIndicator.Props
+                    {
+                        Label = $"Loading {state.DataType?.Name ?? "[Unknown Data Type]"}...",
+                    })
+                );
+        }
+
+        protected virtual ReactElement RenderOperationResult()
+        {
+            if (state.OperationResult == null)
+                return null;
+
+            return
+                DOM.Div(
+                    new Attributes
+                    {
+                        Style = new ReactStyle
+                        {
+
+                        }
+                        .FlexNode(isVerticalFlow: true),
+                        ClassName = "OperationResult-Chrome",
+                    }
+                    ,
+                    new OperationResultCard(new OperationResultCard.Props { 
+                        OperationResult = state.OperationResult,
+                        Width = "100%",
+                    })
+                );
+        }
+
+        protected virtual ReactElement RenderPreDataView() => null;
+        protected virtual ReactElement RenderPostDataView() => null;
+
 
         protected virtual Task<DataViewConfig> GetDataViewConfig() => new DataViewConfig().AsTask();
-
         protected virtual OperationResult<TDataID> GetDataID()
         {
             if (props == null)
