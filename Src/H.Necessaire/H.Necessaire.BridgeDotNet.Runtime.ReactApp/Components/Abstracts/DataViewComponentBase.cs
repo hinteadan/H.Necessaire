@@ -206,7 +206,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         protected virtual string GetDataTypeName() => GetDataType()?.Name ?? "Object";
     }
 
-    public abstract class DataViewComponentState<TData> : ComponentStateBase
+    public class DataViewComponentState<TData> : ComponentStateBase
     {
         public TData Data { get; set; }
         public Type DataType { get; set; } = typeof(TData);
