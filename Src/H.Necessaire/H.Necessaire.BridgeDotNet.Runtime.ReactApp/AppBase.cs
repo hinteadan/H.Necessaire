@@ -515,7 +515,7 @@ p {
             if (prevContext == null && newContext == null)
                 return;
 
-            Navi.GoHome();
+            Navi.GoToIndex(returnTo: Window.Location.Hash.Substring(1));
         }
     }
 }

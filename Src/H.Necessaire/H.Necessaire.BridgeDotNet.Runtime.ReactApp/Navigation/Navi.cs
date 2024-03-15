@@ -19,6 +19,12 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         public static void GoHome()
             => Go(string.Empty);
 
+        public static void GoToIndex(string returnTo = null)
+            => Go(
+                    string.Empty,
+                    string.IsNullOrWhiteSpace(returnTo) ? null : $"?returnTo={Window.EncodeURIComponent(returnTo)}"
+                );
+
         public static void GoToUnauthorized(string pageRef = null)
             => Go(
                     "nogo",

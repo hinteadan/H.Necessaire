@@ -18,7 +18,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         {
             await base.Initialize();
 
-            state.ReturnTo = props.NavigationParams.GetValue<string>();
+            state.ReturnTo = props.NavigationParams?.GetValue<string>();
         }
 
         protected override void EnsureDependencies()
