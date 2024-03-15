@@ -3,7 +3,6 @@ using Bridge.Html5;
 using Bridge.jQuery2;
 using Bridge.React;
 using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Components;
-using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Core.Model.AppState.Abstract;
 using H.Necessaire.Models.Branding;
 using System;
 using System.Linq;
@@ -509,16 +508,14 @@ p {
 
         protected static async Task RestoreSecurityContextFromSessionIfAny()
         {
-            jQuery appContainer = jQuery.Select("#AppContainer");
+            SecurityContext prevContext = Get<SecurityContext>();
+            await Get<SecurityManager>().RestoreSecurityContextIfPossible();
+            SecurityContext newContext = Get<SecurityContext>();
 
-            using (new ScopedRunner(
-                onStart: () => appContainer.Hide(),
-                onStop: () => appContainer.Show()
-                ))
-            {
-                await Get<SecurityManager>().RestoreSecurityContextIfPossible();
-                Navi.GoHome();
-            }
+            if (prevContext == null && newContext == null)
+                return;
+
+            Navi.GoHome();
         }
     }
 }
