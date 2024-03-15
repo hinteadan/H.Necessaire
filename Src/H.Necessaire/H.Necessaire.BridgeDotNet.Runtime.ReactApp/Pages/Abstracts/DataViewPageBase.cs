@@ -104,4 +104,24 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     public class DataViewPageProps : PagePropsBase
     {
     }
+
+
+
+    public abstract class GuidIDDataViewPageBase<TData, TProps, TState>
+       : DataViewPageBase<TData, Guid, TProps, TState>
+       where TData : IDentityType<Guid>
+       where TState : DataViewPageState<TData>, new()
+       where TProps : DataViewPageProps, new()
+    {
+        protected GuidIDDataViewPageBase(TProps props, params Union<ReactElement, string>[] children) : base(props, children) { }
+    }
+
+    public abstract class StringIDDataViewPageBase<TData, TProps, TState>
+       : DataViewPageBase<TData, string, TProps, TState>
+       where TData : IDentityType<string>
+       where TState : DataViewPageState<TData>, new()
+       where TProps : DataViewPageProps, new()
+    {
+        protected StringIDDataViewPageBase(TProps props, params Union<ReactElement, string>[] children) : base(props, children) { }
+    }
 }
