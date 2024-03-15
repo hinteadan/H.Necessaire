@@ -31,6 +31,11 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                     string.IsNullOrWhiteSpace(pageRef) ? null : $"?ref={Window.EncodeURIComponent(pageRef)}"
                 );
 
+        public static void GoBack()
+        {
+            Window.History.Back();
+        }
+
         public static void ChangeDisplayedHash(params object[] pathAndQueryParts)
         {
             using (new ScopedRunner

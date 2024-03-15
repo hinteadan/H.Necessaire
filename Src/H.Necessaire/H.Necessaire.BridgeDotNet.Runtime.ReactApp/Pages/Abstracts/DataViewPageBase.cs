@@ -168,8 +168,37 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 );
         }
 
-        protected virtual ReactElement RenderPreDataView() => null;
-        protected virtual ReactElement RenderPostDataView() => null;
+        protected virtual ReactElement RenderPreDataView() 
+        {
+            string id = state.Data?.ID?.ToString()?.Trim();
+            if (id.IsEmpty())
+                return null;
+
+            return new Title($"{state.DataType?.Name ?? "[Unknown Data Type]"} - {id}");
+        }
+
+        protected virtual ReactElement RenderPostDataView()
+        {
+            return
+                DOM.Div(
+                    new Attributes
+                    {
+                        Style = new ReactStyle
+                        {
+
+                        }
+                        .FlexNode(isVerticalFlow: true),
+                    }
+                    ,
+                    new Button(
+                        new Button.Props {
+                            OnClick = () => FlySafe(() => Navi.GoBack()),
+                        }
+                        ,
+                        "🔙 Back"
+                    )
+                );
+        }
 
 
         protected virtual Task<DataViewConfig> GetDataViewConfig() => new DataViewConfig().AsTask();
