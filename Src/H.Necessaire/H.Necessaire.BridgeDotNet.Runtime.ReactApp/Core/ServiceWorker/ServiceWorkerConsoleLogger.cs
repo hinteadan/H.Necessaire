@@ -10,6 +10,11 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     [Module(ModuleType.UMD, nameof(HServiceWorker))]
     public static class ServiceWorkerConsoleLogger
     {
+        public static void LogDebug(object message)
+        {
+            Bridge.Script.Call("console.debug", message);
+        }
+
         public static void LogInfo(object message)
         {
             Bridge.Script.Call("console.info", message);
