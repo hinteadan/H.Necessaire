@@ -115,6 +115,7 @@
     <Compile Include="Core\Model\AppState\SecurityContextAppStateEntry.cs" />
     <Compile Include="Core\Model\Security\LoginCommand.cs" />
     <Compile Include="Core\Model\Security\RefreshAccessTokenCommand.cs" />
+    <Compile Include="Core\ExtendableEvent.cs" />
     <Compile Include="Core\ServiceWorker\ServiceWorker.cs" />
     <Compile Include="Core\ServiceWorker\ServiceWorkerConsoleLogger.cs" />
     <Compile Include="Core\ServiceWorker\ServiceWorkerContainer.cs" />

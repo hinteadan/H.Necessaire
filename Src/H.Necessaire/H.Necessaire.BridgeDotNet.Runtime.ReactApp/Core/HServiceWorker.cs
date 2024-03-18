@@ -8,39 +8,41 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     [Module(ModuleType.UMD, nameof(HServiceWorker))]
     public class HServiceWorker
     {
+        readonly VersionNumber versionNumber = new VersionNumber(0, 0, 0, null, "play-000001");
+
         ServiceWorkerGlobalScope serviceWorkerGlobalScope = null;
         HServiceWorker()
         {
             this.serviceWorkerGlobalScope = GetGlobalScopeIfAny();
         }
 
-        public static async void Main() => await (new HServiceWorker()).Run();
+        public static void Main() => (new HServiceWorker()).Run();
 
-        public async Task Run()
+        public void Run()
         {
             if (serviceWorkerGlobalScope == null)
-            {
-                ServiceWorkerConsoleLogger.LogInfo("serviceWorkerGlobalScope IS NULL");
                 return;
-            }
 
             new Action(() =>
             {
-                ServiceWorkerConsoleLogger.LogInfo("I'm inside the Service Worker");
-                if (serviceWorkerGlobalScope == null)
-                {
-                    ServiceWorkerConsoleLogger.LogInfo("serviceWorkerGlobalScope IS NULL");
-                    return;
-                }
-
-                
-                ServiceWorkerConsoleLogger.LogInfo(serviceWorkerGlobalScope);
-
+                serviceWorkerGlobalScope.AddEventListener("install", Install);
             })
             .TryOrFailWithGrace(onFail: ex =>
             {
                 ServiceWorkerConsoleLogger.LogError($"Error occurred while starting {nameof(HServiceWorker)}", ex);
             });
+        }
+
+
+        private void Install(ExtendableEvent @event)
+        {
+            ServiceWorkerConsoleLogger.LogInfo("Triggered install event");
+            ServiceWorkerConsoleLogger.LogInfo(@event);
+        }
+
+        private void Activate()
+        {
+
         }
 
 
