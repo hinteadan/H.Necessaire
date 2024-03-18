@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static Retyped.es5;
 
-namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp.Core
+namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     public static class UserAgentData
     {

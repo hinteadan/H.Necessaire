@@ -1,7 +1,7 @@
 ﻿using Bridge;
 using static Retyped.es5;
 
-namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp.Core
+namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     [External]
     [Name("navigator.clipboard")]

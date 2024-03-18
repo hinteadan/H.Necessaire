@@ -1,7 +1,7 @@
 ﻿using Bridge;
 using System;
 
-namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp.Core
+namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     /// <summary>
     /// https://marked.js.org/

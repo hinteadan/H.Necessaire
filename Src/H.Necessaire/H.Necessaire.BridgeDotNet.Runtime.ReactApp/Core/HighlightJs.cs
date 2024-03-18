@@ -1,6 +1,6 @@
 ﻿using Bridge;
 
-namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp.Core
+namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     [External]
     [Name("hljs")]

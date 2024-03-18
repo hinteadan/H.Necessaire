@@ -2,7 +2,7 @@
 using static Retyped.es5;
 using static Retyped.dom;
 
-namespace H.Necessaire.BridgeDotNet.Runtime
+namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     //https://developer.mozilla.org/en-US/docs/Web/API/FontFaceSet
     [External]
