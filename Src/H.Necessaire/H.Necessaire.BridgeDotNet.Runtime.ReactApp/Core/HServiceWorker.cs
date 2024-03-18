@@ -27,6 +27,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             new Action(() =>
             {
                 serviceWorkerGlobalScope.addEventListener("install", Install);
+                serviceWorkerGlobalScope.addEventListener("fetch", HandleFetch);
             })
             .TryOrFailWithGrace(onFail: ex =>
             {
@@ -34,6 +35,10 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             });
         }
 
+        private async void HandleFetch(Event @event)
+        {
+            FetchEvent installEvent = @event.As<ExtendableEvent>();
+        }
 
         private async void Install(Event @event)
         {

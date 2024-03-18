@@ -101,6 +101,7 @@
     <Compile Include="Core\DataPrinter.cs" />
     <Compile Include="Core\CoreDependencyGroup.cs" />
     <Compile Include="Core\Extensions.cs" />
+    <Compile Include="Core\FetchEvent.cs" />
     <Compile Include="Core\FontFaceSet.cs" />
     <Compile Include="Core\HighlightJs.cs" />
     <Compile Include="Core\HServiceWorker.cs" />
