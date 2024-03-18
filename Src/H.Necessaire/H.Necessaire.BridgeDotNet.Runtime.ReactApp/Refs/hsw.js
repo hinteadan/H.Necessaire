@@ -1,5 +1,7 @@
 ﻿//H's Service Worker bootstrapper
 
+const $$serviceWorkerGlobalScope = self || this;
+
 importScripts(
     'bridge.js',
     'bridge.meta.js',
@@ -9,5 +11,3 @@ importScripts(
 );
 
 importScripts('HServiceWorker.js');
-
-(new HServiceWorker.H.Necessaire.BridgeDotNet.Runtime.ReactApp.HServiceWorker()).Main();
