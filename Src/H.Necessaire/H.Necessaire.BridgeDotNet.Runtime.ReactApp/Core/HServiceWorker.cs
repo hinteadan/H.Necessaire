@@ -35,20 +35,39 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         }
 
 
-        private void Install(Event @event)
+        private async void Install(Event @event)
         {
-            ExtendableEvent installEvent = @event.As<ExtendableEvent>();
+            //ExtendableEvent installEvent = @event.As<ExtendableEvent>();
 
-            ServiceWorkerConsoleLogger.LogInfo("Triggered install event");
-            ServiceWorkerConsoleLogger.LogInfo(installEvent);
+            await AddResourcesToCache();
 
-            ServiceWorkerConsoleLogger.LogInfo("Cache Store");
-            ServiceWorkerConsoleLogger.LogInfo(serviceWorkerGlobalScope.CacheStore);
         }
 
         private void Activate()
         {
 
+        }
+
+        private async Task AddResourcesToCache()
+        {
+            ServiceWorkerCache cacher = await serviceWorkerGlobalScope.CacheStore.Open($"H.Necessaire.Cache-{versionNumber}").ToTask();
+            await cacher.AddAll(new string[] {
+                "/bridge.js",
+                "/bridge.meta.js",
+                "/newtonsoft.json.js",
+                "/ProductiveRage.Immutable.js",
+                "/ProductiveRage.Immutable.meta.js",
+                "/H.Necessaire.BridgeDotNet.js",
+                "/H.Necessaire.BridgeDotNet.meta.js",
+                "/Bridge.React.js",
+                "/Bridge.React.meta.js",
+                "/jquery-2.2.4.js",
+                "/productiveRage.immutable.extensions.js",
+                "/productiveRage.immutable.extensions.meta.js",
+                "/ProductiveRage.ReactRouting.js",
+                "/ProductiveRage.ReactRouting.meta.js",
+                "/H.Necessaire.BridgeDotNet.Runtime.ReactApp.js",
+            }).ToTask();
         }
 
 
