@@ -1,6 +1,7 @@
 ﻿using Bridge;
 using System;
 using System.Threading.Tasks;
+using static Retyped.dom;
 using static Retyped.es5;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
@@ -25,7 +26,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
             new Action(() =>
             {
-                serviceWorkerGlobalScope.AddEventListener("install", Install);
+                serviceWorkerGlobalScope.addEventListener("install", Install);
             })
             .TryOrFailWithGrace(onFail: ex =>
             {
@@ -34,10 +35,12 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         }
 
 
-        private void Install(ExtendableEvent @event)
+        private void Install(Event @event)
         {
+            ExtendableEvent installEvent = @event.As<ExtendableEvent>();
+
             ServiceWorkerConsoleLogger.LogInfo("Triggered install event");
-            ServiceWorkerConsoleLogger.LogInfo(@event);
+            ServiceWorkerConsoleLogger.LogInfo(installEvent);
         }
 
         private void Activate()
