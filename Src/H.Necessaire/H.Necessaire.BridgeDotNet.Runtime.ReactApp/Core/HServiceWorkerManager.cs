@@ -7,14 +7,18 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     [Module(ModuleType.UMD, nameof(HServiceWorkerManager))]
     public class HServiceWorkerManager
     {
+        public static bool IsWebWorker => Bridge.Html5.Window.Document["isWebWorkerContext"] != null;
+
         public HServiceWorkerManager()
         {
 
         }
 
-        [Init]
         public static void Main()
         {
+            if (IsWebWorker)
+                return;
+
             new Action(() =>
             {
                 ServiceWorkerContainer
