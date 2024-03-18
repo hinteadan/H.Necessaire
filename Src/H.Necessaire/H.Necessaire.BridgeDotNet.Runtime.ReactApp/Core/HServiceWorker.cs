@@ -12,9 +12,11 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         readonly VersionNumber versionNumber = new VersionNumber(0, 0, 0, null, "play-000001");
 
         ServiceWorkerGlobalScope serviceWorkerGlobalScope = null;
+        Func<dynamic, Promise<dynamic>> fetcher = null;
         HServiceWorker()
         {
             this.serviceWorkerGlobalScope = GetGlobalScopeIfAny();
+            this.fetcher = GetFetcher();
         }
 
         public static void Main() => (new HServiceWorker()).Run();
@@ -43,7 +45,20 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
             ServiceWorkerCache cacher = await serviceWorkerGlobalScope.CacheStore.Open($"H.Necessaire.Cache-{versionNumber}").ToTask();
 
-            var cachedResponse = await cacher.Match(fetchEvent.);
+            dynamic cachedResponse = await (cacher.Match(fetchEvent.Request).ToTask());
+            if (cachedResponse != null)
+            {
+                ServiceWorkerConsoleLogger.LogInfo("Responding from cache");
+                ServiceWorkerConsoleLogger.LogInfo(cachedResponse);
+                fetchEvent.RespondWith(cachedResponse);
+                return;
+            }
+
+            ServiceWorkerConsoleLogger.LogInfo("Responding from network");
+            dynamic response = await fetcher(fetchEvent.Request).ToTask();
+            ServiceWorkerConsoleLogger.LogInfo(cachedResponse);
+
+            fetchEvent.RespondWith(response);
         }
 
         private async void Install(Event @event)
@@ -86,6 +101,21 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             new Action(() =>
             {
                 result = Bridge.Script.Get<ServiceWorkerGlobalScope>("$$serviceWorkerGlobalScope");
+            })
+            .TryOrFailWithGrace(
+                onFail: ex => result = null
+            );
+
+            return result;
+        }
+
+        private static Func<dynamic, Promise<dynamic>> GetFetcher()
+        {
+            Func<dynamic, Promise<dynamic>> result = null;
+
+            new Action(() =>
+            {
+                result = Bridge.Script.Get<Func<dynamic, Promise<dynamic>>>("$$fetcher");
             })
             .TryOrFailWithGrace(
                 onFail: ex => result = null

@@ -1,6 +1,7 @@
 ﻿//H's Service Worker bootstrapper
 
 const $$serviceWorkerGlobalScope = self || this;
+const $$fetcher = fetch;
 
 importScripts(
     'bridge.js',
