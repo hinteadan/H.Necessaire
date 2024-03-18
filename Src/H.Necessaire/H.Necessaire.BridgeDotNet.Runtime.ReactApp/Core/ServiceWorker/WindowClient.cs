@@ -28,7 +28,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         [External]
         [Name("frameType")]
-        public static extern string SrameType { get; }
+        public static extern string FrameType { get; }
 
         [External]
         [Name("focus")]
