@@ -41,6 +41,9 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
             ServiceWorkerConsoleLogger.LogInfo("Triggered install event");
             ServiceWorkerConsoleLogger.LogInfo(installEvent);
+
+            ServiceWorkerConsoleLogger.LogInfo("Cache Store");
+            ServiceWorkerConsoleLogger.LogInfo(serviceWorkerGlobalScope.CacheStore);
         }
 
         private void Activate()

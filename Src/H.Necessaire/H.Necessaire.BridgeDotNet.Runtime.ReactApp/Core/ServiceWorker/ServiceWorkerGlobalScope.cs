@@ -8,6 +8,10 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     public class ServiceWorkerGlobalScope : WorkerGlobalScope
     {
         [External]
+        [Name("caches")]
+        public extern ServiceWorkerCacheStorage CacheStore { get; }
+
+        [External]
         [Name("clients")]
         public static extern ServiceWorkerClients Clients { get; }
 
