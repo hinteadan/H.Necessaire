@@ -9,10 +9,10 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     [Module(ModuleType.UMD, nameof(HServiceWorker))]
     public class HServiceWorker
     {
-        readonly VersionNumber versionNumber = new VersionNumber(0, 0, 0, null, "play-000001");
+        readonly VersionNumber versionNumber = new VersionNumber(0, 0, 0, null, "play-000003");
 
         ServiceWorkerGlobalScope serviceWorkerGlobalScope = null;
-        Func<dynamic, Promise<dynamic>> fetcher = null;
+        Func<object, Promise<object>> fetcher = null;
         HServiceWorker()
         {
             this.serviceWorkerGlobalScope = GetGlobalScopeIfAny();
@@ -43,9 +43,10 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             ServiceWorkerConsoleLogger.LogInfo("Fetch event");
             ServiceWorkerConsoleLogger.LogInfo(fetchEvent);
 
-            ServiceWorkerCache cacher = await serviceWorkerGlobalScope.CacheStore.Open($"H.Necessaire.Cache-{versionNumber}").ToTask();
+            //string cacheID = "v1";
+            //ServiceWorkerCache cacher = await serviceWorkerGlobalScope.CacheStore.Open(cacheID).ToAsync();
 
-            dynamic cachedResponse = await (cacher.Match(fetchEvent.Request).ToTask());
+            object cachedResponse = await (serviceWorkerGlobalScope.CacheStore.Match(fetchEvent.Request).ToAsync());
             if (cachedResponse != null)
             {
                 ServiceWorkerConsoleLogger.LogInfo("Responding from cache");
@@ -55,7 +56,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             }
 
             ServiceWorkerConsoleLogger.LogInfo("Responding from network");
-            dynamic response = await fetcher(fetchEvent.Request).ToTask();
+            object response = await fetcher(fetchEvent.Request).ToAsync();
             ServiceWorkerConsoleLogger.LogInfo(cachedResponse);
 
             fetchEvent.RespondWith(response);
@@ -73,7 +74,10 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         private async Task AddResourcesToCache()
         {
-            ServiceWorkerCache cacher = await serviceWorkerGlobalScope.CacheStore.Open($"H.Necessaire.Cache-{versionNumber}").ToTask();
+            ServiceWorkerConsoleLogger.LogInfo("AddResourcesToCache");
+            string cacheID = "v1";
+            ServiceWorkerCache cacher = await serviceWorkerGlobalScope.CacheStore.Open(cacheID).ToAsync();
+            ServiceWorkerConsoleLogger.LogInfo(cacher);
             await cacher.AddAll(new string[] {
                 "/bridge.js",
                 "/bridge.meta.js",
@@ -90,7 +94,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 "/ProductiveRage.ReactRouting.js",
                 "/ProductiveRage.ReactRouting.meta.js",
                 "/H.Necessaire.BridgeDotNet.Runtime.ReactApp.js",
-            }).ToTask();
+            }).ToAsync();
         }
 
 
@@ -109,13 +113,13 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             return result;
         }
 
-        private static Func<dynamic, Promise<dynamic>> GetFetcher()
+        private static Func<object, Promise<object>> GetFetcher()
         {
-            Func<dynamic, Promise<dynamic>> result = null;
+            Func<object, Promise<object>> result = null;
 
             new Action(() =>
             {
-                result = Bridge.Script.Get<Func<dynamic, Promise<dynamic>>>("$$fetcher");
+                result = Bridge.Script.Get<Func<object, Promise<object>>>("$$fetcher");
             })
             .TryOrFailWithGrace(
                 onFail: ex => result = null

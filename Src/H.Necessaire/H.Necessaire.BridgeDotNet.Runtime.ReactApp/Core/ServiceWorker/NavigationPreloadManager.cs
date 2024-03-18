@@ -18,7 +18,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         //https://developer.mozilla.org/en-US/docs/Web/API/NavigationPreloadManager/getState
         [External]
         [Name("getState")]
-        public extern Promise<dynamic> GetState();
+        public extern Promise<object> GetState();
 
         [External]
         [Name("setHeaderValue")]

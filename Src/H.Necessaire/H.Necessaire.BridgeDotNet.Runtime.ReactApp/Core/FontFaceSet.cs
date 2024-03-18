@@ -22,7 +22,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         [External]
         [Name("add")]
-        public extern FontFaceSet Add(dynamic fontFace);
+        public extern FontFaceSet Add(object fontFace);
 
     }
 }

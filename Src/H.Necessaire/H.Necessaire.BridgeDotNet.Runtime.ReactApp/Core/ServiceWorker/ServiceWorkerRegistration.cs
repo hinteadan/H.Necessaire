@@ -25,7 +25,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         [External]
         [Name("pushManager")]
-        public extern dynamic PushManager { get; }
+        public extern object PushManager { get; }
 
         [External]
         [Name("scope")]
@@ -38,12 +38,12 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         //https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/getNotifications
         [External]
         [Name("getNotifications")]
-        public extern Promise<dynamic> GetNotifications(dynamic options = null);
+        public extern Promise<object> GetNotifications(object options = null);
 
         //https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/showNotification
         [External]
         [Name("showNotification")]
-        public extern Promise<object> ShowNotification(string title, dynamic options = null);
+        public extern Promise<object> ShowNotification(string title, object options = null);
 
         [External]
         [Name("unregister")]

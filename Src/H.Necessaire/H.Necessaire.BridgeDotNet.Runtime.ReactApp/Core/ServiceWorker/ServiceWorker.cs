@@ -16,7 +16,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         [External]
         [Name("postMessage")]
-        public extern void PostMessage(dynamic message, dynamic optionsOrTransferables);
+        public extern void PostMessage(object message, object optionsOrTransferables);
         //https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorker/postMessage
     }
 }

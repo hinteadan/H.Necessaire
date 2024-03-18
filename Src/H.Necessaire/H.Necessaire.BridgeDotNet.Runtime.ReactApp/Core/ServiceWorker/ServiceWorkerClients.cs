@@ -20,7 +20,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         [External]
         [Name("matchAll")]
-        public extern Promise<ServiceWorkerClient[]> MatchAll(dynamic options);
+        public extern Promise<ServiceWorkerClient[]> MatchAll(object options);
         //https://developer.mozilla.org/en-US/docs/Web/API/Clients/matchAll#includeuncontrolled
 
         [External]

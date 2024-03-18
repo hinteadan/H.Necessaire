@@ -15,7 +15,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         //https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register
         [External]
         [Name("register")]
-        public static extern Promise<ServiceWorkerRegistration> Register(string scriptURL, dynamic options);
+        public static extern Promise<ServiceWorkerRegistration> Register(string scriptURL, object options);
 
 
         [External]
