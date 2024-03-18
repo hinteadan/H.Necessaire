@@ -117,6 +117,8 @@
     <Compile Include="Core\Model\Security\LoginCommand.cs" />
     <Compile Include="Core\Model\Security\RefreshAccessTokenCommand.cs" />
     <Compile Include="Core\ExtendableEvent.cs" />
+    <Compile Include="Core\ServiceWorker\ServiceWorkerCache.cs" />
+    <Compile Include="Core\ServiceWorker\ServiceWorkerCacheStorage.cs" />
     <Compile Include="Core\ServiceWorker\NavigationPreloadManager.cs" />
     <Compile Include="Core\ServiceWorker\ServiceWorker.cs" />
     <Compile Include="Core\ServiceWorker\ServiceWorkerClient.cs" />
