@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bridge;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
+    [Module(ModuleType.UMD, nameof(HServiceWorker))]
     public static class ServiceWorkerConsoleLogger
     {
         public static void LogInfo(object message)

@@ -1,10 +1,6 @@
 ﻿//H's Service Worker bootstrapper
 
-const serviceWorkerGlobalScope = this;
-
-console.info(this);
-console.info(self);
-console.info(serviceWorkerGlobalScope);
+const $$serviceWorkerGlobalScope = self || this;
 
 importScripts(
     'bridge.js',

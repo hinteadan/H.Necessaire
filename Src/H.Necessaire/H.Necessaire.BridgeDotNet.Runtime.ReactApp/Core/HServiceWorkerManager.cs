@@ -4,7 +4,6 @@ using static Retyped.es5;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
-    [Module(ModuleType.UMD, nameof(HServiceWorkerManager))]
     public class HServiceWorkerManager
     {
         public static bool IsWebWorker => Bridge.Html5.Window.Document["isWebWorkerContext"] != null;

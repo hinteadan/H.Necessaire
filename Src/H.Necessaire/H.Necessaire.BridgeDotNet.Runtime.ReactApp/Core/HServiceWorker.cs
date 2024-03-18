@@ -11,13 +11,19 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         ServiceWorkerGlobalScope serviceWorkerGlobalScope = null;
         HServiceWorker()
         {
-            serviceWorkerGlobalScope = GetGlobalScopeIfAny();
+            this.serviceWorkerGlobalScope = GetGlobalScopeIfAny();
         }
 
-        [Init] public static async void Main() => await new HServiceWorker().Run();
+        public static async void Main() => await (new HServiceWorker()).Run();
 
         public async Task Run()
         {
+            if (serviceWorkerGlobalScope == null)
+            {
+                ServiceWorkerConsoleLogger.LogInfo("serviceWorkerGlobalScope IS NULL");
+                return;
+            }
+
             new Action(() =>
             {
                 ServiceWorkerConsoleLogger.LogInfo("I'm inside the Service Worker");
@@ -40,17 +46,17 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         private static ServiceWorkerGlobalScope GetGlobalScopeIfAny()
         {
-            ServiceWorkerGlobalScope serviceWorkerGlobalScope = null;
+            ServiceWorkerGlobalScope result = null;
 
             new Action(() =>
             {
-                serviceWorkerGlobalScope = Bridge.Script.Get<ServiceWorkerGlobalScope>("serviceWorkerGlobalScope");
+                result = Bridge.Script.Get<ServiceWorkerGlobalScope>("$$serviceWorkerGlobalScope");
             })
             .TryOrFailWithGrace(
-                onFail: ex => serviceWorkerGlobalScope = null
+                onFail: ex => result = null
             );
 
-            return serviceWorkerGlobalScope;
+            return result;
         }
     }
 }
