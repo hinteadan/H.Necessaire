@@ -103,6 +103,7 @@
     <Compile Include="Core\Extensions.cs" />
     <Compile Include="Core\HighlightJs.cs" />
     <Compile Include="Core\HServiceWorker.cs" />
+    <Compile Include="Core\HServiceWorkerManager.cs" />
     <Compile Include="Core\HttpClient.cs" />
     <Compile Include="Core\Infrastructure\Abstracts\ImAWebWorkerDaemonAction.cs" />
     <Compile Include="Core\Infrastructure\Abstracts\WebWorkerDaemonBase.cs" />
@@ -244,6 +245,7 @@
     <Content Include="Refs\highlightjs\stackoverflow-light.min.css" />
     <Content Include="Refs\highlightjs\vs.min.css" />
     <Content Include="Refs\highlightjs\vs2015.min.css" />
+    <Content Include="Refs\hsw.js" />
     <Content Include="Refs\marked.min.js" />
     <Content Include="Refs\react-dom.production.min.js" />
     <Content Include="Refs\react.production.min.js" />

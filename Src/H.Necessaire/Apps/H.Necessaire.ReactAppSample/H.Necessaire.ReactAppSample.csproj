@@ -108,6 +108,7 @@
     <Content Include="Refs\highlightjs\stackoverflow-light.min.css" />
     <Content Include="Refs\highlightjs\vs.min.css" />
     <Content Include="Refs\highlightjs\vs2015.min.css" />
+    <Content Include="Refs\hsw.js" />
     <Content Include="Refs\marked.min.js" />
     <Content Include="Refs\react-dom.production.min.js" />
     <Content Include="Refs\react.production.min.js" />

@@ -1,31 +1,39 @@
 ﻿using Bridge;
-using Bridge.Html5;
 using System;
 using static Retyped.es5;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
-    [Module(ModuleType.UMD, "HServiceWorker")]
+    [Module(ModuleType.UMD, nameof(HServiceWorker), ExportAsNamespace = "")]
     public class HServiceWorker
     {
-        public HServiceWorker()
-        {
+        [External]
+        [Name("self")]
+        protected extern static dynamic Self { get; }
 
-        }
+        [External]
+        [Name("caches")]
+        protected extern static dynamic Caches { get; }
 
-        [Init]
         public static void Main()
         {
             new Action(() =>
             {
-                LogInfo("Service worker controller");
-                LogInfo(ServiceWorkerContainer.Controller);
+
+
+                if (Self == null)
+                    return;
+
+                LogInfo("I'm inside the Service Worker");
+                LogInfo(Self);
+
             })
             .TryOrFailWithGrace(onFail: ex =>
             {
-                LogError("Error occurred while initializing HServiceWorker", ex);
+                LogError($"Error occurred while starting {nameof(HServiceWorker)}", ex);
             });
         }
+
 
         private static void LogInfo(object message)
         {
@@ -53,42 +61,5 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
             Bridge.Script.Call("console.error", $"{message}. Message: {ex.Message}.{Environment.NewLine}{Environment.NewLine}{ex}");
         }
-    }
-
-    [External]
-    [Name("window.navigator.serviceWorker")]
-    public class ServiceWorkerContainer
-    {
-        [External]
-        [Name("getRegistration")]
-        public static extern Promise<ServiceWorkerRegistration> GetRegistration();
-
-        [External]
-        [Name("getRegistration")]
-        public static extern Promise<ServiceWorkerRegistration> GetRegistration(string clientURL);
-
-        [External]
-        [Name("getRegistrations")]
-        public static extern Promise<ServiceWorkerRegistration[]> GetRegistrations();
-
-        [External]
-        [Name("controller")]
-        public static extern ServiceWorker Controller { get; }
-
-        [External]
-        [Name("ready")]
-        public static extern Promise<ServiceWorkerRegistration> Ready { get; }
-    }
-
-    [External]
-    public class ServiceWorker
-    {
-
-    }
-
-    [External]
-    public class ServiceWorkerRegistration
-    {
-
     }
 }
