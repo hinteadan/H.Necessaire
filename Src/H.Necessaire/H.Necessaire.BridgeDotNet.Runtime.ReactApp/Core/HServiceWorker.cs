@@ -4,62 +4,30 @@ using static Retyped.es5;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
-    [Module(ModuleType.UMD, nameof(HServiceWorker), ExportAsNamespace = "")]
+    [Module(ModuleType.UMD, nameof(HServiceWorker), preventModuleName: true)]
     public class HServiceWorker
     {
-        [External]
-        [Name("self")]
-        protected extern static dynamic Self { get; }
+        readonly ServiceWorkerGlobalScope serviceWorkerGlobalScope;
+        HServiceWorker()
+        {
+            serviceWorkerGlobalScope = Bridge.Script.Eval<ServiceWorkerGlobalScope>("serviceWorkerGlobalScope");
+        }
 
-        [External]
-        [Name("caches")]
-        protected extern static dynamic Caches { get; }
-
-        public static void Main()
+        public void Run()
         {
             new Action(() =>
             {
-
-
-                if (Self == null)
+                if (serviceWorkerGlobalScope == null)
                     return;
 
-                LogInfo("I'm inside the Service Worker");
-                LogInfo(Self);
+                ServiceWorkerConsoleLogger.LogInfo("I'm inside the Service Worker");
+                ServiceWorkerConsoleLogger.LogInfo(serviceWorkerGlobalScope);
 
             })
             .TryOrFailWithGrace(onFail: ex =>
             {
-                LogError($"Error occurred while starting {nameof(HServiceWorker)}", ex);
+                ServiceWorkerConsoleLogger.LogError($"Error occurred while starting {nameof(HServiceWorker)}", ex);
             });
-        }
-
-
-        private static void LogInfo(object message)
-        {
-            Bridge.Script.Call("console.info", message);
-        }
-
-        private static void LogWarning(string message, Exception ex = null)
-        {
-            if (ex == null)
-            {
-                Bridge.Script.Call("console.warn", message);
-                return;
-            }
-
-            Bridge.Script.Call("console.warn", $"{message}. Message: {ex.Message}.{Environment.NewLine}{Environment.NewLine}{ex}");
-        }
-
-        private static void LogError(string message, Exception ex = null)
-        {
-            if (ex == null)
-            {
-                Bridge.Script.Call("console.error", message);
-                return;
-            }
-
-            Bridge.Script.Call("console.error", $"{message}. Message: {ex.Message}.{Environment.NewLine}{Environment.NewLine}{ex}");
         }
     }
 }

@@ -115,6 +115,11 @@
     <Compile Include="Core\Model\AppState\SecurityContextAppStateEntry.cs" />
     <Compile Include="Core\Model\Security\LoginCommand.cs" />
     <Compile Include="Core\Model\Security\RefreshAccessTokenCommand.cs" />
+    <Compile Include="Core\ServiceWorker\ServiceWorker.cs" />
+    <Compile Include="Core\ServiceWorker\ServiceWorkerConsoleLogger.cs" />
+    <Compile Include="Core\ServiceWorker\ServiceWorkerContainer.cs" />
+    <Compile Include="Core\ServiceWorker\ServiceWorkerGlobalScope.cs" />
+    <Compile Include="Core\ServiceWorker\ServiceWorkerRegistration.cs" />
     <Compile Include="Core\Storage\Abstract\ImAnIndexedDBStorage.cs" />
     <Compile Include="Core\Storage\Abstract\IndexedDBStorageBase.cs" />
     <Compile Include="Core\Storage\AppStateIndexedDBStorage.cs" />

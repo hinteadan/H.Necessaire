@@ -1,5 +1,7 @@
 ﻿//H's Service Worker bootstrapper
 
+const serviceWorkerGlobalScope = self;
+
 importScripts(
     'bridge.js',
     'bridge.meta.js',
