@@ -12,4 +12,4 @@ importScripts(
     'H.Necessaire.BridgeDotNet.meta.js'
 );
 
-//importScripts('HServiceWorker.js');
+importScripts('HServiceWorker.js');
