@@ -91,6 +91,45 @@
     <None Include="Refs\webfonts\fa-solid-900.woff2" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\H.Necessaire.BridgeDotNet.Runtime.ReactApp\Refs\dexie.js">
+      <Link>Refs\dexie.js</Link>
+    </Content>
+    <Content Include="..\..\H.Necessaire.BridgeDotNet.Runtime.ReactApp\Refs\fa.all.min.css">
+      <Link>Refs\fa.all.min.css</Link>
+    </Content>
+    <Content Include="..\..\H.Necessaire.BridgeDotNet.Runtime.ReactApp\Refs\fabric.min.css">
+      <Link>Refs\fabric.min.css</Link>
+    </Content>
+    <Content Include="..\..\H.Necessaire.BridgeDotNet.Runtime.ReactApp\Refs\highlightjs\github-dark-dimmed.min.css">
+      <Link>Refs\highlightjs\github-dark-dimmed.min.css</Link>
+    </Content>
+    <Content Include="..\..\H.Necessaire.BridgeDotNet.Runtime.ReactApp\Refs\highlightjs\highlight.min.css">
+      <Link>Refs\highlightjs\highlight.min.css</Link>
+    </Content>
+    <Content Include="..\..\H.Necessaire.BridgeDotNet.Runtime.ReactApp\Refs\highlightjs\highlight.min.js">
+      <Link>Refs\highlightjs\highlight.min.js</Link>
+    </Content>
+    <Content Include="..\..\H.Necessaire.BridgeDotNet.Runtime.ReactApp\Refs\highlightjs\stackoverflow-light.min.css">
+      <Link>Refs\highlightjs\stackoverflow-light.min.css</Link>
+    </Content>
+    <Content Include="..\..\H.Necessaire.BridgeDotNet.Runtime.ReactApp\Refs\highlightjs\vs.min.css">
+      <Link>Refs\highlightjs\vs.min.css</Link>
+    </Content>
+    <Content Include="..\..\H.Necessaire.BridgeDotNet.Runtime.ReactApp\Refs\highlightjs\vs2015.min.css">
+      <Link>Refs\highlightjs\vs2015.min.css</Link>
+    </Content>
+    <Content Include="..\..\H.Necessaire.BridgeDotNet.Runtime.ReactApp\Refs\hsw.js">
+      <Link>Refs\hsw.js</Link>
+    </Content>
+    <Content Include="..\..\H.Necessaire.BridgeDotNet.Runtime.ReactApp\Refs\marked.min.js">
+      <Link>Refs\marked.min.js</Link>
+    </Content>
+    <Content Include="..\..\H.Necessaire.BridgeDotNet.Runtime.ReactApp\Refs\react-dom.production.min.js">
+      <Link>Refs\react-dom.production.min.js</Link>
+    </Content>
+    <Content Include="..\..\H.Necessaire.BridgeDotNet.Runtime.ReactApp\Refs\react.production.min.js">
+      <Link>Refs\react.production.min.js</Link>
+    </Content>
     <Content Include="AppIcon\about.txt" />
     <Content Include="AppIcon\android-chrome-192x192.png" />
     <Content Include="AppIcon\android-chrome-512x512.png" />
@@ -98,20 +137,7 @@
     <Content Include="AppIcon\favicon-16x16.png" />
     <Content Include="AppIcon\favicon-32x32.png" />
     <Content Include="AppIcon\favicon.ico" />
-    <Content Include="Refs\dexie.js" />
-    <Content Include="Refs\fa.all.min.css" />
-    <Content Include="Refs\fabric.min.css" />
     <Content Include="Refs\FiraCode\fira_code.css" />
-    <Content Include="Refs\highlightjs\github-dark-dimmed.min.css" />
-    <Content Include="Refs\highlightjs\highlight.min.css" />
-    <Content Include="Refs\highlightjs\highlight.min.js" />
-    <Content Include="Refs\highlightjs\stackoverflow-light.min.css" />
-    <Content Include="Refs\highlightjs\vs.min.css" />
-    <Content Include="Refs\highlightjs\vs2015.min.css" />
-    <Content Include="Refs\hsw.js" />
-    <Content Include="Refs\marked.min.js" />
-    <Content Include="Refs\react-dom.production.min.js" />
-    <Content Include="Refs\react.production.min.js" />
     <Content Include="Refs\webfonts\fa-brands-400.svg" />
     <Content Include="Refs\webfonts\fa-regular-400.svg" />
     <Content Include="Refs\webfonts\fa-solid-900.svg" />
