@@ -13,15 +13,15 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         [External]
         [Name("clients")]
-        public static extern ServiceWorkerClients Clients { get; }
+        public extern ServiceWorkerClients Clients { get; }
 
         [External]
         [Name("registration")]
-        public static extern ServiceWorkerRegistration Registration { get; }
+        public extern ServiceWorkerRegistration Registration { get; }
 
         [External]
         [Name("serviceWorker")]
-        public static extern ServiceWorker ServiceWorker { get; }
+        public extern ServiceWorker ServiceWorker { get; }
 
         [External]
         [Name("skipWaiting")]

@@ -9,31 +9,31 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     {
         [External]
         [Name("active")]
-        public static extern ServiceWorker ActiveServiceWorker { get; }
+        public extern ServiceWorker ActiveServiceWorker { get; }
 
         [External]
         [Name("installing")]
-        public static extern ServiceWorker InstallingServiceWorker { get; }
+        public extern ServiceWorker InstallingServiceWorker { get; }
 
         [External]
         [Name("waiting")]
-        public static extern ServiceWorker WaitingServiceWorker { get; }
+        public extern ServiceWorker WaitingServiceWorker { get; }
 
         [External]
         [Name("navigationPreload")]
-        public static extern NavigationPreloadManager NavigationPreloadManager { get; }
+        public extern NavigationPreloadManager NavigationPreloadManager { get; }
 
         [External]
         [Name("pushManager")]
-        public static extern dynamic PushManager { get; }
+        public extern dynamic PushManager { get; }
 
         [External]
         [Name("scope")]
-        public static extern string Scope { get; }
+        public extern string Scope { get; }
 
         [External]
         [Name("updateViaCache")]
-        public static extern string UpdateViaCache { get; }
+        public extern string UpdateViaCache { get; }
 
         //https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/getNotifications
         [External]
@@ -47,10 +47,10 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         [External]
         [Name("unregister")]
-        public static extern Promise<bool> Unregister();
+        public extern Promise<bool> Unregister();
 
         [External]
         [Name("update")]
-        public static extern Promise<ServiceWorkerRegistration> Update();
+        public extern Promise<ServiceWorkerRegistration> Update();
     }
 }

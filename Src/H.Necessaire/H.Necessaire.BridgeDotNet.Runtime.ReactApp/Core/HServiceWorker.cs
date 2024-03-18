@@ -37,15 +37,18 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         private async void HandleFetch(Event @event)
         {
-            FetchEvent installEvent = @event.As<ExtendableEvent>();
+            FetchEvent fetchEvent = @event.As<FetchEvent>();
+            ServiceWorkerConsoleLogger.LogInfo("Fetch event");
+            ServiceWorkerConsoleLogger.LogInfo(fetchEvent);
+
+            ServiceWorkerCache cacher = await serviceWorkerGlobalScope.CacheStore.Open($"H.Necessaire.Cache-{versionNumber}").ToTask();
+
+            var cachedResponse = await cacher.Match(fetchEvent.);
         }
 
         private async void Install(Event @event)
         {
-            //ExtendableEvent installEvent = @event.As<ExtendableEvent>();
-
             await AddResourcesToCache();
-
         }
 
         private void Activate()

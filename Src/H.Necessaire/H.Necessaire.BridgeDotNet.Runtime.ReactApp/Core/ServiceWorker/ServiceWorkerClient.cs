@@ -7,19 +7,19 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     {
         [External]
         [Name("id")]
-        public static extern string ID { get; }
+        public extern string ID { get; }
 
         [External]
         [Name("type")]
-        public static extern string Type { get; }
+        public extern string Type { get; }
 
         [External]
         [Name("url")]
-        public static extern string URL { get; }
+        public extern string URL { get; }
 
         [External]
         [Name("frameType")]
-        public static extern string FrameType { get; }
+        public extern string FrameType { get; }
 
         [External]
         [Name("postMessage")]

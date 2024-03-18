@@ -13,27 +13,27 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         [External]
         [Name("clientId")]
-        public static extern string ClientID { get; }
+        public extern string ClientID { get; }
 
         [External]
         [Name("handled")]
-        public static extern Promise<object> Handled { get; }
+        public extern Promise<object> Handled { get; }
 
         [External]
         [Name("preloadResponse")]
-        public static extern Promise<dynamic> PreloadResponse { get; }
+        public extern Promise<dynamic> PreloadResponse { get; }
 
         [External]
         [Name("replacesClientId")]
-        public static extern string ReplacesClientId { get; }
+        public extern string ReplacesClientId { get; }
 
         [External]
         [Name("resultingClientId")]
-        public static extern string ResultingClientId { get; }
+        public extern string ResultingClientId { get; }
 
         [External]
         [Name("request")]
-        public static extern dynamic Request { get; }
+        public extern dynamic Request { get; }
 
         [External]
         [Name("respondWith")]

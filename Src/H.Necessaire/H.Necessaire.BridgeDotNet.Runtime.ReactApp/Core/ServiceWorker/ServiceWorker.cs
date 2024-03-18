@@ -8,11 +8,11 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     {
         [External]
         [Name("scriptURL")]
-        public static extern string ScriptURL { get; }
+        public extern string ScriptURL { get; }
 
         [External]
         [Name("state")]
-        public static extern string State { get; }
+        public extern string State { get; }
 
         [External]
         [Name("postMessage")]
