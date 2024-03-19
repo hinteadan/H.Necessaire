@@ -40,8 +40,6 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         private async void HandleFetch(Event @event)
         {
             FetchEvent fetchEvent = @event.As<FetchEvent>();
-            ServiceWorkerConsoleLogger.LogInfo("Fetch event");
-            ServiceWorkerConsoleLogger.LogInfo(fetchEvent);
 
             string httpMethod = fetchEvent.Request["method"].As<string>();
             if (!httpMethod.Is("GET"))
@@ -53,20 +51,19 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
 
             ServiceWorkerCache cacher = await OpenCurrentCacher();
-            ServiceWorkerConsoleLogger.LogInfo(cacher);
 
             object cachedResponse = await cacher.Match(fetchEvent.Request).ToAsync();
             if (cachedResponse != null)
             {
-                ServiceWorkerConsoleLogger.LogInfo("Responding from cache");
-                ServiceWorkerConsoleLogger.LogInfo(cachedResponse);
                 fetchEvent.RespondWith(cachedResponse);
                 return;
             }
 
-            ServiceWorkerConsoleLogger.LogInfo("Responding from network");
             object response = await fetcher(fetchEvent.Request).ToAsync();
-            ServiceWorkerConsoleLogger.LogInfo(cachedResponse);
+
+            ServiceWorkerConsoleLogger.LogInfo("Request not cached, responding from network");
+            ServiceWorkerConsoleLogger.LogInfo(fetchEvent.Request);
+            ServiceWorkerConsoleLogger.LogInfo(response);
 
             fetchEvent.RespondWith(response);
         }
@@ -83,9 +80,8 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         private async Task AddResourcesToCache()
         {
-            ServiceWorkerConsoleLogger.LogInfo("AddResourcesToCache");
-            var cacher = await OpenCurrentCacher();
-            ServiceWorkerConsoleLogger.LogInfo(cacher);
+            ServiceWorkerCache cacher = await OpenCurrentCacher();
+
             await cacher.AddAll(new string[] {
                 "/dexie.js",
                 "/react.production.min.js",
