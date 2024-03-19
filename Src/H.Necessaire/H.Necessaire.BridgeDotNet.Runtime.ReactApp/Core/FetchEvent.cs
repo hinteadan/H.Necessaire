@@ -22,7 +22,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         [External]
         [Name("preloadResponse")]
-        public extern Promise<object> PreloadResponse { get; }
+        public extern Promise<Response> PreloadResponse { get; }
 
         [External]
         [Name("replacesClientId")]
@@ -34,10 +34,10 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         [External]
         [Name("request")]
-        public extern object Request { get; }
+        public extern Request Request { get; }
 
         [External]
         [Name("respondWith")]
-        public extern void RespondWith(object responseOrResponsePromise);
+        public extern void RespondWith(Union<Response, Promise<Response>> responseOrResponsePromise);
     }
 }

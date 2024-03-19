@@ -12,7 +12,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         readonly VersionNumber versionNumber = new VersionNumber(0, 0, 0, null, "play-000001");
 
         ServiceWorkerGlobalScope serviceWorkerGlobalScope = null;
-        Func<object, Promise<object>> fetcher = null;
+        Func<Request, Promise<Response>> fetcher = null;
         HServiceWorker()
         {
             this.serviceWorkerGlobalScope = GetGlobalScopeIfAny();
@@ -44,7 +44,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             string httpMethod = fetchEvent.Request["method"].As<string>();
             if (!httpMethod.Is("GET"))
             {
-                object res = await fetcher(fetchEvent.Request).ToAsync();
+                Response res = await fetcher(fetchEvent.Request).ToAsync();
 
                 ServiceWorkerConsoleLogger.LogInfo($"Fetch event method is {httpMethod}, not GET, therefore skipping cache...");
                 ServiceWorkerConsoleLogger.LogInfo(fetchEvent.Request);
@@ -57,20 +57,20 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
             ServiceWorkerCache cacher = await OpenCurrentCacher();
 
-            object cachedResponse = await cacher.Match(fetchEvent.Request).ToAsync();
+            Response cachedResponse = await cacher.Match(fetchEvent.Request).ToAsync();
             if (cachedResponse != null)
             {
                 fetchEvent.RespondWith(cachedResponse);
                 return;
             }
 
-            object response = await fetcher(fetchEvent.Request).ToAsync();
+            Response networkResponse = await fetcher(fetchEvent.Request).ToAsync();
 
             ServiceWorkerConsoleLogger.LogInfo("Request not cached, responding from network");
             ServiceWorkerConsoleLogger.LogInfo(fetchEvent.Request);
-            ServiceWorkerConsoleLogger.LogInfo(response);
+            ServiceWorkerConsoleLogger.LogInfo(networkResponse);
 
-            fetchEvent.RespondWith(response);
+            fetchEvent.RespondWith(networkResponse);
         }
 
         private async void Install(Event @event)
@@ -87,7 +87,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         {
             ServiceWorkerCache cacher = await OpenCurrentCacher();
 
-            await cacher.AddAll(new string[] {
+            await cacher.AddAll(new Union<Request, string>[] {
                 "/dexie.js",
                 "/react.production.min.js",
                 "/react-dom.production.min.js",
@@ -132,13 +132,13 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             return result;
         }
 
-        private static Func<object, Promise<object>> GetFetcher()
+        private static Func<Request, Promise<Response>> GetFetcher()
         {
-            Func<object, Promise<object>> result = null;
+            Func<Request, Promise<Response>> result = null;
 
             new Action(() =>
             {
-                result = Bridge.Script.Get<Func<object, Promise<object>>>("$$fetcher");
+                result = Bridge.Script.Get<Func<Request, Promise<Response>>>("$$fetcher");
             })
             .TryOrFailWithGrace(
                 onFail: ex => result = null
