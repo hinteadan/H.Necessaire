@@ -59,10 +59,10 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         //https://developer.mozilla.org/en-US/docs/Web/API/Cache/matchAll#options
         [External]
         [Name("matchAll")]
-        public extern Promise<Response[]> MatchAll(Request request = null, object options = null);
+        public extern Promise<Response> MatchAll(Request request = null, object options = null);
         //https://developer.mozilla.org/en-US/docs/Web/API/Cache/matchAll#options
         [External]
         [Name("matchAll")]
-        public extern Promise<Response[]> MatchAll(string url = null, object options = null);
+        public extern Promise<Response> MatchAll(string url = null, object options = null);
     }
 }

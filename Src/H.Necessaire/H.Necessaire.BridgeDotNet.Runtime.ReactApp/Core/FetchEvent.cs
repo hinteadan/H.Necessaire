@@ -38,7 +38,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
         [External]
         [Name("respondWith")]
-        public extern void RespondWith(Response responseOrResponsePromise);
+        public extern void RespondWith(Response response);
 
         [External]
         [Name("respondWith")]

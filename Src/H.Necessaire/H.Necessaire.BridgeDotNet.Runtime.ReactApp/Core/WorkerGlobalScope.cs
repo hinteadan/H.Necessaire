@@ -11,22 +11,30 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     {
         [External]
         [Name("fonts")]
-        public static extern FontFaceSet Fonts { get; }
+        public extern FontFaceSet Fonts { get; }
 
         [External]
         [Name("location")]
-        public static extern WorkerLocation Location { get; }
+        public extern WorkerLocation Location { get; }
 
         [External]
         [Name("navigator")]
-        public static extern Navigator Navigator { get; }
+        public extern Navigator Navigator { get; }
 
         [External]
         [Name("self")]
-        public static extern WorkerGlobalScope Self { get; }
+        public extern WorkerGlobalScope Self { get; }
 
         [External]
         [Name("importScripts")]
-        public static extern void ImportScripts(params string[] paths);
+        public extern void ImportScripts(params string[] paths);
+
+        [External]
+        [Name("fetch")]
+        public extern Promise<Response> Fetch(Request request, object options = null);
+
+        [External]
+        [Name("fetch")]
+        public extern Promise<Response> Fetch(string url, object options = null);
     }
 }

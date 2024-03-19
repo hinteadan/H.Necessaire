@@ -1,5 +1,6 @@
 ﻿using Bridge;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using static Retyped.dom;
 using static Retyped.es5;
@@ -11,12 +12,9 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     {
         readonly VersionNumber versionNumber = new VersionNumber(0, 0, 0, null, "play-000001");
 
-        ServiceWorkerGlobalScope serviceWorkerGlobalScope = null;
-        Func<Request, Promise<Response>> fetcher = null;
-        HServiceWorker()
-        {
-            this.serviceWorkerGlobalScope = GetGlobalScopeIfAny();
-            this.fetcher = GetFetcher();
+        readonly ServiceWorkerGlobalScope serviceWorkerGlobalScope;
+        public HServiceWorker() {
+            serviceWorkerGlobalScope = GetGlobalScope();
         }
 
         public static void Main() => (new HServiceWorker()).Run();
@@ -29,7 +27,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             new Action(() =>
             {
                 serviceWorkerGlobalScope.addEventListener("install", Install);
-                serviceWorkerGlobalScope.addEventListener("fetch", HandleFetch);
+                serviceWorkerGlobalScope.addEventListener("fetch", async ev => ev.As<FetchEvent>().RespondWith(await HandleFetch(ev)));
             })
             .TryOrFailWithGrace(onFail: ex =>
             {
@@ -37,40 +35,31 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             });
         }
 
-        private async void HandleFetch(Event @event)
+        private async Task<Promise<Response>> HandleFetch(Event @event)
         {
             FetchEvent fetchEvent = @event.As<FetchEvent>();
+
 
             string httpMethod = fetchEvent.Request["method"].As<string>();
             if (!httpMethod.Is("GET"))
             {
-                Response res = await fetcher(fetchEvent.Request).ToAsync();
-
                 ServiceWorkerConsoleLogger.LogInfo($"Fetch event method is {httpMethod}, not GET, therefore skipping cache...");
                 ServiceWorkerConsoleLogger.LogInfo(fetchEvent.Request);
-                ServiceWorkerConsoleLogger.LogInfo(res);
-
-                fetchEvent.RespondWith(await fetcher(fetchEvent.Request).ToAsync());
-                return;
+                return serviceWorkerGlobalScope.Fetch(fetchEvent.Request);
             }
-
 
             ServiceWorkerCache cacher = await OpenCurrentCacher();
 
             Response cachedResponse = await cacher.Match(fetchEvent.Request).ToAsync();
             if (cachedResponse != null)
             {
-                fetchEvent.RespondWith(cachedResponse);
-                return;
+                return cacher.Match(fetchEvent.Request);
             }
-
-            Response networkResponse = await fetcher(fetchEvent.Request).ToAsync();
 
             ServiceWorkerConsoleLogger.LogInfo("Request not cached, responding from network");
             ServiceWorkerConsoleLogger.LogInfo(fetchEvent.Request);
-            ServiceWorkerConsoleLogger.LogInfo(networkResponse);
 
-            fetchEvent.RespondWith(networkResponse);
+            return serviceWorkerGlobalScope.Fetch(fetchEvent.Request);
         }
 
         private async void Install(Event @event)
@@ -117,28 +106,13 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             return await serviceWorkerGlobalScope.CacheStore.Open(cacheID).ToAsync();
         }
 
-        private static ServiceWorkerGlobalScope GetGlobalScopeIfAny()
+        private ServiceWorkerGlobalScope GetGlobalScope()
         {
             ServiceWorkerGlobalScope result = null;
 
             new Action(() =>
             {
                 result = Bridge.Script.Get<ServiceWorkerGlobalScope>("$$serviceWorkerGlobalScope");
-            })
-            .TryOrFailWithGrace(
-                onFail: ex => result = null
-            );
-
-            return result;
-        }
-
-        private static Func<Request, Promise<Response>> GetFetcher()
-        {
-            Func<Request, Promise<Response>> result = null;
-
-            new Action(() =>
-            {
-                result = Bridge.Script.Get<Func<Request, Promise<Response>>>("$$fetcher");
             })
             .TryOrFailWithGrace(
                 onFail: ex => result = null
