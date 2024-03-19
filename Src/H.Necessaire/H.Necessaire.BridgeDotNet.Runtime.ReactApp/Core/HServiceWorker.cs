@@ -9,7 +9,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
     [Module(ModuleType.UMD, nameof(HServiceWorker))]
     public class HServiceWorker
     {
-        readonly VersionNumber versionNumber = new VersionNumber(0, 0, 0, null, "play-000003");
+        readonly VersionNumber versionNumber = new VersionNumber(0, 0, 0, null, "play-000001");
 
         ServiceWorkerGlobalScope serviceWorkerGlobalScope = null;
         Func<object, Promise<object>> fetcher = null;
@@ -43,11 +43,10 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             ServiceWorkerConsoleLogger.LogInfo("Fetch event");
             ServiceWorkerConsoleLogger.LogInfo(fetchEvent);
 
-            string cacheID = "v1";
-            ServiceWorkerCache cacher = await serviceWorkerGlobalScope.CacheStore.Open(cacheID).ToAsync();
+            ServiceWorkerCache cacher = await OpenCurrentCacher();
             ServiceWorkerConsoleLogger.LogInfo(cacher);
 
-            object cachedResponse = await (serviceWorkerGlobalScope.CacheStore.Match(fetchEvent.Request).ToAsync());
+            object cachedResponse = await cacher.Match(fetchEvent.Request).ToAsync();
             if (cachedResponse != null)
             {
                 ServiceWorkerConsoleLogger.LogInfo("Responding from cache");
@@ -76,28 +75,37 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         private async Task AddResourcesToCache()
         {
             ServiceWorkerConsoleLogger.LogInfo("AddResourcesToCache");
-            //string cacheID = "v1";
-            //ServiceWorkerCache cacher = await serviceWorkerGlobalScope.CacheStore.Open(cacheID).ToAsync();
-            //ServiceWorkerConsoleLogger.LogInfo(cacher);
-            //await cacher.AddAll(new string[] {
-            //    "/bridge.js",
-            //    "/bridge.meta.js",
-            //    "/newtonsoft.json.js",
-            //    "/ProductiveRage.Immutable.js",
-            //    "/ProductiveRage.Immutable.meta.js",
-            //    "/H.Necessaire.BridgeDotNet.js",
-            //    "/H.Necessaire.BridgeDotNet.meta.js",
-            //    "/Bridge.React.js",
-            //    "/Bridge.React.meta.js",
-            //    "/jquery-2.2.4.js",
-            //    "/productiveRage.immutable.extensions.js",
-            //    "/productiveRage.immutable.extensions.meta.js",
-            //    "/ProductiveRage.ReactRouting.js",
-            //    "/ProductiveRage.ReactRouting.meta.js",
-            //    "/H.Necessaire.BridgeDotNet.Runtime.ReactApp.js",
-            //}).ToAsync();
+            var cacher = await OpenCurrentCacher();
+            ServiceWorkerConsoleLogger.LogInfo(cacher);
+            await cacher.AddAll(new string[] {
+                "/dexie.js",
+                "/react.production.min.js",
+                "/react-dom.production.min.js",
+                "/marked.min.js",
+                "/highlight.min.js",
+                "/bridge.js",
+                "/bridge.meta.js",
+                "/newtonsoft.json.js",
+                "/ProductiveRage.Immutable.js",
+                "/ProductiveRage.Immutable.meta.js",
+                "/H.Necessaire.BridgeDotNet.js",
+                "/H.Necessaire.BridgeDotNet.meta.js",
+                "/Bridge.React.js",
+                "/Bridge.React.meta.js",
+                "/jquery-2.2.4.js",
+                "/productiveRage.immutable.extensions.js",
+                "/productiveRage.immutable.extensions.meta.js",
+                "/ProductiveRage.ReactRouting.js",
+                "/ProductiveRage.ReactRouting.meta.js",
+                "/H.Necessaire.BridgeDotNet.Runtime.ReactApp.js",
+            }).ToAsync();
         }
 
+        private async Task<ServiceWorkerCache> OpenCurrentCacher()
+        {
+            string cacheID = $"H.Necessaire-Cache-{versionNumber}";
+            return await serviceWorkerGlobalScope.CacheStore.Open(cacheID).ToAsync();
+        }
 
         private static ServiceWorkerGlobalScope GetGlobalScopeIfAny()
         {
