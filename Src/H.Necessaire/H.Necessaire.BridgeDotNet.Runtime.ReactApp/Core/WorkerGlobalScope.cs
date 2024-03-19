@@ -6,6 +6,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     //https://developer.mozilla.org/en-US/docs/Web/API/WorkerGlobalScope/error_event
     [External]
+    [Name("WorkerGlobalScope")]
     public class WorkerGlobalScope : EventTarget
     {
         [External]

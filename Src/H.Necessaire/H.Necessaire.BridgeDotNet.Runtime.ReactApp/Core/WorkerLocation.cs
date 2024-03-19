@@ -3,6 +3,7 @@
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     [External]
+    [Name("WorkerLocation")]
     public class WorkerLocation
     {
         [External]

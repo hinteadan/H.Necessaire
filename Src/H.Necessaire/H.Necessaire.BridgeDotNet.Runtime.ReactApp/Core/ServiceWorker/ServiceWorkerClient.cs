@@ -3,6 +3,7 @@
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     [External]
+    [Name("Client")]
     public class ServiceWorkerClient
     {
         [External]

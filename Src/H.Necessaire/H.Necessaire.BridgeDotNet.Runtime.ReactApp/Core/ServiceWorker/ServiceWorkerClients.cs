@@ -4,6 +4,7 @@ using static Retyped.es5;
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     [External]
+    [Name("Clients")]
     public class ServiceWorkerClients
     {
         [External]

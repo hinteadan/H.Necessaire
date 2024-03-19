@@ -4,6 +4,7 @@ using static Retyped.dom;
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     [External]
+    [Name("ServiceWorker")]
     public class ServiceWorker : EventTarget
     {
         [External]

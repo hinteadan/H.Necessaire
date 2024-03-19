@@ -5,6 +5,7 @@ using static Retyped.es5;
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     [External]
+    [Name("Cache")]
     public class ServiceWorkerCache
     {
         [External]

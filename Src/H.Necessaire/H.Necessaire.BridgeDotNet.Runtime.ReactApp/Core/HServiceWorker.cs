@@ -43,8 +43,9 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             ServiceWorkerConsoleLogger.LogInfo("Fetch event");
             ServiceWorkerConsoleLogger.LogInfo(fetchEvent);
 
-            //string cacheID = "v1";
-            //ServiceWorkerCache cacher = await serviceWorkerGlobalScope.CacheStore.Open(cacheID).ToAsync();
+            string cacheID = "v1";
+            ServiceWorkerCache cacher = await serviceWorkerGlobalScope.CacheStore.Open(cacheID).ToAsync();
+            ServiceWorkerConsoleLogger.LogInfo(cacher);
 
             object cachedResponse = await (serviceWorkerGlobalScope.CacheStore.Match(fetchEvent.Request).ToAsync());
             if (cachedResponse != null)
@@ -75,26 +76,26 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         private async Task AddResourcesToCache()
         {
             ServiceWorkerConsoleLogger.LogInfo("AddResourcesToCache");
-            string cacheID = "v1";
-            ServiceWorkerCache cacher = await serviceWorkerGlobalScope.CacheStore.Open(cacheID).ToAsync();
-            ServiceWorkerConsoleLogger.LogInfo(cacher);
-            await cacher.AddAll(new string[] {
-                "/bridge.js",
-                "/bridge.meta.js",
-                "/newtonsoft.json.js",
-                "/ProductiveRage.Immutable.js",
-                "/ProductiveRage.Immutable.meta.js",
-                "/H.Necessaire.BridgeDotNet.js",
-                "/H.Necessaire.BridgeDotNet.meta.js",
-                "/Bridge.React.js",
-                "/Bridge.React.meta.js",
-                "/jquery-2.2.4.js",
-                "/productiveRage.immutable.extensions.js",
-                "/productiveRage.immutable.extensions.meta.js",
-                "/ProductiveRage.ReactRouting.js",
-                "/ProductiveRage.ReactRouting.meta.js",
-                "/H.Necessaire.BridgeDotNet.Runtime.ReactApp.js",
-            }).ToAsync();
+            //string cacheID = "v1";
+            //ServiceWorkerCache cacher = await serviceWorkerGlobalScope.CacheStore.Open(cacheID).ToAsync();
+            //ServiceWorkerConsoleLogger.LogInfo(cacher);
+            //await cacher.AddAll(new string[] {
+            //    "/bridge.js",
+            //    "/bridge.meta.js",
+            //    "/newtonsoft.json.js",
+            //    "/ProductiveRage.Immutable.js",
+            //    "/ProductiveRage.Immutable.meta.js",
+            //    "/H.Necessaire.BridgeDotNet.js",
+            //    "/H.Necessaire.BridgeDotNet.meta.js",
+            //    "/Bridge.React.js",
+            //    "/Bridge.React.meta.js",
+            //    "/jquery-2.2.4.js",
+            //    "/productiveRage.immutable.extensions.js",
+            //    "/productiveRage.immutable.extensions.meta.js",
+            //    "/ProductiveRage.ReactRouting.js",
+            //    "/ProductiveRage.ReactRouting.meta.js",
+            //    "/H.Necessaire.BridgeDotNet.Runtime.ReactApp.js",
+            //}).ToAsync();
         }
 
 

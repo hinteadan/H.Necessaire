@@ -6,6 +6,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     //https://developer.mozilla.org/en-US/docs/Web/API/FontFaceSet
     [External]
+    [Name("FontFaceSet")]
     public class FontFaceSet : EventTarget
     {
         [External]

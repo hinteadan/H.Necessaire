@@ -6,6 +6,7 @@ using static Retyped.es5;
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     [External]
+    [Name("FetchEvent")]
     public class FetchEvent : ExtendableEvent
     {
         public FetchEvent(string typeArg) : base(typeArg) { }

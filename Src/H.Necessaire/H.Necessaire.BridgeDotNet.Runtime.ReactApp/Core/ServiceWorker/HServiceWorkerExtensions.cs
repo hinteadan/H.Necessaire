@@ -15,21 +15,28 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 
             TaskCompletionSource<T> taskCompletionSource = new TaskCompletionSource<T>();
 
-            promise
-                .then<T, T>(
-                    result => {
-                        taskCompletionSource.SetResult(result);
-                        return result;
-                    },
-                    ex => {
-                        taskCompletionSource.SetCanceled();
-                        return default(T);
-                    })
-                .@catch(ex => {
-                    taskCompletionSource.SetException(new InvalidOperationException(ex.ToString()));
-                });
+            JsPromise.All(promise.AsArray())
+            .then<T, T>(results => {
+                taskCompletionSource.TrySetResult(results[0]);
+                return results[0];
+            }, err => {
+                taskCompletionSource.TrySetCanceled();
+                return default(T);
+            })
+            .@catch(ex => {
+                taskCompletionSource.TrySetException(new OperationResultException(OperationResult.Fail(ex.ToString())));
+            })
+            ;
 
             return taskCompletionSource.Task;
         }
+    }
+
+    [External]
+    [Name("Promise")]
+    public static class JsPromise
+    {
+        [Name("all")]
+        public static extern Promise<T[]> All<T>(Promise<T>[] promises);
     }
 }

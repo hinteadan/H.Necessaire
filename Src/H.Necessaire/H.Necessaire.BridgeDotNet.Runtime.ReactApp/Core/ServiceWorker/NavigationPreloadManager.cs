@@ -5,6 +5,7 @@ using static Retyped.es5;
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
     [External]
+    [Name("NavigationPreloadManager")]
     public class NavigationPreloadManager
     {
         [External]
