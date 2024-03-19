@@ -44,7 +44,12 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             string httpMethod = fetchEvent.Request["method"].As<string>();
             if (!httpMethod.Is("GET"))
             {
+                object res = await fetcher(fetchEvent.Request).ToAsync();
+
                 ServiceWorkerConsoleLogger.LogInfo($"Fetch event method is {httpMethod}, not GET, therefore skipping cache...");
+                ServiceWorkerConsoleLogger.LogInfo(fetchEvent.Request);
+                ServiceWorkerConsoleLogger.LogInfo(res);
+
                 fetchEvent.RespondWith(await fetcher(fetchEvent.Request).ToAsync());
                 return;
             }
