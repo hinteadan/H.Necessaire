@@ -87,7 +87,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         {
             ServiceWorkerCache cacher = await OpenCurrentCacher();
 
-            await cacher.AddAll(new Union<Request, string>[] {
+            await cacher.AddAll(new string[] {
                 "/dexie.js",
                 "/react.production.min.js",
                 "/react-dom.production.min.js",

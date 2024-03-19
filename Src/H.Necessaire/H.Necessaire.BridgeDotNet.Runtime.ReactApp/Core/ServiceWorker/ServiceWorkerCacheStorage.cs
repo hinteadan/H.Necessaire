@@ -23,7 +23,11 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
         //https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/match#options
         [External]
         [Name("match")]
-        public extern Promise<Response> Match(Union<Request, string> request, object options = null);
+        public extern Promise<Response> Match(Request request, object options = null);
+        //https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/match#options
+        [External]
+        [Name("match")]
+        public extern Promise<Response> Match(string url, object options = null);
 
         [External]
         [Name("open")]
