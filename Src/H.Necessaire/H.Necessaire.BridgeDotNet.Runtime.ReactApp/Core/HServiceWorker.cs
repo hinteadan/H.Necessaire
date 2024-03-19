@@ -43,6 +43,15 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             ServiceWorkerConsoleLogger.LogInfo("Fetch event");
             ServiceWorkerConsoleLogger.LogInfo(fetchEvent);
 
+            string httpMethod = fetchEvent.Request["method"].As<string>();
+            if (!httpMethod.Is("GET"))
+            {
+                ServiceWorkerConsoleLogger.LogInfo($"Fetch event method is {httpMethod}, not GET, therefore skipping cache...");
+                fetchEvent.RespondWith(await fetcher(fetchEvent.Request).ToAsync());
+                return;
+            }
+
+
             ServiceWorkerCache cacher = await OpenCurrentCacher();
             ServiceWorkerConsoleLogger.LogInfo(cacher);
 
