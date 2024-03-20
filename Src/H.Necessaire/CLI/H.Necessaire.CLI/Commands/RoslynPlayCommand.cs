@@ -23,17 +23,24 @@ namespace H.Necessaire.CLI.Commands
             if (!srcFolder.Exists)
                 return OperationResult.Fail($"Source folder {srcFolder.FullName} doesn't exist");
 
-            FileInfo[] srcFiles = srcFolder.EnumerateFiles("*.cs", SearchOption.AllDirectories).ToArray();
+            FileInfo[] csProjs = srcFolder.GetFiles("*.csproj", SearchOption.AllDirectories);
+            ProjectInfo[] projectInfos = csProjs.Select(csProj => new ProjectInfo { 
+                ID = Path.GetFileNameWithoutExtension(csProj.Name),
+                CsProj = csProj,
+                Folder = csProj.Directory,
+                CsFiles = csProj.Directory.GetFiles("*.cs", SearchOption.AllDirectories),
+            }).ToArray();
 
 
-            FileInfo sourceCodeFile = new FileInfo(@"C:\H\H.Necessaire\Src\H.Necessaire\CLI\H.Necessaire.CLI\Commands\PingCommand.cs");
-            string sourceCode = await sourceCodeFile.OpenRead().ReadAsStringAsync(isStreamLeftOpen: false);
-            SyntaxTree syntaxTreesyntaxTree = CSharpSyntaxTree.ParseText(sourceCode, CSharpParseOptions.Default);
-            CompilationUnitSyntax root = syntaxTreesyntaxTree.GetCompilationUnitRoot();
-            ClassDeclarationSyntax[] classes 
-                = root.DescendantNodes().OfType<ClassDeclarationSyntax>().ToArrayNullIfEmpty();
-            MethodDeclarationSyntax[] methods
-                = root.DescendantNodes().OfType<MethodDeclarationSyntax>().ToArrayNullIfEmpty();
+
+            //FileInfo sourceCodeFile = new FileInfo(@"C:\H\H.Necessaire\Src\H.Necessaire\CLI\H.Necessaire.CLI\Commands\PingCommand.cs");
+            //string sourceCode = await sourceCodeFile.OpenRead().ReadAsStringAsync(isStreamLeftOpen: false);
+            //SyntaxTree syntaxTreesyntaxTree = CSharpSyntaxTree.ParseText(sourceCode, CSharpParseOptions.Default);
+            //CompilationUnitSyntax root = syntaxTreesyntaxTree.GetCompilationUnitRoot();
+            //ClassDeclarationSyntax[] classes
+            //    = root.DescendantNodes().OfType<ClassDeclarationSyntax>().ToArrayNullIfEmpty();
+            //MethodDeclarationSyntax[] methods
+            //    = root.DescendantNodes().OfType<MethodDeclarationSyntax>().ToArrayNullIfEmpty();
 
 
             return OperationResult.Win();
@@ -50,5 +57,15 @@ namespace H.Necessaire.CLI.Commands
             string srcFolderPath = Path.GetDirectoryName(dllPath.Substring(0, srcFolderIndex + srcFolderRelativePath.Length)) ?? string.Empty;
             return srcFolderPath;
         }
+    }
+
+    public class ProjectInfo : IStringIdentity
+    {
+        public string ID { get; set; }
+        public FileInfo CsProj { get; set; }
+        public DirectoryInfo Folder { get; set; }
+        public FileInfo[] CsFiles { get; set; }
+
+        public override string ToString() => ID;
     }
 }
