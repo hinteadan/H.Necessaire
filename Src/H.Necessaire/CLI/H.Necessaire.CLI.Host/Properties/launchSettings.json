@@ -8,6 +8,10 @@
     "CLI": {
       "commandName": "Project"
     },
+    "CLI - play-roslyn": {
+      "commandName": "Project",
+      "commandLineArgs": "play-roslyn"
+    },
     "CLI - nugetversion": {
       "commandName": "Project",
       "commandLineArgs": "nugetversion"
