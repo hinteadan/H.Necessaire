@@ -25,6 +25,8 @@ namespace H.Necessaire.CLI.Commands
 
         public override async Task<OperationResult> Run()
         {
+            Versioning.Version version = H.Versioning.Version.Self.GetCurrent() ?? Versioning.Version.Unknown;
+
             Note[] args = (await GetArguments())?.Jump(1);
             DirectoryInfo srcFolder = new DirectoryInfo(args?.Get("src") ?? Path.Combine(GetCodebaseFolderPath(), "H.Necessaire"));
             if (!srcFolder.Exists)
