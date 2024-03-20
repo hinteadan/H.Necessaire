@@ -15,6 +15,12 @@ namespace H.Necessaire.CLI.Commands
     [ID("play-roslyn")]
     public class RoslynPlayCommand : CommandBase
     {
+        static readonly string[] projectsToIgnore = new string[] {
+            "H.Necessaire.Testicles.Unit",
+            "H.Necessaire.AspNetCoreWebAppSample",
+            "H.Necessaire.ReactAppSample",
+            "H.Necessaire.CLI.Host",
+        };
         const string srcFolderRelativePath = "Src/H.Necessaire";
 
         public override async Task<OperationResult> Run()
@@ -25,7 +31,8 @@ namespace H.Necessaire.CLI.Commands
                 return OperationResult.Fail($"Source folder {srcFolder.FullName} doesn't exist");
 
             FileInfo[] csProjs = srcFolder.GetFiles("*.csproj", SearchOption.AllDirectories);
-            ProjectInfo[] projectInfos = csProjs.Select(csProj => new ProjectInfo { 
+            ProjectInfo[] projectInfos = csProjs.Select(csProj => new ProjectInfo
+            {
                 ID = Path.GetFileNameWithoutExtension(csProj.Name),
                 CsProj = csProj,
                 Folder = csProj.Directory,
@@ -64,7 +71,7 @@ namespace H.Necessaire.CLI.Commands
 
         private static HTypeInfo[] ProcessCsFile(FileInfo csFile, ProjectInfo projectInfo)
         {
-            if(csFile?.Exists != true)
+            if (csFile?.Exists != true)
                 return Array.Empty<HTypeInfo>();
 
             string sourceCode = File.ReadAllText(csFile.FullName);
@@ -73,7 +80,7 @@ namespace H.Necessaire.CLI.Commands
 
             IEnumerable<TypeDeclarationSyntax> allTypeDeclarations = root.DescendantNodes().OfType<TypeDeclarationSyntax>();
 
-            if(allTypeDeclarations.Any() != true)
+            if (allTypeDeclarations.Any() != true)
                 return Array.Empty<HTypeInfo>();
 
             return
@@ -85,15 +92,29 @@ namespace H.Necessaire.CLI.Commands
 
         private static HTypeInfo ProcessType(TypeDeclarationSyntax typeDeclaration, FileInfo csFile, string sourceCode, ProjectInfo projectInfo)
         {
+            if (projectInfo.ID.In(projectsToIgnore))
+                return null;
+
+            if (typeDeclaration.Modifiers.Any(m => m.ToString() == "public") != true)
+                return null;
+
+            if (typeDeclaration.Parent is ClassDeclarationSyntax parentClass && parentClass.Modifiers.Any(m => m.ToString() == "public") != true)
+                return null;
+
             NamespaceDeclarationSyntax ns = FindNamespaceFor(typeDeclaration);
             string nsName = ns?.Name.ToString();
 
-            string category 
+            string category
                 = csFile.Directory.FullName == projectInfo.CsProj.Directory.FullName
                 ? null :
                 csFile.Directory.FullName
                 .Replace(projectInfo.CsProj.Directory.FullName, "")
+                .Replace("\\", ".")
+                .Substring(1)
                 ;
+
+            IEnumerable<ConstructorDeclarationSyntax> constructors = typeDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>();
+            IEnumerable<MethodDeclarationSyntax> methods = typeDeclaration.DescendantNodes().OfType<MethodDeclarationSyntax>();
 
             return
                 new HTypeInfo
@@ -103,6 +124,23 @@ namespace H.Necessaire.CLI.Commands
                     Name = typeDeclaration.Identifier.Text,
                     Namespace = nsName,
                     Category = category,
+                    Constructors = constructors.Select(ProcessConstructor).ToNoNullsArray(),
+                    Methods = methods.Select(ProcessMethod).ToNoNullsArray(),
+                };
+        }
+
+        private static HConstructorInfo ProcessConstructor(ConstructorDeclarationSyntax constructorDeclaration)
+        {
+            return
+                new HConstructorInfo { };
+        }
+
+        private static HMethodInfo ProcessMethod(MethodDeclarationSyntax methodDeclaration)
+        {
+            return
+                new HMethodInfo
+                {
+                    Name = methodDeclaration.Identifier.Text,
                 };
         }
 
@@ -164,10 +202,12 @@ namespace H.Necessaire.CLI.Commands
     }
 
     public class HMethodInfo
-    { 
+    {
+        public string Name { get; set; }
     }
 
     public class HPropertyInfo
     {
+        public string Name { get; set; }
     }
 }
