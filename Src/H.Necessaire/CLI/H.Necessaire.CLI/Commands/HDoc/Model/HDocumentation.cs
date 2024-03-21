@@ -13,5 +13,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.Model
         }
 
         public HDocTypeInfo[] AllTypes { get; set; }
+
+        public Version Version { get; set; }
     }
 }

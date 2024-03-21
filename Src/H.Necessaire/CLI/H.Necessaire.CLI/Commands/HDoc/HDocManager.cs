@@ -11,10 +11,12 @@ namespace H.Necessaire.CLI.Commands.HDoc
     {
         HDocCsProjParser hDocCsProjParser;
         HDocCsFileParser hDocCsFileParser;
+        ImAVersionProvider versionProvider;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             hDocCsProjParser = dependencyProvider.Get<HDocCsProjParser>();
             hDocCsFileParser = dependencyProvider.Get<HDocCsFileParser>();
+            versionProvider = dependencyProvider.Get<ImAVersionProvider>();
         }
 
         public async Task<OperationResult<HDocumentation>> ParseDocumentation(DirectoryInfo srcFolder = null)
@@ -45,6 +47,7 @@ namespace H.Necessaire.CLI.Commands.HDoc
                 new HDocumentation
                 {
                     AllTypes = types,
+                    Version = await GetCurrentVersion(),
                 }
                 .ToWinResult()
                 ;
@@ -59,6 +62,31 @@ namespace H.Necessaire.CLI.Commands.HDoc
                 await Task.WhenAll(
                     projectInfo.CsFiles.Select(async csFile => await hDocCsFileParser.Parse(csFile, projectInfo))
                 );
+        }
+
+        private async Task<Version> GetCurrentVersion()
+        {
+            Version runtimeVersion = await versionProvider.GetCurrentVersion();
+            if (runtimeVersion != Version.Unknown)
+                return runtimeVersion;
+
+            Versioning.Version version = H.Versioning.Version.Self.GetCurrent() ?? Versioning.Version.Unknown;
+
+            return
+                new Version
+                {
+                    Branch = version.Branch,
+                    Commit = version.Commit,
+                    Timestamp = version.Timestamp,
+                    Number = new VersionNumber
+                    {
+                        Build = version.Number?.Build,
+                        Major = version.Number?.Major ?? 0,
+                        Minor = version.Number?.Minor ?? 0,
+                        Patch = version.Number?.Patch,
+                        Suffix = version.Number?.Suffix,
+                    },
+                };
         }
     }
 }
