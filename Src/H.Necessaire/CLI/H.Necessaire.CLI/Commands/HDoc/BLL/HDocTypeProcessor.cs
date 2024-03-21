@@ -9,8 +9,14 @@ using System.Text;
 
 namespace H.Necessaire.CLI.Commands.HDoc.BLL
 {
-    internal class HDocTypeProcessor
+    internal class HDocTypeProcessor : ImADependency
     {
+        HDocConstructorProcessor constructorProcessor;
+        public void ReferDependencies(ImADependencyProvider dependencyProvider)
+        {
+            constructorProcessor = dependencyProvider.Get<HDocConstructorProcessor>();
+        }
+
         public OperationResult<HDocTypeInfo> Process(TypeDeclarationSyntax typeDeclaration, FileInfo csFile, string sourceCode, HDocProjectInfo projectInfo)
         {
             if (typeDeclaration is null)
@@ -47,7 +53,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
                     Namespace = nsName,
                     Category = category,
                     IsStatic = typeDeclaration.IsStatic(),
-                    //Constructors = constructors.Select(ProcessConstructor).ToNoNullsArray(),
+                    Constructors = constructors.Select(constructorProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),
                     //Methods = methods.Select(ProcessMethod).ToNoNullsArray(),
                     //Properties = properties.Select(ProcessProperty).ToNoNullsArray(),
                 }
@@ -79,5 +85,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
 
             return FindNamespaceFor(syntaxNode.Parent);
         }
+
+        
     }
 }

@@ -8,6 +8,10 @@
                 .Register<HDocCsProjParser>(() => new HDocCsProjParser())
                 .Register<HDocCsFileParser>(() => new HDocCsFileParser())
                 .Register<HDocTypeProcessor>(() => new HDocTypeProcessor())
+
+                .Register<HDocConstructorProcessor>(() => new HDocConstructorProcessor())
+                .Register<HDocMethodProcessor>(() => new HDocMethodProcessor())
+                .Register<HDocPropertyProcessor>(() => new HDocPropertyProcessor())
                 ;
         }
     }
