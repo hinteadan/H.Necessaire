@@ -1,8 +1,8 @@
-﻿using H.Necessaire.Runtime.CLI.Commands;
+﻿using H.Necessaire.CLI.Commands.HDoc.Model;
+using H.Necessaire.Runtime.CLI.Commands;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,7 +33,7 @@ namespace H.Necessaire.CLI.Commands
                 return OperationResult.Fail($"Source folder {srcFolder.FullName} doesn't exist");
 
             FileInfo[] csProjs = srcFolder.GetFiles("*.csproj", SearchOption.AllDirectories);
-            ProjectInfo[] projectInfos = csProjs.Select(csProj => new ProjectInfo
+            HDocProjectInfo[] projectInfos = csProjs.Select(csProj => new HDocProjectInfo
             {
                 ID = Path.GetFileNameWithoutExtension(csProj.Name),
                 CsProj = csProj,
@@ -41,16 +41,16 @@ namespace H.Necessaire.CLI.Commands
                 CsFiles = csProj.Directory.GetFiles("*.cs", SearchOption.AllDirectories),
             }).ToArray();
 
-            HTypeInfo[] hTypes = projectInfos.SelectMany(ProcessProjectTypes).ToArray();
+            HDocTypeInfo[] hTypes = projectInfos.SelectMany(ProcessProjectTypes).ToArray();
 
 
             return OperationResult.Win();
         }
 
-        private static HTypeInfo[] ProcessProjectTypes(ProjectInfo projectInfo)
+        private static HDocTypeInfo[] ProcessProjectTypes(HDocProjectInfo projectInfo)
         {
             if (projectInfo?.CsFiles?.Any() != true)
-                return Array.Empty<HTypeInfo>();
+                return Array.Empty<HDocTypeInfo>();
 
             return
                 projectInfo
@@ -62,10 +62,10 @@ namespace H.Necessaire.CLI.Commands
                 ;
         }
 
-        private static HTypeInfo[] ProcessCsFile(FileInfo csFile, ProjectInfo projectInfo)
+        private static HDocTypeInfo[] ProcessCsFile(FileInfo csFile, HDocProjectInfo projectInfo)
         {
             if (csFile?.Exists != true)
-                return Array.Empty<HTypeInfo>();
+                return Array.Empty<HDocTypeInfo>();
 
             string sourceCode = File.ReadAllText(csFile.FullName);
             SyntaxTree syntaxTreesyntaxTree = CSharpSyntaxTree.ParseText(sourceCode, CSharpParseOptions.Default);
@@ -74,7 +74,7 @@ namespace H.Necessaire.CLI.Commands
             IEnumerable<TypeDeclarationSyntax> allTypeDeclarations = root.DescendantNodes().OfType<TypeDeclarationSyntax>();
 
             if (allTypeDeclarations.Any() != true)
-                return Array.Empty<HTypeInfo>();
+                return Array.Empty<HDocTypeInfo>();
 
             return
                 allTypeDeclarations
@@ -83,7 +83,7 @@ namespace H.Necessaire.CLI.Commands
                 ;
         }
 
-        private static HTypeInfo ProcessType(TypeDeclarationSyntax typeDeclaration, FileInfo csFile, string sourceCode, ProjectInfo projectInfo)
+        private static HDocTypeInfo ProcessType(TypeDeclarationSyntax typeDeclaration, FileInfo csFile, string sourceCode, HDocProjectInfo projectInfo)
         {
             if (projectInfo.ID.In(projectsToIgnore))
                 return null;
@@ -111,7 +111,7 @@ namespace H.Necessaire.CLI.Commands
             IEnumerable<PropertyDeclarationSyntax> properties = typeDeclaration.DescendantNodes().OfType<PropertyDeclarationSyntax>();
 
             return
-                new HTypeInfo
+                new HDocTypeInfo
                 {
                     ID = $"{(nsName.IsEmpty() ? "" : $"{nsName}.")}{typeDeclaration.Identifier.Text}",
                     Module = projectInfo.ID,
@@ -133,35 +133,35 @@ namespace H.Necessaire.CLI.Commands
             return typeDeclaration.Identifier.Text;
         }
 
-        private static HConstructorInfo ProcessConstructor(ConstructorDeclarationSyntax constructorDeclaration)
+        private static HDocConstructorInfo ProcessConstructor(ConstructorDeclarationSyntax constructorDeclaration)
         {
             if (!IsPublic(constructorDeclaration))
                 return null;
 
             return
-                new HConstructorInfo { };
+                new HDocConstructorInfo { };
         }
 
-        private static HMethodInfo ProcessMethod(MethodDeclarationSyntax methodDeclaration)
+        private static HDocMethodInfo ProcessMethod(MethodDeclarationSyntax methodDeclaration)
         {
             if (!IsPublic(methodDeclaration))
                 return null;
 
             return
-                new HMethodInfo
+                new HDocMethodInfo
                 {
                     Name = methodDeclaration.Identifier.Text,
                     IsStatic = IsStatic(methodDeclaration),
                 };
         }
 
-        private static HPropertyInfo ProcessProperty(PropertyDeclarationSyntax propertyDeclaration)
+        private static HDocPropertyInfo ProcessProperty(PropertyDeclarationSyntax propertyDeclaration)
         {
             if (!IsPublic(propertyDeclaration))
                 return null;
 
             return
-                new HPropertyInfo
+                new HDocPropertyInfo
                 {
                     Name = propertyDeclaration.Identifier.Text,
                     IsStatic = IsStatic(propertyDeclaration),
@@ -206,45 +206,5 @@ namespace H.Necessaire.CLI.Commands
             string srcFolderPath = Path.GetDirectoryName(dllPath.Substring(0, srcFolderIndex + srcFolderRelativePath.Length)) ?? string.Empty;
             return srcFolderPath;
         }
-    }
-
-    public class ProjectInfo : IStringIdentity
-    {
-        public string ID { get; set; }
-        public FileInfo CsProj { get; set; }
-        public DirectoryInfo Folder { get; set; }
-        public FileInfo[] CsFiles { get; set; }
-
-        public override string ToString() => ID;
-    }
-
-    public class HTypeInfo : IStringIdentity
-    {
-        public string ID { get; set; }
-        public string Module { get; set; }
-        public string Name { get; set; }
-        public string Category { get; set; }
-        public string Namespace { get; set; }
-        public bool IsStatic { get; set; }
-
-        public HConstructorInfo[] Constructors { get; set; }
-        public HPropertyInfo[] Properties { get; set; }
-        public HMethodInfo[] Methods { get; set; }
-    }
-
-    public class HConstructorInfo
-    {
-    }
-
-    public class HMethodInfo
-    {
-        public string Name { get; set; }
-        public bool IsStatic { get; set; }
-    }
-
-    public class HPropertyInfo
-    {
-        public string Name { get; set; }
-        public bool IsStatic { get; set; }
     }
 }
