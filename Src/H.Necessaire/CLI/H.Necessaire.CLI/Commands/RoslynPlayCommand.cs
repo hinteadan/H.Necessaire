@@ -1,4 +1,5 @@
-﻿using H.Necessaire.CLI.Commands.HDoc.Model;
+﻿using H.Necessaire.CLI.Commands.HDoc;
+using H.Necessaire.CLI.Commands.HDoc.Model;
 using H.Necessaire.Runtime.CLI.Commands;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -88,10 +89,10 @@ namespace H.Necessaire.CLI.Commands
             if (projectInfo.ID.In(projectsToIgnore))
                 return null;
 
-            if (!IsPublic(typeDeclaration))
+            if (!typeDeclaration.IsPublic())
                 return null;
 
-            if (typeDeclaration.Parent is ClassDeclarationSyntax parentClass && !IsPublic(parentClass))
+            if (typeDeclaration.Parent is ClassDeclarationSyntax parentClass && !parentClass.IsPublic())
                 return null;
 
             NamespaceDeclarationSyntax ns = FindNamespaceFor(typeDeclaration);
@@ -118,7 +119,7 @@ namespace H.Necessaire.CLI.Commands
                     Name = ProcessName(typeDeclaration),
                     Namespace = nsName,
                     Category = category,
-                    IsStatic = IsStatic(typeDeclaration),
+                    IsStatic = typeDeclaration.IsStatic(),
                     Constructors = constructors.Select(ProcessConstructor).ToNoNullsArray(),
                     Methods = methods.Select(ProcessMethod).ToNoNullsArray(),
                     Properties = properties.Select(ProcessProperty).ToNoNullsArray(),
@@ -135,7 +136,7 @@ namespace H.Necessaire.CLI.Commands
 
         private static HDocConstructorInfo ProcessConstructor(ConstructorDeclarationSyntax constructorDeclaration)
         {
-            if (!IsPublic(constructorDeclaration))
+            if (!constructorDeclaration.IsPublic())
                 return null;
 
             return
@@ -144,27 +145,27 @@ namespace H.Necessaire.CLI.Commands
 
         private static HDocMethodInfo ProcessMethod(MethodDeclarationSyntax methodDeclaration)
         {
-            if (!IsPublic(methodDeclaration))
+            if (!methodDeclaration.IsPublic())
                 return null;
 
             return
                 new HDocMethodInfo
                 {
                     Name = methodDeclaration.Identifier.Text,
-                    IsStatic = IsStatic(methodDeclaration),
+                    IsStatic = methodDeclaration.IsStatic(),
                 };
         }
 
         private static HDocPropertyInfo ProcessProperty(PropertyDeclarationSyntax propertyDeclaration)
         {
-            if (!IsPublic(propertyDeclaration))
+            if (!propertyDeclaration.IsPublic())
                 return null;
 
             return
                 new HDocPropertyInfo
                 {
                     Name = propertyDeclaration.Identifier.Text,
-                    IsStatic = IsStatic(propertyDeclaration),
+                    IsStatic = propertyDeclaration.IsStatic(),
                 };
         }
 
@@ -183,16 +184,6 @@ namespace H.Necessaire.CLI.Commands
                 return parent;
 
             return FindNamespaceFor(syntaxNode.Parent);
-        }
-
-        private static bool IsPublic(MemberDeclarationSyntax memberDeclaration)
-        {
-            return memberDeclaration?.Modifiers.Any(m => m.ToString() == "public") == true;
-        }
-
-        private static bool IsStatic(MemberDeclarationSyntax memberDeclaration)
-        {
-            return memberDeclaration?.Modifiers.Any(m => m.ToString() == "static") == true;
         }
 
         private static string GetCodebaseFolderPath()
