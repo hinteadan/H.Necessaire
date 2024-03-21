@@ -14,6 +14,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
             "H.Necessaire.AspNetCoreWebAppSample",
             "H.Necessaire.ReactAppSample",
             "H.Necessaire.CLI.Host",
+            "H.Necessaire.CLI",
         };
         const string srcFolderRelativePath = "Src/H.Necessaire";
 

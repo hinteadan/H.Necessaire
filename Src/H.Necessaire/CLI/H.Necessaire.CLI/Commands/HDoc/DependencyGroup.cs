@@ -6,6 +6,7 @@
         {
             dependencyRegistry
                 .Register<BLL.DependencyGroup>(() => new BLL.DependencyGroup())
+                .Register<HDocManager>(() => new HDocManager())
                 ;
         }
     }
