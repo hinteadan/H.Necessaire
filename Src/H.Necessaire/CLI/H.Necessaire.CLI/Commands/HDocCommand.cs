@@ -1,14 +1,6 @@
 ﻿using H.Necessaire.CLI.Commands.HDoc;
 using H.Necessaire.CLI.Commands.HDoc.Model;
 using H.Necessaire.Runtime.CLI.Commands;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Commands
@@ -33,31 +25,5 @@ namespace H.Necessaire.CLI.Commands
 
             return OperationResult.Win();
         }
-
-        //private static HDocMethodInfo ProcessMethod(MethodDeclarationSyntax methodDeclaration)
-        //{
-        //    if (!methodDeclaration.IsPublic())
-        //        return null;
-
-        //    return
-        //        new HDocMethodInfo
-        //        {
-        //            Name = methodDeclaration.Identifier.Text,
-        //            IsStatic = methodDeclaration.IsStatic(),
-        //        };
-        //}
-
-        //private static HDocPropertyInfo ProcessProperty(PropertyDeclarationSyntax propertyDeclaration)
-        //{
-        //    if (!propertyDeclaration.IsPublic())
-        //        return null;
-
-        //    return
-        //        new HDocPropertyInfo
-        //        {
-        //            Name = propertyDeclaration.Identifier.Text,
-        //            IsStatic = propertyDeclaration.IsStatic(),
-        //        };
-        //}
     }
 }

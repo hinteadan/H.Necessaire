@@ -1,21 +1,25 @@
 ﻿using H.Necessaire.CLI.Commands.HDoc.Model;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace H.Necessaire.CLI.Commands.HDoc.BLL
 {
     internal class HDocTypeProcessor : ImADependency
     {
+        #region Construct
         HDocConstructorProcessor constructorProcessor;
+        HDocMethodProcessor methodProcessor;
+        HDocPropertyProcessor propertyProcessor;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             constructorProcessor = dependencyProvider.Get<HDocConstructorProcessor>();
+            methodProcessor = dependencyProvider.Get<HDocMethodProcessor>();
+            propertyProcessor = dependencyProvider.Get<HDocPropertyProcessor>();
         }
+        #endregion
 
         public OperationResult<HDocTypeInfo> Process(TypeDeclarationSyntax typeDeclaration, FileInfo csFile, string sourceCode, HDocProjectInfo projectInfo)
         {
@@ -54,8 +58,8 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
                     Category = category,
                     IsStatic = typeDeclaration.IsStatic(),
                     Constructors = constructors.Select(constructorProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),
-                    //Methods = methods.Select(ProcessMethod).ToNoNullsArray(),
-                    //Properties = properties.Select(ProcessProperty).ToNoNullsArray(),
+                    Methods = methods.Select(methodProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),
+                    Properties = properties.Select(propertyProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),
                 }
                 .ToWinResult()
                 ;
@@ -86,6 +90,6 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
             return FindNamespaceFor(syntaxNode.Parent);
         }
 
-        
+
     }
 }
