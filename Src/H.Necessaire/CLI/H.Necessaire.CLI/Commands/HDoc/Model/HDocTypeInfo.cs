@@ -12,5 +12,8 @@
         public HDocConstructorInfo[] Constructors { get; set; }
         public HDocPropertyInfo[] Properties { get; set; }
         public HDocMethodInfo[] Methods { get; set; }
+
+
+        public string[] InheritedTypeNames { get; set; }
     }
 }

@@ -33,8 +33,8 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
                 return OperationResult.Fail($"{typeDeclaration.Identifier.Text}'s parent class is not public").WithoutPayload<HDocTypeInfo>();
 
             NamespaceDeclarationSyntax ns = FindNamespaceFor(typeDeclaration);
+            string name = ProcessName(typeDeclaration);
             string nsName = ns?.Name.ToString();
-
             string category
                 = csFile.Directory.FullName == projectInfo.CsProj.Directory.FullName
                 ? null :
@@ -51,15 +51,16 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
             return
                 new HDocTypeInfo
                 {
-                    ID = $"{(nsName.IsEmpty() ? "" : $"{nsName}.")}{typeDeclaration.Identifier.Text}",
+                    ID = $"{(nsName.IsEmpty() ? "" : $"{nsName}.")}{name}",
                     Module = projectInfo.ID,
-                    Name = ProcessName(typeDeclaration),
+                    Name = name,
                     Namespace = nsName,
                     Category = category,
                     IsStatic = typeDeclaration.IsStatic(),
                     Constructors = constructors.Select(constructorProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),
                     Methods = methods.Select(methodProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),
                     Properties = properties.Select(propertyProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),
+                    InheritedTypeNames = typeDeclaration.BaseList?.Types.Select(b => b.ToString()).ToArrayNullIfEmpty(),
                 }
                 .ToWinResult()
                 ;
