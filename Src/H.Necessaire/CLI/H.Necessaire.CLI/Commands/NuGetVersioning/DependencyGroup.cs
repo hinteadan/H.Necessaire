@@ -1,6 +1,6 @@
 ﻿namespace H.Necessaire.CLI.Commands.NuGetVersioning
 {
-    public class DependencyGroup : ImADependencyGroup
+    internal class DependencyGroup : ImADependencyGroup
     {
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {

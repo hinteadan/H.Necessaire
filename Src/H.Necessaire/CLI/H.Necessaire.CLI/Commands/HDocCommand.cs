@@ -13,8 +13,8 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Commands
 {
-    [ID("play-roslyn")]
-    public class RoslynPlayCommand : CommandBase
+    [ID("h-doc")]
+    public class HDocCommand : CommandBase
     {
         static readonly string[] projectsToIgnore = new string[] {
             "H.Necessaire.Testicles.Unit",

@@ -12,6 +12,7 @@ namespace H.Necessaire.CLI
                 .WithEverything()
                 .WithDefaultRuntimeConfig()
                 .With(x => x.Register<Commands.NuGetVersioning.DependencyGroup>(() => new Commands.NuGetVersioning.DependencyGroup()))
+                .With(x => x.Register<Commands.HDoc.DependencyGroup>(() => new Commands.HDoc.DependencyGroup()))
                 ;
         }
     }

@@ -8,9 +8,9 @@
     "CLI": {
       "commandName": "Project"
     },
-    "CLI - play-roslyn": {
+    "CLI - h-doc": {
       "commandName": "Project",
-      "commandLineArgs": "play-roslyn"
+      "commandLineArgs": "h-doc"
     },
     "CLI - nugetversion": {
       "commandName": "Project",
