@@ -115,7 +115,7 @@ namespace H.Necessaire.CLI.Commands
                 {
                     ID = $"{(nsName.IsEmpty() ? "" : $"{nsName}.")}{typeDeclaration.Identifier.Text}",
                     Module = projectInfo.ID,
-                    Name = typeDeclaration.Identifier.Text,
+                    Name = ProcessName(typeDeclaration),
                     Namespace = nsName,
                     Category = category,
                     IsStatic = IsStatic(typeDeclaration),
@@ -123,6 +123,14 @@ namespace H.Necessaire.CLI.Commands
                     Methods = methods.Select(ProcessMethod).ToNoNullsArray(),
                     Properties = properties.Select(ProcessProperty).ToNoNullsArray(),
                 };
+        }
+
+        private static string ProcessName(TypeDeclarationSyntax typeDeclaration)
+        {
+            if (typeDeclaration.Parent is ClassDeclarationSyntax parentClass)
+                return $"{parentClass.Identifier.Text}.{typeDeclaration.Identifier.Text}";
+
+            return typeDeclaration.Identifier.Text;
         }
 
         private static HConstructorInfo ProcessConstructor(ConstructorDeclarationSyntax constructorDeclaration)
