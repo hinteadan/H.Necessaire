@@ -43,15 +43,6 @@ namespace H.Necessaire.CLI.Commands
 
             HTypeInfo[] hTypes = projectInfos.SelectMany(ProcessProjectTypes).ToArray();
 
-            //FileInfo sourceCodeFile = new FileInfo(@"C:\H\H.Necessaire\Src\H.Necessaire\CLI\H.Necessaire.CLI\Commands\PingCommand.cs");
-            //string sourceCode = await sourceCodeFile.OpenRead().ReadAsStringAsync(isStreamLeftOpen: false);
-            //SyntaxTree syntaxTreesyntaxTree = CSharpSyntaxTree.ParseText(sourceCode, CSharpParseOptions.Default);
-            //CompilationUnitSyntax root = syntaxTreesyntaxTree.GetCompilationUnitRoot();
-            //ClassDeclarationSyntax[] classes
-            //    = root.DescendantNodes().OfType<ClassDeclarationSyntax>().ToArrayNullIfEmpty();
-            //MethodDeclarationSyntax[] methods
-            //    = root.DescendantNodes().OfType<MethodDeclarationSyntax>().ToArrayNullIfEmpty();
-
 
             return OperationResult.Win();
         }
@@ -97,10 +88,10 @@ namespace H.Necessaire.CLI.Commands
             if (projectInfo.ID.In(projectsToIgnore))
                 return null;
 
-            if (typeDeclaration.Modifiers.Any(m => m.ToString() == "public") != true)
+            if (!IsPublic(typeDeclaration))
                 return null;
 
-            if (typeDeclaration.Parent is ClassDeclarationSyntax parentClass && parentClass.Modifiers.Any(m => m.ToString() == "public") != true)
+            if (typeDeclaration.Parent is ClassDeclarationSyntax parentClass && !IsPublic(parentClass))
                 return null;
 
             NamespaceDeclarationSyntax ns = FindNamespaceFor(typeDeclaration);
@@ -117,6 +108,7 @@ namespace H.Necessaire.CLI.Commands
 
             IEnumerable<ConstructorDeclarationSyntax> constructors = typeDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>();
             IEnumerable<MethodDeclarationSyntax> methods = typeDeclaration.DescendantNodes().OfType<MethodDeclarationSyntax>();
+            IEnumerable<PropertyDeclarationSyntax> properties = typeDeclaration.DescendantNodes().OfType<PropertyDeclarationSyntax>();
 
             return
                 new HTypeInfo
@@ -126,23 +118,45 @@ namespace H.Necessaire.CLI.Commands
                     Name = typeDeclaration.Identifier.Text,
                     Namespace = nsName,
                     Category = category,
+                    IsStatic = IsStatic(typeDeclaration),
                     Constructors = constructors.Select(ProcessConstructor).ToNoNullsArray(),
                     Methods = methods.Select(ProcessMethod).ToNoNullsArray(),
+                    Properties = properties.Select(ProcessProperty).ToNoNullsArray(),
                 };
         }
 
         private static HConstructorInfo ProcessConstructor(ConstructorDeclarationSyntax constructorDeclaration)
         {
+            if (!IsPublic(constructorDeclaration))
+                return null;
+
             return
                 new HConstructorInfo { };
         }
 
         private static HMethodInfo ProcessMethod(MethodDeclarationSyntax methodDeclaration)
         {
+            if (!IsPublic(methodDeclaration))
+                return null;
+
             return
                 new HMethodInfo
                 {
                     Name = methodDeclaration.Identifier.Text,
+                    IsStatic = IsStatic(methodDeclaration),
+                };
+        }
+
+        private static HPropertyInfo ProcessProperty(PropertyDeclarationSyntax propertyDeclaration)
+        {
+            if (!IsPublic(propertyDeclaration))
+                return null;
+
+            return
+                new HPropertyInfo
+                {
+                    Name = propertyDeclaration.Identifier.Text,
+                    IsStatic = IsStatic(propertyDeclaration),
                 };
         }
 
@@ -161,6 +175,16 @@ namespace H.Necessaire.CLI.Commands
                 return parent;
 
             return FindNamespaceFor(syntaxNode.Parent);
+        }
+
+        private static bool IsPublic(MemberDeclarationSyntax memberDeclaration)
+        {
+            return memberDeclaration?.Modifiers.Any(m => m.ToString() == "public") == true;
+        }
+
+        private static bool IsStatic(MemberDeclarationSyntax memberDeclaration)
+        {
+            return memberDeclaration?.Modifiers.Any(m => m.ToString() == "static") == true;
         }
 
         private static string GetCodebaseFolderPath()
@@ -193,6 +217,7 @@ namespace H.Necessaire.CLI.Commands
         public string Name { get; set; }
         public string Category { get; set; }
         public string Namespace { get; set; }
+        public bool IsStatic { get; set; }
 
         public HConstructorInfo[] Constructors { get; set; }
         public HPropertyInfo[] Properties { get; set; }
@@ -206,10 +231,12 @@ namespace H.Necessaire.CLI.Commands
     public class HMethodInfo
     {
         public string Name { get; set; }
+        public bool IsStatic { get; set; }
     }
 
     public class HPropertyInfo
     {
         public string Name { get; set; }
+        public bool IsStatic { get; set; }
     }
 }
