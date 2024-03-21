@@ -25,7 +25,7 @@ namespace H.Necessaire.CLI.Commands
 
         public override async Task<OperationResult> Run()
         {
-            OperationResult<HDocumentation> docResult = hDocManager.ParseDocumentation();
+            OperationResult<HDocumentation> docResult = await hDocManager.ParseDocumentation();
             if (!docResult.IsSuccessful)
                 return docResult;
             HDocumentation documentation = docResult.Payload;

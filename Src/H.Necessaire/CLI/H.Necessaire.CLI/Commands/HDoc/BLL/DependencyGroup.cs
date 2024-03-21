@@ -6,6 +6,8 @@
         {
             dependencyRegistry
                 .Register<HDocCsProjParser>(() => new HDocCsProjParser())
+                .Register<HDocCsFileParser>(() => new HDocCsFileParser())
+                .Register<HDocTypeProcessor>(() => new HDocTypeProcessor())
                 ;
         }
     }
