@@ -18,10 +18,10 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
                     Name = parameter.Identifier.ToString(),
                     Type = parameter.Type?.ToString(),
                     IsParamsArray = parameter.IsParamsArray(),
-                    IsTheExtensionMethodValue = false,//TODO IsTheExtensionMethodValue
+                    IsTheExtensionMethodValue = parameter.IsTheExtensionMethodValue(),
                     DefaultsTo = defaultValue,
                     IsOptional = defaultValue != null,
-                    IsOutput = false,//TODO IsOutput
+                    IsOutput = parameter.IsOutput(),
                 }
                 .ToWinResult();
         }

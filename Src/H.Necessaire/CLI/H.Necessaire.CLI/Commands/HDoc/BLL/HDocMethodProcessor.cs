@@ -1,10 +1,17 @@
 ﻿using H.Necessaire.CLI.Commands.HDoc.Model;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Linq;
 
 namespace H.Necessaire.CLI.Commands.HDoc.BLL
 {
-    internal class HDocMethodProcessor
+    internal class HDocMethodProcessor : ImADependency
     {
+        HDocParameterProcessor parameterProcessor;
+        public void ReferDependencies(ImADependencyProvider dependencyProvider)
+        {
+            parameterProcessor = dependencyProvider.Get<HDocParameterProcessor>();
+        }
+
         public OperationResult<HDocMethodInfo> Process(MethodDeclarationSyntax methodDeclaration)
         {
             if (!methodDeclaration.IsPublic())
@@ -15,6 +22,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
                 {
                     Name = methodDeclaration.Identifier.Text,
                     IsStatic = methodDeclaration.IsStatic(),
+                    Parameters = methodDeclaration.ParameterList?.Parameters.Select(parameterProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),
                 }
                 .ToWinResult()
                 ;

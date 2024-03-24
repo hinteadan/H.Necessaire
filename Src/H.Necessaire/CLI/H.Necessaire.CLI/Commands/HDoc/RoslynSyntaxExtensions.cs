@@ -19,5 +19,15 @@ namespace H.Necessaire.CLI.Commands.HDoc
         {
             return memberDeclaration?.Modifiers.Any(m => m.ToString() == "params") == true;
         }
+
+        public static bool IsTheExtensionMethodValue(this BaseParameterSyntax memberDeclaration)
+        {
+            return memberDeclaration?.Modifiers.Any(m => m.ToString() == "this") == true;
+        }
+
+        public static bool IsOutput(this BaseParameterSyntax memberDeclaration)
+        {
+            return memberDeclaration?.Modifiers.Any(m => m.ToString() == "out") == true;
+        }
     }
 }
