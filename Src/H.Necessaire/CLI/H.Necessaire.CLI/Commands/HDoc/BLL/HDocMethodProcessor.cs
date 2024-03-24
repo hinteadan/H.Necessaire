@@ -26,6 +26,10 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
                     ReturnType = methodDeclaration.ReturnType?.ToString(),
                     Parameters = methodDeclaration.ParameterList?.Parameters.Select(parameterProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),
                 }
+                .And(methodInfo => {
+                    if (methodInfo.ReturnType == "void")
+                        methodInfo.ReturnType = null;
+                })
                 .ToWinResult()
                 ;
         }
