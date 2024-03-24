@@ -1,6 +1,8 @@
-﻿using H.Necessaire.CLI.Commands.HDoc;
+﻿using DeviceDetectorNET;
+using H.Necessaire.CLI.Commands.HDoc;
 using H.Necessaire.CLI.Commands.HDoc.Model;
 using H.Necessaire.Runtime.CLI.Commands;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Commands
@@ -22,6 +24,7 @@ namespace H.Necessaire.CLI.Commands
                 return docResult;
             HDocumentation documentation = docResult.Payload;
 
+            var x = docResult.Payload.AllTypes.Where(t => t.Methods?.Any(m => m.IsVirtual) == true).ToArray();
 
             return OperationResult.Win();
         }
