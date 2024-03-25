@@ -82,7 +82,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
 
         private async Task PrintTypeDocumentation(StreamWriter printer, HDocTypeInfo typeDoc)
         {
-            await PrintHeader(printer, $"**{typeDoc.Name}**", level: 4);
+            await PrintHeader(printer, $"**{typeDoc.Name.Replace(">", "\\>")}**", level: 4);
             await PrintSeparator(printer);
             await PrintSpacer(printer);
 
