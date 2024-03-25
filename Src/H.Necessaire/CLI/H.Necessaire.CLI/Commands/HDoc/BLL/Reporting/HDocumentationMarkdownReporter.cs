@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -64,7 +66,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
                 {
                     if (!category.Key.IsEmpty())
                     {
-                        await PrintHeader(printer,$"_**{category.Key}**_", level: 3);
+                        await PrintHeader(printer, $"_**{category.Key}**_", level: 3);
                         await PrintSpacer(printer);
                         await PrintSeparator(printer);
                         await PrintSpacer(printer);
@@ -84,7 +86,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
             await PrintSeparator(printer);
             await PrintSpacer(printer);
 
-            if(typeDoc.Constructors?.Any() == true)
+            if (typeDoc.Constructors?.Any() == true)
             {
                 await PrintHeader(printer, $"**Constructor(s)**", level: 5);
                 await PrintSeparator(printer);
@@ -95,40 +97,60 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
                     await PrintConstructorDocumentation(printer, typeDoc, constructor);
                 }
             }
+
+            if (typeDoc.Fields?.Any() == true)
+            {
+                await PrintHeader(printer, $"**Field(s)**", level: 5);
+                await PrintSeparator(printer);
+                await PrintSpacer(printer);
+
+                foreach (HDocFieldInfo field in typeDoc.Fields)
+                {
+                    await PrintFieldDocumentation(printer, field);
+                }
+            }
         }
 
         private async Task PrintConstructorDocumentation(StreamWriter printer, HDocTypeInfo typeDoc, HDocConstructorInfo constructorDoc)
         {
-            if (constructorDoc.IsProtected)
-                await printer.WriteAsync("_protected_ ");
+            await PrintProtectedMarkerIf(printer, constructorDoc.IsProtected);
             await printer.WriteAsync(typeDoc.Name);
             await printer.WriteAsync("(");
-            if(constructorDoc.Parameters?.Any() == true)
-            {
-                foreach(HDocParameterInfo param in constructorDoc.Parameters)
-                {
-                    await printer.WriteAsync(param.Type);
-                    await printer.WriteAsync(" ");
-                    await printer.WriteAsync(param.Name);
-                    if(param.IsOptional)
-                    {
-                        await printer.WriteAsync(" = ");
-                        await printer.WriteAsync(param.DefaultsTo);
-                    }
-                }
-            }
+            await PrintParamtersIfAny(printer, constructorDoc.Parameters);
             await printer.WriteAsync(")");
             await PrintSpacer(printer);
         }
 
-        private async Task PrintFieldsDocumentation(StreamWriter printer, HDocConstructorInfo constructorDoc)
+        private async Task PrintFieldDocumentation(StreamWriter printer, HDocFieldInfo fieldDoc)
         {
+            await PrintProtectedMarkerIf(printer, fieldDoc.IsProtected);
 
+            if (fieldDoc.IsConst)
+            {
+                await printer.WriteAsync("_const_ ");
+            }
+            else
+            {
+                await PrintStaticMarkerIf(printer, fieldDoc.IsStatic);
+                await PrintReadonlyMarkerIf(printer, fieldDoc.IsReadonly);
+            }
+
+            await printer.WriteAsync(fieldDoc.Type);
+            await printer.WriteAsync(" ");
+            await printer.WriteAsync(fieldDoc.Name);
+
+            if (fieldDoc.HasDefaultValue)
+            {
+                await printer.WriteAsync(" = ");
+                await printer.WriteAsync(fieldDoc.DefaultsTo);
+            }
+
+            await PrintSpacer(printer);
         }
 
         private async Task PrintReportTitle(StreamWriter printer, HDocumentation reportData)
         {
-            await PrintHeader(printer, $"**H.Necessaire** ");
+            await PrintHeader(printer, $"**H.Necessaire**");
             await printer.WriteLineAsync(reportData.Version.ToString());
             await PrintSeparator(printer);
             await PrintQuote(printer, $"_as of **{reportData.AsOf.PrintDateAndTime()}**_");
@@ -150,6 +172,54 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
 
             await PrintSeparator(printer);
             await PrintSpacer(printer);
+        }
+
+        private async Task PrintParamtersIfAny(StreamWriter printer, params HDocParameterInfo[] parameterInfos)
+        {
+            if (parameterInfos?.Any() != true)
+                return;
+
+            int paramIndex = -1;
+            foreach (HDocParameterInfo param in parameterInfos)
+            {
+                paramIndex++;
+                await printer.WriteAsync(param.Type);
+                await printer.WriteAsync(" ");
+                await printer.WriteAsync(param.Name);
+                if (param.IsOptional)
+                {
+                    await printer.WriteAsync(" = ");
+                    await printer.WriteAsync(param.DefaultsTo);
+                }
+                if (paramIndex < parameterInfos.Length - 1)
+                {
+                    await printer.WriteAsync(", ");
+                }
+            }
+        }
+
+        private async Task PrintProtectedMarkerIf(StreamWriter printer, bool isProtected)
+        {
+            if (!isProtected)
+                return;
+
+            await printer.WriteAsync("_protected_ ");
+        }
+
+        private async Task PrintReadonlyMarkerIf(StreamWriter printer, bool isReadOnly)
+        {
+            if (!isReadOnly)
+                return;
+
+            await printer.WriteAsync("_readonly_ ");
+        }
+
+        private async Task PrintStaticMarkerIf(StreamWriter printer, bool isStatic)
+        {
+            if (!isStatic)
+                return;
+
+            await printer.WriteAsync("_static_ ");
         }
     }
 }

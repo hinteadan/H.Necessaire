@@ -24,7 +24,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
                     Name = fieldDeclaration.Declaration.Variables.Single().Identifier.Text,
                     IsConst = fieldDeclaration.IsConst(),
                     IsStatic = fieldDeclaration.IsStatic() || fieldDeclaration.IsConst(),
-                    IsReadonly = fieldDeclaration.IsReadonly(),
+                    IsReadonly = fieldDeclaration.IsReadonly() || fieldDeclaration.IsConst(),
                     IsProtected = fieldDeclaration.IsProtected(),
                     Type = fieldDeclaration.Declaration.Type?.ToString(),
                     DefaultsTo = defaultValue,
