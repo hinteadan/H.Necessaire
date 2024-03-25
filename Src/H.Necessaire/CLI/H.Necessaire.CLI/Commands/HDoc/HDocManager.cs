@@ -1,5 +1,6 @@
 ﻿using H.Necessaire.CLI.Commands.HDoc.BLL;
 using H.Necessaire.CLI.Commands.HDoc.Model;
+using H.Necessaire.Runtime.Reporting;
 using System;
 using System.IO;
 using System.Linq;
@@ -12,14 +13,46 @@ namespace H.Necessaire.CLI.Commands.HDoc
         HDocCsProjParser hDocCsProjParser;
         HDocCsFileParser hDocCsFileParser;
         ImAVersionProvider versionProvider;
+        ImAReportBuilder<HDocumentation> markdownReporter;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             hDocCsProjParser = dependencyProvider.Get<HDocCsProjParser>();
             hDocCsFileParser = dependencyProvider.Get<HDocCsFileParser>();
             versionProvider = dependencyProvider.Get<ImAVersionProvider>();
+            markdownReporter = dependencyProvider.Build<ImAReportBuilder<HDocumentation>>("hdoc-reporter-md");
         }
 
         public async Task<OperationResult<HDocumentation>> ParseDocumentation(DirectoryInfo srcFolder = null)
+        {
+            return await ParseAndBuildHDocumentation(srcFolder);
+        }
+
+        public async Task<OperationResult> ParseAndExportDocumentationAsMarkdown(DirectoryInfo dstFolder = null, DirectoryInfo srcFolder = null)
+        {
+            OperationResult<HDocumentation> hDocResult = await ParseAndBuildHDocumentation(srcFolder);
+            if (!hDocResult.IsSuccessful)
+                return hDocResult;
+
+            HDocumentation hDoc = hDocResult.Payload;
+
+            OperationResult<Stream> reportStreamResult = await markdownReporter.BuildReport(hDoc);
+            if (!reportStreamResult.IsSuccessful)
+                return reportStreamResult;
+
+            FileInfo outputFile = new FileInfo(Path.Combine(dstFolder?.FullName ?? "", $"HDoc_{hDoc.Version.Number}_asof_{hDoc.AsOf.PrintTimeStampAsIdentifier()}.txt.md"));
+
+            using (Stream reportStream = reportStreamResult.Payload)
+            {
+                using (FileStream outputFileStream = outputFile.OpenWrite())
+                {
+                    await reportStream.CopyToAsync(outputFileStream);
+                }
+            }
+
+            return OperationResult.Win();
+        }
+
+        private async Task<OperationResult<HDocumentation>> ParseAndBuildHDocumentation(DirectoryInfo srcFolder = null)
         {
             OperationResult<HDocProjectInfo[]> csProjsResult = hDocCsProjParser.Parse(srcFolder);
             if (!csProjsResult.IsSuccessful)

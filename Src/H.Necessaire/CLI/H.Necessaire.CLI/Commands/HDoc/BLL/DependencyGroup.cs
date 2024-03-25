@@ -14,6 +14,8 @@
                 .Register<HDocPropertyProcessor>(() => new HDocPropertyProcessor())
                 .Register<HDocParameterProcessor>(() => new HDocParameterProcessor())
                 .Register<HDocFieldProcessor>(() => new HDocFieldProcessor())
+
+                .Register<Reporting.DependencyGroup>(() => new Reporting.DependencyGroup())
                 ;
         }
     }
