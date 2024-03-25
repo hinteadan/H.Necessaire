@@ -21,7 +21,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
             return
                 new HDocFieldInfo
                 {
-                    Name = fieldDeclaration.Declaration.Variables.Single().Identifier.Text,
+                    Name = fieldDeclaration.Declaration.Variables.Single().Identifier.ToString(),
                     IsConst = fieldDeclaration.IsConst(),
                     IsStatic = fieldDeclaration.IsStatic() || fieldDeclaration.IsConst(),
                     IsReadonly = fieldDeclaration.IsReadonly() || fieldDeclaration.IsConst(),

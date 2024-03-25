@@ -20,7 +20,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
             return
                 new HDocMethodInfo
                 {
-                    Name = methodDeclaration.Identifier.Text,
+                    Name = methodDeclaration.Identifier.ToString(),
                     IsStatic = methodDeclaration.IsStatic(),
                     IsVirtual = methodDeclaration.IsVirtual(),
                     IsAbstract = methodDeclaration.Parent is InterfaceDeclarationSyntax || methodDeclaration.IsAbstract(),

@@ -23,7 +23,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
             return
                 new HDocPropertyInfo
                 {
-                    Name = propertyDeclaration.Identifier.Text,
+                    Name = propertyDeclaration.Identifier.ToString(),
                     IsStatic = propertyDeclaration.IsStatic(),
                     DefaultsTo = defaultValue,
                     HasDefaultValue = defaultValue != null,

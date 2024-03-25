@@ -30,10 +30,10 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
                 return OperationResult.Fail("Type Declaration is NULL").WithoutPayload<HDocTypeInfo>();
 
             if (!typeDeclaration.IsPublic())
-                return OperationResult.Fail($"{typeDeclaration.Identifier.Text} type is not public").WithoutPayload<HDocTypeInfo>();
+                return OperationResult.Fail($"{typeDeclaration.Identifier} type is not public").WithoutPayload<HDocTypeInfo>();
 
             if (typeDeclaration.Parent is ClassDeclarationSyntax parentClass && !parentClass.IsPublic())
-                return OperationResult.Fail($"{typeDeclaration.Identifier.Text}'s parent class is not public").WithoutPayload<HDocTypeInfo>();
+                return OperationResult.Fail($"{typeDeclaration.Identifier}'s parent class is not public").WithoutPayload<HDocTypeInfo>();
 
             NamespaceDeclarationSyntax ns = FindNamespaceFor(typeDeclaration);
             string name = ProcessName(typeDeclaration);
@@ -83,9 +83,9 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
         private static string ProcessName(TypeDeclarationSyntax typeDeclaration)
         {
             if (typeDeclaration.Parent is ClassDeclarationSyntax parentClass)
-                return $"{parentClass.Identifier.Text}.{typeDeclaration.Identifier.Text}";
+                return $"{ProcessName(parentClass)}.{typeDeclaration.Identifier}{typeDeclaration.TypeParameterList}";
 
-            return typeDeclaration.Identifier.Text;
+            return $"{typeDeclaration.Identifier}{typeDeclaration.TypeParameterList}";
         }
 
         private static NamespaceDeclarationSyntax FindNamespaceFor(SyntaxNode syntaxNode)

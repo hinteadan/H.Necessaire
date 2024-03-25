@@ -109,6 +109,18 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
                     await PrintFieldDocumentation(printer, field);
                 }
             }
+
+            if (typeDoc.Properties?.Any() == true)
+            {
+                await PrintHeader(printer, $"**Propertie(s)**", level: 5);
+                await PrintSeparator(printer);
+                await PrintSpacer(printer);
+
+                foreach (var property in typeDoc.Properties)
+                {
+                    await PrintPropertyDocumentation(printer, property);
+                }
+            }
         }
 
         private async Task PrintConstructorDocumentation(StreamWriter printer, HDocTypeInfo typeDoc, HDocConstructorInfo constructorDoc)
@@ -144,6 +156,19 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
                 await printer.WriteAsync(" = ");
                 await printer.WriteAsync(fieldDoc.DefaultsTo);
             }
+
+            await PrintSpacer(printer);
+        }
+
+        private async Task PrintPropertyDocumentation(StreamWriter printer, HDocPropertyInfo property)
+        {
+            await PrintProtectedMarkerIf(printer, property.IsProtected);
+
+            await PrintStaticMarkerIf(printer, property.IsStatic);
+
+            await printer.WriteAsync(property.Type);
+            await printer.WriteAsync(" ");
+            await printer.WriteAsync(property.Name);
 
             await PrintSpacer(printer);
         }
