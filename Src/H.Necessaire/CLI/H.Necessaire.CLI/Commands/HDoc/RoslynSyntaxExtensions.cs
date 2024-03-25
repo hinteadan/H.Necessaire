@@ -20,6 +20,16 @@ namespace H.Necessaire.CLI.Commands.HDoc
             return memberDeclaration?.Modifiers.Any(m => m.ToString() == "virtual") == true;
         }
 
+        public static bool IsReadonly(this MemberDeclarationSyntax memberDeclaration)
+        {
+            return memberDeclaration?.Modifiers.Any(m => m.ToString() == "readonly") == true;
+        }
+
+        public static bool IsConst(this MemberDeclarationSyntax memberDeclaration)
+        {
+            return memberDeclaration?.Modifiers.Any(m => m.ToString() == "const") == true;
+        }
+
         public static bool IsParamsArray(this BaseParameterSyntax memberDeclaration)
         {
             return memberDeclaration?.Modifiers.Any(m => m.ToString() == "params") == true;

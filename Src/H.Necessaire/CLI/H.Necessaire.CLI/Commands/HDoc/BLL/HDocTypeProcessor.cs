@@ -14,11 +14,13 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
         HDocConstructorProcessor constructorProcessor;
         HDocMethodProcessor methodProcessor;
         HDocPropertyProcessor propertyProcessor;
+        HDocFieldProcessor fieldProcessor;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             constructorProcessor = dependencyProvider.Get<HDocConstructorProcessor>();
             methodProcessor = dependencyProvider.Get<HDocMethodProcessor>();
             propertyProcessor = dependencyProvider.Get<HDocPropertyProcessor>();
+            fieldProcessor = dependencyProvider.Get<HDocFieldProcessor>();
         }
         #endregion
 
@@ -50,6 +52,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
             string[] folderPath = filePath.Take(filePath.Length - 1).ToArrayNullIfEmpty();
 
             IEnumerable<ConstructorDeclarationSyntax> constructors = typeDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>();
+            IEnumerable<FieldDeclarationSyntax> fields = typeDeclaration.DescendantNodes().OfType<FieldDeclarationSyntax>();
             IEnumerable<MethodDeclarationSyntax> methods = typeDeclaration.DescendantNodes().OfType<MethodDeclarationSyntax>();
             IEnumerable<PropertyDeclarationSyntax> properties = typeDeclaration.DescendantNodes().OfType<PropertyDeclarationSyntax>();
 
@@ -65,6 +68,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
                     Category = category,
                     IsStatic = typeDeclaration.IsStatic(),
                     Constructors = constructors.Select(constructorProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),
+                    Fields = fields.Select(fieldProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),
                     Methods = methods.Select(methodProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),
                     Properties = properties.Select(propertyProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),
                     InheritedTypeNames = typeDeclaration.BaseList?.Types.Select(b => b.ToString()).ToArrayNullIfEmpty(),

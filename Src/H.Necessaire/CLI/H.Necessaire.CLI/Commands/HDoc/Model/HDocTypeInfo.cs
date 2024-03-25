@@ -12,6 +12,7 @@
         public bool IsStatic { get; set; }
 
         public HDocConstructorInfo[] Constructors { get; set; }
+        public HDocFieldInfo[] Fields { get; set; }
         public HDocPropertyInfo[] Properties { get; set; }
         public HDocMethodInfo[] Methods { get; set; }
 

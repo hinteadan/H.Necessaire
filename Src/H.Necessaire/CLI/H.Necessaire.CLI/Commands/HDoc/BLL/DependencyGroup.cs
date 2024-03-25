@@ -13,6 +13,7 @@
                 .Register<HDocMethodProcessor>(() => new HDocMethodProcessor())
                 .Register<HDocPropertyProcessor>(() => new HDocPropertyProcessor())
                 .Register<HDocParameterProcessor>(() => new HDocParameterProcessor())
+                .Register<HDocFieldProcessor>(() => new HDocFieldProcessor())
                 ;
         }
     }
