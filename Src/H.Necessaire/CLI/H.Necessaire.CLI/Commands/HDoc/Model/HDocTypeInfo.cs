@@ -4,6 +4,8 @@
     {
         public string ID { get; set; }
         public string Module { get; set; }
+        public string[] FilePath { get; set; }
+        public string[] FolderPath { get; set; }
         public string Name { get; set; }
         public string Category { get; set; }
         public string Namespace { get; set; }

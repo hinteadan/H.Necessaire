@@ -10,6 +10,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
     internal class HDocTypeProcessor : ImADependency
     {
         #region Construct
+        static string pathRootKey = Path.Combine("Src", "H.Necessaire");
         HDocConstructorProcessor constructorProcessor;
         HDocMethodProcessor methodProcessor;
         HDocPropertyProcessor propertyProcessor;
@@ -43,6 +44,10 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
                 .Replace("\\", ".")
                 .Substring(1)
                 ;
+            
+            int filePathRootIndex = csFile.FullName.IndexOf(pathRootKey) + pathRootKey.Length + 1;
+            string[] filePath = csFile.FullName.Substring(filePathRootIndex).Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            string[] folderPath = filePath.Take(filePath.Length - 1).ToArrayNullIfEmpty();
 
             IEnumerable<ConstructorDeclarationSyntax> constructors = typeDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>();
             IEnumerable<MethodDeclarationSyntax> methods = typeDeclaration.DescendantNodes().OfType<MethodDeclarationSyntax>();
@@ -53,6 +58,8 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
                 {
                     ID = $"{(nsName.IsEmpty() ? "" : $"{nsName}.")}{name}",
                     Module = projectInfo.ID,
+                    FilePath = filePath,
+                    FolderPath = folderPath,
                     Name = name,
                     Namespace = nsName,
                     Category = category,
