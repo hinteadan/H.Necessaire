@@ -11,8 +11,8 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
     {
         public OperationResult<HDocFieldInfo> Process(FieldDeclarationSyntax fieldDeclaration)
         {
-            if (!fieldDeclaration.IsPublic())
-                return OperationResult.Fail($"Field {fieldDeclaration} is not public").WithoutPayload<HDocFieldInfo>();
+            if (!fieldDeclaration.IsPublic() && !fieldDeclaration.IsProtected())
+                return OperationResult.Fail($"Field {fieldDeclaration} is private").WithoutPayload<HDocFieldInfo>();
 
 
 

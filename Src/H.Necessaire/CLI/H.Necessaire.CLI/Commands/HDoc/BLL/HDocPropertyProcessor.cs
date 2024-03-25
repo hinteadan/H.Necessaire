@@ -10,8 +10,8 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
     {
         public OperationResult<HDocPropertyInfo> Process(PropertyDeclarationSyntax propertyDeclaration)
         {
-            if (!propertyDeclaration.IsPublic())
-                return OperationResult.Fail($"Property {propertyDeclaration} is not public").WithoutPayload<HDocPropertyInfo>();
+            if (!propertyDeclaration.IsPublic() && !propertyDeclaration.IsProtected())
+                return OperationResult.Fail($"Property {propertyDeclaration} is private").WithoutPayload<HDocPropertyInfo>();
 
             string defaultValue = propertyDeclaration.Initializer?.Value?.ToString().NullIfEmpty();
 

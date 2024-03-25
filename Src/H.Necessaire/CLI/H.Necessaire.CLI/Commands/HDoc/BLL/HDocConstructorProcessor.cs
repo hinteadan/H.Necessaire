@@ -14,8 +14,8 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
 
         public OperationResult<HDocConstructorInfo> Process(ConstructorDeclarationSyntax constructorDeclaration)
         {
-            if (!constructorDeclaration.IsPublic())
-                return OperationResult.Fail($"Constructor {constructorDeclaration} is not public").WithoutPayload<HDocConstructorInfo>();
+            if (!constructorDeclaration.IsPublic() && !constructorDeclaration.IsProtected())
+                return OperationResult.Fail($"Constructor {constructorDeclaration} is private").WithoutPayload<HDocConstructorInfo>();
 
             return
                 new HDocConstructorInfo

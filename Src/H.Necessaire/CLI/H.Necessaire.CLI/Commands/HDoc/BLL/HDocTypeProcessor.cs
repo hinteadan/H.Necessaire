@@ -67,6 +67,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
                     Namespace = nsName,
                     Category = category,
                     IsStatic = typeDeclaration.IsStatic(),
+                    IsSealed = typeDeclaration.IsSealed(),
                     IsInterface = typeDeclaration is InterfaceDeclarationSyntax,
                     IsAbstract = typeDeclaration is InterfaceDeclarationSyntax || typeDeclaration.IsAbstract(),
                     Constructors = constructors.Select(constructorProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),

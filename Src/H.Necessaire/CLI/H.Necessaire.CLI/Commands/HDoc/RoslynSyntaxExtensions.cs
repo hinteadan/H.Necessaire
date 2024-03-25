@@ -30,6 +30,11 @@ namespace H.Necessaire.CLI.Commands.HDoc
             return memberDeclaration?.Modifiers.Any(m => m.ToString() == "static") == true;
         }
 
+        public static bool IsSealed(this MemberDeclarationSyntax memberDeclaration)
+        {
+            return memberDeclaration?.Modifiers.Any(m => m.ToString() == "sealed") == true;
+        }
+
         public static bool IsVirtual(this MemberDeclarationSyntax memberDeclaration)
         {
             return memberDeclaration?.Modifiers.Any(m => m.ToString() == "virtual") == true;

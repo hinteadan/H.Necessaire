@@ -11,6 +11,8 @@
         public string Namespace { get; set; }
         public bool IsStatic { get; set; }
         public bool IsAbstract { get; set; }
+        public bool IsInterface { get; set; }
+        public bool IsSealed { get; set; }
 
         public HDocConstructorInfo[] Constructors { get; set; }
         public HDocFieldInfo[] Fields { get; set; }
@@ -19,6 +21,5 @@
 
 
         public string[] InheritedTypeNames { get; set; }
-        public bool IsInterface { get; internal set; }
     }
 }

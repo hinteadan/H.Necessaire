@@ -14,8 +14,8 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
 
         public OperationResult<HDocMethodInfo> Process(MethodDeclarationSyntax methodDeclaration)
         {
-            if (!methodDeclaration.IsPublic())
-                return OperationResult.Fail($"Method {methodDeclaration} is not public").WithoutPayload<HDocMethodInfo>();
+            if (!methodDeclaration.IsPublic() && !methodDeclaration.IsProtected())
+                return OperationResult.Fail($"Method {methodDeclaration} is private").WithoutPayload<HDocMethodInfo>();
 
             return
                 new HDocMethodInfo
