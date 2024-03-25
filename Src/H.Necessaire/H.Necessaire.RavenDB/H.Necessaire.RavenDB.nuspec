@@ -19,7 +19,7 @@
     <dependencies>
       <dependency id="H.Necessaire" version="2.34.13" />
       <dependency id="H.Necessaire.Serialization" version="2.34.13" />
-      <dependency id="RavenDB.Client" version="6.0.100" />
+      <dependency id="RavenDB.Client" version="6.0.101" />
     </dependencies>
   </metadata>
   <files>
