@@ -64,7 +64,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
                 {
                     if (!category.Key.IsEmpty())
                     {
-                        await PrintHeader(printer, category.Key, level: 3);
+                        await PrintHeader(printer,$"_**{category.Key}**_", level: 3);
                         await PrintSpacer(printer);
                         await PrintSeparator(printer);
                         await PrintSpacer(printer);
@@ -83,6 +83,47 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
             await PrintHeader(printer, $"**{typeDoc.Name}**", level: 4);
             await PrintSeparator(printer);
             await PrintSpacer(printer);
+
+            if(typeDoc.Constructors?.Any() == true)
+            {
+                await PrintHeader(printer, $"**Constructor(s)**", level: 5);
+                await PrintSeparator(printer);
+                await PrintSpacer(printer);
+
+                foreach (HDocConstructorInfo constructor in typeDoc.Constructors)
+                {
+                    await PrintConstructorDocumentation(printer, typeDoc, constructor);
+                }
+            }
+        }
+
+        private async Task PrintConstructorDocumentation(StreamWriter printer, HDocTypeInfo typeDoc, HDocConstructorInfo constructorDoc)
+        {
+            if (constructorDoc.IsProtected)
+                await printer.WriteAsync("_protected_ ");
+            await printer.WriteAsync(typeDoc.Name);
+            await printer.WriteAsync("(");
+            if(constructorDoc.Parameters?.Any() == true)
+            {
+                foreach(HDocParameterInfo param in constructorDoc.Parameters)
+                {
+                    await printer.WriteAsync(param.Type);
+                    await printer.WriteAsync(" ");
+                    await printer.WriteAsync(param.Name);
+                    if(param.IsOptional)
+                    {
+                        await printer.WriteAsync(" = ");
+                        await printer.WriteAsync(param.DefaultsTo);
+                    }
+                }
+            }
+            await printer.WriteAsync(")");
+            await PrintSpacer(printer);
+        }
+
+        private async Task PrintFieldsDocumentation(StreamWriter printer, HDocConstructorInfo constructorDoc)
+        {
+
         }
 
         private async Task PrintReportTitle(StreamWriter printer, HDocumentation reportData)
@@ -90,7 +131,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
             await PrintHeader(printer, $"**H.Necessaire** ");
             await printer.WriteLineAsync(reportData.Version.ToString());
             await PrintSeparator(printer);
-            await PrintQuote(printer, $"_as of **{reportData.AsOf.PrintDateAndTime()}**");
+            await PrintQuote(printer, $"_as of **{reportData.AsOf.PrintDateAndTime()}**_");
             await PrintSeparator(printer);
             await PrintSpacer(printer);
         }

@@ -20,8 +20,6 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
             bool isGetterPublic = (getter?.Modifiers.Any() == false) || (propertyDeclaration.ExpressionBody != null);
             bool isSetterPublic = setter?.Modifiers.Any() == false;
 
-            //propertyDeclaration.AccessorList.Accessors
-
             return
                 new HDocPropertyInfo
                 {
@@ -31,6 +29,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
                     HasDefaultValue = defaultValue != null,
                     IsVirtual = propertyDeclaration.IsVirtual(),
                     IsAbstract = propertyDeclaration.Parent is InterfaceDeclarationSyntax || propertyDeclaration.IsAbstract(),
+                    IsProtected = propertyDeclaration.IsProtected(),
                     IsReadable = isGetterPublic,
                     IsWriteable = isSetterPublic,
                     Type = propertyDeclaration.Type?.ToString(),

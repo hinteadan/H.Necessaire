@@ -51,10 +51,10 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
             string[] filePath = csFile.FullName.Substring(filePathRootIndex).Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
             string[] folderPath = filePath.Take(filePath.Length - 1).ToArrayNullIfEmpty();
 
-            IEnumerable<ConstructorDeclarationSyntax> constructors = typeDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>();
-            IEnumerable<FieldDeclarationSyntax> fields = typeDeclaration.DescendantNodes().OfType<FieldDeclarationSyntax>();
-            IEnumerable<MethodDeclarationSyntax> methods = typeDeclaration.DescendantNodes().OfType<MethodDeclarationSyntax>();
-            IEnumerable<PropertyDeclarationSyntax> properties = typeDeclaration.DescendantNodes().OfType<PropertyDeclarationSyntax>();
+            IEnumerable<ConstructorDeclarationSyntax> constructors = typeDeclaration.ChildNodes().OfType<ConstructorDeclarationSyntax>();
+            IEnumerable<FieldDeclarationSyntax> fields = typeDeclaration.ChildNodes().OfType<FieldDeclarationSyntax>();
+            IEnumerable<MethodDeclarationSyntax> methods = typeDeclaration.ChildNodes().OfType<MethodDeclarationSyntax>();
+            IEnumerable<PropertyDeclarationSyntax> properties = typeDeclaration.ChildNodes().OfType<PropertyDeclarationSyntax>();
 
             return
                 new HDocTypeInfo

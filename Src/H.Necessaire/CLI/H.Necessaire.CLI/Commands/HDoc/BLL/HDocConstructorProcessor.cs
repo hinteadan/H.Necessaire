@@ -20,6 +20,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
             return
                 new HDocConstructorInfo
                 {
+                    IsProtected = constructorDeclaration.IsProtected(),
                     Parameters = constructorDeclaration.ParameterList?.Parameters.Select(parameterProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),
                 }
                 .ToWinResult()

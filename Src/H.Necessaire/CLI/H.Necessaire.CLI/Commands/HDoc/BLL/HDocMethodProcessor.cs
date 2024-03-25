@@ -24,6 +24,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
                     IsStatic = methodDeclaration.IsStatic(),
                     IsVirtual = methodDeclaration.IsVirtual(),
                     IsAbstract = methodDeclaration.Parent is InterfaceDeclarationSyntax || methodDeclaration.IsAbstract(),
+                    IsProtected = methodDeclaration.IsProtected(),
                     ReturnType = methodDeclaration.ReturnType?.ToString(),
                     Parameters = methodDeclaration.ParameterList?.Parameters.Select(parameterProcessor.Process).Where(x => x.IsSuccessful).Select(x => x.Payload).ToArrayNullIfEmpty(),
                 }
