@@ -30,6 +30,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL
                     DefaultsTo = defaultValue,
                     HasDefaultValue = defaultValue != null,
                     IsVirtual = propertyDeclaration.IsVirtual(),
+                    IsAbstract = propertyDeclaration.Parent is InterfaceDeclarationSyntax || propertyDeclaration.IsAbstract(),
                     IsReadable = isGetterPublic,
                     IsWriteable = isSetterPublic,
                     Type = propertyDeclaration.Type?.ToString(),

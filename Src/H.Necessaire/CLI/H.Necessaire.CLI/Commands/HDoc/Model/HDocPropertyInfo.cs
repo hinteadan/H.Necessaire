@@ -5,6 +5,7 @@
         public string Name { get; set; }
         public string Type { get; set; }
         public bool IsStatic { get; set; }
+        public bool IsAbstract { get; set; }
         public bool IsReadable { get; set; }
         public bool IsWriteable { get; set; }
         public bool IsVirtual { get; set; }
