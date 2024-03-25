@@ -10,6 +10,16 @@ namespace H.Necessaire.CLI.Commands.HDoc
             return memberDeclaration?.Modifiers.Any(m => m.ToString() == "public") == true;
         }
 
+        public static bool IsPrivate(this MemberDeclarationSyntax memberDeclaration)
+        {
+            return memberDeclaration?.Modifiers.Any(m => m.ToString() == "private") == true;
+        }
+
+        public static bool IsProtected(this MemberDeclarationSyntax memberDeclaration)
+        {
+            return memberDeclaration?.Modifiers.Any(m => m.ToString() == "protected") == true;
+        }
+
         public static bool IsStatic(this MemberDeclarationSyntax memberDeclaration)
         {
             return memberDeclaration?.Modifiers.Any(m => m.ToString() == "static") == true;
