@@ -38,6 +38,9 @@ namespace H.Necessaire.CLI.Commands.HDoc
                 = typesParseResults
                 .Where(x => x.IsSuccessful)
                 .SelectMany(x => x.Payload)
+                .OrderBy(x => x.Module)
+                .ThenBy(x => x.Category)
+                .ThenBy(x => x.Name)
                 .ToArray()
                 ;
 
