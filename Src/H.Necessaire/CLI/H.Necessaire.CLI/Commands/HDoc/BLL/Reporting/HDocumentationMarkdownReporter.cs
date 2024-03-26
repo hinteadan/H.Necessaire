@@ -3,9 +3,9 @@ using H.Necessaire.Runtime.Reporting.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,11 +28,25 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
 
                     MemoryStream resultStream = new MemoryStream();
 
-                    using (StreamWriter printer = new StreamWriter(resultStream, encoding: Encoding.UTF8, bufferSize: 1024 * 10, leaveOpen: true))
+                    using (ZipArchive zipArchive = new ZipArchive(resultStream, ZipArchiveMode.Create, leaveOpen: true, Encoding.UTF8))
                     {
-                        await PrintReportTitle(printer, reportData);
-                        await PrintSummary(printer, reportData);
-                        await PrintDocumentation(printer, reportData);
+                        IEnumerable<IGrouping<string, HDocTypeInfo>> modules = reportData.AllTypes.GroupBy(t => t.Module);
+
+                        foreach(HDocTypeInfo docTypeInfo in reportData.AllTypes)
+                        {
+                            string path = docTypeInfo.Module.ToSafeFileName();
+                            if (!docTypeInfo.Category.IsEmpty())
+                                path = $"{path}/{docTypeInfo.Category.ToSafeFileName()}";
+                            path = $"{path}/{docTypeInfo.Name.ToSafeFileName(replacementValue: ".")}.txt.md";
+
+                            ZipArchiveEntry moduleFileEntry = zipArchive.CreateEntry(path);
+
+                            using (Stream moduleFileEntryStream = moduleFileEntry.Open())
+                            using (StreamWriter moduleFileEntryStreamWriter = new StreamWriter(moduleFileEntryStream))
+                            {
+                                await PrintTypeDocumentation(moduleFileEntryStreamWriter, docTypeInfo);
+                            }
+                        }
                     }
 
                     resultStream.Seek(0, SeekOrigin.Begin);
@@ -42,40 +56,35 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
                 .TryOrFailWithGrace(
                     onFail: ex =>
                     {
-                        result = OperationResult.Fail(ex, $"Error occurred while trying to Build WebDomains Markdown Report. Message: {ex.Message}").WithoutPayload<Stream>();
+                        result = OperationResult.Fail(ex, $"Error occurred while trying to Build HDocumentation Markdown Report. Message: {ex.Message}").WithoutPayload<Stream>();
                     }
                 );
 
             return result;
         }
 
-        private async Task PrintDocumentation(StreamWriter printer, HDocumentation reportData)
+        private async Task PrintModuleDocumentation(StreamWriter printer, string moduleName, IEnumerable<HDocTypeInfo> moduleTypes)
         {
-            IEnumerable<IGrouping<string, HDocTypeInfo>> modules = reportData.AllTypes.GroupBy(t => t.Module);
+            await PrintHeader(printer, moduleName, level: 2);
+            await PrintSpacer(printer);
+            await PrintSeparator(printer);
+            await PrintSpacer(printer);
 
-            foreach (IGrouping<string, HDocTypeInfo> module in modules)
+            IEnumerable<IGrouping<string, HDocTypeInfo>> categories = moduleTypes.GroupBy(t => t.Category);
+
+            foreach (IGrouping<string, HDocTypeInfo> category in categories)
             {
-                await PrintHeader(printer, module.Key, level: 2);
-                await PrintSpacer(printer);
-                await PrintSeparator(printer);
-                await PrintSpacer(printer);
-
-                IEnumerable<IGrouping<string, HDocTypeInfo>> categories = module.GroupBy(t => t.Category);
-
-                foreach (IGrouping<string, HDocTypeInfo> category in categories)
+                if (!category.Key.IsEmpty())
                 {
-                    if (!category.Key.IsEmpty())
-                    {
-                        await PrintHeader(printer, $"_**{category.Key}**_", level: 3);
-                        await PrintSpacer(printer);
-                        await PrintSeparator(printer);
-                        await PrintSpacer(printer);
-                    }
+                    await PrintHeader(printer, $"_**{category.Key}**_", level: 3);
+                    await PrintSpacer(printer);
+                    await PrintSeparator(printer);
+                    await PrintSpacer(printer);
+                }
 
-                    foreach (HDocTypeInfo typeDoc in category)
-                    {
-                        await PrintTypeDocumentation(printer, typeDoc);
-                    }
+                foreach (HDocTypeInfo typeDoc in category)
+                {
+                    await PrintTypeDocumentation(printer, typeDoc);
                 }
             }
         }

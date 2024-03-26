@@ -39,7 +39,7 @@ namespace H.Necessaire.CLI.Commands.HDoc
             if (!reportStreamResult.IsSuccessful)
                 return reportStreamResult;
 
-            FileInfo outputFile = new FileInfo(Path.Combine(dstFolder?.FullName ?? "", $"HDoc_{hDoc.Version.Number}_asof_{hDoc.AsOf.PrintTimeStampAsIdentifier()}.txt.md"));
+            FileInfo outputFile = new FileInfo(Path.Combine(dstFolder?.FullName ?? "", $"HDoc_{hDoc.Version.Number}_asof_{hDoc.AsOf.PrintTimeStampAsIdentifier()}.hdoc.md.zip"));
 
             using (Stream reportStream = reportStreamResult.Payload)
             {
