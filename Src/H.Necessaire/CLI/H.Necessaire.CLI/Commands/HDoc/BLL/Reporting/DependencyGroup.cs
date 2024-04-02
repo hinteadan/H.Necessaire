@@ -8,6 +8,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry
+                .Register<HTML.DependencyGroup>(() => new HTML.DependencyGroup())
                 .Register<HDocumentationMarkdownReporter>(() => new HDocumentationMarkdownReporter())
                 ;
         }
