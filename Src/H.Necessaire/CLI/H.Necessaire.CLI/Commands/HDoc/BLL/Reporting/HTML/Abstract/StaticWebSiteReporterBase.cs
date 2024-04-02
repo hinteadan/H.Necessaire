@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,7 +41,17 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
 
                     using (ZipArchive zipArchive = new ZipArchive(resultStream, ZipArchiveMode.Create, leaveOpen: true, Encoding.UTF8))
                     {
-                        
+                        foreach (Task<TaggedStream> sourceStreamTask in await GetContentStreams())
+                        {
+                            using (TaggedStream sourceStream = await sourceStreamTask)
+                            {
+                                ZipArchiveEntry zipEntry = zipArchive.CreateEntry(sourceStream.ID);
+                                using (Stream zipStream = zipEntry.Open())
+                                {
+                                    await sourceStream.Stream.CopyToAsync(zipStream);
+                                }
+                            }
+                        }
                     }
 
                     resultStream.Seek(0, SeekOrigin.Begin);
@@ -59,7 +68,6 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
             return result;
         }
 
-        protected virtual Task AddPreAssets() => Task.CompletedTask;
-        protected virtual Task AddPostAssets() => Task.CompletedTask;
+        protected abstract Task<IEnumerable<Task<TaggedStream>>> GetContentStreams();
     }
 }
