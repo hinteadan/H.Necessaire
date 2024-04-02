@@ -16,7 +16,7 @@ namespace H.Necessaire.CLI.Commands
 
         public override async Task<OperationResult> Run()
         {
-            return await hDocManager.ParseAndExportDocumentationAsMarkdown(dstFolder: new System.IO.DirectoryInfo(@"C:\Users\Hintea Dan Alexandru\Downloads"));
+            return await hDocManager.ParseAndExportDocumentation(dstFolder: new System.IO.DirectoryInfo(@"C:\Users\Hintea Dan Alexandru\Downloads"));
         }
     }
 }

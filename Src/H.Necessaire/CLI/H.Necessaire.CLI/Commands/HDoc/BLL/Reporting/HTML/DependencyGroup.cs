@@ -8,7 +8,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML
     {
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

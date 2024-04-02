@@ -14,12 +14,14 @@ namespace H.Necessaire.CLI.Commands.HDoc
         HDocCsFileParser hDocCsFileParser;
         ImAVersionProvider versionProvider;
         ImAReportBuilder<HDocumentation> markdownReporter;
+        ImAReportBuilder<HDocumentation> staticWebSiteReporter;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             hDocCsProjParser = dependencyProvider.Get<HDocCsProjParser>();
             hDocCsFileParser = dependencyProvider.Get<HDocCsFileParser>();
             versionProvider = dependencyProvider.Get<ImAVersionProvider>();
             markdownReporter = dependencyProvider.Build<ImAReportBuilder<HDocumentation>>("hdoc-reporter-md");
+            staticWebSiteReporter = dependencyProvider.Build<ImAReportBuilder<HDocumentation>>("hdoc-reporter-web");
         }
 
         public async Task<OperationResult<HDocumentation>> ParseDocumentation(DirectoryInfo srcFolder = null)
@@ -27,7 +29,7 @@ namespace H.Necessaire.CLI.Commands.HDoc
             return await ParseAndBuildHDocumentation(srcFolder);
         }
 
-        public async Task<OperationResult> ParseAndExportDocumentationAsMarkdown(DirectoryInfo dstFolder = null, DirectoryInfo srcFolder = null)
+        public async Task<OperationResult> ParseAndExportDocumentation(DirectoryInfo dstFolder = null, DirectoryInfo srcFolder = null)
         {
             OperationResult<HDocumentation> hDocResult = await ParseAndBuildHDocumentation(srcFolder);
             if (!hDocResult.IsSuccessful)
@@ -35,11 +37,11 @@ namespace H.Necessaire.CLI.Commands.HDoc
 
             HDocumentation hDoc = hDocResult.Payload;
 
-            OperationResult<Stream> reportStreamResult = await markdownReporter.BuildReport(hDoc);
+            OperationResult<Stream> reportStreamResult = await staticWebSiteReporter.BuildReport(hDoc);
             if (!reportStreamResult.IsSuccessful)
                 return reportStreamResult;
 
-            FileInfo outputFile = new FileInfo(Path.Combine(dstFolder?.FullName ?? "", $"HDoc_{hDoc.Version.Number}_asof_{hDoc.AsOf.PrintTimeStampAsIdentifier()}.hdoc.md.zip"));
+            FileInfo outputFile = new FileInfo(Path.Combine(dstFolder?.FullName ?? "", $"HDoc_{hDoc.Version.Number}_asof_{hDoc.AsOf.PrintTimeStampAsIdentifier()}.hdoc.zip"));
 
             using (Stream reportStream = reportStreamResult.Payload)
             {
