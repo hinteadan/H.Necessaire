@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Commands\HDoc\BLL\Reporting\HTML\Templates\**\*.*" />
+	  <EmbeddedResource Include="Commands\HDoc\BLL\Reporting\HTML\Templates\**\*.*">
+		  <LogicalName>$([System.String]::new('%(RelativeDir)').Replace('\','/'))%(FileName)%(Extension)</LogicalName>
+	  </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
