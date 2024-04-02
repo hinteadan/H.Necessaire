@@ -36,4 +36,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\HDoc\BLL\Reporting\HTML\Templates\CoderDocs-BS5-v3.0\" />
+  </ItemGroup>
+
 </Project>
