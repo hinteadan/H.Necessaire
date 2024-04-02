@@ -2,6 +2,7 @@
 using H.Necessaire.CLI.Commands.HDoc.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,16 +12,9 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
     [Alias("hdoc-reporter-static-website")]
     internal class HDocumentationStaticWebSiteReporter : CoderDocsReporterBase<HDocumentation>
     {
-        protected override Task<TaggedStream> BuildIndexStream()
+        protected override Task<Stream> BuildIndexContentStream()
         {
-            return
-                new TaggedStream { 
-                    ID = "index.html",
-                    Name = "index.html",
-                    Value = "Index Page".ToStream(),
-                }
-                .AsTask()
-                ;
+            return "Index Page".ToStream().AsTask();
         }
 
         protected override Task<IEnumerable<Task<TaggedStream>>> BuildPagesStreams()

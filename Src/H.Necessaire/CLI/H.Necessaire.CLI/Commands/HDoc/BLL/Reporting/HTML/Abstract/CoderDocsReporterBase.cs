@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using YamlDotNet.Core.Tokens;
@@ -22,9 +23,20 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
                 .Union(Enumerable.Repeat(true, 1).Select(_ => BuildIndexStream()))
                 ;
         }
-
-        protected abstract Task<TaggedStream> BuildIndexStream();
+        protected abstract Task<Stream> BuildIndexContentStream();
         protected abstract Task<IEnumerable<Task<TaggedStream>>> BuildPagesStreams();
+
+        protected virtual async Task<TaggedStream> BuildIndexStream()
+        {
+            return
+                new TaggedStream
+                {
+                    ID = "index.html",
+                    Name = "index.html",
+                    Value = await BuildIndexContentStream(),
+                }
+                ;
+        }
 
         protected virtual Task<IEnumerable<Task<TaggedStream>>> BuildAssetsStreams()
         {
