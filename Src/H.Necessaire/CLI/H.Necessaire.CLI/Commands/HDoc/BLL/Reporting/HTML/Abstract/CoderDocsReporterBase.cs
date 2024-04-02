@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using YamlDotNet.Core.Tokens;
 
 namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
 {
@@ -11,8 +12,22 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
 
         protected override async Task<IEnumerable<Task<TaggedStream>>> GetContentStreams()
         {
-            await Task.CompletedTask;
+            IEnumerable<Task<TaggedStream>> assets = await BuildAssetsStreams();
+            IEnumerable<Task<TaggedStream>> pages = await BuildPagesStreams();
 
+
+            return 
+                assets
+                .Union(pages)
+                .Union(Enumerable.Repeat(true, 1).Select(_ => BuildIndexStream()))
+                ;
+        }
+
+        protected abstract Task<TaggedStream> BuildIndexStream();
+        protected abstract Task<IEnumerable<Task<TaggedStream>>> BuildPagesStreams();
+
+        protected virtual Task<IEnumerable<Task<TaggedStream>>> BuildAssetsStreams()
+        {
             IEnumerable<string> assetResourceNames
                 = GetType()
                 .Assembly
@@ -30,7 +45,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
                 }.AsTask())
                 ;
 
-            return streams;
+            return streams.AsTask();
         }
     }
 }
