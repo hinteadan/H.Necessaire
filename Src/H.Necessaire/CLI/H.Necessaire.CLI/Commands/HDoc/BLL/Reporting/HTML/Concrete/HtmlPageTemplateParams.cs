@@ -5,7 +5,7 @@ using System.Text;
 
 namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Concrete
 {
-    internal class HtmlPageTemplateParams : TemplateParamsBinBase
+    internal class HtmlPageTemplateParams : TemplateBase
     {
         public string PageTitle { get; set; }
     }

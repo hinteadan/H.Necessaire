@@ -2,8 +2,7 @@
 
 namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Concrete.CoderDocs.Parts
 {
-    internal class PageHeaderPartTemplate : TemplateBase
+    internal class ContentHeaderPartTemplate : TemplateBase
     {
-
     }
 }

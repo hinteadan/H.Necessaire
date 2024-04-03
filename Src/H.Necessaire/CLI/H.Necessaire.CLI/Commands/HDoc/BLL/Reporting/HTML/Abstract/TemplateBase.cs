@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
 {
-    internal abstract class TemplateParamsBinBase : ImATemplateParamsBin, ImATemplateProcessor
+    internal abstract class TemplateBase : ImATemplate
     {
-        readonly Lazy<PropertyInfo[]> templateParamPropertiesThatReturnString;
-        readonly Lazy<PropertyInfo[]> templateParamPropertiesThatReturnImATemplateParam;
-        readonly Lazy<MethodInfo[]> templateParamMethodsThatReturnStringTask;
-        readonly Lazy<MethodInfo[]> templateParamMethodsThatReturnImATemplateParamTask;
+        private readonly Lazy<PropertyInfo[]> templateParamPropertiesThatReturnString;
+        private readonly Lazy<PropertyInfo[]> templateParamPropertiesThatReturnImATemplateParam;
+        private readonly Lazy<MethodInfo[]> templateParamMethodsThatReturnStringTask;
+        private readonly Lazy<MethodInfo[]> templateParamMethodsThatReturnImATemplateParamTask;
         private ImATemplateParam[] parsedTemplateParams = null;
-        readonly SemaphoreSlim templateParamsParseSemaphore = new SemaphoreSlim(1, 1);
-        protected TemplateParamsBinBase()
+        private readonly SemaphoreSlim templateParamsParseSemaphore = new SemaphoreSlim(1, 1);
+        protected TemplateBase()
         {
             templateParamPropertiesThatReturnString = new Lazy<PropertyInfo[]>(ParseTemplateParamPropertiesThatReturnString);
             templateParamPropertiesThatReturnImATemplateParam = new Lazy<PropertyInfo[]>(ParseTemplateParamPropertiesThatReturnImATemplateParam);
@@ -91,6 +91,15 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
                 );
 
             templateParamsParseSemaphore.Release();
+        }
+
+        protected async Task<string> ProcessPartFromEmbeddedResource(string partEmbeddedResourceID, ImATemplate partTemplate)
+        {
+            return
+                await partTemplate.Process(
+                    await partEmbeddedResourceID.OpenEmbeddedResource().ReadAsStringAsync(isStreamLeftOpen: false),
+                    await partTemplate.ReadParams()
+                );
         }
 
         private PropertyInfo[] ParseTemplateParamPropertiesThatReturnString()
