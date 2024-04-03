@@ -25,6 +25,13 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
                 ContentHeader = new ContentHeaderPartTemplate { 
 
                 },
+                ContentCards = new ContentCardPartTemplate[] {
+                    new ContentCardPartTemplate { },
+                    new ContentCardPartTemplate { },
+                    new ContentCardPartTemplate { },
+                    new ContentCardPartTemplate { },
+                    new ContentCardPartTemplate { },
+                },
             };
 
             return
