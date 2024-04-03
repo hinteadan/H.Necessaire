@@ -11,6 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Commands\HDoc\BLL\Reporting\HTML\Templates\CoderDocs-BS5-v3.0\Parts\contentheader.part.tmpl.html" />
+    <None Remove="Commands\HDoc\BLL\Reporting\HTML\Templates\CoderDocs-BS5-v3.0\Parts\pageheader.part.tmpl.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\..\..\..\LICENSE" Link="LICENSE">
       <PackagePath></PackagePath>
       <Pack>True</Pack>
@@ -32,14 +37,16 @@
 		<ProjectReference Include="..\H.Necessaire.Runtime.CLI\H.Necessaire.Runtime.CLI.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <EmbeddedResource Update="Commands\HDoc\BLL\Reporting\HTML\Templates\CoderDocs-BS5-v3.0\Parts\contentheader.part.tmpl.html">
+	    <LogicalName>$([System.String]::new('%(RelativeDir)').Replace('\','/'))%(FileName)%(Extension)</LogicalName>
+	  </EmbeddedResource>
+	</ItemGroup>
+
   <ItemGroup>
     <None Update="IconLogo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Commands\HDoc\BLL\Reporting\HTML\Templates\CoderDocs-BS5-v3.0\" />
   </ItemGroup>
 
 </Project>

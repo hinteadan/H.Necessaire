@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using YamlDotNet.Core.Tokens;
 
 namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
 {
@@ -10,6 +9,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
     {
         protected const string templateRootPath = "Commands/HDoc/BLL/Reporting/HTML/Templates/CoderDocs-BS5-v3.0/";
         protected const string templateAssetsPath = "Commands/HDoc/BLL/Reporting/HTML/Templates/CoderDocs-BS5-v3.0/assets/";
+        protected const string templatePartsPath = "Commands/HDoc/BLL/Reporting/HTML/Templates/CoderDocs-BS5-v3.0/Parts/";
 
         protected override async Task<IEnumerable<Task<TaggedStream>>> GetContentStreams()
         {

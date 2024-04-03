@@ -11,6 +11,6 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
         protected abstract Task<string> LoadValue();
 
         public string ID { get; }
-        public async Task<Note> Read() => (await LoadValue()).NoteAs(ID);
+        public async Task<string> Read() => await LoadValue();
     }
 }
