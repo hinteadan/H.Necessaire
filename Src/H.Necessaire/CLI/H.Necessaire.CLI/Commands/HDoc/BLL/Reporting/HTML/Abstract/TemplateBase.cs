@@ -93,15 +93,6 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
             templateParamsParseSemaphore.Release();
         }
 
-        protected async Task<string> ProcessPartFromEmbeddedResource(string partEmbeddedResourceID, ImATemplate partTemplate)
-        {
-            return
-                await partTemplate.Process(
-                    await partEmbeddedResourceID.OpenEmbeddedResource().ReadAsStringAsync(isStreamLeftOpen: false),
-                    await partTemplate.ReadParams()
-                );
-        }
-
         private PropertyInfo[] ParseTemplateParamPropertiesThatReturnString()
         {
             return

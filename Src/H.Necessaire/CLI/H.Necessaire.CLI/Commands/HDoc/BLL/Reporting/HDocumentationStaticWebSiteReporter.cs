@@ -16,7 +16,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
     {
         protected override async Task<Stream> BuildIndexContentStream()
         {
-            CoderDocsIndexTemplateParams template = new CoderDocsIndexTemplateParams { 
+            CoderDocsIndexTemplate template = new CoderDocsIndexTemplate { 
                 PageTitle = "Test",
                 PageHeader = new PageHeaderPartTemplate
                 {
@@ -25,11 +25,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
             };
 
             return
-                (await template
-                .Process(
-                    await $"{templateRootPath}index.html".OpenEmbeddedResource().ReadAsStringAsync(isStreamLeftOpen: false),
-                    await template.ReadParams()
-                ))
+                (await template.ProcessEmbeddedResource($"{templateRootPath}index.html"))
                 .ToStream();
         }
 

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML
 {
-    internal class TypeDocTemplateParams : HtmlPageTemplateParams
+    internal class TypeDocTemplateParams : HtmlPageTemplate
     {
         public string ContentTitle { get; set; }
     }

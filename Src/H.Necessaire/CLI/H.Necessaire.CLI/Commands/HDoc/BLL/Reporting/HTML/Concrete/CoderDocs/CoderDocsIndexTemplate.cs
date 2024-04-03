@@ -3,21 +3,15 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Concrete.CoderDocs
 {
-    internal class CoderDocsIndexTemplateParams : HtmlPageTemplateParams
+    internal class CoderDocsIndexTemplate : HtmlPageTemplate
     {
         public PageHeaderPartTemplate PageHeader { get; set; } = new PageHeaderPartTemplate();
         public ContentHeaderPartTemplate ContentHeader { get; set; } = new ContentHeaderPartTemplate();
 
         public async Task<string> PageHeaderPart()
-            => await ProcessPartFromEmbeddedResource(
-                "CoderDocs-BS5-v3.0/Parts/pageheader.part.tmpl.html",
-                PageHeader
-            );
+            => await PageHeader.ProcessEmbeddedResource("CoderDocs-BS5-v3.0/Parts/pageheader.part.tmpl.html");
 
         public async Task<string> ContentHeaderPart()
-            => await ProcessPartFromEmbeddedResource(
-                "CoderDocs-BS5-v3.0/Parts/contentheader.part.tmpl.html",
-                ContentHeader
-            );
+            => await ContentHeader.ProcessEmbeddedResource("CoderDocs-BS5-v3.0/Parts/contentheader.part.tmpl.html");
     }
 }
