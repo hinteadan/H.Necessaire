@@ -4,5 +4,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Concrete.CoderDocs.P
 {
     internal class ContentCardPartTemplate : TemplateBase
     {
+        public string Title { get; set; }
+        public string Description { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
         protected override async Task<Stream> BuildIndexContentStream(HDocumentation reportData)
         {
             CoderDocsIndexTemplate template = new CoderDocsIndexTemplate { 
-                PageTitle = "",
+                PageTitle = $"H.Necessaire v{reportData.Version.Number}",
                 PageHeader = new PageHeaderPartTemplate
                 {
                     
@@ -25,13 +25,10 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
                 ContentHeader = new ContentHeaderPartTemplate { 
 
                 },
-                ContentCards = new ContentCardPartTemplate[] {
-                    new ContentCardPartTemplate { },
-                    new ContentCardPartTemplate { },
-                    new ContentCardPartTemplate { },
-                    new ContentCardPartTemplate { },
-                    new ContentCardPartTemplate { },
-                },
+                ContentCards = reportData.AllTypes.GroupBy(t => t.Module).Select(g => new ContentCardPartTemplate { 
+                    Title = g.Key,
+                    Description = $"Description for {g.Key} goes here",
+                }).ToArray(),
                 ContentFooter = new ContentFooterPartTemplate {
 
                 },
