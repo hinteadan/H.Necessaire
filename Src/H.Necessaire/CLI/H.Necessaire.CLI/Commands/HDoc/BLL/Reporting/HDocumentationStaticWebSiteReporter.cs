@@ -1,5 +1,7 @@
 ﻿using H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML;
 using H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract;
+using H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Concrete.CoderDocs;
+using H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Concrete.CoderDocs.Parts;
 using H.Necessaire.CLI.Commands.HDoc.Model;
 using System.Collections.Generic;
 using System.IO;
@@ -14,14 +16,21 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
     {
         protected override async Task<Stream> BuildIndexContentStream()
         {
-            ImATemplateParamsBin docParams = new TypeDocTemplateParams { 
+            CoderDocsIndexTemplateParams template = new CoderDocsIndexTemplateParams { 
                 PageTitle = "Test",
-                ContentTitle = "Test",
+                PageHeader = new PageHeaderPartTemplate
+                {
+                    
+                }
             };
 
-            var x = (await docParams.ReadParams()).ToArray();
-
-            return $"{templateRootPath}index.html".OpenEmbeddedResource();
+            return
+                (await template
+                .Process(
+                    await $"{templateRootPath}index.html".OpenEmbeddedResource().ReadAsStringAsync(isStreamLeftOpen: false),
+                    await template.ReadParams()
+                ))
+                .ToStream();
         }
 
         protected override Task<IEnumerable<Task<TaggedStream>>> BuildPagesStreams()

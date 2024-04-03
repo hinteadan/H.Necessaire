@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
 {
-    internal abstract class TemplateParamsBinBase : ImATemplateParamsBin
+    internal abstract class TemplateParamsBinBase : ImATemplateParamsBin, ImATemplateProcessor
     {
         readonly Lazy<PropertyInfo[]> templateParamPropertiesThatReturnString;
         readonly Lazy<PropertyInfo[]> templateParamPropertiesThatReturnImATemplateParam;
@@ -29,6 +29,16 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
             await EnsureTemplateParamsParsing();
 
             return parsedTemplateParams;
+        }
+
+        public virtual async Task<string> Process(string template, IEnumerable<ImATemplateParam> templateParams)
+        {
+            string result = template;
+            foreach(ImATemplateParam templateParam in templateParams)
+            {
+                result = result.Replace($"{{{{{templateParam.ID}}}}}", await templateParam.Read());
+            }
+            return result;
         }
 
         protected async Task EnsureTemplateParamsParsing()
