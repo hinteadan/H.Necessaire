@@ -1,4 +1,5 @@
-﻿using H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract;
+﻿using H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML;
+using H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract;
 using H.Necessaire.CLI.Commands.HDoc.Model;
 using System.Collections.Generic;
 using System.IO;
@@ -11,9 +12,16 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
     [Alias("hdoc-reporter-static-website")]
     internal class HDocumentationStaticWebSiteReporter : CoderDocsReporterBase<HDocumentation>
     {
-        protected override Task<Stream> BuildIndexContentStream()
+        protected override async Task<Stream> BuildIndexContentStream()
         {
-            return $"{templateRootPath}index.html".OpenEmbeddedResource().AsTask();
+            ImATemplateParamsBin docParams = new TypeDocTemplateParams { 
+                PageTitle = "Test",
+                ContentTitle = "Test",
+            };
+
+            var x = (await docParams.ReadParams()).ToArray();
+
+            return $"{templateRootPath}index.html".OpenEmbeddedResource();
         }
 
         protected override Task<IEnumerable<Task<TaggedStream>>> BuildPagesStreams()
