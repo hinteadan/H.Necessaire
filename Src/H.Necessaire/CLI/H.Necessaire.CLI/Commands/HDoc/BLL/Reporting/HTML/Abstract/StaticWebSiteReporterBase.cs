@@ -41,7 +41,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
 
                     using (ZipArchive zipArchive = new ZipArchive(resultStream, ZipArchiveMode.Create, leaveOpen: true, Encoding.UTF8))
                     {
-                        foreach (Task<TaggedStream> sourceStreamTask in await GetContentStreams())
+                        foreach (Task<TaggedStream> sourceStreamTask in await GetContentStreams(reportData))
                         {
                             using (TaggedStream sourceStream = await sourceStreamTask)
                             {
@@ -68,6 +68,6 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Abstract
             return result;
         }
 
-        protected abstract Task<IEnumerable<Task<TaggedStream>>> GetContentStreams();
+        protected abstract Task<IEnumerable<Task<TaggedStream>>> GetContentStreams(T reportData);
     }
 }

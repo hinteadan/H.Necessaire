@@ -14,10 +14,10 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
     [Alias("hdoc-reporter-static-website")]
     internal class HDocumentationStaticWebSiteReporter : CoderDocsReporterBase<HDocumentation>
     {
-        protected override async Task<Stream> BuildIndexContentStream()
+        protected override async Task<Stream> BuildIndexContentStream(HDocumentation reportData)
         {
             CoderDocsIndexTemplate template = new CoderDocsIndexTemplate { 
-                PageTitle = "Test",
+                PageTitle = "",
                 PageHeader = new PageHeaderPartTemplate
                 {
                     
@@ -32,6 +32,12 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
                     new ContentCardPartTemplate { },
                     new ContentCardPartTemplate { },
                 },
+                ContentFooter = new ContentFooterPartTemplate {
+
+                },
+                PageFooter = new PageFooterPartTemplate { 
+
+                },
             };
 
             return
@@ -39,7 +45,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
                 .ToStream();
         }
 
-        protected override Task<IEnumerable<Task<TaggedStream>>> BuildPagesStreams()
+        protected override Task<IEnumerable<Task<TaggedStream>>> BuildPagesStreams(HDocumentation reportData)
         {
             return 
                 Enumerable.Repeat(true, 1).Select(_ =>
