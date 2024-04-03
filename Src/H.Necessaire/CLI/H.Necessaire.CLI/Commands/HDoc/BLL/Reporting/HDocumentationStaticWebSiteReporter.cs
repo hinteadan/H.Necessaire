@@ -21,7 +21,10 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
                 PageHeader = new PageHeaderPartTemplate
                 {
                     
-                }
+                },
+                ContentHeader = new ContentHeaderPartTemplate { 
+
+                },
             };
 
             return
