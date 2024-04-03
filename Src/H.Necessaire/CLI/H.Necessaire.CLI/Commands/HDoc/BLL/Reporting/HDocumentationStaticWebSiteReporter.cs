@@ -26,7 +26,7 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
 
                 },
                 ContentCards = reportData.AllTypes.GroupBy(t => t.Module).Select(g => new ContentCardPartTemplate { 
-                    Title = g.Key,
+                    Title = g.Key.Replace(".", " ."),
                     Description = $"Description for {g.Key} goes here",
                 }).ToArray(),
                 ContentFooter = new ContentFooterPartTemplate {
