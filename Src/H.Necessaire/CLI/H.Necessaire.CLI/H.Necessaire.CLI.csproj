@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Commands\HDoc\BLL\Reporting\HTML\Templates\CoderDocs-BS5-v3.0\Parts\contentcard.part.tmpl.html" />
     <None Remove="Commands\HDoc\BLL\Reporting\HTML\Templates\CoderDocs-BS5-v3.0\Parts\contentheader.part.tmpl.html" />
     <None Remove="Commands\HDoc\BLL\Reporting\HTML\Templates\CoderDocs-BS5-v3.0\Parts\pageheader.part.tmpl.html" />
   </ItemGroup>
@@ -38,7 +39,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Commands\HDoc\BLL\Reporting\HTML\Templates\CoderDocs-BS5-v3.0\Parts\contentheader.part.tmpl.html">
+	  <EmbeddedResource Update="Commands\HDoc\BLL\Reporting\HTML\Templates\CoderDocs-BS5-v3.0\Parts\Index\contentcard.part.tmpl.html">
+	    <LogicalName>$([System.String]::new('%(RelativeDir)').Replace('\','/'))%(FileName)%(Extension)</LogicalName>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Commands\HDoc\BLL\Reporting\HTML\Templates\CoderDocs-BS5-v3.0\Parts\Index\contentheader.part.tmpl.html">
 	    <LogicalName>$([System.String]::new('%(RelativeDir)').Replace('\','/'))%(FileName)%(Extension)</LogicalName>
 	  </EmbeddedResource>
 	</ItemGroup>
