@@ -16,23 +16,28 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
     {
         protected override async Task<Stream> BuildIndexContentStream(HDocumentation reportData)
         {
-            CoderDocsIndexTemplate template = new CoderDocsIndexTemplate { 
+            CoderDocsIndexTemplate template = new CoderDocsIndexTemplate
+            {
                 PageTitle = $"H.Necessaire v{reportData.Version.Number}",
                 PageHeader = new PageHeaderPartTemplate
                 {
-                    
-                },
-                ContentHeader = new ContentHeaderPartTemplate { 
 
                 },
-                ContentCards = reportData.AllTypes.GroupBy(t => t.Module).Select(g => new ContentCardPartTemplate { 
+                ContentHeader = new ContentHeaderPartTemplate
+                {
+
+                },
+                ContentCards = reportData.AllTypes.GroupBy(t => t.Module).Select(g => new ContentCardPartTemplate
+                {
                     Title = g.Key.Replace(".", " ."),
                     Description = $"<ul><li><strong>{g.Count()}</strong> types</li></ul>",
                 }).ToArray(),
-                ContentFooter = new ContentFooterPartTemplate {
+                ContentFooter = new ContentFooterPartTemplate
+                {
 
                 },
-                PageFooter = new PageFooterPartTemplate { 
+                PageFooter = new PageFooterPartTemplate
+                {
 
                 },
             };
@@ -42,16 +47,43 @@ namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting
                 .ToStream();
         }
 
-        protected override Task<IEnumerable<Task<TaggedStream>>> BuildPagesStreams(HDocumentation reportData)
+        protected override async Task<IEnumerable<Task<TaggedStream>>> BuildPagesStreams(HDocumentation reportData)
         {
-            return 
-                Enumerable.Repeat(true, 1).Select(_ =>
-                    new TaggedStream { 
-                        ID = "docs-page.html",
-                        Name = "docs-page.html",
-                        Value = $"{templateRootPath}docs-page.html".OpenEmbeddedResource()
-                    }.AsTask()
-                ).AsTask();
+            IEnumerable<IGrouping<string, HDocTypeInfo>> modules = reportData.AllTypes.GroupBy(t => t.Module);
+
+            IEnumerable<Task<TaggedStream>> result = Enumerable.Empty<Task<TaggedStream>>();
+
+            foreach (IGrouping<string, HDocTypeInfo> moduleGroup in modules)
+            {
+                result = result.Concat(await BuildModulePagesStreams(moduleGroup));
+            }
+
+            return result;
+        }
+
+        private Task<IEnumerable<Task<TaggedStream>>> BuildModulePagesStreams(IEnumerable<HDocTypeInfo> hDocTypes)
+        {
+            return
+                hDocTypes
+                .Select(BuildDocTypeStream)
+                .AsTask()
+                ;
+        }
+
+        private async Task<TaggedStream> BuildDocTypeStream(HDocTypeInfo hDocTypeInfo)
+        {
+            CoderDocsPageTemplate template = new CoderDocsPageTemplate
+            {
+                PageTitle = $"{hDocTypeInfo.Module} - {hDocTypeInfo.Name}",
+                AssetsRootPath = "../"
+            };
+
+            return new TaggedStream
+            {
+                ID = $"{hDocTypeInfo.Module}/{hDocTypeInfo.Name.ToSafeFileName()}.html",
+                Name = hDocTypeInfo.Name,
+                Value = (await template.ProcessEmbeddedResource($"{templateRootPath}docs-page.html")).ToStream()
+            };
         }
     }
 }
