@@ -1,7 +1,5 @@
-﻿using DeviceDetectorNET;
-using H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Concrete.CoderDocs.Parts;
+﻿using H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Concrete.CoderDocs.Parts;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Commands.HDoc.BLL.Reporting.HTML.Concrete.CoderDocs
