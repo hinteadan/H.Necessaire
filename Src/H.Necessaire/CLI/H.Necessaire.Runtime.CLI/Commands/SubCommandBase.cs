@@ -1,12 +1,11 @@
 ﻿using H.Necessaire.CLI.Commands;
-using H.Necessaire.Runtime.CLI.Builders;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.CLI.Commands
 {
-    public abstract class CommandBase : UseCaseBase, ImACliCommand
+    public abstract class SubCommandBase : UseCaseBase, ImACliSubCommand
     {
         Func<string, ImACliSubCommand> subCommandFinder;
         CustomCommandRunner customCommandRunner;
@@ -17,12 +16,7 @@ namespace H.Necessaire.Runtime.CLI.Commands
             customCommandRunner = dependencyProvider.Get<CustomCommandRunner>();
         }
 
-        protected async Task<Note[]> GetArguments()
-        {
-            return (await GetCurrentContext() ?? new UseCaseContext()).Notes;
-        }
-
-        public abstract Task<OperationResult> Run();
+        public abstract Task<OperationResult> Run(params Note[] args);
 
         protected async Task<OperationResult> RunCliCommand(params Note[] args)
             => await customCommandRunner.RunCliCommand(args);
@@ -30,9 +24,14 @@ namespace H.Necessaire.Runtime.CLI.Commands
         protected async Task<OperationResult> RunCliCommand(params string[] args)
             => await customCommandRunner.RunCliCommand(args);
 
-        protected virtual async Task<OperationResult> RunSubCommand(bool failOnMissingCommand = false)
+        protected async Task<Note[]> GetAllArguments()
         {
-            Note[] args = (await GetArguments())?.Jump(1);
+            return (await GetCurrentContext() ?? new UseCaseContext()).Notes;
+        }
+
+        protected virtual async Task<OperationResult> RunSubCommand(Note[] currentArgs, bool failOnMissingCommand = false)
+        {
+            Note[] args = currentArgs?.Jump(1);
 
             if (args?.Any() != true)
             {

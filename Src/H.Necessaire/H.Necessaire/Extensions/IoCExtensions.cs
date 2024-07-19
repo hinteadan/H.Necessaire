@@ -8,14 +8,30 @@ namespace H.Necessaire
         public static T Build<T>(this ImADependencyProvider dependencyProvider, string identifier, T defaultTo = default(T))
             where T : class
         {
-            Type concreteType
+            if (string.IsNullOrWhiteSpace(identifier))
+                return defaultTo;
+
+            Type[] matchedTypes
                 = typeof(T)
                 .GetAllImplementations()
-                .FirstOrDefault(x => x.IsMatch(identifier))
+                .Where(x => x.IsMatch(identifier))
+                .ToArray()
                 ;
 
-            if (concreteType == null)
+            if (!matchedTypes.Any())
                 return defaultTo;
+
+            Type concreteType
+                = matchedTypes
+                .OrderBy(x => 
+                    x.IsTypeIDMatch(identifier)
+                    ? 0
+                    : x.IsTypeAliasMatch(identifier)
+                    ? 1
+                    : 2
+                )
+                .First()
+                ;
 
             return
                 (dependencyProvider.Get(concreteType) as T)
