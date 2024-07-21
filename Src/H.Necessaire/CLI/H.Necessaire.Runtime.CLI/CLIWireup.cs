@@ -15,16 +15,16 @@ namespace H.Necessaire.Runtime.CLI
             return
                 base
                 .WithEverything()
-                .With(x => {
-                    ImAUseCaseContextProvider baseUseCaseContextProvider = x.Get<ImAUseCaseContextProvider>();
-                    x.Register<CustomizableCliContextProvider>(() => new CustomizableCliContextProvider(baseUseCaseContextProvider));
-                    x.Register<ImAUseCaseContextProvider>(x.Get<CustomizableCliContextProvider>);
-                })
                 .With(x => x.Register<CustomCommandRunner>(() => new CustomCommandRunner()))
                 .With(x => x.Register<ArgsParser>(() => new ArgsParser()))
                 .With(x => x.Register<ImAUseCaseContextProvider>(() => new CliUseCaseContextProvider()))
                 .With(x => x.Register<CliCommandFactory>(() => new CliCommandFactory(DependencyRegistry)))
                 .With(x => AddAllUseCasesInAssemblyForType<CliWireup>(x))
+                .With(x => {
+                    ImAUseCaseContextProvider baseUseCaseContextProvider = x.Get<ImAUseCaseContextProvider>();
+                    x.Register<CustomizableCliContextProvider>(() => new CustomizableCliContextProvider(baseUseCaseContextProvider));
+                    x.Register<ImAUseCaseContextProvider>(x.Get<CustomizableCliContextProvider>);
+                })
                 ;
         }
 
