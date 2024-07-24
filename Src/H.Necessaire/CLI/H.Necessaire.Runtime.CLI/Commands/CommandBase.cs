@@ -1,6 +1,7 @@
 ﻿using H.Necessaire.CLI.Commands;
 using H.Necessaire.Runtime.CLI.Builders;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,12 +9,14 @@ namespace H.Necessaire.Runtime.CLI.Commands
 {
     public abstract class CommandBase : UseCaseBase, ImACliCommand
     {
-        Func<string, ImACliSubCommand> subCommandFinder;
+        Func<string, ImACliSubCommand> globalSubCommandFinder;
+        Func<string, IEnumerable<Type>, ImACliSubCommand> concreteTypesSubCommandFinder;
         CustomCommandRunner customCommandRunner;
         public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             base.ReferDependencies(dependencyProvider);
-            subCommandFinder = subCommandFinder ?? (name => dependencyProvider.Build<ImACliSubCommand>(name));
+            globalSubCommandFinder = globalSubCommandFinder ?? (name => dependencyProvider.Build<ImACliSubCommand>(name));
+            concreteTypesSubCommandFinder = concreteTypesSubCommandFinder ?? ((name, types) => dependencyProvider.Build<ImACliSubCommand>(name, types));
             customCommandRunner = dependencyProvider.Get<CustomCommandRunner>();
         }
 
@@ -39,7 +42,7 @@ namespace H.Necessaire.Runtime.CLI.Commands
                 return failOnMissingCommand ? OperationResult.Fail("No Args") : WinWithUsageSyntax();
             }
 
-            ImACliSubCommand subCommand = subCommandFinder.Invoke(args.First().ID);
+            ImACliSubCommand subCommand = FindSubCommand(args.First().ID);
 
             if (subCommand is null)
             {
@@ -47,6 +50,34 @@ namespace H.Necessaire.Runtime.CLI.Commands
             }
 
             return await subCommand.Run(args.Jump(1));
+        }
+
+        protected virtual ImACliSubCommand FindSubCommand(string identifier)
+        {
+            if (identifier.IsEmpty())
+                return null;
+
+            Type commandType = GetType();
+
+            Type[] matchingTypesInCurrentAssembly
+                = typeof(ImACliSubCommand)
+                .FindMatchingConcreteTypes(identifier, commandType.Assembly)
+                .ToArray()
+                ;
+
+            Type[] matchingNestedTypes
+                = matchingTypesInCurrentAssembly
+                .Where(x => x.IsNestedUnder(commandType))
+                .ToArray()
+                ;
+
+            if (matchingNestedTypes.Any())
+                return concreteTypesSubCommandFinder.Invoke(identifier, matchingNestedTypes);
+
+            if (matchingTypesInCurrentAssembly.Any())
+                return concreteTypesSubCommandFinder.Invoke(identifier, matchingTypesInCurrentAssembly);
+
+            return globalSubCommandFinder.Invoke(identifier);
         }
 
         protected virtual string[] GetUsageSyntaxes() => new string[0];

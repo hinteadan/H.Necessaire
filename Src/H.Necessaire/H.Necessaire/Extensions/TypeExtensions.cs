@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace H.Necessaire
 {
@@ -20,12 +22,16 @@ namespace H.Necessaire
                 || typeToCompareWith.IsSubclassOf(typeToCheck);
         }
 
-        public static Type[] GetAllImplementations(this Type baseType)
+        public static Type[] GetAllImplementations(this Type baseType, params Assembly[] assembliesToScan)
         {
+            assembliesToScan
+                = assembliesToScan?.Any() == true
+                ? assembliesToScan
+                : AppDomain.CurrentDomain.GetAssemblies()
+                ;
+
             return
-                AppDomain
-                .CurrentDomain
-                .GetAssemblies()
+                assembliesToScan
                 .SelectMany(
                     assembly => assembly
                     .GetTypes()
@@ -134,6 +140,29 @@ namespace H.Necessaire
                 return true;
 
             return false;
+        }
+
+        public static bool IsNestedUnder(this Type type, Type declaringTypeToCheck)
+        {
+            if (type?.IsNested != true)
+                return false;
+
+            if (type?.DeclaringType is null)
+                return false;
+
+            return type.DeclaringType == declaringTypeToCheck || type.DeclaringType.IsNestedUnder(declaringTypeToCheck);
+        }
+
+        public static IEnumerable<Type> FindMatchingConcreteTypes(this Type type, string identifier, params Assembly[] assembliesToScan)
+        {
+            if (identifier.IsEmpty())
+                return Enumerable.Empty<Type>();
+
+            return 
+                type
+                .GetAllImplementations(assembliesToScan)
+                .Where(x => x.IsMatch(identifier))
+                ;
         }
     }
 }

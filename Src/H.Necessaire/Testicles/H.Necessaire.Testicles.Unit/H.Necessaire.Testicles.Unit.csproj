@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\CLI\H.Necessaire.Runtime.CLI\H.Necessaire.Runtime.CLI.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime\H.Necessaire.Runtime.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Serialization\H.Necessaire.Serialization.csproj" />
     <ProjectReference Include="..\..\H.Necessaire\H.Necessaire.csproj" />

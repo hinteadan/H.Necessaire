@@ -19,7 +19,8 @@ namespace H.Necessaire.Runtime.CLI
                 .With(x => x.Register<ArgsParser>(() => new ArgsParser()))
                 .With(x => x.Register<ImAUseCaseContextProvider>(() => new CliUseCaseContextProvider()))
                 .With(x => x.Register<CliCommandFactory>(() => new CliCommandFactory(DependencyRegistry)))
-                .With(x => AddAllUseCasesInAssemblyForType<CliWireup>(x))
+                .With(x => AddAllCommandsInAllAssemblies(x))
+                .With(x => AddAllSubCommandsInAllAssemblies(x))
                 .With(x => {
                     ImAUseCaseContextProvider baseUseCaseContextProvider = x.Get<ImAUseCaseContextProvider>();
                     x.Register<CustomizableCliContextProvider>(() => new CustomizableCliContextProvider(baseUseCaseContextProvider));
@@ -28,7 +29,7 @@ namespace H.Necessaire.Runtime.CLI
                 ;
         }
 
-        private static void AddAllUseCasesInAssemblyForType<T>(ImADependencyRegistry registry)
+        private static void AddAllCommandsInAllAssemblies(ImADependencyRegistry registry)
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
@@ -38,6 +39,19 @@ namespace H.Necessaire.Runtime.CLI
             foreach (Type useCaseType in useCaseTypes)
             {
                 registry.RegisterAlwaysNew(useCaseType, () => Activator.CreateInstance(useCaseType));
+            }
+        }
+
+        private static void AddAllSubCommandsInAllAssemblies(ImADependencyRegistry registry)
+        {
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+            Type subCommandInterfaceType = typeof(ImACliSubCommand);
+            Type[] subCommandsTypes = assemblies.SelectMany(assembly => assembly.GetTypes().Where(p => subCommandInterfaceType.IsAssignableFrom(p) && !p.IsAbstract)).ToArray();
+
+            foreach (Type subCommandsType in subCommandsTypes)
+            {
+                registry.RegisterAlwaysNew(subCommandsType, () => Activator.CreateInstance(subCommandsType));
             }
         }
     }
