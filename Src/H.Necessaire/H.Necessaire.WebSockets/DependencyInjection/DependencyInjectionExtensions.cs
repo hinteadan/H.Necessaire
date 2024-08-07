@@ -24,5 +24,16 @@ namespace H.Necessaire.WebSockets
                 )
             );
         }
+
+        public static T WithHNecessaireWebSockets<T>(this T dependencyRegistry, Func<string> webSocketServerBaseUrlProvider) where T : ImADependencyRegistry
+        {
+            dependencyRegistry
+                .Register<WebSocketClientNotificationQueue>(() => new WebSocketClientNotificationQueue())
+                .Register<IWebSocketClientNotifier>(() => dependencyRegistry.Get<WebSocketClientNotificationQueue>())
+                .Register<IWebSocketServerService>(() => new WebSocketServerService(webSocketServerBaseUrlProvider(), dependencyRegistry.Get<WebSocketClientNotificationQueue>()))
+                ;
+
+            return dependencyRegistry;
+        }
     }
 }
