@@ -212,7 +212,7 @@ namespace H.Necessaire.Dapper
             if (isDatabaseEnsured)
                 return;
 
-            using (SqlConnection dbConnection = new SqlConnection(connectionStringWithoutDatabase))
+            using (SqlConnection dbConnection = new SqlConnection(connectionString))
             {
                 bool databaseExists = await dbConnection.ExecuteScalarAsync<bool>($"SELECT CASE WHEN ISNULL(DB_ID('{databaseName}'), 0) = 0 THEN 0 ELSE 1 END");
 
