@@ -2,6 +2,7 @@
 using H.Necessaire.Dapper.Operations.Concrete;
 using Microsoft.Data.SqlClient;
 using System;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -212,17 +213,43 @@ namespace H.Necessaire.Dapper
             if (isDatabaseEnsured)
                 return;
 
-            using (SqlConnection dbConnection = new SqlConnection(connectionString))
+            bool databaseExists = false;
+
+            await
+                new Func<Task>(async () => {
+
+                    using (SqlConnection dbConnection = new SqlConnection(connectionString))
+                    {
+                        databaseExists = await dbConnection.ExecuteScalarAsync<bool>($"SELECT CASE WHEN ISNULL(DB_ID('{databaseName}'), 0) = 0 THEN 0 ELSE 1 END");
+                        if (databaseExists)
+                        {
+                            isDatabaseEnsured = true;
+                            return;
+                        }
+
+                        await dbConnection.ExecuteAsync($"CREATE DATABASE [{databaseName}]");
+                    }
+
+                }).TryOrFailWithGrace(onFail: ex => databaseExists = false);
+
+            if (!databaseExists)
             {
-                bool databaseExists = await dbConnection.ExecuteScalarAsync<bool>($"SELECT CASE WHEN ISNULL(DB_ID('{databaseName}'), 0) = 0 THEN 0 ELSE 1 END");
+                await
+                    new Func<Task>(async () => {
 
-                if (databaseExists)
-                {
-                    isDatabaseEnsured = true;
-                    return;
-                }
+                        using (SqlConnection dbConnection = new SqlConnection(connectionStringWithoutDatabase))
+                        {
+                            databaseExists = await dbConnection.ExecuteScalarAsync<bool>($"SELECT CASE WHEN ISNULL(DB_ID('{databaseName}'), 0) = 0 THEN 0 ELSE 1 END");
+                            if (databaseExists)
+                            {
+                                isDatabaseEnsured = true;
+                                return;
+                            }
 
-                await dbConnection.ExecuteAsync($"CREATE DATABASE [{databaseName}]");
+                            await dbConnection.ExecuteAsync($"CREATE DATABASE [{databaseName}]");
+                        }
+
+                    }).TryOrFailWithGrace(onFail: ex => databaseExists = false);
             }
 
             isDatabaseEnsured = true;
