@@ -93,6 +93,14 @@ namespace H.Necessaire
                     await logger.LogTrace($"Processing QdAction {qdAction}");
                     using (new TimeMeasurement(async x => await logger.LogTrace($"DONE Processing QdAction {qdAction} in {x}")))
                     {
+                        //Check status, in case another processor already picked it up
+                        qdAction = (await qdActionStorage.LoadByID(qdAction.ID)).ThrowOnFailOrReturn();
+                        if (qdAction.Status.NotIn(QdActionStatus.Queued, QdActionStatus.Failed) || qdAction.RunCount >= maxProcessingAttempts)
+                        {
+                            await logger.LogTrace($"SKIPPING Processing QdAction {qdAction} because it has already been picked up by another agent");
+                            return;
+                        }
+
                         (await qdActionStorage.Save(qdAction.And(x => x.Status = QdActionStatus.Running))).ThrowOnFail();
 
                         QdActionResult processingResult = await RunEligibleProcessorForQdAction(qdAction);
