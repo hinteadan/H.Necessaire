@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire
 {
-    public class QdActionProcessingDaemon : ImADaemon, ImADependency
+    public class QdActionProcessingDaemon : ImADaemon, ImAQdActionQueueOnDemandRunner, ImADependency
     {
         #region Construct
         int maxProcessingAttempts = 3;
@@ -40,7 +40,7 @@ namespace H.Necessaire
                 await logger.LogWarn($"Cannot start QdAction Processing Daemon because the wireup is invalid.", wireupValidationResult, wireupValidationResult.FlattenReasons().ToNotes("WireupError-"));
                 return;
             }
-            processingTimer?.StartDelayed(processingInterval, processingInterval, RunProcessingCycle);
+            processingTimer?.StartDelayed(processingInterval, processingInterval, RunTimerProcessingCycle);
         }
 
         public Task Stop(CancellationToken? cancellationToken = null)
@@ -49,8 +49,20 @@ namespace H.Necessaire
             return true.AsTask();
         }
 
-        private async Task RunProcessingCycle()
+        public async Task<OperationResult<QdActionResult[]>> RunQdActionQueueProcessingCycle()
         {
+            return await RunProcessingCycle();
+        }
+
+        private async Task RunTimerProcessingCycle()
+        {
+            await RunProcessingCycle();
+        }
+
+        private async Task<OperationResult<QdActionResult[]>> RunProcessingCycle()
+        {
+            OperationResult<QdActionResult[]> result = OperationResult.Fail("Not yet started").WithoutPayload<QdActionResult[]>();
+
             await
                 new Func<Task>(async () =>
                 {
@@ -69,24 +81,32 @@ namespace H.Necessaire
                         if (!qdActionsToProcess?.Any() ?? true)
                         {
                             await logger.LogTrace($"There are no QD Actions to process. Skipping processing cycle...");
+                            result = OperationResult.Win().WithoutPayload<QdActionResult[]>();
                             return;
                         }
 
-                        await Task.WhenAll(
+                        QdActionResult[] qdActionResults = await Task.WhenAll(
                             qdActionsToProcess.Select(x => ProcessQdAction(x)).ToArray()
                         );
+
+                        result = OperationResult.Win().WithPayload(qdActionResults);
                     }
                 })
                 .TryOrFailWithGrace(
                     onFail: async ex =>
                     {
                         await logger.LogError(ex);
+                        result = OperationResult.Fail(ex, $"Error occurred while running QD Action Queue processing cycle. Message: {ex.Message}").WithoutPayload<QdActionResult[]>();
                     }
                 );
+
+            return result;
         }
 
-        private async Task ProcessQdAction(QdAction qdAction)
+        private async Task<QdActionResult> ProcessQdAction(QdAction qdAction)
         {
+            QdActionResult result = OperationResult.Fail("Not yet started").WithPayload(qdAction).ToQdActionResult();
+
             await
                 new Func<Task>(async () =>
                 {
@@ -112,14 +132,19 @@ namespace H.Necessaire
                         }))).ThrowOnFail();
 
                         (await qdActionResultStorage.Save(processingResult)).ThrowOnFail();
+
+                        result = processingResult;
                     }
                 })
                 .TryOrFailWithGrace(
                     onFail: async ex =>
                     {
                         await logger.LogError(ex);
+                        result = OperationResult.Fail(ex, $"Error occurred while processing QD Action {qdAction}. Message: {ex.Message}").WithPayload(qdAction).ToQdActionResult();
                     }
                 );
+
+            return result;
         }
 
         private async Task<QdActionResult> RunEligibleProcessorForQdAction(QdAction qdAction)
