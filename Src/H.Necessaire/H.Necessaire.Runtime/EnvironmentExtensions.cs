@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace H.Necessaire.Runtime
 {
@@ -57,8 +59,45 @@ namespace H.Necessaire.Runtime
                             $"Process-{currentProcess.StartInfo.ErrorDialogParentHandle}".NoteAs($"{nameof(currentProcess.StartInfo)}.{nameof(currentProcess.StartInfo.ErrorDialogParentHandle)}"),
                             $"Process-{currentProcess.StartInfo.ErrorDialog}".NoteAs($"{nameof(currentProcess.StartInfo)}.{nameof(currentProcess.StartInfo.ErrorDialog)}"),
                         }
+                        .Concat(
+                            currentProcess.GetEnvironmentVariables()
+                        )
+                        .Concat(
+                            currentProcess.GetEnvironment()
+                        )
                     );
             }
+        }
+
+        public static Note[] GetEnvironmentVariables(this Process process, string prefix = "Process-EnvironmentVariable-")
+        {
+            if (process?.StartInfo?.EnvironmentVariables?.Keys is null)
+                return Array.Empty<Note>();
+
+            List<Note> result = new List<Note>();
+
+            foreach (object key in process.StartInfo.EnvironmentVariables.Keys)
+            {
+                string id = key?.ToString();
+                if (id is null)
+                    continue;
+                result.Add(process.StartInfo.EnvironmentVariables[id].NoteAs($"{prefix}{id}"));
+            }
+
+            return result.Where(x => !x.IsEmpty()).ToArray();
+        }
+
+        public static Note[] GetEnvironment(this Process process, string prefix = "Process-Environment-")
+        {
+            if (process?.StartInfo?.Environment?.Any() != true)
+                return Array.Empty<Note>();
+
+            return
+                process.StartInfo.Environment
+                .Select(x => x.Value.NoteAs($"{prefix}{x.Key}"))
+                .Where(x => !x.IsEmpty())
+                .ToArray()
+                ;
         }
     }
 }
