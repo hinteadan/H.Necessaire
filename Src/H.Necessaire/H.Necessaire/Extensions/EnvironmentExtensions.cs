@@ -50,6 +50,7 @@ namespace H.Necessaire
 
                         $"{process.ProcessName}".NoteAs($"{prefix}ProcessName"),
                         $"{process.MachineName}".NoteAs($"{prefix}MachineName"),
+                        $"{process.MainWindowTitle}".NoteAs($"{prefix}MainWindowTitle"),
                         $"{process.MainWindowHandle}".NoteAs($"{prefix}MainWindowHandle"),
                         $"{process.SessionId}".NoteAs($"{prefix}SessionId"),
                         $"{process.Responding}".NoteAs($"{prefix}Responding"),
