@@ -15,8 +15,12 @@ namespace H.Necessaire.Runtime
                     notes.Push(
                         new Note[]
                         {
+                            $"Process-{currentProcess.Id}".NoteAs(nameof(currentProcess.Id)),
+
                             $"Process-{currentProcess.PriorityClass}({(int)currentProcess.PriorityClass})".NoteAs(nameof(currentProcess.PriorityClass)),
+                            $"Process-{currentProcess.BasePriority}".NoteAs(nameof(currentProcess.BasePriority)),
                             $"Process-{currentProcess.PriorityBoostEnabled}".NoteAs(nameof(currentProcess.PriorityBoostEnabled)),
+                            $"Process-{currentProcess.ProcessorAffinity}".NoteAs(nameof(currentProcess.ProcessorAffinity)),
 
                             $"Process-{currentProcess.PeakWorkingSet64}".NoteAs(nameof(currentProcess.PeakWorkingSet64)),
                             $"Process-{currentProcess.PeakVirtualMemorySize64}".NoteAs(nameof(currentProcess.PeakVirtualMemorySize64)),
@@ -25,6 +29,7 @@ namespace H.Necessaire.Runtime
                             $"Process-{currentProcess.PagedMemorySize64}".NoteAs(nameof(currentProcess.PagedMemorySize64)),
                             $"Process-{currentProcess.NonpagedSystemMemorySize64}".NoteAs(nameof(currentProcess.NonpagedSystemMemorySize64)),
                             $"Process-{currentProcess.MinWorkingSet}".NoteAs(nameof(currentProcess.MinWorkingSet)),
+                            $"Process-{currentProcess.MaxWorkingSet}".NoteAs(nameof(currentProcess.MaxWorkingSet)),
                             $"Process-{currentProcess.PagedSystemMemorySize64}".NoteAs(nameof(currentProcess.PagedSystemMemorySize64)),
                             $"Process-{currentProcess.PrivateMemorySize64}".NoteAs(nameof(currentProcess.PrivateMemorySize64)),
                             $"Process-{currentProcess.PrivilegedProcessorTime}".NoteAs(nameof(currentProcess.PrivilegedProcessorTime)),
@@ -32,14 +37,32 @@ namespace H.Necessaire.Runtime
                             $"Process-{currentProcess.VirtualMemorySize64}".NoteAs(nameof(currentProcess.VirtualMemorySize64)),
 
                             $"Process-{currentProcess.ProcessName}".NoteAs(nameof(currentProcess.ProcessName)),
+                            $"Process-{currentProcess.MachineName}".NoteAs(nameof(currentProcess.MachineName)),
+                            $"Process-{currentProcess.MainWindowHandle}".NoteAs(nameof(currentProcess.MainWindowHandle)),
+                            $"Process-{currentProcess.SessionId}".NoteAs(nameof(currentProcess.SessionId)),
+                            $"Process-{currentProcess.Responding}".NoteAs(nameof(currentProcess.Responding)),
+                            $"Process-{currentProcess.HasExited}".NoteAs(nameof(currentProcess.HasExited)),
+                            $"Process-{currentProcess.EnableRaisingEvents}".NoteAs(nameof(currentProcess.EnableRaisingEvents)),
+
+                            $"{currentProcess.MainModule.ModuleName}".NoteAs($"Process-MainModule-ModuleName"),
+                            $"{currentProcess.MainModule.FileName}".NoteAs($"Process-MainModule-FileName"),
+                            $"{currentProcess.MainModule.ModuleMemorySize}".NoteAs($"Process-MainModule-ModuleMemorySize"),
+                            $"{currentProcess.MainModule.BaseAddress}".NoteAs($"Process-MainModule-BaseAddress"),
+                            $"{currentProcess.MainModule.EntryPointAddress}".NoteAs($"Process-MainModule-EntryPointAddress"),
+                            $"{currentProcess.MainModule.FileVersionInfo}".NoteAs($"Process-MainModule-FileVersionInfo"),
+
 
                             $"Process-{currentProcess.UserProcessorTime}".NoteAs(nameof(currentProcess.UserProcessorTime)),
                             $"Process-{currentProcess.TotalProcessorTime}".NoteAs(nameof(currentProcess.TotalProcessorTime)),
 
                             $"Process-{currentProcess.Modules.Count}".NoteAs(nameof(currentProcess.Modules)),
                             $"Process-{currentProcess.Threads.Count}".NoteAs(nameof(currentProcess.Threads)),
+                            $"Process-{currentProcess.HandleCount}".NoteAs(nameof(currentProcess.HandleCount)),
+                            $"Process-{currentProcess.Handle}".NoteAs(nameof(currentProcess.Handle)),
 
                             $"Process-{currentProcess.StartTime}".NoteAs(nameof(currentProcess.StartTime)),
+                            $"Process-{currentProcess.ExitTime}".NoteAs(nameof(currentProcess.ExitTime)),
+                            $"Process-{currentProcess.ExitCode}".NoteAs(nameof(currentProcess.ExitCode)),
                             $"Process-{currentProcess.StartInfo.FileName}".NoteAs($"{nameof(currentProcess.StartInfo)}.{nameof(currentProcess.StartInfo.FileName)}"),
                             $"Process-{currentProcess.StartInfo.WorkingDirectory}".NoteAs($"{nameof(currentProcess.StartInfo)}.{nameof(currentProcess.StartInfo.WorkingDirectory)}"),
                             $"Process-{currentProcess.StartInfo.Arguments}".NoteAs($"{nameof(currentProcess.StartInfo)}.{nameof(currentProcess.StartInfo.Arguments)}"),
