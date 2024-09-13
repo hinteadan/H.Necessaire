@@ -56,29 +56,28 @@ namespace H.Necessaire
             return
                 new Note[] {
 
-                    $"{nameof(Environment.MachineName)}{IDSeparator}{Environment.MachineName}",
-                    $"{nameof(Environment.ProcessorCount)}{IDSeparator}{Environment.ProcessorCount}",
-                    $"{nameof(Environment.UserDomainName)}{IDSeparator}{Environment.UserDomainName}",
-                    $"{nameof(Environment.UserName)}{IDSeparator}{Environment.UserName}",
-                    $"{nameof(Environment.UserInteractive)}{IDSeparator}{Environment.UserInteractive}",
+                    $"{Environment.MachineName}".NoteAs(nameof(Environment.MachineName)),
+                    $"{Environment.ProcessorCount}".NoteAs(nameof(Environment.ProcessorCount)),
+                    $"{Environment.UserDomainName}".NoteAs(nameof(Environment.UserDomainName)),
+                    $"{Environment.UserName}".NoteAs(nameof(Environment.UserName)),
+                    $"{Environment.UserInteractive}".NoteAs(nameof(Environment.UserInteractive)),
 
-                    $"{nameof(Environment.OSVersion)}{IDSeparator}{Environment.OSVersion}",
+                    $"{Environment.OSVersion}".NoteAs(nameof(Environment.OSVersion)),
+                    $"{Environment.Version}".NoteAs(nameof(Environment.Version)),
 
-                    $"{nameof(Environment.Is64BitOperatingSystem)}{IDSeparator}{Environment.Is64BitOperatingSystem}",
-                    $"{nameof(Environment.Is64BitProcess)}{IDSeparator}{Environment.Is64BitProcess}",
+                    $"{Environment.Is64BitOperatingSystem}".NoteAs(nameof(Environment.Is64BitOperatingSystem)),
+                    $"{Environment.Is64BitProcess}".NoteAs(nameof(Environment.Is64BitProcess)),
 
-                    $"{nameof(Environment.Version)}{IDSeparator}{Environment.Version}",
+                    $"{Environment.CommandLine}".NoteAs(nameof(Environment.CommandLine)),
+                    $"{Environment.CurrentDirectory}".NoteAs(nameof(Environment.CurrentDirectory)),
+                    $"{Environment.SystemDirectory}".NoteAs(nameof(Environment.SystemDirectory)),
+                    $"{Environment.NewLine}".NoteAs(nameof(Environment.NewLine)),
 
-                    $"{nameof(Environment.CommandLine)}{IDSeparator}{Environment.CommandLine}",
-                    $"{nameof(Environment.CurrentDirectory)}{IDSeparator}{Environment.CurrentDirectory}",
-                    $"{nameof(Environment.SystemDirectory)}{IDSeparator}{Environment.SystemDirectory}",
-                    $"{nameof(Environment.NewLine)}{IDSeparator}{Environment.NewLine}",
+                    $"{Environment.SystemPageSize}".NoteAs(nameof(Environment.SystemPageSize)),
+                    $"{Environment.TickCount}".NoteAs(nameof(Environment.TickCount)),
+                    $"{Environment.WorkingSet}".NoteAs(nameof(Environment.WorkingSet)),
 
-                    $"{nameof(Environment.SystemPageSize)}{IDSeparator}{Environment.SystemPageSize}",
-                    $"{nameof(Environment.TickCount)}{IDSeparator}{Environment.TickCount}",
-                    $"{nameof(Environment.WorkingSet)}{IDSeparator}{Environment.WorkingSet}",
-
-                    $"{nameof(Environment.CurrentManagedThreadId)}{IDSeparator}{Environment.CurrentManagedThreadId}",
+                    $"{Environment.CurrentManagedThreadId}".NoteAs(nameof(Environment.CurrentManagedThreadId)),
 
                 };
         }
