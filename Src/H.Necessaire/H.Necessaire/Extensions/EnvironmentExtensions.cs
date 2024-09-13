@@ -10,11 +10,11 @@ namespace H.Necessaire
         public static Note[] AppendProcessInfo(this Note[] notes, Process process = null, string prefix = "Process-")
         {
             if (process != null)
-                return process.GetProcessInfo(prefix);
+                return notes.Push(process.GetProcessInfo(prefix));
 
             using (process = Process.GetCurrentProcess())
             {
-                return process.GetProcessInfo(prefix);
+                return notes.Push(process.GetProcessInfo(prefix));
             }
         }
 
