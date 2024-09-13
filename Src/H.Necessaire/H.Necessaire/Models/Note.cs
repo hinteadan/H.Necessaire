@@ -23,7 +23,7 @@ namespace H.Necessaire
             return $"[{ID}:\"{Value}\"]";
         }
 
-        public static Note[] FromDictionary(Dictionary<string, string> keyValuePairs)
+        public static Note[] FromDictionary(IDictionary<string, string> keyValuePairs)
         {
             if (!keyValuePairs?.Any() ?? true)
                 return new Note[0];
