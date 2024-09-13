@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security;
 
 namespace H.Necessaire.Runtime
 {
@@ -61,35 +62,51 @@ namespace H.Necessaire.Runtime
                             $"{currentProcess.Handle}".NoteAs($"Process-Handle"),
 
                             $"{currentProcess.StartTime}".NoteAs($"Process-StartTime"),
-                            $"{currentProcess.ExitTime}".NoteAs($"Process-ExitTime"),
-                            $"{currentProcess.ExitCode}".NoteAs($"Process-ExitCode"),
-                            $"{currentProcess.StartInfo.FileName}".NoteAs($"Process-StartInfo-FileName"),
-                            $"{currentProcess.StartInfo.WorkingDirectory}".NoteAs($"Process-StartInfo-WorkingDirectory"),
-                            $"{currentProcess.StartInfo.Arguments}".NoteAs($"Process-StartInfo-Arguments"),
-                            $"{currentProcess.StartInfo.WindowStyle}({(int)currentProcess.StartInfo.WindowStyle})".NoteAs($"Process-StartInfo-WindowStyle"),
-                            $"{currentProcess.StartInfo.Domain}".NoteAs($"Process-StartInfo-Domain"),
-                            $"{currentProcess.StartInfo.UserName}".NoteAs($"Process-StartInfo-UserName"),
-                            $"{currentProcess.StartInfo.LoadUserProfile}".NoteAs($"Process-StartInfo-LoadUserProfile"),
-                            $"{currentProcess.StartInfo.CreateNoWindow}".NoteAs($"Process-StartInfo-CreateNoWindow"),
-                            $"{currentProcess.StartInfo.Verb}".NoteAs($"Process-StartInfo-Verb"),
-                            $"{string.Join(", ", currentProcess.StartInfo.Verbs ?? Array.Empty<string>())}".NoteAs($"Process-StartInfo-Verbs"),
-                            $"{currentProcess.StartInfo.UseShellExecute}".NoteAs($"Process-StartInfo-UseShellExecute"),
-                            $"{currentProcess.StartInfo.StandardOutputEncoding.WebName}".NoteAs($"Process-StartInfo-StandardOutputEncoding"),
-                            $"{currentProcess.StartInfo.StandardErrorEncoding.WebName}".NoteAs($"Process-StartInfo-StandardErrorEncoding"),
-                            $"{currentProcess.StartInfo.RedirectStandardOutput}".NoteAs($"Process-StartInfo-RedirectStandardOutput"),
-                            $"{currentProcess.StartInfo.RedirectStandardInput}".NoteAs($"Process-StartInfo-RedirectStandardInput"),
-                            $"{currentProcess.StartInfo.RedirectStandardError}".NoteAs($"Process-StartInfo-RedirectStandardError"),
-                            $"{currentProcess.StartInfo.ErrorDialogParentHandle}".NoteAs($"Process-StartInfo-ErrorDialogParentHandle"),
-                            $"{currentProcess.StartInfo.ErrorDialog}".NoteAs($"Process-StartInfo-ErrorDialog"),
                         }
                         .Concat(
-                            currentProcess.GetEnvironmentVariables()
-                        )
-                        .Concat(
-                            currentProcess.GetEnvironment()
+                            currentProcess.GetStartInfo()
                         )
                     );
             }
+        }
+
+        public static Note[] GetStartInfo(this Process process, string prefix = "Process-StartInfo-")
+        {
+            List<Note> list = new List<Note>();
+
+            new Action(() =>
+            {
+                ProcessStartInfo startInfo = process.StartInfo;
+
+                list.AddRange(
+                    new Note[] {
+                        $"{startInfo.FileName}".NoteAs($"Process-StartInfo-FileName"),
+                        $"{startInfo.WorkingDirectory}".NoteAs($"Process-StartInfo-WorkingDirectory"),
+                        $"{startInfo.Arguments}".NoteAs($"Process-StartInfo-Arguments"),
+                        $"{startInfo.WindowStyle}({(int)startInfo.WindowStyle})".NoteAs($"Process-StartInfo-WindowStyle"),
+                        $"{startInfo.Domain}".NoteAs($"Process-StartInfo-Domain"),
+                        $"{startInfo.UserName}".NoteAs($"Process-StartInfo-UserName"),
+                        $"{startInfo.LoadUserProfile}".NoteAs($"Process-StartInfo-LoadUserProfile"),
+                        $"{startInfo.CreateNoWindow}".NoteAs($"Process-StartInfo-CreateNoWindow"),
+                        $"{startInfo.Verb}".NoteAs($"Process-StartInfo-Verb"),
+                        $"{string.Join(", ", startInfo.Verbs ?? Array.Empty<string>())}".NoteAs($"Process-StartInfo-Verbs"),
+                        $"{startInfo.UseShellExecute}".NoteAs($"Process-StartInfo-UseShellExecute"),
+                        $"{startInfo.StandardOutputEncoding.WebName}".NoteAs($"Process-StartInfo-StandardOutputEncoding"),
+                        $"{startInfo.StandardErrorEncoding.WebName}".NoteAs($"Process-StartInfo-StandardErrorEncoding"),
+                        $"{startInfo.RedirectStandardOutput}".NoteAs($"Process-StartInfo-RedirectStandardOutput"),
+                        $"{startInfo.RedirectStandardInput}".NoteAs($"Process-StartInfo-RedirectStandardInput"),
+                        $"{startInfo.RedirectStandardError}".NoteAs($"Process-StartInfo-RedirectStandardError"),
+                        $"{startInfo.ErrorDialogParentHandle}".NoteAs($"Process-StartInfo-ErrorDialogParentHandle"),
+                        $"{startInfo.ErrorDialog}".NoteAs($"Process-StartInfo-ErrorDialog"),
+                    }
+                );
+
+                list.AddRange(process.GetEnvironmentVariables());
+                list.AddRange(process.GetEnvironment());
+
+            }).TryOrFailWithGrace();
+
+            return list.Where(x => !x.IsEmpty()).ToArray();
         }
 
         public static Note[] GetEnvironmentVariables(this Process process, string prefix = "Process-EnvironmentVariable-")
