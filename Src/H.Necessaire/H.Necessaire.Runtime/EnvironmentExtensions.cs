@@ -2,72 +2,87 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Security;
 
 namespace H.Necessaire.Runtime
 {
     public static class EnvironmentExtensions
     {
-        public static Note[] AppendProcessInfo(this Note[] notes)
+        public static Note[] AppendProcessInfo(this Note[] notes, Process process = null, string prefix = "Process-")
         {
-            using (Process currentProcess = Process.GetCurrentProcess())
+            if (process != null)
+                return process.GetProcessInfo(prefix);
+
+            using (process = Process.GetCurrentProcess())
             {
-                return
-                    notes.Push(
-                        new Note[]
-                        {
-                            $"{currentProcess.Id}".NoteAs($"Process-Id"),
-
-                            $"{currentProcess.PriorityClass}({(int)currentProcess.PriorityClass})".NoteAs($"Process-PriorityClass"),
-                            $"{currentProcess.BasePriority}".NoteAs($"Process-BasePriority"),
-                            $"{currentProcess.PriorityBoostEnabled}".NoteAs($"Process-PriorityBoostEnabled"),
-                            $"{currentProcess.ProcessorAffinity}".NoteAs($"Process-ProcessorAffinity"),
-
-                            $"{currentProcess.PeakWorkingSet64}".NoteAs($"Process-PeakWorkingSet64"),
-                            $"{currentProcess.PeakVirtualMemorySize64}".NoteAs($"Process-PeakVirtualMemorySize64"),
-                            $"{currentProcess.PeakPagedMemorySize64}".NoteAs($"Process-PeakPagedMemorySize64"),
-
-                            $"{currentProcess.PagedMemorySize64}".NoteAs($"Process-PagedMemorySize64"),
-                            $"{currentProcess.NonpagedSystemMemorySize64}".NoteAs($"Process-NonpagedSystemMemorySize64"),
-                            $"{currentProcess.MinWorkingSet}".NoteAs($"Process-MinWorkingSet"),
-                            $"{currentProcess.MaxWorkingSet}".NoteAs($"Process-MaxWorkingSet"),
-                            $"{currentProcess.PagedSystemMemorySize64}".NoteAs($"Process-PagedSystemMemorySize64"),
-                            $"{currentProcess.PrivateMemorySize64}".NoteAs($"Process-PrivateMemorySize64"),
-                            $"{currentProcess.PrivilegedProcessorTime}".NoteAs($"Process-PrivilegedProcessorTime"),
-                            $"{currentProcess.WorkingSet64}".NoteAs($"Process-WorkingSet64"),
-                            $"{currentProcess.VirtualMemorySize64}".NoteAs($"Process-VirtualMemorySize64"),
-
-                            $"{currentProcess.ProcessName}".NoteAs($"Process-ProcessName"),
-                            $"{currentProcess.MachineName}".NoteAs($"Process-MachineName"),
-                            $"{currentProcess.MainWindowHandle}".NoteAs($"Process-MainWindowHandle"),
-                            $"{currentProcess.SessionId}".NoteAs($"Process-SessionId"),
-                            $"{currentProcess.Responding}".NoteAs($"Process-Responding"),
-                            $"{currentProcess.HasExited}".NoteAs($"Process-HasExited"),
-                            $"{currentProcess.EnableRaisingEvents}".NoteAs($"Process-EnableRaisingEvents"),
-
-                            $"{currentProcess.MainModule.ModuleName}".NoteAs($"Process-MainModule-ModuleName"),
-                            $"{currentProcess.MainModule.FileName}".NoteAs($"Process-MainModule-FileName"),
-                            $"{currentProcess.MainModule.ModuleMemorySize}".NoteAs($"Process-MainModule-ModuleMemorySize"),
-                            $"{currentProcess.MainModule.BaseAddress}".NoteAs($"Process-MainModule-BaseAddress"),
-                            $"{currentProcess.MainModule.EntryPointAddress}".NoteAs($"Process-MainModule-EntryPointAddress"),
-                            $"{currentProcess.MainModule.FileVersionInfo}".NoteAs($"Process-MainModule-FileVersionInfo"),
-
-
-                            $"{currentProcess.UserProcessorTime}".NoteAs($"Process-UserProcessorTime"),
-                            $"{currentProcess.TotalProcessorTime}".NoteAs($"Process-TotalProcessorTime"),
-
-                            $"{currentProcess.Modules.Count}".NoteAs($"Process-Modules"),
-                            $"{currentProcess.Threads.Count}".NoteAs($"Process-Threads"),
-                            $"{currentProcess.HandleCount}".NoteAs($"Process-HandleCount"),
-                            $"{currentProcess.Handle}".NoteAs($"Process-Handle"),
-
-                            $"{currentProcess.StartTime}".NoteAs($"Process-StartTime"),
-                        }
-                        .Concat(
-                            currentProcess.GetStartInfo()
-                        )
-                    );
+                return process.GetProcessInfo(prefix);
             }
+        }
+
+        public static Note[] GetProcessInfo(this Process process, string prefix = "Process-")
+        {
+            Note[] result = Array.Empty<Note>();
+
+            new Action(() =>
+            {
+                result
+                    = new Note[]
+                    {
+                        $"{process.Id}".NoteAs($"{prefix}Id"),
+
+                        $"{process.PriorityClass}({(int)process.PriorityClass})".NoteAs($"{prefix}PriorityClass"),
+                        $"{process.BasePriority}".NoteAs($"{prefix}BasePriority"),
+                        $"{process.PriorityBoostEnabled}".NoteAs($"{prefix}PriorityBoostEnabled"),
+                        $"{process.ProcessorAffinity}".NoteAs($"{prefix}ProcessorAffinity"),
+
+                        $"{process.PeakWorkingSet64}".NoteAs($"{prefix}PeakWorkingSet64"),
+                        $"{process.PeakVirtualMemorySize64}".NoteAs($"{prefix}PeakVirtualMemorySize64"),
+                        $"{process.PeakPagedMemorySize64}".NoteAs($"{prefix}PeakPagedMemorySize64"),
+
+                        $"{process.PagedMemorySize64}".NoteAs($"{prefix}PagedMemorySize64"),
+                        $"{process.NonpagedSystemMemorySize64}".NoteAs($"{prefix}NonpagedSystemMemorySize64"),
+                        $"{process.MinWorkingSet}".NoteAs($"{prefix}MinWorkingSet"),
+                        $"{process.MaxWorkingSet}".NoteAs($"{prefix}MaxWorkingSet"),
+                        $"{process.PagedSystemMemorySize64}".NoteAs($"{prefix}PagedSystemMemorySize64"),
+                        $"{process.PrivateMemorySize64}".NoteAs($"{prefix}PrivateMemorySize64"),
+                        $"{process.PrivilegedProcessorTime}".NoteAs($"{prefix}PrivilegedProcessorTime"),
+                        $"{process.WorkingSet64}".NoteAs($"{prefix}WorkingSet64"),
+                        $"{process.VirtualMemorySize64}".NoteAs($"{prefix}VirtualMemorySize64"),
+
+                        $"{process.ProcessName}".NoteAs($"{prefix}ProcessName"),
+                        $"{process.MachineName}".NoteAs($"{prefix}MachineName"),
+                        $"{process.MainWindowHandle}".NoteAs($"{prefix}MainWindowHandle"),
+                        $"{process.SessionId}".NoteAs($"{prefix}SessionId"),
+                        $"{process.Responding}".NoteAs($"{prefix}Responding"),
+                        $"{process.HasExited}".NoteAs($"{prefix}HasExited"),
+                        $"{process.EnableRaisingEvents}".NoteAs($"{prefix}EnableRaisingEvents"),
+
+                        $"{process.MainModule.ModuleName}".NoteAs($"{prefix}MainModule-ModuleName"),
+                        $"{process.MainModule.FileName}".NoteAs($"{prefix}MainModule-FileName"),
+                        $"{process.MainModule.ModuleMemorySize}".NoteAs($"{prefix}MainModule-ModuleMemorySize"),
+                        $"{process.MainModule.BaseAddress}".NoteAs($"{prefix}MainModule-BaseAddress"),
+                        $"{process.MainModule.EntryPointAddress}".NoteAs($"{prefix}MainModule-EntryPointAddress"),
+                        $"{process.MainModule.FileVersionInfo}".NoteAs($"{prefix}MainModule-FileVersionInfo"),
+
+
+                        $"{process.UserProcessorTime}".NoteAs($"{prefix}UserProcessorTime"),
+                        $"{process.TotalProcessorTime}".NoteAs($"{prefix}TotalProcessorTime"),
+
+                        $"{process.Modules.Count}".NoteAs($"{prefix}Modules"),
+                        $"{process.Threads.Count}".NoteAs($"{prefix}Threads"),
+                        $"{process.HandleCount}".NoteAs($"{prefix}HandleCount"),
+                        $"{process.Handle}".NoteAs($"{prefix}Handle"),
+
+                        $"{process.StartTime}".NoteAs($"{prefix}StartTime"),
+                    }
+                    .Concat(
+                        process.GetStartInfo($"{prefix}-StartInfo-")
+                    )
+                    .ToArray()
+                    ;
+
+            }).TryOrFailWithGrace();
+
+            return result;
         }
 
         public static Note[] GetStartInfo(this Process process, string prefix = "Process-StartInfo-")
@@ -101,8 +116,8 @@ namespace H.Necessaire.Runtime
                     }
                 );
 
-                list.AddRange(process.GetEnvironmentVariables());
-                list.AddRange(process.GetEnvironment());
+                list.AddRange(process.GetEnvironmentVariables($"{prefix}-EnvironmentVariable-"));
+                list.AddRange(process.GetEnvironment($"{prefix}-Environment-"));
 
             }).TryOrFailWithGrace();
 
