@@ -1,9 +1,5 @@
 ﻿using FluentAssertions;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace H.Necessaire.Testicles.Unit
@@ -29,6 +25,14 @@ namespace H.Necessaire.Testicles.Unit
             Note[] notes = ["NoteA =::= ValueA", "NoteB =::= ValueB"];
 
             notes.Should().BeEquivalentTo(["ValueA".NoteAs("NoteA"), "ValueB".NoteAs("NoteB")], because: "Notes should be correctly constructed from strings");
+        }
+
+        [Fact(DisplayName = "Notes Can Be DeConstructed To Strings")]
+        public void Notes_Can_Be_DeConstructed_To_Strings()
+        {
+            string[] strings = ["ValueA".NoteAs("NoteA"), "ValueB".NoteAs("NoteB")];
+
+            strings.Should().BeEquivalentTo(["NoteA =::= ValueA", "NoteB =::= ValueB"], because: "Notes should be correctly deconstructed to strings");
         }
     }
 }

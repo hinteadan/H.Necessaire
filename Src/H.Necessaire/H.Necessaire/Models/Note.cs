@@ -22,7 +22,7 @@ namespace H.Necessaire
 
         public override string ToString()
         {
-            return $"[{ID} {IDSeparator} {Value}]";
+            return $"{ID} {IDSeparator} {Value}";
         }
 
         public static Note[] FromDictionary(IDictionary<string, string> keyValuePairs)
@@ -41,6 +41,14 @@ namespace H.Necessaire
             string[] parts = noteAsString.Split(IDSeparator.AsArray(), 2, StringSplitOptions.RemoveEmptyEntries);
 
             return new Note(parts.Length > 1 ? parts[0]?.Trim().NullIfEmpty() : null, parts[parts.Length - 1]?.Trim().NullIfEmpty());
+        }
+
+        public static implicit operator string(Note note)
+        {
+            if (note.IsEmpty())
+                return null;
+
+            return note.ToString();
         }
     }
 }
