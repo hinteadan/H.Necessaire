@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace H.Necessaire.Runtime
+namespace H.Necessaire
 {
     public static class EnvironmentExtensions
     {
