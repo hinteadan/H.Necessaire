@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace H.Necessaire
 {
     public struct Note
     {
+        public const string IDSeparator = "=::=";
         public static readonly Note Empty = new Note();
 
         public Note(string id, string value)
@@ -20,7 +22,7 @@ namespace H.Necessaire
 
         public override string ToString()
         {
-            return $"[{ID}:\"{Value}\"]";
+            return $"[{ID} {IDSeparator} {Value}]";
         }
 
         public static Note[] FromDictionary(IDictionary<string, string> keyValuePairs)
@@ -29,6 +31,16 @@ namespace H.Necessaire
                 return new Note[0];
 
             return keyValuePairs.Select(x => new Note(x.Key, x.Value)).ToArray();
+        }
+
+        public static implicit operator Note(string noteAsString)
+        {
+            if (noteAsString.IsEmpty())
+                return Empty;
+
+            string[] parts = noteAsString.Split(IDSeparator.AsArray(), 2, StringSplitOptions.RemoveEmptyEntries);
+
+            return new Note(parts.Length > 1 ? parts[0]?.Trim().NullIfEmpty() : null, parts[parts.Length - 1]?.Trim().NullIfEmpty());
         }
     }
 }

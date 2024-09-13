@@ -22,5 +22,13 @@ namespace H.Necessaire.Testicles.Unit
 
             notes.Should().BeEquivalentTo(["ValueA".NoteAs("NoteA"), "ValueB".NoteAs("NoteB")], because: "Notes should be correctly constructed from a dictionary");
         }
+
+        [Fact(DisplayName = "Notes Can Be Constructed From Strings")]
+        public void Notes_Can_Be_Constructed_From_Strings()
+        {
+            Note[] notes = ["NoteA =::= ValueA", "NoteB =::= ValueB"];
+
+            notes.Should().BeEquivalentTo(["ValueA".NoteAs("NoteA"), "ValueB".NoteAs("NoteB")], because: "Notes should be correctly constructed from strings");
+        }
     }
 }
