@@ -82,7 +82,7 @@ namespace H.Necessaire.Runtime.QdActions.Processors
                     onFail: async ex =>
                     {
                         string message = $"Error occurred while trying to trace IP Address {ipAddress} via {networkTraceProvider.GetType().Name}. Reason: {ex.Message}";
-                        await logger.LogError(message, ex, ipAddress);
+                        await logger.LogError(message, ex, ipAddress as object);
                         result = OperationResult.Fail(ex, message).WithoutPayload<NetworkTrace>();
                     }
                 );
