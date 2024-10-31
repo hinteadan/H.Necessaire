@@ -558,6 +558,9 @@
     <Compile Include="..\H.Necessaire\Operations\QdAction\ImAQdActionProcessor.cs">
       <Link>Operations\QdAction\ImAQdActionProcessor.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Operations\QdAction\ImAQdActionQueueOnDemandRunner.cs">
+      <Link>Operations\QdAction\ImAQdActionQueueOnDemandRunner.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Operations\ScopedRunner.cs">
       <Link>Operations\ScopedRunner.cs</Link>
     </Compile>

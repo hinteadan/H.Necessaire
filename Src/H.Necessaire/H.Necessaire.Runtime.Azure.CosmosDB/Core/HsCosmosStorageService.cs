@@ -177,7 +177,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core
                 new Func<Task>(async () =>
                 {
                     Dictionary<string, object> actualParams = new Dictionary<string, object>(sqlParams);
-                    List<ImACosmosSqlFilterCriteria> actualFilters = new List<ImACosmosSqlFilterCriteria>(sqlFilters);
+                    List<ImACosmosSqlFilterCriteria> actualFilters = sqlFilters?.Any() == true ? new List<ImACosmosSqlFilterCriteria>(sqlFilters) : new List<ImACosmosSqlFilterCriteria>();
                     if (!partitionKey.IsEmpty())
                     {
                         actualFilters.Add(new CosmosSqlFilterCriteria("partitionKey", "="));
@@ -252,7 +252,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core
                 new Func<Task>(() =>
                 {
                     Dictionary<string, object> actualParams = new Dictionary<string, object>(sqlParams);
-                    List<ImACosmosSqlFilterCriteria> actualFilters = new List<ImACosmosSqlFilterCriteria>(sqlFilters);
+                    List<ImACosmosSqlFilterCriteria> actualFilters = sqlFilters?.Any() == true ? new List<ImACosmosSqlFilterCriteria>(sqlFilters) : new List<ImACosmosSqlFilterCriteria>();
                     if (!partitionKey.IsEmpty())
                     {
                         actualFilters.Add(new CosmosSqlFilterCriteria("partitionKey", "="));

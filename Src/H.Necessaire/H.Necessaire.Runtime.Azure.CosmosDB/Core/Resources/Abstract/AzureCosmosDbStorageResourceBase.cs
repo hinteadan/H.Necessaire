@@ -74,7 +74,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core.Resources.Abstract
         public virtual async Task<OperationResult<TId>[]> DeleteByIDs(params TId[] ids)
             => await Task.WhenAll(ids.Select(async id => (await DeleteByID(id)).WithPayload(id)));
 
-        public async Task<OperationResult<Page<TEntity>>> LoadPage(TFilter filter)
+        public virtual async Task<OperationResult<Page<TEntity>>> LoadPage(TFilter filter)
         {
             OperationResult<Page<TEntity>> result = OperationResult.Fail("Not yet started").WithoutPayload<Page<TEntity>>();
 
@@ -119,7 +119,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core.Resources.Abstract
             return result;
         }
 
-        public async Task<OperationResult<IDisposableEnumerable<TEntity>>> Stream(TFilter filter)
+        public virtual async Task<OperationResult<IDisposableEnumerable<TEntity>>> Stream(TFilter filter)
         {
             OperationResult<IDisposableEnumerable<TEntity>> result = OperationResult.Fail("Not yet started").WithoutPayload<IDisposableEnumerable<TEntity>>();
 
@@ -160,7 +160,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core.Resources.Abstract
             return result;
         }
 
-        public async Task<OperationResult<IDisposableEnumerable<TEntity>>> StreamAll()
+        public virtual async Task<OperationResult<IDisposableEnumerable<TEntity>>> StreamAll()
         {
             OperationResult<IDisposableEnumerable<TEntity>> result = OperationResult.Fail("Not yet started").WithoutPayload<IDisposableEnumerable<TEntity>>();
 

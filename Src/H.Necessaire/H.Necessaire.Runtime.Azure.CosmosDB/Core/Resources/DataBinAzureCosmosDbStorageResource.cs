@@ -14,7 +14,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core.Resources
         , ImAStorageBrowserService<DataBin, DataBinFilter>
     {
         #region Construct
-        int maxDataSizeInBytes = 1440 * 1000; //1.44MB
+        const int maxDataSizeInBytes = 1440 * 1000; //1.44MB
         ImALogger logger;
         HsCosmosStorageService cosmosDataBinStorageService;
         public override void ReferDependencies(ImADependencyProvider dependencyProvider)
@@ -75,9 +75,18 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core.Resources
                         do
                         {
                             batchIndex++;
-                            bytesRead = await stream.ReadAsync(batch, 0, maxDataSizeInBytes);
+
+                            bytesRead = 0;
+                            int lastBytesRead = 0;
+                            do
+                            {
+                                lastBytesRead = await stream.ReadAsync(batch, bytesRead, maxDataSizeInBytes - bytesRead);
+                                bytesRead += lastBytesRead;
+                            } while (lastBytesRead > 0 && bytesRead < maxDataSizeInBytes);
+
                             if (bytesRead == 0)
                                 break;
+
                             sizeInBytes += bytesRead;
                             string bytesReadAsString = Convert.ToBase64String(batch, 0, bytesRead);
                             DataBinPayload dataBinPayload = new DataBinPayload
@@ -360,7 +369,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core.Resources
                 .TryOrFailWithGrace(
                     onFail: async ex =>
                     {
-                        await logger.LogError($"Error occurred while trying to open DataBin content stream for {meta.ID}. Message: {ex.Message}", ex, meta);
+                        await logger.LogError($"Error occurred while trying to open DataBin content stream for {meta.ID} from CosmosDB. Message: {ex.Message}", ex, meta);
                         result = null;
                     }
                 );

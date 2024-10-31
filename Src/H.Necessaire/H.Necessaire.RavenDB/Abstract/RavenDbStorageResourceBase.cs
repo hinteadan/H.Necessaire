@@ -49,15 +49,7 @@ namespace H.Necessaire.RavenDB
             {
                 string id = GetIdForRaven(GetIdFor(item));
 
-                bool exists = await session.Advanced.ExistsAsync(id);
-
-                if (exists)
-                {
-                    session.Delete(id);
-                    await session.SaveChangesAsync();
-                }
-
-                await session.StoreAsync(item, id);
+                await session.StoreAsync(item, changeVector: null, id);
 
                 await session.SaveChangesAsync();
             }

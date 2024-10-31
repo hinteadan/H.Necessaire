@@ -13,12 +13,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="H.Versioning" Version="2.0.5" />
-		<PackageReference Include="System.Runtime.Caching" Version="8.0.0" />
+		<PackageReference Include="System.Runtime.Caching" Version="8.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\H.Necessaire.Dapper\H.Necessaire.Dapper.csproj" />
-		<ProjectReference Include="..\..\H.Necessaire.Runtime.SqlServer\H.Necessaire.Runtime.SqlServer.csproj" />
 		<ProjectReference Include="..\..\H.Necessaire.Runtime\H.Necessaire.Runtime.csproj" />
 		<ProjectReference Include="..\..\H.Necessaire.Serialization\H.Necessaire.Serialization.csproj" />
 		<ProjectReference Include="..\..\H.Necessaire\H.Necessaire.csproj" />

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace H.Necessaire
 {
@@ -20,12 +22,16 @@ namespace H.Necessaire
                 || typeToCompareWith.IsSubclassOf(typeToCheck);
         }
 
-        public static Type[] GetAllImplementations(this Type baseType)
+        public static Type[] GetAllImplementations(this Type baseType, params Assembly[] assembliesToScan)
         {
+            assembliesToScan
+                = assembliesToScan?.Any() == true
+                ? assembliesToScan
+                : AppDomain.CurrentDomain.GetAssemblies()
+                ;
+
             return
-                AppDomain
-                .CurrentDomain
-                .GetAssemblies()
+                assembliesToScan
                 .SelectMany(
                     assembly => assembly
                     .GetTypes()
@@ -77,16 +83,86 @@ namespace H.Necessaire
             if (type == null || string.IsNullOrWhiteSpace(identifier))
                 return false;
 
-            if (type.Name?.StartsWith(identifier, StringComparison.InvariantCultureIgnoreCase) ?? false)
+            if (type.IsTypeNameMatch(identifier))
                 return true;
 
-            if (string.Equals(identifier, type.GetID(), StringComparison.InvariantCultureIgnoreCase))
+            if (type.IsTypeIDMatch(identifier))
                 return true;
 
-            if (type.GetAliases()?.Any(alias => string.Equals(identifier, alias, StringComparison.InvariantCultureIgnoreCase)) ?? false)
+            if (type.IsTypeAliasMatch(identifier))
+                return true;
+
+            if (type.IsTypeNamePartialMatch(identifier))
                 return true;
 
             return false;
+        }
+
+        public static bool IsTypeNameMatch(this Type type, string identifier)
+        {
+            if (type == null || string.IsNullOrWhiteSpace(identifier))
+                return false;
+
+            if (identifier.Is(type.Name))
+                return true;
+
+            return false;
+        }
+
+        public static bool IsTypeIDMatch(this Type type, string identifier)
+        {
+            if (type == null || string.IsNullOrWhiteSpace(identifier))
+                return false;
+
+            if (identifier.Is(type.GetID()))
+                return true;
+
+            return false;
+        }
+
+        public static bool IsTypeAliasMatch(this Type type, string identifier)
+        {
+            if (type == null || string.IsNullOrWhiteSpace(identifier))
+                return false;
+
+            if (identifier.In(type.GetAliases(), (key, alias) => key.Is(alias)))
+                return true;
+
+            return false;
+        }
+
+        public static bool IsTypeNamePartialMatch(this Type type, string identifier)
+        {
+            if (type == null || string.IsNullOrWhiteSpace(identifier))
+                return false;
+
+            if (type.Name?.StartsWith(identifier, StringComparison.InvariantCultureIgnoreCase) == true)
+                return true;
+
+            return false;
+        }
+
+        public static bool IsNestedUnder(this Type type, Type declaringTypeToCheck)
+        {
+            if (type?.IsNested != true)
+                return false;
+
+            if (type?.DeclaringType is null)
+                return false;
+
+            return type.DeclaringType == declaringTypeToCheck || type.DeclaringType.IsNestedUnder(declaringTypeToCheck);
+        }
+
+        public static IEnumerable<Type> FindMatchingConcreteTypes(this Type type, string identifier, params Assembly[] assembliesToScan)
+        {
+            if (identifier.IsEmpty())
+                return Enumerable.Empty<Type>();
+
+            return 
+                type
+                .GetAllImplementations(assembliesToScan)
+                .Where(x => x.IsMatch(identifier))
+                ;
         }
     }
 }

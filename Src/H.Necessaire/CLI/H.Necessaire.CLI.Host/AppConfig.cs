@@ -23,6 +23,15 @@ namespace H.Necessaire.CLI
                         //        "Core".ConfigWith("H.Necessaire.CLI.Local.Core.Debug")
                         //    )
                         //),
+                        "Google".ConfigWith(
+                            "Firestore".ConfigWith(
+                                "ProjectID".ConfigWith("free-tier-playground-409721"),
+                                "DefaultCollectionName".ConfigWith("HNecessaireDefault"),
+                                "Auth".ConfigWith(
+                                    "Json".ConfigWith("free-tier-playground-409721-6f5f5d8af5a6.cfg.json")
+                                )
+                            )
+                        ),
                         "AzureCosmosDB".ConfigWith(
                             //"URL".ConfigWith(ReadConnectionStringFromFile("AzureCosmosDB.URL.cfg.txt")),
                             "URL".ConfigWith("https://localhost:8081"),
