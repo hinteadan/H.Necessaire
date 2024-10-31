@@ -33,28 +33,10 @@ namespace H.Necessaire.Runtime.CLI.Builders
 
             string commandName = commandRetrieveResult.Payload;
 
-            Type commandType
-                =
-                dependencyBrowser
-                .GetAllAlwaysNewTypes()
-                .SingleOrDefault(x => IsCommandNameMatch(commandName, x.Key) || x.Key.IsMatch(commandName))
-                .Key
-
-                ??
-
-                dependencyBrowser
-                .GetAllOneTimeTypes()
-                .SingleOrDefault(x => IsCommandNameMatch(commandName, x.Key) || x.Key.IsMatch(commandName))
-                .Key
-                ;
-
-            if (commandType == null)
-                return OperationResult.Fail($"Command [{commandName}] doesn't exist. Will display help here.");
-
-            ImACliCommand command = dependencyProvider?.Get(commandType) as ImACliCommand;
+            ImACliCommand command = dependencyProvider?.Build<ImACliCommand>(commandName);
 
             if (command == null)
-                return OperationResult.Fail($"Command [{commandName}] cannot be instantiated. Will display help here.");
+                return OperationResult.Fail($"Command [{commandName}] cannot be found or instantiated. Will display help here.");
 
             return await command.Run();
         }

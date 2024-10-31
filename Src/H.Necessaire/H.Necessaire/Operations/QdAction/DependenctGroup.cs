@@ -7,6 +7,7 @@
             dependencyRegistry
                 .Register<ImAnActionQer>(() => new ActionQer())
                 .Register<QdActionProcessingDaemon>(() => new QdActionProcessingDaemon())
+                .Register<ImAQdActionQueueOnDemandRunner>(() => dependencyRegistry.Get<QdActionProcessingDaemon>())
                 ;
         }
     }
