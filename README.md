@@ -11,6 +11,7 @@ This document describes all these items along with their use case description an
 They are grouped in three main areas, each with its own set of functional areas:
 
 - [H's Necessaire](#hs-necessaire)
+  - [Configs](#configs)
   - [Models](#models)
     - [`OperationResult`](#operationresult)
       - [Definition overview](#definition-overview)
@@ -120,6 +121,76 @@ They are grouped in three main areas, each with its own set of functional areas:
       - [Definition overview](#definition-overview-21)
       - [Use Case code sample](#use-case-code-sample-28)
   - [Discussions](#discussions)
+
+
+---
+
+## Configs
+H.Necessaire runtime configs described
+
+ - `App.Name` **optional**, defaults to `"H.Necessaire"`
+ - `DefaultHasher` **optional**, defaults to `SimpleSecureHasher`, possible values: `SimpleSecureHasher`, `MD5Hasher`
+
+### QD Actions
+ - `QdActions.MaxProcessingAttempts` **optional**, defaults to `3`
+ - `QdActions.ProcessingIntervalInSeconds` **optional**, defaults to `15`
+ - `QdActions.ProcessingBatchSize` **optional**, defaults to `10`
+
+### FileSystem Storage
+ - `FileSystemStorageRootFolder` **optional**, defaults to `GetRootFolderFromStartAssembly()`
+
+### Security Admins aka IronMen
+ - `IronMen.FilePath` **optional**, default to `"ironmen.json"`
+ - `IronMen.PassFilePath` **optional**, default to `"ironmen.pass.json"`
+
+### SQL
+ - `SqlConnections.DefaultConnectionString`
+ - `SqlConnections.DatabaseNames.Core`
+
+### RavenDB
+ - `RavenDbConnections.DatabaseNames.Core`
+ - `RavenDbConnections.ClientCertificateName` PFX cert must be an embedded resource
+ - `RavenDbConnections.DatabaseUrls` - collection of strings
+ - `RavenDbConnections.ClientCertificatePassword` - if client cert is pass-protected
+
+### Azure CosmosDB
+ - `AzureCosmosDB.URL`
+ - `AzureCosmosDB.Keys` - collection of strings
+ - `AzureCosmosDB.DatabaseID`
+ - `AzureCosmosDB.ContainerID`
+ - `AzureCosmosDB.App` or `AzureCosmosDB.Application` or `AzureCosmosDB.AppName` or `AzureCosmosDB.ApplicationName` **optional**
+
+### Google FirestoreDB
+ - `Google.Firestore.ProjectID`
+ - `Google.Firestore.HNecessaireDefault` **optional** collection name, defaults to `HNecessaireDefault`
+ - `Google.Firestore.Auth.Json` - googleAuthJsonPath, can also be already set in `GOOGLE_APPLICATION_CREDENTIALS` env. variable and skipped from runtime config
+
+### UI
+
+ - `BaseUrl` **optional**, defaults to smart determination
+ - `BaseApiUrl` **optional**, defaults to smart determination
+ - `SecurityContextCheckIntervalInSeconds` **optional**, defaults to `30`
+ - `SyncIntervalInSeconds` **optional**, defaults to `10`
+ - `Formatting.DateAndTime` **optional**, defaults to `"ddd, MMM dd, yyyy 'at' HH:mm 'UTC'"`
+ - `Formatting.Date` **optional**, defaults to `"ddd, MMM dd, yyyy"`
+ - `Formatting.Time` **optional**, defaults to `"HH:mm"`
+ - `Formatting.Month` **optional**, defaults to `"yyyy MMM"`
+ - `Formatting.DayOfWeek` **optional**, defaults to `"dddd"`
+ - `Formatting.TimeStampThisYear` **optional**, defaults to `"MMM dd 'at' HH:mm"`
+ - `Formatting.TimeStampOtherYear` **optional**, defaults to `"MMM dd, yyyy 'at' HH:mm"`
+ - `Formatting.TimeStampIdentifier` **optional**, defaults to `"yyyyMMdd_HHmmss_'UTC'"`
+ - `Security.LoginUrl` **optional**, defaults to `"/Security/Login"`
+ - `Security.RefreshUrl` **optional**, defaults to `"/Security/Refresh"`
+ - `"BffApiSyncRegistryRelativeUrl"` **optional**, defaults to `"/sync/sync"`
+
+
+### CLI
+
+ - `NuSpecRootFolderPath` **optional**, defaults to `"C:\H\H.Necessaire\Src\H.Necessaire"`
+
+ 
+
+
 
 ---
 
