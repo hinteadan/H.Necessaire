@@ -49,13 +49,38 @@ namespace H.Necessaire
         {
             if (baseType.IsGenericTypeDefinition)
             {
-                if (!typeToCheck.IsGenericType)
-                    return false;
+                if (typeToCheck.IsGenericType)
+                    return baseType.IsAssignableFrom(typeToCheck.GetGenericTypeDefinition());
 
-                return baseType.IsAssignableFrom(typeToCheck.GetGenericTypeDefinition());
+                return IsInstanceOfGenericType(baseType, typeToCheck);
             }
 
             return baseType.IsAssignableFrom(typeToCheck);
+        }
+
+        private static bool IsInstanceOfGenericType(Type openGenericType, Type typeToCheck)
+        {
+            if (openGenericType.IsInterface)
+            {
+                Type[] implementedInterfaces = typeToCheck.GetInterfaces()?.Where(i => i.IsGenericType).ToNoNullsArray();
+                if (implementedInterfaces is null)
+                    return false;
+
+                return implementedInterfaces.Any(i => i.GetGenericTypeDefinition() == openGenericType);
+            }
+
+            Type type = typeToCheck;
+
+            while (type != null)
+            {
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == openGenericType)
+                {
+                    return true;
+                }
+                type = type.BaseType;
+            }
+
+            return false;
         }
 
         public static ImALogger GetLogger(this ImADependencyProvider dependencyProvider, string component, string application = "H.Necessaire")
