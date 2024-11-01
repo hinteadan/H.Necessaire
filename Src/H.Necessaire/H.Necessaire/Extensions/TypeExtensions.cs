@@ -38,11 +38,24 @@ namespace H.Necessaire
                     .Where(
                         p =>
                         p != baseType
-                        && baseType.IsAssignableFrom(p)
                         && !p.IsAbstract
+                        && IsAssignableFrom(baseType, p)
                     )
                 )
                 .ToArray();
+        }
+
+        private static bool IsAssignableFrom(Type baseType, Type typeToCheck)
+        {
+            if (baseType.IsGenericTypeDefinition)
+            {
+                if (!typeToCheck.IsGenericType)
+                    return false;
+
+                return baseType.IsAssignableFrom(typeToCheck.GetGenericTypeDefinition());
+            }
+
+            return baseType.IsAssignableFrom(typeToCheck);
         }
 
         public static ImALogger GetLogger(this ImADependencyProvider dependencyProvider, string component, string application = "H.Necessaire")
