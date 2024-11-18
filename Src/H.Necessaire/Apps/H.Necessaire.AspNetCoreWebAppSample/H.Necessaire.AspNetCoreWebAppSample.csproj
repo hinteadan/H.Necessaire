@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,18 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.0" />
   </ItemGroup>
 
     <ItemGroup>
-	    <EmbeddedResource Include="free.hinteadan.client.certificate.with.password.pfx" />
-	    <None Include="free-tier-playground-409721-6f5f5d8af5a6.cfg.json">
-	      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	    </None>
-	    <None Include="ironmen.json">
-	      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	    </None>
-	    <None Include="ironmen.pass.json" />
 	    <EmbeddedResource Include="version.txt" />
     </ItemGroup>
 
