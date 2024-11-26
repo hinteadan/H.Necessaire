@@ -66,9 +66,6 @@
     <Compile Include="..\H.Necessaire\Extensions\TaskExtensions.cs">
       <Link>Extensions\TaskExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\H.Necessaire\Extensions\TypeExtensions.cs">
-      <Link>Extensions\TypeExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\H.Necessaire\HNecessaireDependencyGroup.cs">
       <Link>HNecessaireDependencyGroup.cs</Link>
     </Compile>
@@ -655,6 +652,7 @@
       <Link>UI\UserInput\UserOptionSelectionResult.cs</Link>
     </Compile>
     <Compile Include="Extensions\BridgeDotNetExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Models\ConcurrentDictionary.cs" />
     <Compile Include="Models\ConcurrentQueue.cs" />
     <Compile Include="Models\Lazy.cs" />
