@@ -1,10 +1,5 @@
 {
   "profiles": {
-    "WSL": {
-      "commandName": "WSL2",
-      "environmentVariables": {},
-      "distributionName": ""
-    },
     "CLI": {
       "commandName": "Project"
     },
@@ -28,9 +23,13 @@
       "commandName": "Project",
       "commandLineArgs": "nugetversion update H.Necessaire=minor H.Necessaire.BridgeDotNet=minor"
     },
+    "CLI - debug external command": {
+      "commandName": "Project",
+      "commandLineArgs": "debug ExternalCommand cmd.exe /c tasklist"
+    },
     "CLI - debug": {
       "commandName": "Project",
-      "commandLineArgs": "debug"
+      "commandLineArgs": "debug default"
     },
     "CLI - version": {
       "commandName": "Project",

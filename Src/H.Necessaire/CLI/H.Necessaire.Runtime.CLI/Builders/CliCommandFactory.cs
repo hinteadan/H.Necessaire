@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.CLI.Builders
 {
-    public class CliCommandFactory : UseCaseBase, ImADependency
+    public sealed class CliCommandFactory : UseCaseBase, ImADependency
     {
         #region Construct
         static readonly string[] commandTypeNameEndings = new[] { "UseCase", "Command", "CliCommand", "CommandUseCase", "UseCaseCommand", "CliCommandUseCase", "CliUseCaseCommand" };

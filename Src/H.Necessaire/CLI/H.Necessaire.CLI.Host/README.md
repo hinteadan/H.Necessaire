@@ -51,3 +51,32 @@ _.\H.Necessaire.CLI.exe_
 ```
 .\H.Necessaire.CLI.exe bridgedotnet copy "Src=C:\H\H.Necessaire\Src\H.Necessaire\Apps\H.Necessaire.ReactAppSample" "Dst=C:\H\H.Necessaire\Src\H.Necessaire\Apps\H.Necessaire.AspNetCoreWebAppSample"
 ```
+
+
+# Run external command
+
+```csharp
+ExternalCommandRunner externalCommandRunner;
+
+public override void ReferDependencies(ImADependencyProvider dependencyProvider)
+{
+    base.ReferDependencies(dependencyProvider);
+    externalCommandRunner = dependencyProvider.Get<ExternalCommandRunner>();
+}
+
+var x = await externalCommandRunner
+    .WithContext(new ExternalCommandRunContext { IsOutputCaptured = true, IsOutputPrinted = false })
+    .Run("node", "--version");
+string result = x.Payload.OutputData.ToString().Trim();
+var nodeVersion = VersionNumber.Parse(result);
+
+OperationResult<ExternalCommandRunContext>[] results = await Task.WhenAll(
+    externalCommandRunner.WithContext(new ExternalCommandRunContext { IsOutputCaptured = true }).RunCmd("tasklist"),
+    externalCommandRunner.WithContext(new ExternalCommandRunContext { IsOutputCaptured = true }).RunCmd("dir")
+);
+
+
+return await externalCommandRunner.WithContext(new ExternalCommandRunContext { IsUserInputExpected = true }).RunCmd();
+
+externalCommandRunner.Run("some.exe", "with", "args");
+```

@@ -16,6 +16,7 @@ namespace H.Necessaire.Runtime
                 ;
 
             dependencyRegistry
+                .Register<ExternalCommandRunner.DependencyGroup>(() => new ExternalCommandRunner.DependencyGroup())
                 .Register<Resources.DependencyGroup>(() => new Resources.DependencyGroup())
                 .Register<Validation.DependencyGroup>(() => new Validation.DependencyGroup())
                 .Register<Security.DependencyGroup>(() => new Security.DependencyGroup())
