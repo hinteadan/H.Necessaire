@@ -57,7 +57,7 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
                     StartProcess(context, externalProcess);
 
                     CancellationTokenSource userInputCancelTokenSource = context.CancellationTokenSource;
-                    Task userInputTask = context.IsUserInputExpected ? BuildUserInputMonitoringTask(externalProcess, userInputCancelTokenSource) : null;
+                    Task userInputTask = context.IsUserInputExpected ? BuildUserInputMonitoringTask(context, externalProcess, userInputCancelTokenSource) : null;
 
                     externalProcess.WaitForExit();
 
@@ -96,14 +96,28 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
             });
         }
 
-        private static Task BuildUserInputMonitoringTask(Process externalProcess, CancellationTokenSource cancelTokenSource)
+        private static Task BuildUserInputMonitoringTask(ExternalCommandRunContext context, Process externalProcess, CancellationTokenSource cancelTokenSource)
         {
             return Task.Run(async () =>
             {
+                if (context.UserInputProvider != null)
+                {
+                    string[] userInputs = await context.UserInputProvider.Invoke();
+
+                    foreach (string userInput in userInputs)
+                    {
+                        await externalProcess.StandardInput.WriteLineAsync(userInput);
+                    }
+
+                    return;
+                }
+
                 while (!cancelTokenSource.IsCancellationRequested)
                 {
                     string userInput = await Task.Run(async () => await Console.In.ReadLineAsync(), cancelTokenSource.Token);
+
                     Console.WriteLine();
+
                     await externalProcess.StandardInput.WriteLineAsync(userInput);
                 }
             });
@@ -160,8 +174,6 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
 
         static void DisposeProcess(ExternalCommandRunContext context, Process externalProcess)
         {
-            //new Action(() => { externalProcess.OutputDataReceived -= OnOutputDataReceived; }).TryOrFailWithGrace();
-            //new Action(() => { externalProcess.ErrorDataReceived -= OnErrorDataReceived; }).TryOrFailWithGrace();
             if (context.IsOutputCaptured)
             {
                 new Action(externalProcess.CancelOutputRead).TryOrFailWithGrace();

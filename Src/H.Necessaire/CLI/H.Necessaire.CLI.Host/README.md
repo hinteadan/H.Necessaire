@@ -78,5 +78,13 @@ OperationResult<ExternalCommandRunContext>[] results = await Task.WhenAll(
 
 return await externalCommandRunner.WithContext(new ExternalCommandRunContext { IsUserInputExpected = true }).RunCmd();
 
+await externalCommandRunner
+    .WithContext(new ExternalCommandRunContext
+    {
+        IsUserInputExpected = true,
+        UserInputProvider = () => new string[] { "ping google.com", "exit" }.AsTask(),
+    })
+    .RunCmd();
+
 externalCommandRunner.Run("some.exe", "with", "args");
 ```

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.ExternalCommandRunner
 {
@@ -9,6 +10,7 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
         public StringBuilder OutputData { get; } = new StringBuilder();
         public StringBuilder ErrorData { get; } = new StringBuilder();
         public bool IsUserInputExpected { get; set; } = false;
+        public Func<Task<string[]>> UserInputProvider { get; set; } = null;
         public bool IsOutputCaptured { get; set; } = false;
         /// <summary>
         /// Obviously, only has effect if IsOutputCaptured is true, otherwise the output is sent to the std. output by the underlying command, without our control.

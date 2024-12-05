@@ -40,7 +40,14 @@ namespace H.Necessaire.CLI.Host
                 );
 
 
-                return await externalCommandRunner.WithContext(new ExternalCommandRunContext { IsUserInputExpected = true }).RunCmd();
+                return
+                    await externalCommandRunner
+                    .WithContext(new ExternalCommandRunContext
+                    {
+                        IsUserInputExpected = true,
+                        UserInputProvider = () => new string[] { "ping google.com", "exit" }.AsTask(),
+                    })
+                    .RunCmd();
             }
         }
     }
