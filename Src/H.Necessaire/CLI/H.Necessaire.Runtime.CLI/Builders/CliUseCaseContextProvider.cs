@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.CLI.Builders
 {
-    public class CliUseCaseContextProvider : ImAUseCaseContextProvider, ImADependency
+    public sealed class CliUseCaseContextProvider : ImAUseCaseContextProvider, ImADependency
     {
         #region Construct
         ArgsParser argsParser = new ArgsParser();

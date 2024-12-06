@@ -38,49 +38,11 @@ namespace H.Necessaire
                     .Where(
                         p =>
                         p != baseType
+                        && baseType.IsAssignableFrom(p)
                         && !p.IsAbstract
-                        && IsAssignableFrom(baseType, p)
                     )
                 )
                 .ToArray();
-        }
-
-        private static bool IsAssignableFrom(Type baseType, Type typeToCheck)
-        {
-            if (baseType.IsGenericTypeDefinition)
-            {
-                if (typeToCheck.IsGenericType)
-                    return baseType.IsAssignableFrom(typeToCheck.GetGenericTypeDefinition());
-
-                return IsInstanceOfGenericType(baseType, typeToCheck);
-            }
-
-            return baseType.IsAssignableFrom(typeToCheck);
-        }
-
-        private static bool IsInstanceOfGenericType(Type openGenericType, Type typeToCheck)
-        {
-            if (openGenericType.IsInterface)
-            {
-                Type[] implementedInterfaces = typeToCheck.GetInterfaces()?.Where(i => i.IsGenericType).ToNoNullsArray();
-                if (implementedInterfaces is null)
-                    return false;
-
-                return implementedInterfaces.Any(i => i.GetGenericTypeDefinition() == openGenericType);
-            }
-
-            Type type = typeToCheck;
-
-            while (type != null)
-            {
-                if (type.IsGenericType && type.GetGenericTypeDefinition() == openGenericType)
-                {
-                    return true;
-                }
-                type = type.BaseType;
-            }
-
-            return false;
         }
 
         public static ImALogger GetLogger(this ImADependencyProvider dependencyProvider, string component, string application = "H.Necessaire")
@@ -94,9 +56,6 @@ namespace H.Necessaire
 
         public static RuntimeConfig GetRuntimeConfig(this ImADependencyProvider dependencyProvider)
             => dependencyProvider?.Get<ImAConfigProvider>()?.GetRuntimeConfig() ?? dependencyProvider?.Get<RuntimeConfig>() ?? RuntimeConfig.Empty;
-
-        public static ImACacher<T> GetCacher<T>(this ImADependencyProvider dependencyProvider, string cacherID = "InMemory")
-            => dependencyProvider?.Get<ImACacherFactory>()?.BuildCacher<T>(cacherID);
 
         public static string GetID(this Type type)
         {
@@ -116,13 +75,6 @@ namespace H.Necessaire
         {
             return
                 type?.GetCustomAttributes(typeof(CategoryAttribute), true)?.SelectMany(noteAttr => (noteAttr as CategoryAttribute)?.Categories)?.Distinct()?.ToArray()
-                ;
-        }
-
-        public static int GetPriority(this Type type)
-        {
-            return
-                (type?.GetCustomAttributes(typeof(PriorityAttribute), false)?.SingleOrDefault() as PriorityAttribute)?.Priority ?? 0;
                 ;
         }
 
@@ -206,7 +158,7 @@ namespace H.Necessaire
             if (identifier.IsEmpty())
                 return Enumerable.Empty<Type>();
 
-            return 
+            return
                 type
                 .GetAllImplementations(assembliesToScan)
                 .Where(x => x.IsMatch(identifier))
