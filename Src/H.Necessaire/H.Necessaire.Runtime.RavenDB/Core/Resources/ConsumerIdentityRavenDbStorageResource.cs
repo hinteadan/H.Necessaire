@@ -7,17 +7,8 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
 {
     internal class ConsumerIdentityRavenDbStorageResource : RavenDbStorageServiceBase<Guid, ConsumerIdentity, IDFilter<Guid>, ConsumerIdentityRavenDbStorageResource.ConsumerIdentityFilterIndex>
     {
-        protected override IAsyncDocumentQuery<ConsumerIdentity> ApplyFilter(IAsyncDocumentQuery<ConsumerIdentity> result, IDFilter<Guid> filter)
-        {
-            if (filter?.IDs?.Any() ?? false)
-            {
-                result = result.WhereIn(nameof(ConsumerIdentity.ID), filter.IDs.ToStringArray());
-            }
 
-            return result;
-        }
-
-        protected override IDocumentQuery<ConsumerIdentity> ApplyFilterSync(IDocumentQuery<ConsumerIdentity> result, IDFilter<Guid> filter)
+        protected override TDocQuery ApplyFilterGeneric<TDocQuery>(TDocQuery result, IDFilter<Guid> filter)
         {
             if (filter?.IDs?.Any() ?? false)
             {

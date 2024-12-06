@@ -7,17 +7,7 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
 {
     internal class RuntimeTraceRavenDbStorageResource : RavenDbStorageServiceBase<Guid, RuntimeTrace, IDFilter<Guid>, RuntimeTraceRavenDbStorageResource.RuntimeTraceFilterIndex>
     {
-        protected override IAsyncDocumentQuery<RuntimeTrace> ApplyFilter(IAsyncDocumentQuery<RuntimeTrace> result, IDFilter<Guid> filter)
-        {
-            if (filter?.IDs?.Any() ?? false)
-            {
-                result = result.WhereIn(nameof(RuntimeTrace.ID), filter.IDs.ToStringArray());
-            }
-
-            return result;
-        }
-
-        protected override IDocumentQuery<RuntimeTrace> ApplyFilterSync(IDocumentQuery<RuntimeTrace> result, IDFilter<Guid> filter)
+        protected override TDocQuery ApplyFilterGeneric<TDocQuery>(TDocQuery result, IDFilter<Guid> filter)
         {
             if (filter?.IDs?.Any() ?? false)
             {

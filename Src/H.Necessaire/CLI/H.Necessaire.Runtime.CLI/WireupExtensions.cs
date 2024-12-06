@@ -6,7 +6,8 @@ namespace H.Necessaire.Runtime.CLI
 {
     public static class WireupExtensions
     {
-        public static async Task Run(this ImAnApiWireup wireup, bool askForCommandIfEmpty = false)
+        private static ImALogger logger = null;
+        public static async Task<OperationResult> Run(this ImAnApiWireup wireup, bool askForCommandIfEmpty = false)
         {
             OperationResult result =
                 (
@@ -19,11 +20,22 @@ namespace H.Necessaire.Runtime.CLI
                 ?? OperationResult.Win()
                 ;
 
+            EnsureLogger(wireup.DependencyRegistry);
+
             if (!result.IsSuccessful)
             {
-                ImALogger logger = wireup.DependencyRegistry.GetLogger("Wireup", "H.Necessaire.Runtime.CLI");
                 await logger.LogError(string.Join(Environment.NewLine, result.FlattenReasons()));
             }
+
+            return result;
+        }
+
+        private static void EnsureLogger(ImADependencyProvider dependencyProvider)
+        {
+            if (logger != null)
+                return;
+
+            logger = dependencyProvider.GetLogger("Wireup", "H.Necessaire.Runtime.CLI");
         }
     }
 }

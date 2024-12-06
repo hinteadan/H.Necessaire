@@ -16,7 +16,7 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
                 (
                     new FormLayout.Props { LayoutMode = FormLayoutMode.OnePerRow },
 
-                    new Elevation(new Elevation.Props { Depth = ElevationDepthLevel.Hihghest, StyleDecorator = x => x.And(s => s.MaxHeight = "70vh").FlexNode(isVerticalFlow: true) },
+                    new Elevation(new Elevation.Props { ClassName = "animate morph-in", Depth = ElevationDepthLevel.Hihghest, StyleDecorator = x => x.And(s => s.MaxHeight = "70vh").FlexNode(isVerticalFlow: true) },
 
                         DOM.Div(
                             new Attributes

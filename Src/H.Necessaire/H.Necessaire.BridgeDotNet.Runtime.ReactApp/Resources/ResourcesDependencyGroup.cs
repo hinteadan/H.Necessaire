@@ -1,7 +1,9 @@
-﻿using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Logging;
+﻿using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources;
+using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Logging;
 using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Sync;
 using H.Necessaire.BridgeDotNet.Runtime.ReactApp.Resources.Versioning;
 using System;
+using System.Linq;
 
 namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
 {
@@ -33,6 +35,22 @@ namespace H.Necessaire.BridgeDotNet.Runtime.ReactApp
             dependencyRegistry
                 .Register<ImASyncer<ConsumerIdentity, Guid>>(() => new ConsumerIdentitySyncerResource())
                 .Register<ImASyncer<LogEntry, Guid>>(() => new LogEntrySyncerResource())
+                ;
+
+            dependencyRegistry
+                .Register<Resources.AppState.DependencyGroup>(() => new Resources.AppState.DependencyGroup())
+                ;
+
+            dependencyRegistry
+                .RegisterAlwaysNew<ImAUserPrivateDataStorage[]>(() =>
+                {
+                    return
+                        typeof(ImAUserPrivateDataStorage)
+                        .GetAllImplementations()
+                        .Select(t => dependencyRegistry.Get(t) as ImAUserPrivateDataStorage)
+                        .ToNoNullsArray()
+                        ;
+                })
                 ;
         }
     }

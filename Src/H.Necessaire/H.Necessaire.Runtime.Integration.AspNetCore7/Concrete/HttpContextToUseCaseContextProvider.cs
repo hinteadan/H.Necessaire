@@ -1,6 +1,7 @@
 ﻿using H.Necessaire.Runtime.Security.Managers;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -106,17 +107,17 @@ namespace H.Necessaire.Runtime.Integration.AspNetCore7.Concrete
                                 , httpContext?.Request?.HasFormContentType.ToString()?.NoteAs("Request.HasFormContentType") ?? Note.Empty
                             )
                             .Add(
-                                httpContext?.Request?.Query?.Select(x => string.Join(listItemsSeparator, x.Value).NoteAs($"Request.Query.{x.Key}")).ToArray()
+                                httpContext?.Request?.Query?.Select(x => string.Join(listItemsSeparator, x.Value as IEnumerable<string>).NoteAs($"Request.Query.{x.Key}")).ToArray()
                             )
                             .Add(
-                                httpContext?.Request?.Headers?.Select(x => string.Join(listItemsSeparator, x.Value).NoteAs($"Request.Header.{x.Key}")).ToArray()
+                                httpContext?.Request?.Headers?.Select(x => string.Join(listItemsSeparator, x.Value as IEnumerable<string>).NoteAs($"Request.Header.{x.Key}")).ToArray()
                             )
                             .Add(
                                 httpContext?.Request?.Cookies?.Select(x => x.Value?.NoteAs($"Request.Cookie.{x.Key}") ?? Note.Empty).ToArray()
                             )
                             .Add(
                                 httpContext?.Request?.HasFormContentType ?? false
-                                ? httpContext?.Request?.Form?.Select(x => string.Join(listItemsSeparator, x.Value).NoteAs($"Request.Form.{x.Key}")).ToArray()
+                                ? httpContext?.Request?.Form?.Select(x => string.Join(listItemsSeparator, x.Value as IEnumerable<string>).NoteAs($"Request.Form.{x.Key}")).ToArray()
                                 : Note.Empty.AsArray()
                             )
                             ;

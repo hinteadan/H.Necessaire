@@ -47,7 +47,7 @@ namespace H.Necessaire.WebHooks.Implementations.SQLServer
                     PageIndex = filter.PageFilter?.PageIndex ?? 0,
                     PageSize = filter.PageFilter?.PageSize ?? sqlEntities.Length,
                     TotalNumberOfPages = (filter.PageFilter?.PageSize ?? 0) > 0
-                        ? (sqlEntities.TotalNumberOfItems / filter.PageFilter.PageSize) + (sqlEntities.TotalNumberOfItems % filter.PageFilter.PageSize == 0 ? 0 : 1)
+                        ? (int)((sqlEntities.TotalNumberOfItems / filter.PageFilter.PageSize) + (sqlEntities.TotalNumberOfItems % filter.PageFilter.PageSize == 0 ? 0 : 1))
                         : 1,
                 };
         }

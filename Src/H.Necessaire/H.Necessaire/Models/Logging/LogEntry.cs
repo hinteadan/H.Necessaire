@@ -1,24 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace H.Necessaire
 {
+    [DataContract]
     public class LogEntry : IGuidIdentity, ImSyncable
     {
-        public Guid ID { get; set; } = Guid.NewGuid();
-        public LogEntryLevel Level { get; set; } = LogEntryLevel.Info;
-        public Guid ScopeID { get; set; } = Guid.NewGuid();
-        public OperationContext OperationContext { get; set; } = null;
-        public DateTime HappenedAt { get; set; } = DateTime.UtcNow;
-        public string Message { get; set; } = null;
-        public string Method { get; set; } = MethodName.GetCurrentName();
-        public string StackTrace { get; set; } = null;
-        public string Component { get; set; } = null;
-        public string Application { get; set; } = "H.Necessaire";
-        public Version AppVersion { get; set; } = null;
-        public Exception Exception { get; set; } = null;
-        public object Payload { get; set; } = null;
-        public Note[] Notes { get; set; }
+        [DataMember] public Guid ID { get; set; } = Guid.NewGuid();
+        [DataMember] public LogEntryLevel Level { get; set; } = LogEntryLevel.Info;
+        [DataMember] public Guid ScopeID { get; set; } = Guid.NewGuid();
+        [DataMember] public OperationContext OperationContext { get; set; } = null;
+        [DataMember] public DateTime HappenedAt { get; set; } = DateTime.UtcNow;
+        [DataMember] public string Message { get; set; } = null;
+        [DataMember] public string Method { get; set; } = MethodName.GetCurrentName();
+        [DataMember] public string StackTrace { get; set; } = null;
+        [DataMember] public string Component { get; set; } = null;
+        [DataMember] public string Application { get; set; } = "H.Necessaire";
+        [DataMember] public Version AppVersion { get; set; } = null;
+        Exception exception = null;
+        public Exception Exception { get => exception; set => exception = value.And(x => Exceptions = x.Flatten()?.Select(ex => new LogEntryExceptionInfo(ex)).ToArrayNullIfEmpty()); }
+        [DataMember] public LogEntryExceptionInfo[] Exceptions { get; set; }
+        [DataMember] public object Payload { get; set; } = null;
+        [DataMember] public Note[] Notes { get; set; }
 
         public override string ToString()
         {

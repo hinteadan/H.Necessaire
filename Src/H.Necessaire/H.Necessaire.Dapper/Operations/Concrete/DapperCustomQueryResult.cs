@@ -17,7 +17,7 @@ namespace H.Necessaire.Dapper.Operations.Concrete
 
         public int Offset { get; }
         public int Length { get; }
-        public int TotalNumberOfItems { get; }
+        public long TotalNumberOfItems { get; }
 
         public IEnumerator<T> GetEnumerator()
         {

@@ -6,6 +6,6 @@ namespace H.Necessaire
     {
         int Offset { get; }
         int Length { get; }
-        int TotalNumberOfItems { get; }
+        long TotalNumberOfItems { get; }
     }
 }

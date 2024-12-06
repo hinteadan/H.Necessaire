@@ -19,57 +19,7 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Resources
             logger = dependencyProvider.GetLogger<DataBinRavenDbStorageResource>();
         }
 
-        protected override IAsyncDocumentQuery<DataBinMeta> ApplyFilter(IAsyncDocumentQuery<DataBinMeta> result, DataBinFilter filter)
-        {
-            if (filter?.IDs?.Any() ?? false)
-            {
-                result = result.WhereIn(nameof(DataBinMeta.ID), filter.IDs.ToStringArray());
-            }
-
-            if (filter?.Names?.Any(x => !string.IsNullOrWhiteSpace(x)) ?? false)
-            {
-                result = result.WhereIn(nameof(DataBinMeta.Name), filter.Names.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray());
-            }
-
-            if (filter?.FormatIDs?.Any() == true)
-            {
-                result = result.WhereIn("FormatID", filter.FormatIDs);
-            }
-
-            if (filter?.FormatExtensions?.Any() == true)
-            {
-                result = result.WhereIn("FormatExtension", filter.FormatExtensions);
-            }
-
-            if (filter?.FormatMimeTypes?.Any() == true)
-            {
-                result = result.WhereIn("FormatMimeType", filter.FormatMimeTypes);
-            }
-
-            if (filter?.FormatEncodings?.Any() == true)
-            {
-                result = result.WhereIn("FormatEncoding", filter.FormatEncodings);
-            }
-
-            if (filter?.FromInclusive != null)
-            {
-                result = result.WhereGreaterThanOrEqual(nameof(DataBinMeta.AsOf), filter.FromInclusive.Value);
-            }
-
-            if (filter?.ToInclusive != null)
-            {
-                result = result.WhereLessThanOrEqual(nameof(DataBinMeta.AsOf), filter.ToInclusive.Value);
-            }
-
-            if (filter?.Notes?.Any() == true)
-            {
-                result = result.ContainsAny("NotesAsStrings", filter.Notes.Select(x => x.ToString()).ToArray());
-            }
-
-            return result;
-        }
-
-        protected override IDocumentQuery<DataBinMeta> ApplyFilterSync(IDocumentQuery<DataBinMeta> result, DataBinFilter filter)
+        protected override TDocQuery ApplyFilterGeneric<TDocQuery>(TDocQuery result, DataBinFilter filter)
         {
             if (filter?.IDs?.Any() ?? false)
             {
