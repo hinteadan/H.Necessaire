@@ -58,7 +58,8 @@ namespace H.Necessaire
 
         public static string Print(this decimal number, int numberOfDecimals = 2)
         {
-            return Math.Round(number, numberOfDecimals).ToString();
+            numberOfDecimals = numberOfDecimals < 0 ? 0 : numberOfDecimals > int.MaxValue / 100 ? int.MaxValue / 100 : numberOfDecimals;
+            return number.ToString($"0.{new string('0', numberOfDecimals)}");
         }
 
         public static string PrintException(this Exception ex)

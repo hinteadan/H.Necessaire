@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace H.Necessaire
@@ -574,6 +575,17 @@ namespace H.Necessaire
                 return ellipseSymbol;
 
             return $"{value.Substring(0, maxLength - ellipseSymbol.Length)}{ellipseSymbol}";
+        }
+
+        public static string ToDisplayLabel(this string value)
+        {
+            if (value.IsEmpty())
+                return "";
+
+            if (char.IsLower(value[0]))
+                value = $"{char.ToUpper(value[0])}{value.Substring(1)}";
+
+            return Regex.Replace(value, "(\\B([A-Z]|(\\d+)))", " $1");
         }
     }
 }

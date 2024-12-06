@@ -1,4 +1,4 @@
-﻿using System;
+﻿using H.Necessaire;
 using System.Collections.Generic;
 
 namespace System.Collections.Concurrent
@@ -22,6 +22,26 @@ namespace System.Collections.Concurrent
             else
                 this.Add(key, addValue);
             return addValue;
+        }
+
+        public bool TryAdd(TKey key, TValue addValue)
+        {
+            bool result = false;
+
+            new Action(() =>
+            {
+                if (this.ContainsKey(key))
+                {
+                    result = false;
+                    return;
+                }
+                this.Add(key, addValue);
+                result = true;
+            })
+            .TryOrFailWithGrace(onFail: ex => result = false);
+
+
+            return result;
         }
 
         public TValue GetOrAdd(TKey key, TValue value)

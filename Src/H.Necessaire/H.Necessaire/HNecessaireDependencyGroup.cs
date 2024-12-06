@@ -11,6 +11,7 @@ namespace H.Necessaire
                 ;
 
             dependencyRegistry
+                .Register<CachingDependencyGroup>(() => new CachingDependencyGroup())
                 .Register<SyncDependencyGroup>(() => new SyncDependencyGroup())
                 .Register<LoggingDependencyGroup>(() => new LoggingDependencyGroup())
                 .Register<VersioningDependencyGroup>(() => new VersioningDependencyGroup())
