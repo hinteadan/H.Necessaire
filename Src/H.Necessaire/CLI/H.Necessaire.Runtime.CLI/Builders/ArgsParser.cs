@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.CLI.Builders
 {
-    public class ArgsParser
+    public sealed class ArgsParser
     {
         static readonly string[] valueSplitters = { "=" };
 

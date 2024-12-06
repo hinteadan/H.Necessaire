@@ -27,10 +27,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="H.Versioning" Version="2.0.5" />
-		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.9.2" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
-		<PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.9.2" />
-		<PackageReference Include="System.Runtime.Caching" Version="8.0.1" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.12.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.12.0" />
+		<PackageReference Include="System.Runtime.Caching" Version="9.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
