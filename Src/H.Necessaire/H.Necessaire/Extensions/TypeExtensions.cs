@@ -95,6 +95,9 @@ namespace H.Necessaire
         public static RuntimeConfig GetRuntimeConfig(this ImADependencyProvider dependencyProvider)
             => dependencyProvider?.Get<ImAConfigProvider>()?.GetRuntimeConfig() ?? dependencyProvider?.Get<RuntimeConfig>() ?? RuntimeConfig.Empty;
 
+        public static ImACacher<T> GetCacher<T>(this ImADependencyProvider dependencyProvider, string cacherID = "InMemory")
+            => dependencyProvider?.Get<ImACacherFactory>()?.BuildCacher<T>(cacherID);
+
         public static string GetID(this Type type)
         {
             return
@@ -113,6 +116,13 @@ namespace H.Necessaire
         {
             return
                 type?.GetCustomAttributes(typeof(CategoryAttribute), true)?.SelectMany(noteAttr => (noteAttr as CategoryAttribute)?.Categories)?.Distinct()?.ToArray()
+                ;
+        }
+
+        public static int GetPriority(this Type type)
+        {
+            return
+                (type?.GetCustomAttributes(typeof(PriorityAttribute), false)?.SingleOrDefault() as PriorityAttribute)?.Priority ?? 0;
                 ;
         }
 

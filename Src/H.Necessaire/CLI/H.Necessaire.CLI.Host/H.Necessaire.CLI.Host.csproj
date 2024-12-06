@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DeviceDetector.NET" Version="6.4.1" />
+    <PackageReference Include="DeviceDetector.NET" Version="6.4.2" />
     <PackageReference Include="H.Versioning" Version="2.0.5" />
     <PackageReference Include="System.Runtime.Caching" Version="9.0.0" />
   </ItemGroup>
