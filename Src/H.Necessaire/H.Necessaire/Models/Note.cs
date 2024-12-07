@@ -56,6 +56,9 @@ namespace H.Necessaire
             return
                 new Note[] {
 
+                    $"{DateTime.UtcNow.PrintTimeStampAsIdentifier()}".NoteAs($"Environment-AsOf"),
+                    $"{DateTime.UtcNow.Ticks}".NoteAs($"Environment-AsOf-Ticks"),
+
                     $"{Environment.MachineName}".NoteAs($"Environment-MachineName"),
                     $"{Environment.ProcessorCount}".NoteAs($"Environment-ProcessorCount"),
                     $"{Environment.UserDomainName}".NoteAs($"Environment-UserDomainName"),
