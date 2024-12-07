@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -107,6 +110,7 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
                     foreach (string userInput in userInputs)
                     {
                         await externalProcess.StandardInput.WriteLineAsync(userInput);
+                        CollectMetricsIfNecessary(context, externalProcess);
                     }
 
                     return;
@@ -119,6 +123,7 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
                     Console.WriteLine();
 
                     await externalProcess.StandardInput.WriteLineAsync(userInput);
+                    CollectMetricsIfNecessary(context, externalProcess);
                 }
             });
         }
@@ -167,13 +172,26 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
             externalProcess.StartInfo.RedirectStandardError = context.IsOutputCaptured;
             externalProcess.StartInfo.RedirectStandardInput = context.IsUserInputExpected;
             externalProcess.EnableRaisingEvents = true;
-            externalProcess.OutputDataReceived += (s, e) => OnOutputDataReceived(s, e, context);
-            externalProcess.ErrorDataReceived += (s, e) => OnErrorDataReceived(s, e, context);
+            externalProcess.OutputDataReceived += (s, e) =>
+            {
+                OnOutputDataReceived(s, e, context);
+                CollectMetricsIfNecessary(context, externalProcess);
+            };
+            externalProcess.ErrorDataReceived += (s, e) =>
+            {
+                OnErrorDataReceived(s, e, context);
+                CollectMetricsIfNecessary(context, externalProcess);
+            };
+
+            CollectMetricsIfNecessary(context, externalProcess);
+
             return externalProcess;
         }
 
         static void DisposeProcess(ExternalCommandRunContext context, Process externalProcess)
         {
+            CollectMetricsIfNecessary(context, externalProcess);
+
             if (context.IsOutputCaptured)
             {
                 new Action(externalProcess.CancelOutputRead).TryOrFailWithGrace();
@@ -195,7 +213,23 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
                 externalProcess.BeginOutputReadLine();
                 externalProcess.BeginErrorReadLine();
             }
+
+            CollectMetricsIfNecessary(context, externalProcess);
+
             return isNewProcess;
+        }
+
+        static void CollectMetricsIfNecessary(ExternalCommandRunContext context, Process externalProcess)
+        {
+            if (!context.IsMetricsCollectionEnabled)
+                return;
+
+            (context.Metrics as IDictionary<DateTime, Note[]>).Add(DateTime.UtcNow, 
+                Note
+                    .GetEnvironmentInfo()
+                    .AppendProcessInfo(externalProcess, prefix: "ExternalProcess-")
+                    .AppendProcessInfo(prefix: "HostProcess-")
+            );
         }
     }
 }

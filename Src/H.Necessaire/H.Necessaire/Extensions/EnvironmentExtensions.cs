@@ -79,7 +79,7 @@ namespace H.Necessaire
                         SafelyGrabValueOrNull(() => $"{process.StartTime}").NoteAs($"{prefix}StartTime"),
                     }
                     .Concat(
-                        process.GetStartInfo($"{prefix}-StartInfo-")
+                        process.GetStartInfo($"{prefix}StartInfo-")
                     )
                     .Where(x => !x.Value.IsEmpty())
                     .ToArray()
@@ -100,24 +100,24 @@ namespace H.Necessaire
 
                 list.AddRange(
                     new Note[] {
-                        SafelyGrabValueOrNull(() => $"{startInfo.FileName}").NoteAs($"Process-StartInfo-FileName"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.WorkingDirectory}").NoteAs($"Process-StartInfo-WorkingDirectory"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.Arguments}").NoteAs($"Process-StartInfo-Arguments"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.WindowStyle}({(int)startInfo.WindowStyle})").NoteAs($"Process-StartInfo-WindowStyle"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.Domain}").NoteAs($"Process-StartInfo-Domain"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.UserName}").NoteAs($"Process-StartInfo-UserName"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.LoadUserProfile}").NoteAs($"Process-StartInfo-LoadUserProfile"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.CreateNoWindow}").NoteAs($"Process-StartInfo-CreateNoWindow"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.Verb}").NoteAs($"Process-StartInfo-Verb"),
-                        SafelyGrabValueOrNull(() => $"{string.Join(", ", startInfo.Verbs ?? Array.Empty<string>())}").NoteAs($"Process-StartInfo-Verbs"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.UseShellExecute}").NoteAs($"Process-StartInfo-UseShellExecute"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.StandardOutputEncoding.WebName}").NoteAs($"Process-StartInfo-StandardOutputEncoding"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.StandardErrorEncoding.WebName}").NoteAs($"Process-StartInfo-StandardErrorEncoding"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.RedirectStandardOutput}").NoteAs($"Process-StartInfo-RedirectStandardOutput"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.RedirectStandardInput}").NoteAs($"Process-StartInfo-RedirectStandardInput"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.RedirectStandardError}").NoteAs($"Process-StartInfo-RedirectStandardError"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.ErrorDialogParentHandle}").NoteAs($"Process-StartInfo-ErrorDialogParentHandle"),
-                        SafelyGrabValueOrNull(() => $"{startInfo.ErrorDialog}").NoteAs($"Process-StartInfo-ErrorDialog"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.FileName}").NoteAs($"{prefix}FileName"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.WorkingDirectory}").NoteAs($"{prefix}WorkingDirectory"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.Arguments}").NoteAs($"{prefix}Arguments"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.WindowStyle}({(int)startInfo.WindowStyle})").NoteAs($"{prefix}WindowStyle"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.Domain}").NoteAs($"{prefix}Domain"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.UserName}").NoteAs($"{prefix}UserName"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.LoadUserProfile}").NoteAs($"{prefix}LoadUserProfile"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.CreateNoWindow}").NoteAs($"{prefix}CreateNoWindow"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.Verb}").NoteAs($"{prefix}Verb"),
+                        SafelyGrabValueOrNull(() => $"{string.Join(", ", startInfo.Verbs ?? Array.Empty<string>())}").NoteAs($"{prefix}Verbs"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.UseShellExecute}").NoteAs($"{prefix}UseShellExecute"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.StandardOutputEncoding.WebName}").NoteAs($"{prefix}StandardOutputEncoding"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.StandardErrorEncoding.WebName}").NoteAs($"{prefix}StandardErrorEncoding"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.RedirectStandardOutput}").NoteAs($"{prefix}RedirectStandardOutput"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.RedirectStandardInput}").NoteAs($"{prefix}RedirectStandardInput"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.RedirectStandardError}").NoteAs($"{prefix}RedirectStandardError"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.ErrorDialogParentHandle}").NoteAs($"{prefix}ErrorDialogParentHandle"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.ErrorDialog}").NoteAs($"{prefix}ErrorDialog"),
                     }
                 );
 
