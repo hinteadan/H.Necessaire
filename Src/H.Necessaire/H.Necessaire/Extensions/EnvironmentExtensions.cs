@@ -27,57 +27,61 @@ namespace H.Necessaire
                 result
                     = new Note[]
                     {
-                        $"{process.Id}".NoteAs($"{prefix}Id"),
+                        $"{DateTime.UtcNow.PrintTimeStampAsIdentifier()}".NoteAs($"{prefix}AsOf"),
+                        $"{DateTime.UtcNow.Ticks}".NoteAs($"{prefix}AsOf-Ticks"),
 
-                        $"{process.PriorityClass}({(int)process.PriorityClass})".NoteAs($"{prefix}PriorityClass"),
-                        $"{process.BasePriority}".NoteAs($"{prefix}BasePriority"),
-                        $"{process.PriorityBoostEnabled}".NoteAs($"{prefix}PriorityBoostEnabled"),
-                        $"{process.ProcessorAffinity}".NoteAs($"{prefix}ProcessorAffinity"),
+                        SafelyGrabValueOrNull(() => $"{process.Id}").NoteAs($"{prefix}Id"),
 
-                        $"{process.PeakWorkingSet64}".NoteAs($"{prefix}PeakWorkingSet64"),
-                        $"{process.PeakVirtualMemorySize64}".NoteAs($"{prefix}PeakVirtualMemorySize64"),
-                        $"{process.PeakPagedMemorySize64}".NoteAs($"{prefix}PeakPagedMemorySize64"),
+                        SafelyGrabValueOrNull(() => $"{process.PriorityClass}({(int)process.PriorityClass})").NoteAs($"{prefix}PriorityClass"),
+                        SafelyGrabValueOrNull(() => $"{process.BasePriority}").NoteAs($"{prefix}BasePriority"),
+                        SafelyGrabValueOrNull(() => $"{process.PriorityBoostEnabled}").NoteAs($"{prefix}PriorityBoostEnabled"),
+                        SafelyGrabValueOrNull(() => $"{process.ProcessorAffinity}").NoteAs($"{prefix}ProcessorAffinity"),
 
-                        $"{process.PagedMemorySize64}".NoteAs($"{prefix}PagedMemorySize64"),
-                        $"{process.NonpagedSystemMemorySize64}".NoteAs($"{prefix}NonpagedSystemMemorySize64"),
-                        $"{process.MinWorkingSet}".NoteAs($"{prefix}MinWorkingSet"),
-                        $"{process.MaxWorkingSet}".NoteAs($"{prefix}MaxWorkingSet"),
-                        $"{process.PagedSystemMemorySize64}".NoteAs($"{prefix}PagedSystemMemorySize64"),
-                        $"{process.PrivateMemorySize64}".NoteAs($"{prefix}PrivateMemorySize64"),
-                        $"{process.PrivilegedProcessorTime}".NoteAs($"{prefix}PrivilegedProcessorTime"),
-                        $"{process.WorkingSet64}".NoteAs($"{prefix}WorkingSet64"),
-                        $"{process.VirtualMemorySize64}".NoteAs($"{prefix}VirtualMemorySize64"),
+                        SafelyGrabValueOrNull(() => $"{process.PeakWorkingSet64}").NoteAs($"{prefix}PeakWorkingSet64"),
+                        SafelyGrabValueOrNull(() => $"{process.PeakVirtualMemorySize64}").NoteAs($"{prefix}PeakVirtualMemorySize64"),
+                        SafelyGrabValueOrNull(() => $"{process.PeakPagedMemorySize64}").NoteAs($"{prefix}PeakPagedMemorySize64"),
 
-                        $"{process.ProcessName}".NoteAs($"{prefix}ProcessName"),
-                        $"{process.MachineName}".NoteAs($"{prefix}MachineName"),
-                        $"{process.MainWindowTitle}".NoteAs($"{prefix}MainWindowTitle"),
-                        $"{process.MainWindowHandle}".NoteAs($"{prefix}MainWindowHandle"),
-                        $"{process.SessionId}".NoteAs($"{prefix}SessionId"),
-                        $"{process.Responding}".NoteAs($"{prefix}Responding"),
-                        $"{process.HasExited}".NoteAs($"{prefix}HasExited"),
-                        $"{process.EnableRaisingEvents}".NoteAs($"{prefix}EnableRaisingEvents"),
+                        SafelyGrabValueOrNull(() => $"{process.PagedMemorySize64}").NoteAs($"{prefix}PagedMemorySize64"),
+                        SafelyGrabValueOrNull(() => $"{process.NonpagedSystemMemorySize64}").NoteAs($"{prefix}NonpagedSystemMemorySize64"),
+                        SafelyGrabValueOrNull(() => $"{process.MinWorkingSet}").NoteAs($"{prefix}MinWorkingSet"),
+                        SafelyGrabValueOrNull(() => $"{process.MaxWorkingSet}").NoteAs($"{prefix}MaxWorkingSet"),
+                        SafelyGrabValueOrNull(() => $"{process.PagedSystemMemorySize64}").NoteAs($"{prefix}PagedSystemMemorySize64"),
+                        SafelyGrabValueOrNull(() => $"{process.PrivateMemorySize64}").NoteAs($"{prefix}PrivateMemorySize64"),
+                        SafelyGrabValueOrNull(() => $"{process.PrivilegedProcessorTime}").NoteAs($"{prefix}PrivilegedProcessorTime"),
+                        SafelyGrabValueOrNull(() => $"{process.WorkingSet64}").NoteAs($"{prefix}WorkingSet64"),
+                        SafelyGrabValueOrNull(() => $"{process.VirtualMemorySize64}").NoteAs($"{prefix}VirtualMemorySize64"),
 
-                        $"{process.MainModule.ModuleName}".NoteAs($"{prefix}MainModule-ModuleName"),
-                        $"{process.MainModule.FileName}".NoteAs($"{prefix}MainModule-FileName"),
-                        $"{process.MainModule.ModuleMemorySize}".NoteAs($"{prefix}MainModule-ModuleMemorySize"),
-                        $"{process.MainModule.BaseAddress}".NoteAs($"{prefix}MainModule-BaseAddress"),
-                        $"{process.MainModule.EntryPointAddress}".NoteAs($"{prefix}MainModule-EntryPointAddress"),
-                        $"{process.MainModule.FileVersionInfo}".NoteAs($"{prefix}MainModule-FileVersionInfo"),
+                        SafelyGrabValueOrNull(() => $"{process.ProcessName}").NoteAs($"{prefix}ProcessName"),
+                        SafelyGrabValueOrNull(() => $"{process.MachineName}").NoteAs($"{prefix}MachineName"),
+                        SafelyGrabValueOrNull(() => $"{process.MainWindowTitle}").NoteAs($"{prefix}MainWindowTitle"),
+                        SafelyGrabValueOrNull(() => $"{process.MainWindowHandle}").NoteAs($"{prefix}MainWindowHandle"),
+                        SafelyGrabValueOrNull(() => $"{process.SessionId}").NoteAs($"{prefix}SessionId"),
+                        SafelyGrabValueOrNull(() => $"{process.Responding}").NoteAs($"{prefix}Responding"),
+                        SafelyGrabValueOrNull(() => $"{process.HasExited}").NoteAs($"{prefix}HasExited"),
+                        SafelyGrabValueOrNull(() => $"{process.EnableRaisingEvents}").NoteAs($"{prefix}EnableRaisingEvents"),
+
+                        SafelyGrabValueOrNull(() => $"{process.MainModule.ModuleName}").NoteAs($"{prefix}MainModule-ModuleName"),
+                        SafelyGrabValueOrNull(() => $"{process.MainModule.FileName}").NoteAs($"{prefix}MainModule-FileName"),
+                        SafelyGrabValueOrNull(() => $"{process.MainModule.ModuleMemorySize}").NoteAs($"{prefix}MainModule-ModuleMemorySize"),
+                        SafelyGrabValueOrNull(() => $"{process.MainModule.BaseAddress}").NoteAs($"{prefix}MainModule-BaseAddress"),
+                        SafelyGrabValueOrNull(() => $"{process.MainModule.EntryPointAddress}").NoteAs($"{prefix}MainModule-EntryPointAddress"),
+                        SafelyGrabValueOrNull(() => $"{process.MainModule.FileVersionInfo}").NoteAs($"{prefix}MainModule-FileVersionInfo"),
 
 
-                        $"{process.UserProcessorTime}".NoteAs($"{prefix}UserProcessorTime"),
-                        $"{process.TotalProcessorTime}".NoteAs($"{prefix}TotalProcessorTime"),
+                        SafelyGrabValueOrNull(() => $"{process.UserProcessorTime}").NoteAs($"{prefix}UserProcessorTime"),
+                        SafelyGrabValueOrNull(() => $"{process.TotalProcessorTime}").NoteAs($"{prefix}TotalProcessorTime"),
 
-                        $"{process.Modules.Count}".NoteAs($"{prefix}Modules"),
-                        $"{process.Threads.Count}".NoteAs($"{prefix}Threads"),
-                        $"{process.HandleCount}".NoteAs($"{prefix}HandleCount"),
-                        $"{process.Handle}".NoteAs($"{prefix}Handle"),
+                        SafelyGrabValueOrNull(() => $"{process.Modules.Count}").NoteAs($"{prefix}Modules"),
+                        SafelyGrabValueOrNull(() => $"{process.Threads.Count}").NoteAs($"{prefix}Threads"),
+                        SafelyGrabValueOrNull(() => $"{process.HandleCount}").NoteAs($"{prefix}HandleCount"),
+                        SafelyGrabValueOrNull(() => $"{process.Handle}").NoteAs($"{prefix}Handle"),
 
-                        $"{process.StartTime}".NoteAs($"{prefix}StartTime"),
+                        SafelyGrabValueOrNull(() => $"{process.StartTime}").NoteAs($"{prefix}StartTime"),
                     }
                     .Concat(
                         process.GetStartInfo($"{prefix}-StartInfo-")
                     )
+                    .Where(x => !x.Value.IsEmpty())
                     .ToArray()
                     ;
 
@@ -96,24 +100,24 @@ namespace H.Necessaire
 
                 list.AddRange(
                     new Note[] {
-                        $"{startInfo.FileName}".NoteAs($"Process-StartInfo-FileName"),
-                        $"{startInfo.WorkingDirectory}".NoteAs($"Process-StartInfo-WorkingDirectory"),
-                        $"{startInfo.Arguments}".NoteAs($"Process-StartInfo-Arguments"),
-                        $"{startInfo.WindowStyle}({(int)startInfo.WindowStyle})".NoteAs($"Process-StartInfo-WindowStyle"),
-                        $"{startInfo.Domain}".NoteAs($"Process-StartInfo-Domain"),
-                        $"{startInfo.UserName}".NoteAs($"Process-StartInfo-UserName"),
-                        $"{startInfo.LoadUserProfile}".NoteAs($"Process-StartInfo-LoadUserProfile"),
-                        $"{startInfo.CreateNoWindow}".NoteAs($"Process-StartInfo-CreateNoWindow"),
-                        $"{startInfo.Verb}".NoteAs($"Process-StartInfo-Verb"),
-                        $"{string.Join(", ", startInfo.Verbs ?? Array.Empty<string>())}".NoteAs($"Process-StartInfo-Verbs"),
-                        $"{startInfo.UseShellExecute}".NoteAs($"Process-StartInfo-UseShellExecute"),
-                        $"{startInfo.StandardOutputEncoding.WebName}".NoteAs($"Process-StartInfo-StandardOutputEncoding"),
-                        $"{startInfo.StandardErrorEncoding.WebName}".NoteAs($"Process-StartInfo-StandardErrorEncoding"),
-                        $"{startInfo.RedirectStandardOutput}".NoteAs($"Process-StartInfo-RedirectStandardOutput"),
-                        $"{startInfo.RedirectStandardInput}".NoteAs($"Process-StartInfo-RedirectStandardInput"),
-                        $"{startInfo.RedirectStandardError}".NoteAs($"Process-StartInfo-RedirectStandardError"),
-                        $"{startInfo.ErrorDialogParentHandle}".NoteAs($"Process-StartInfo-ErrorDialogParentHandle"),
-                        $"{startInfo.ErrorDialog}".NoteAs($"Process-StartInfo-ErrorDialog"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.FileName}").NoteAs($"Process-StartInfo-FileName"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.WorkingDirectory}").NoteAs($"Process-StartInfo-WorkingDirectory"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.Arguments}").NoteAs($"Process-StartInfo-Arguments"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.WindowStyle}({(int)startInfo.WindowStyle})").NoteAs($"Process-StartInfo-WindowStyle"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.Domain}").NoteAs($"Process-StartInfo-Domain"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.UserName}").NoteAs($"Process-StartInfo-UserName"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.LoadUserProfile}").NoteAs($"Process-StartInfo-LoadUserProfile"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.CreateNoWindow}").NoteAs($"Process-StartInfo-CreateNoWindow"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.Verb}").NoteAs($"Process-StartInfo-Verb"),
+                        SafelyGrabValueOrNull(() => $"{string.Join(", ", startInfo.Verbs ?? Array.Empty<string>())}").NoteAs($"Process-StartInfo-Verbs"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.UseShellExecute}").NoteAs($"Process-StartInfo-UseShellExecute"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.StandardOutputEncoding.WebName}").NoteAs($"Process-StartInfo-StandardOutputEncoding"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.StandardErrorEncoding.WebName}").NoteAs($"Process-StartInfo-StandardErrorEncoding"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.RedirectStandardOutput}").NoteAs($"Process-StartInfo-RedirectStandardOutput"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.RedirectStandardInput}").NoteAs($"Process-StartInfo-RedirectStandardInput"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.RedirectStandardError}").NoteAs($"Process-StartInfo-RedirectStandardError"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.ErrorDialogParentHandle}").NoteAs($"Process-StartInfo-ErrorDialogParentHandle"),
+                        SafelyGrabValueOrNull(() => $"{startInfo.ErrorDialog}").NoteAs($"Process-StartInfo-ErrorDialog"),
                     }
                 );
 
@@ -122,7 +126,7 @@ namespace H.Necessaire
 
             }).TryOrFailWithGrace();
 
-            return list.Where(x => !x.IsEmpty()).ToArray();
+            return list.Where(x => !x.Value.IsEmpty()).ToArray();
         }
 
         public static Note[] GetEnvironmentVariables(this Process process, string prefix = "Process-EnvironmentVariable-")
@@ -137,10 +141,10 @@ namespace H.Necessaire
                 string id = key?.ToString();
                 if (id is null)
                     continue;
-                result.Add(process.StartInfo.EnvironmentVariables[id].NoteAs($"{prefix}{id}"));
+                result.Add(SafelyGrabValueOrNull(() => process.StartInfo.EnvironmentVariables[id]).NoteAs($"{prefix}{id}"));
             }
 
-            return result.Where(x => !x.IsEmpty()).ToArray();
+            return result.Where(x => !x.Value.IsEmpty()).ToArray();
         }
 
         public static Note[] GetEnvironment(this Process process, string prefix = "Process-Environment-")
@@ -150,10 +154,24 @@ namespace H.Necessaire
 
             return
                 process.StartInfo.Environment
-                .Select(x => x.Value.NoteAs($"{prefix}{x.Key}"))
-                .Where(x => !x.IsEmpty())
+                .Select(x => SafelyGrabValueOrNull(() => x.Value).NoteAs($"{prefix}{x.Key}"))
+                .Where(x => !x.Value.IsEmpty())
                 .ToArray()
                 ;
+        }
+
+        static string SafelyGrabValueOrNull(Func<object> valueSelector)
+        {
+            string result = null;
+
+            new Action(() =>
+            {
+
+                result = $"{valueSelector.Invoke()}";
+
+            }).TryOrFailWithGrace(onFail: ex => result = null);
+
+            return result;
         }
     }
 }
