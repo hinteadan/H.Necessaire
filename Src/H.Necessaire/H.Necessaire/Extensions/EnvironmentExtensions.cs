@@ -112,14 +112,14 @@ namespace H.Necessaire
 
         public static Note[] GetStartInfo(this Process process, string prefix = "Process-StartInfo-")
         {
-            if (process.StartInfo is null)
-                return Array.Empty<Note>();
-
             List<Note> list = new List<Note>();
 
             new Action(() =>
             {
                 ProcessStartInfo startInfo = process.StartInfo;
+
+                if (startInfo is null)
+                    return;
 
                 list.AddRange(
                     new Note[] {
