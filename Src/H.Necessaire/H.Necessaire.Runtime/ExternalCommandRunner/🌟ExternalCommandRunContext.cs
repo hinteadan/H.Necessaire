@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +20,8 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
         public CancellationTokenSource CancellationTokenSource { get; } = new CancellationTokenSource();
         public bool HasErrors => ErrorData.Length > 0;
         public bool HasData => OutputData.Length > 0;
+        public bool IsMetricsCollectionEnabled { get; set; } = false;
+        public IReadOnlyDictionary<DateTime, Note[]> Metrics { get; set; } = new Dictionary<DateTime, Note[]>();
         public static ExternalCommandRunContext GetCurrent() => ExternalCommandRunScope.GetCurrentContext();
     }
 
