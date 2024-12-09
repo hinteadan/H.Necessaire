@@ -66,6 +66,9 @@
     <Compile Include="..\H.Necessaire\Extensions\NotificationExtensions.cs">
       <Link>Extensions\NotificationExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Extensions\ResiliencyExtensions.cs">
+      <Link>Extensions\ResiliencyExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Extensions\TaskExtensions.cs">
       <Link>Extensions\TaskExtensions.cs</Link>
     </Compile>

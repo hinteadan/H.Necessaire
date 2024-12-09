@@ -1,5 +1,7 @@
 ﻿using H.Necessaire.Runtime.CLI.Commands;
 using H.Necessaire.Runtime.ExternalCommandRunner;
+using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Host
