@@ -37,8 +37,8 @@ namespace H.Necessaire.CLI.Host
                 var nodeVersion = VersionNumber.Parse(result);
 
                 OperationResult<ExternalCommandRunContext>[] results = await Task.WhenAll(
-                    externalCommandRunner.WithContext(new ExternalCommandRunContext { IsOutputCaptured = true, }).RunCmd("tasklist"),
-                    externalCommandRunner.WithContext(new ExternalCommandRunContext { IsOutputCaptured = true, }).RunCmd("dir")
+                    externalCommandRunner.WithContext(new ExternalCommandRunContext { IsOutputCaptured = true, IsMetricsCollectionEnabled = true }).RunCmd("tasklist"),
+                    externalCommandRunner.WithContext(new ExternalCommandRunContext { IsOutputCaptured = true, IsMetricsCollectionEnabled = true }).RunCmd("dir")
                 );
 
 
@@ -47,6 +47,7 @@ namespace H.Necessaire.CLI.Host
                     .WithContext(new ExternalCommandRunContext
                     {
                         IsUserInputExpected = true,
+                        IsMetricsCollectionEnabled = true,
                         UserInputProvider = () => new string[] { "ping google.com", "exit" }.AsTask(),
                     })
                     .RunCmd();
