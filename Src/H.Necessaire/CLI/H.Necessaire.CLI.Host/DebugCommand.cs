@@ -31,7 +31,7 @@ namespace H.Necessaire.CLI.Host
             public override async Task<OperationResult> Run(params Note[] args)
             {
                 var x = await externalCommandRunner
-                    .WithContext(new ExternalCommandRunContext { IsOutputCaptured = true, IsOutputPrinted = false})
+                    .WithContext(new ExternalCommandRunContext { IsOutputCaptured = true, IsOutputPrinted = false, IsMetricsCollectionEnabled = true})
                     .Run("node", "--version");
                 string result = x.Payload.OutputData.ToString().Trim();
                 var nodeVersion = VersionNumber.Parse(result);
