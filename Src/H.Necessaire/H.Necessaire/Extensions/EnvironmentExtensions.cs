@@ -61,14 +61,6 @@ namespace H.Necessaire
                         process.SafeRead(p => $"{p.HasExited}").NoteAs($"{prefix}HasExited"),
                         process.SafeRead(p => $"{p.EnableRaisingEvents}").NoteAs($"{prefix}EnableRaisingEvents"),
 
-                        process.SafeRead(p => $"{p.MainModule.ModuleName}").NoteAs($"{prefix}MainModule-ModuleName"),
-                        process.SafeRead(p => $"{p.MainModule.FileName}").NoteAs($"{prefix}MainModule-FileName"),
-                        process.SafeRead(p => $"{p.MainModule.ModuleMemorySize}").NoteAs($"{prefix}MainModule-ModuleMemorySize"),
-                        process.SafeRead(p => $"{p.MainModule.BaseAddress}").NoteAs($"{prefix}MainModule-BaseAddress"),
-                        process.SafeRead(p => $"{p.MainModule.EntryPointAddress}").NoteAs($"{prefix}MainModule-EntryPointAddress"),
-                        process.SafeRead(p => $"{p.MainModule.FileVersionInfo}").NoteAs($"{prefix}MainModule-FileVersionInfo"),
-
-
                         process.SafeRead(p => $"{p.UserProcessorTime}").NoteAs($"{prefix}UserProcessorTime"),
                         process.SafeRead(p => $"{p.TotalProcessorTime}").NoteAs($"{prefix}TotalProcessorTime"),
 
@@ -80,6 +72,9 @@ namespace H.Necessaire
                         process.SafeRead(p => $"{p.StartTime}").NoteAs($"{prefix}StartTime"),
                     }
                     .Concat(
+                        process.GetMainModuleInfo($"{prefix}MainModule-")
+                    )
+                    .Concat(
                         process.GetStartInfo($"{prefix}StartInfo-")
                     )
                     .Where(x => !x.Value.IsEmpty())
@@ -89,6 +84,31 @@ namespace H.Necessaire
             }).TryOrFailWithGrace();
 
             return result;
+        }
+
+        public static Note[] GetMainModuleInfo(this Process process, string prefix = "Process-MainModule-")
+        {
+            List<Note> list = new List<Note>();
+
+            new Action(() =>
+            {
+                var moduleInfo = process.MainModule;
+
+                list.AddRange(
+                    new Note[] {
+
+                        moduleInfo.ModuleName.NoteAs($"{prefix}ModuleName"),
+                        moduleInfo.FileName.NoteAs($"{prefix}FileName"),
+                        $"{moduleInfo.ModuleMemorySize}".NoteAs($"{prefix}ModuleMemorySize"),
+                        $"{moduleInfo.BaseAddress}".NoteAs($"{prefix}BaseAddress"),
+                        $"{moduleInfo.EntryPointAddress}".NoteAs($"{prefix}EntryPointAddress"),
+                        $"{moduleInfo.FileVersionInfo}".NoteAs($"{prefix}FileVersionInfo"),
+                    }
+                );
+
+            }).TryOrFailWithGrace();
+
+            return list.Where(x => !x.Value.IsEmpty()).ToArray();
         }
 
         public static Note[] GetStartInfo(this Process process, string prefix = "Process-StartInfo-")
