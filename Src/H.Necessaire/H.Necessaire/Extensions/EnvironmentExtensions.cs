@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 
 namespace H.Necessaire
 {
@@ -113,6 +112,9 @@ namespace H.Necessaire
 
         public static Note[] GetStartInfo(this Process process, string prefix = "Process-StartInfo-")
         {
+            if (process.StartInfo is null)
+                return Array.Empty<Note>();
+
             List<Note> list = new List<Note>();
 
             new Action(() =>
@@ -121,7 +123,7 @@ namespace H.Necessaire
 
                 list.AddRange(
                     new Note[] {
-                        
+
                         startInfo.SafeRead(x => $"{x.FileName}").NoteAs($"{prefix}FileName"),
                         startInfo.SafeRead(x => $"{x.WorkingDirectory}").NoteAs($"{prefix}WorkingDirectory"),
                         startInfo.SafeRead(x => $"{x.Arguments}").NoteAs($"{prefix}Arguments"),
@@ -163,7 +165,7 @@ namespace H.Necessaire
                 string id = key?.ToString();
                 if (id is null)
                     continue;
-                result.Add(process.SafeRead(p => p.StartInfo.EnvironmentVariables[id]).NoteAs($"{prefix}{id}"));
+                result.Add(process.StartInfo.EnvironmentVariables[id].NoteAs($"{prefix}{id}"));
             }
 
             return result.Where(x => !x.Value.IsEmpty()).ToArray();
@@ -176,7 +178,7 @@ namespace H.Necessaire
 
             return
                 process.StartInfo.Environment
-                .Select(x => x.SafeRead(k => k.Value).NoteAs($"{prefix}{x.Key}"))
+                .Select(x => x.Value.NoteAs($"{prefix}{x.Key}"))
                 .Where(x => !x.Value.IsEmpty())
                 .ToArray()
                 ;
