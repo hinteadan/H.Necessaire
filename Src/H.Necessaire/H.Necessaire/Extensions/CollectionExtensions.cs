@@ -249,6 +249,16 @@ namespace H.Necessaire
                 .FirstOrDefault();
         }
 
+        public static bool IsEmpty<T>(this IEnumerable<T> collection)
+        {
+            return collection?.Any() != true;
+        }
+
+        public static bool IsEmpty<T>(this T[] collection)
+        {
+            return (collection?.Length ?? 0) == 0;
+        }
+
         public static T[] NullIfEmpty<T>(this T[] value)
         {
             if (value?.Any() != true)

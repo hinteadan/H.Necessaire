@@ -59,20 +59,20 @@ namespace H.Necessaire
                     $"{DateTime.UtcNow.PrintTimeStampAsIdentifier()}".NoteAs($"Environment-AsOf"),
                     $"{DateTime.UtcNow.Ticks}".NoteAs($"Environment-AsOf-Ticks"),
 
-                    $"{Environment.MachineName}".NoteAs($"Environment-MachineName"),
+                    0.SafeRead(x => Environment.MachineName).NoteAs($"Environment-MachineName"),
                     $"{Environment.ProcessorCount}".NoteAs($"Environment-ProcessorCount"),
-                    $"{Environment.UserDomainName}".NoteAs($"Environment-UserDomainName"),
+                    0.SafeRead(x => Environment.UserDomainName).NoteAs($"Environment-UserDomainName"),
                     $"{Environment.UserName}".NoteAs($"Environment-UserName"),
                     $"{Environment.UserInteractive}".NoteAs($"Environment-UserInteractive"),
 
-                    $"{Environment.OSVersion}".NoteAs($"Environment-OSVersion"),
+                    0.SafeRead(x => $"{Environment.OSVersion}").NoteAs($"Environment-OSVersion"),
                     $"{Environment.Version}".NoteAs($"Environment-Version"),
 
                     $"{Environment.Is64BitOperatingSystem}".NoteAs($"Environment-Is64BitOperatingSystem"),
                     $"{Environment.Is64BitProcess}".NoteAs($"Environment-Is64BitProcess"),
 
                     $"{Environment.CommandLine}".NoteAs($"Environment-CommandLine"),
-                    $"{Environment.CurrentDirectory}".NoteAs($"Environment-CurrentDirectory"),
+                    0.SafeRead(x => Environment.CurrentDirectory).NoteAs($"Environment-CurrentDirectory"),
                     $"{Environment.SystemDirectory}".NoteAs($"Environment-SystemDirectory"),
                     $"{Environment.NewLine}".NoteAs($"Environment-NewLine"),
 
