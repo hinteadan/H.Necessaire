@@ -8,15 +8,7 @@ namespace H.Necessaire.Runtime.CLI.Builders
     public sealed class CliCommandFactory : UseCaseBase, ImADependency
     {
         #region Construct
-        static readonly string[] commandTypeNameEndings = new[] { "UseCase", "Command", "CliCommand", "CommandUseCase", "UseCaseCommand", "CliCommandUseCase", "CliUseCaseCommand" };
-        readonly ImADependencyBrowser dependencyBrowser;
         ImADependencyProvider dependencyProvider;
-
-        public CliCommandFactory(ImADependencyBrowser dependencyBrowser)
-        {
-            this.dependencyBrowser = dependencyBrowser;
-        }
-
         public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             base.ReferDependencies(dependencyProvider);
@@ -24,9 +16,9 @@ namespace H.Necessaire.Runtime.CLI.Builders
         }
         #endregion
 
-        public async Task<OperationResult> Run(bool askForCommandIfEmpty = false)
+        public async Task<OperationResult> Run()
         {
-            OperationResult<string> commandRetrieveResult = await GetCommandToRun(askForCommandIfEmpty);
+            OperationResult<string> commandRetrieveResult = await GetCommandToRun();
 
             if (!commandRetrieveResult.IsSuccessful)
                 return commandRetrieveResult;
@@ -41,35 +33,16 @@ namespace H.Necessaire.Runtime.CLI.Builders
             return await command.Run();
         }
 
-        private async Task<OperationResult<string>> GetCommandToRun(bool askForCommandIfEmpty)
+        private async Task<OperationResult<string>> GetCommandToRun()
         {
             UseCaseContext context = await GetCurrentContext() ?? new UseCaseContext();
 
             string commandName = context.Notes.FirstOrDefault().ID;
 
-            if (string.IsNullOrWhiteSpace(commandName) && !askForCommandIfEmpty)
-                return OperationResult.Fail("Command name is empty. Will display help here.").WithoutPayload<string>();
-
-            if (askForCommandIfEmpty && string.IsNullOrWhiteSpace(commandName))
-            {
-                Console.WriteLine("Please type in the command you want to run:");
-                commandName = (Console.ReadLine() ?? string.Empty).Trim();
-            }
-
-            if (string.IsNullOrWhiteSpace(commandName))
-                return OperationResult.Fail("Command name is empty. Will display help here.").WithoutPayload<string>();
+            if (commandName.IsEmpty())
+                commandName = "cli";
 
             return OperationResult.Win().WithPayload(commandName);
-        }
-
-        private bool IsCommandNameMatch(string commandName, Type type)
-        {
-            if (type.IsMatch(commandName))
-                return true;
-
-            string[] possibleTypeNames = commandName.AsArray().Concat(commandTypeNameEndings.Select(x => $"{commandName}{x}")).ToArray();
-
-            return possibleTypeNames.Any(x => string.Equals(x, type.Name, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

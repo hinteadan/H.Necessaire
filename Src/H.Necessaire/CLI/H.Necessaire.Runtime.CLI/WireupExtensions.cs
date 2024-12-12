@@ -7,7 +7,7 @@ namespace H.Necessaire.Runtime.CLI
     public static class WireupExtensions
     {
         private static ImALogger logger = null;
-        public static async Task<OperationResult> Run(this ImAnApiWireup wireup, bool askForCommandIfEmpty = false)
+        public static async Task<OperationResult> Run(this ImAnApiWireup wireup)
         {
             OperationResult result =
                 (
@@ -15,7 +15,7 @@ namespace H.Necessaire.Runtime.CLI
                     wireup
                     .DependencyRegistry
                     .Get<CliCommandFactory>()
-                    .Run(askForCommandIfEmpty)
+                    .Run()
                 )
                 ?? OperationResult.Win()
                 ;

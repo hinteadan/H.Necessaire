@@ -1,5 +1,6 @@
 ﻿using H.Necessaire.CLI.Commands;
 using H.Necessaire.Runtime.CLI.Builders;
+using H.Necessaire.Runtime.CLI.CommandInterpreter;
 using H.Necessaire.Runtime.CLI.Commands;
 using H.Necessaire.Runtime.Wireup.Abstracts;
 using System;
@@ -21,7 +22,9 @@ namespace H.Necessaire.Runtime.CLI
                 .With(x => x.Register<ArgsParser>(() => new ArgsParser()))
 
                 .With(x => x.Register<ImAUseCaseContextProvider>(() => new CliUseCaseContextProvider()))
-                .With(x => x.Register<CliCommandFactory>(() => new CliCommandFactory(DependencyRegistry)))
+                .With(x => x.Register<CliCommandFactory>(() => new CliCommandFactory()))
+
+                .With(x => x.WithCliInterpreter())
 
                 .With(x => AddAllCommandsInAllAssemblies(x))
                 .With(x => AddAllSubCommandsInAllAssemblies(x))
