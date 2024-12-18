@@ -1,4 +1,5 @@
-﻿using System;
+﻿using H.Necessaire.CLI.Commands;
+using System;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.CLI.Commands

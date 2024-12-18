@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
+using H.Necessaire.CLI.Commands;
 using H.Necessaire.Runtime;
 using H.Necessaire.Runtime.CLI;
 using H.Necessaire.Runtime.CLI.Commands;
+using H.Necessaire.Runtime.CLI.Common;
 using Org.BouncyCastle.Crypto.Agreement;
 using System;
 using System.Collections.Concurrent;

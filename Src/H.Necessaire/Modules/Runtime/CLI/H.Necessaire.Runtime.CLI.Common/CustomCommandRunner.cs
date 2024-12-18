@@ -1,7 +1,6 @@
-﻿using H.Necessaire.Runtime.CLI.Builders;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace H.Necessaire.Runtime.CLI.Commands
+namespace H.Necessaire.Runtime.CLI.Common
 {
     internal class CustomCommandRunner : ImADependency
     {

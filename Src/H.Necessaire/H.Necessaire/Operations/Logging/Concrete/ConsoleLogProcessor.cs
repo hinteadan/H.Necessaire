@@ -33,10 +33,10 @@ namespace H.Necessaire
             );
 
             if (logEntry.Payload != null)
-                Write($"{Environment.NewLine}Payload: {logEntry.Payload}", ColorFor(LogEntryLevel.Debug));
+                Write($"{Environment.NewLine}Payload: {logEntry.Payload}{Environment.NewLine}", ColorFor(LogEntryLevel.Debug));
 
             if (logEntry.Level >= LogEntryLevel.Error && !string.IsNullOrWhiteSpace(logEntry.StackTrace))
-                Write($"{Environment.NewLine}Stack Trace:{Environment.NewLine}{logEntry.StackTrace}", ColorFor(LogEntryLevel.Warn));
+                Write($"{Environment.NewLine}Stack Trace:{Environment.NewLine}{logEntry.StackTrace}{Environment.NewLine}", ColorFor(LogEntryLevel.Warn));
 
             Console.WriteLine();
 

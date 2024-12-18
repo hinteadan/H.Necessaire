@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace H.Necessaire.Runtime.CLI.Builders
+namespace H.Necessaire.Runtime.CLI.Common
 {
-    public sealed class ArgsParser
+    internal sealed class ArgsParser
     {
         static readonly string[] valueSplitters = { "=" };
 

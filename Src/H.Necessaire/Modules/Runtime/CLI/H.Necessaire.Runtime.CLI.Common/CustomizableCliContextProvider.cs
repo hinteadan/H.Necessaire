@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace H.Necessaire.Runtime.CLI
+namespace H.Necessaire.Runtime.CLI.Common
 {
-    public class CustomizableCliContextProvider : ImAUseCaseContextProvider
+    internal class CustomizableCliContextProvider : ImAUseCaseContextProvider
     {
         private readonly ImAUseCaseContextProvider baseUseCaseContextProvider;
 

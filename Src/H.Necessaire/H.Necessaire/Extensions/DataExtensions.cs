@@ -255,6 +255,22 @@ namespace H.Necessaire
         }
 
         public static T And<T>(this T data, Action<T> doThis) { doThis(data); return data; }
+        public static T AndIf<T>(this T data, bool condition, Action<T> doThis)
+        {
+            if (!condition)
+                return data;
+
+            doThis(data);
+            return data;
+        }
+        public static T AndIf<T>(this T data, Func<T, bool> condition, Action<T> doThis)
+        {
+            if (!condition(data))
+                return data;
+
+            doThis(data);
+            return data;
+        }
 
         public static Tuple<T1, T2> TupleWith<T1, T2>(this T1 item1, T2 item2) => Tuple.Create<T1, T2>(item1, item2);
 

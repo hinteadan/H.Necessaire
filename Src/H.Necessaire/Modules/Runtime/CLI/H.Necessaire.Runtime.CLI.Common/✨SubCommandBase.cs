@@ -1,9 +1,10 @@
-﻿using H.Necessaire.CLI.Commands;
+﻿using H.Necessaire.Runtime;
+using H.Necessaire.Runtime.CLI.Common;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace H.Necessaire.Runtime.CLI.Commands
+namespace H.Necessaire.CLI.Commands
 {
     public abstract class SubCommandBase : UseCaseBase, ImACliSubCommand
     {

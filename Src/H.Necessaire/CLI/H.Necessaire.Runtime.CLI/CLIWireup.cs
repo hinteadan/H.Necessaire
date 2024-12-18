@@ -1,7 +1,7 @@
 ﻿using H.Necessaire.CLI.Commands;
-using H.Necessaire.Runtime.CLI.Builders;
 using H.Necessaire.Runtime.CLI.CommandInterpreter;
-using H.Necessaire.Runtime.CLI.Commands;
+using H.Necessaire.Runtime.CLI.Common;
+using H.Necessaire.Runtime.CLI.UI;
 using H.Necessaire.Runtime.Wireup.Abstracts;
 using System;
 using System.Linq;
@@ -15,26 +15,18 @@ namespace H.Necessaire.Runtime.CLI
         {
             return
                 base
+
                 .WithEverything()
 
-                .With(x => x.Register<CustomCommandRunner>(() => new CustomCommandRunner()))
+                .WithCliCommons()
 
-                .With(x => x.Register<ArgsParser>(() => new ArgsParser()))
-
-                .With(x => x.Register<ImAUseCaseContextProvider>(() => new CliUseCaseContextProvider()))
-                .With(x => x.Register<CliCommandFactory>(() => new CliCommandFactory()))
+                .WithCliUI()
 
                 .With(x => x.WithCliInterpreter())
 
                 .With(x => AddAllCommandsInAllAssemblies(x))
                 .With(x => AddAllSubCommandsInAllAssemblies(x))
 
-                .With(x =>
-                {
-                    ImAUseCaseContextProvider baseUseCaseContextProvider = x.Get<ImAUseCaseContextProvider>();
-                    x.Register<CustomizableCliContextProvider>(() => new CustomizableCliContextProvider(baseUseCaseContextProvider));
-                    x.Register<ImAUseCaseContextProvider>(x.Get<CustomizableCliContextProvider>);
-                })
                 ;
         }
 

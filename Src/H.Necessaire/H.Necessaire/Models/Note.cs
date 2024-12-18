@@ -18,7 +18,7 @@ namespace H.Necessaire
         public string ID { get; set; }
         public string Value { get; set; }
 
-        public bool IsEmpty() => string.IsNullOrWhiteSpace(ID) && string.IsNullOrWhiteSpace(Value);
+        public bool IsEmpty() => ID.IsEmpty() && Value.IsEmpty();
 
         public override string ToString()
         {

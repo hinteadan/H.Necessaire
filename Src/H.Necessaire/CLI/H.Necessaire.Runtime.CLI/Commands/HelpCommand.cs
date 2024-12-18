@@ -1,4 +1,5 @@
-﻿using H.Necessaire.Runtime.CLI.CommandInterpreter;
+﻿using H.Necessaire.CLI.Commands;
+using H.Necessaire.Runtime.CLI.CommandInterpreter;
 using System.Linq;
 using System.Threading.Tasks;
 

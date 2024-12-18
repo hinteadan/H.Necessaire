@@ -3,9 +3,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace H.Necessaire.Runtime.CLI.Builders
+namespace H.Necessaire.Runtime.CLI.Common
 {
-    public sealed class CliCommandFactory : UseCaseBase, ImADependency
+    internal sealed class CliCommandFactory : UseCaseBase, ImADependency
     {
         #region Construct
         ImADependencyProvider dependencyProvider;
@@ -30,7 +30,23 @@ namespace H.Necessaire.Runtime.CLI.Builders
             if (command == null)
                 return OperationResult.Fail($"Command [{commandName}] cannot be found or instantiated. Will display help here.");
 
-            return await command.Run();
+            OperationResult commandRunResult = OperationResult.Fail($"Command {commandName} not yet run");
+
+            await
+                new Func<Task>(async () =>
+                {
+                    commandRunResult = await command.Run();
+                })
+                .TryOrFailWithGrace(
+                    onFail: async ex =>
+                    {
+                        string message = $"Error occurred while running command {commandName}. Reason: {ex.Message}.";
+                        await Logger.LogError(message, ex);
+                        commandRunResult = OperationResult.Fail(ex, message);
+                    }
+                );
+
+            return commandRunResult;
         }
 
         private async Task<OperationResult<string>> GetCommandToRun()

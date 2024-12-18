@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace H.Necessaire.Runtime.CLI
+namespace H.Necessaire.Runtime.CLI.Common
 {
-    public static class CLIPrinter
+    internal static class CLIPrinter
     {
         public static string PrintUsageSyntax(params string[] usageSyntaxes)
         {
