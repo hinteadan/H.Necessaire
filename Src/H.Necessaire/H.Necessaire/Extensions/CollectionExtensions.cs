@@ -249,6 +249,27 @@ namespace H.Necessaire
                 .FirstOrDefault();
         }
 
+        public static bool IsEmpty<T>(this IEnumerable<T> collection)
+        {
+            return collection?.Any() != true;
+        }
+
+        public static void ProcessStream<T>(this IEnumerable<T> collection, Action<T> processor)
+        {
+            if (processor is null || collection.IsEmpty())
+                return;
+
+            foreach (T item in collection)
+            {
+                processor.Invoke(item);
+            }
+        }
+
+        public static bool IsEmpty<T>(this T[] collection)
+        {
+            return (collection?.Length ?? 0) == 0;
+        }
+
         public static T[] NullIfEmpty<T>(this T[] value)
         {
             if (value?.Any() != true)

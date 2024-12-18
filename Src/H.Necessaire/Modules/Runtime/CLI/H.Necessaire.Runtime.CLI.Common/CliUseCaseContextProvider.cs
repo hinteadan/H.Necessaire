@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace H.Necessaire.Runtime.CLI.Builders
+namespace H.Necessaire.Runtime.CLI.Common
 {
-    public sealed class CliUseCaseContextProvider : ImAUseCaseContextProvider, ImADependency
+    internal sealed class CliUseCaseContextProvider : ImAUseCaseContextProvider, ImADependency
     {
         #region Construct
         ArgsParser argsParser = new ArgsParser();

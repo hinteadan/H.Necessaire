@@ -1,11 +1,11 @@
-﻿using H.Necessaire.CLI.Commands;
-using H.Necessaire.Runtime.CLI.Builders;
+﻿using H.Necessaire.Runtime;
+using H.Necessaire.Runtime.CLI.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace H.Necessaire.Runtime.CLI.Commands
+namespace H.Necessaire.CLI.Commands
 {
     public abstract class CommandBase : UseCaseBase, ImACliCommand
     {

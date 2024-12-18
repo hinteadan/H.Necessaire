@@ -1,12 +1,12 @@
 ﻿namespace H.Necessaire
 {
-    public class ProgressiveScope : ScopedRunner
+    public class ProgressiveScope : ScopedRunner, IStringIdentity
     {
         public ProgressiveScope(string scopeIdentifier, AsyncEventHandler<ProgressEventArgs> onProgress = null)
             : base(
                 onStart: () =>
                 {
-                    CallContext<ProgressReporter>.SetData(scopeIdentifier, new ProgressReporter().And(x =>
+                    CallContext<ProgressReporter>.SetData(scopeIdentifier, new ProgressReporter(scopeIdentifier).And(x =>
                     {
                         if (onProgress != null)
                             x.OnProgress += onProgress;
@@ -17,6 +17,10 @@
                     CallContext<ProgressReporter>.ZapData(scopeIdentifier);
                 }
             )
-        { }
+        {
+            ID = scopeIdentifier;
+        }
+
+        public string ID { get; }
     }
 }

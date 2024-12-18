@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\..\..\..\CLI\H.Necessaire.Runtime.CLI\🤝Friends.cs" Link="🤝Friends.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\H.Necessaire.Runtime\H.Necessaire.Runtime.csproj" />
+		<ProjectReference Include="..\..\..\..\H.Necessaire\H.Necessaire.csproj" />
+	</ItemGroup>
+
+</Project>

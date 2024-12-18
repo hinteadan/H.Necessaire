@@ -15,7 +15,7 @@ namespace H.Necessaire
             DoStart();
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             DoStop();
         }

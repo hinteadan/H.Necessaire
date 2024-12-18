@@ -14,7 +14,7 @@ public static class Program
         await
             new App()
             .WithEverything()
-            .Run(askForCommandIfEmpty: true)
+            .Run()
             ;
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -12,6 +10,7 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
     public sealed class ExternalCommandRunner : ImAnExternalCommandRunner, ImAContextualExternalCommandRunnerFactory, ImADependency
     {
         #region Construct
+        static readonly TimeSpan minimumMetricsCollectionInterval = TimeSpan.FromSeconds(5);
         ArgsBuilder argsBuilder = new ArgsBuilder();
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
@@ -190,7 +189,7 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
 
         static void DisposeProcess(ExternalCommandRunContext context, Process externalProcess)
         {
-            CollectMetricsIfNecessary(context, externalProcess);
+            CollectMetricsIfNecessary(context, externalProcess, isForcedRegardlessOfMetricsInterval: true);
 
             if (context.IsOutputCaptured)
             {
@@ -219,12 +218,20 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
             return isNewProcess;
         }
 
-        static void CollectMetricsIfNecessary(ExternalCommandRunContext context, Process externalProcess)
+        static void CollectMetricsIfNecessary(ExternalCommandRunContext context, Process externalProcess, bool isForcedRegardlessOfMetricsInterval = false)
         {
             if (!context.IsMetricsCollectionEnabled)
                 return;
 
-            (context.Metrics as IDictionary<DateTime, Note[]>).Add(DateTime.UtcNow, 
+            if (!isForcedRegardlessOfMetricsInterval)
+            {
+                DateTime latestMetricsCollectionTimestamp = context.Metrics.IsEmpty() ? DateTime.MinValue : context.Metrics.Max(x => x.Key);
+
+                if (DateTime.UtcNow - latestMetricsCollectionTimestamp <= minimumMetricsCollectionInterval)
+                    return;
+            }
+
+            (context.Metrics as IDictionary<DateTime, Note[]>).Add(DateTime.UtcNow,
                 Note
                     .GetEnvironmentInfo()
                     .AppendProcessInfo(externalProcess, prefix: "ExternalProcess-")
