@@ -24,6 +24,7 @@ namespace H.Necessaire
         public async Task Invoke()
         {
             periodicActionExecutioner?.Stop();
+            (periodicActionExecutioner as IDisposable)?.Dispose();
             periodicActionExecutioner = periodicActionFactory.Invoke();
             periodicActionExecutioner.StartDelayed(debounceInterval, debounceInterval, async () =>
             {

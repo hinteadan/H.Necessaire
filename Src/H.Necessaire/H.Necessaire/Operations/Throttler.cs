@@ -33,6 +33,7 @@ namespace H.Necessaire
             });
 
             periodicActionDestroyer?.Stop();
+            (periodicActionDestroyer as IDisposable)?.Dispose();
             periodicActionDestroyer = periodicActionFactory.Invoke();
             periodicActionDestroyer.StartDelayed(throttleInterval, throttleInterval, () => { periodicActionExecutioner.Stop(); return true.AsTask(); });
 
