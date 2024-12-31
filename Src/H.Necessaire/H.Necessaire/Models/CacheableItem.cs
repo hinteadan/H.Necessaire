@@ -10,6 +10,15 @@ namespace H.Necessaire
 
         public bool IsSlidingExpirationDisabled { get; set; } = false;
 
-        public void PinAccess(DateTime? at = null) => AsOf = at ?? DateTime.UtcNow;
+        public void PinAccess(DateTime? at = null) => AsOf = at?.EnsureUtc() ?? DateTime.UtcNow;
+
+        public override string ToString()
+        {
+            return $"CachedAs({ID.EllipsizeIfNecessary(maxLength: 50)}): {Payload?.ToString() ?? "NULL"}";
+        }
+
+        public static implicit operator CacheableItem<T>(T payload) => payload.ToCacheableItem(identifier: null) as CacheableItem<T>;
+
+        public static implicit operator T(CacheableItem<T> cacheableItem) => cacheableItem?.IsExpired() == false ? cacheableItem.Payload : default(T);
     }
 }

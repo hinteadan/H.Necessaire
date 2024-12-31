@@ -9,11 +9,13 @@ namespace H.Necessaire
         TimeSpan? validFor = defaultValidity;
         DateTime? expiresAt = DateTime.UtcNow + defaultValidity;
         DateTime validFrom = DateTime.UtcNow;
+        DateTime createdAt = DateTime.UtcNow;
+        DateTime asOf = DateTime.UtcNow;
         #endregion
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get => createdAt; set => createdAt = value.EnsureUtc(); }
 
-        public DateTime AsOf { get; set; } = DateTime.UtcNow;
+        public DateTime AsOf { get => asOf; set => asOf = value.EnsureUtc(); }
         public long AsOfTicks { get => AsOf.Ticks; set => AsOf = new DateTime(value, DateTimeKind.Utc); }
 
         public DateTime ValidFrom
@@ -21,7 +23,7 @@ namespace H.Necessaire
             get => validFrom;
             set
             {
-                validFrom = value;
+                validFrom = value.EnsureUtc();
                 ValidFor = ValidFor;
             }
         }
@@ -52,7 +54,7 @@ namespace H.Necessaire
             }
             set
             {
-                expiresAt = value;
+                expiresAt = value?.EnsureUtc();
                 if (expiresAt == null && ValidFor != null)
                     ValidForTicks = null;
                 else if (expiresAt != null && ExpiresAtTicks - ValidFromTicks != ValidForTicks)
@@ -65,7 +67,7 @@ namespace H.Necessaire
         #region Operations
         public TimeSpan GetAge(DateTime? asOf = null)
         {
-            return (asOf ?? DateTime.UtcNow) - ValidFrom.EnsureUtc();
+            return (asOf?.EnsureUtc() ?? DateTime.UtcNow) - ValidFrom.EnsureUtc();
         }
         public bool IsExpired(DateTime? asOf = null)
         {
@@ -76,12 +78,12 @@ namespace H.Necessaire
         }
         public bool IsActive(DateTime? asOf = null)
         {
-            return ValidFrom.Ticks <= (asOf?.Ticks ?? DateTime.UtcNow.Ticks) && !IsExpired(asOf);
+            return ValidFrom.Ticks <= (asOf?.EnsureUtc().Ticks ?? DateTime.UtcNow.Ticks) && !IsExpired(asOf);
         }
 
-        public void ActiveAsOf(DateTime asOf) => ValidFrom = asOf;
+        public void ActiveAsOf(DateTime asOf) => ValidFrom = asOf.EnsureUtc();
         public void DoNotExpire() => ExpiresAt = null;
-        public void ExpireAt(DateTime at) => ExpiresAt = at;
+        public void ExpireAt(DateTime at) => ExpiresAt = at.EnsureUtc();
         public void ExpireIn(TimeSpan timeSpan) => ValidFor = timeSpan;
         #endregion
     }

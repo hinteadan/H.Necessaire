@@ -86,5 +86,21 @@ namespace H.Necessaire.Testicles.Unit
             OperationResult cachedValueResult = await cacher.TryGet("IntCacheTest");
             cachedValueResult.IsSuccessful.Should().BeFalse(because: "the cached item should have been removed from cache during a housekeeping session as even though it was accessed, it has sliding expiration disabled");
         }
+
+        [Fact(DisplayName = "Caching Correctly Updates Cached Items")]
+        public async Task Caching_Correctly_Updates_Cached_Items()
+        {
+            ImACacher<int> cacher = dependencyRegistry.GetCacher<int>();
+
+            int value = 42;
+            await cacher.GetOrAdd("IntCacheTest", id => value.ToCacheableItem(id).AsTask());
+            int cachedValue = (await cacher.TryGet("IntCacheTest")).ThrowOnFailOrReturn();
+            cachedValue.Should().Be(42, because: "we just cached the value 42");
+
+            value = 43;
+            await cacher.AddOrUpdate("IntCacheTest", id => value.ToCacheableItem(id).AsTask());
+            cachedValue = (await cacher.TryGet("IntCacheTest")).ThrowOnFailOrReturn();
+            cachedValue.Should().Be(43, because: "we just updated the cached value to 43");
+        }
     }
 }
