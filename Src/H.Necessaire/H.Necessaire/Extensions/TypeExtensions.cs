@@ -55,6 +55,11 @@ namespace H.Necessaire
                 return IsInstanceOfGenericType(baseType, typeToCheck);
             }
 
+            if (baseType.IsGenericType && typeToCheck.IsGenericTypeDefinition)
+            {
+                return IsInstanceOfGenericType(baseType.GetGenericTypeDefinition(), typeToCheck);
+            }
+
             return baseType.IsAssignableFrom(typeToCheck);
         }
 
@@ -108,21 +113,39 @@ namespace H.Necessaire
         public static string[] GetAliases(this Type type)
         {
             return
-                type?.GetCustomAttributes(typeof(AliasAttribute), false)?.SelectMany(aliasAttr => (aliasAttr as AliasAttribute)?.Aliases)?.Distinct()?.ToArray()
+                type
+                ?.GetCustomAttributes(typeof(AliasAttribute), inherit: false)
+                ?.SelectMany(
+                    aliasAttr => (aliasAttr as AliasAttribute)?.Aliases
+                )
+                ?.Distinct()
+                ?.ToArray()
                 ;
         }
 
         public static string[] GetCategories(this Type type)
         {
             return
-                type?.GetCustomAttributes(typeof(CategoryAttribute), true)?.SelectMany(noteAttr => (noteAttr as CategoryAttribute)?.Categories)?.Distinct()?.ToArray()
+                type
+                ?.GetCustomAttributes(typeof(CategoryAttribute), inherit: true)
+                ?.SelectMany(
+                    noteAttr => (noteAttr as CategoryAttribute)?.Categories
+                )
+                ?.Distinct()
+                ?.ToArray()
                 ;
         }
 
         public static int GetPriority(this Type type)
         {
             return
-                (type?.GetCustomAttributes(typeof(PriorityAttribute), false)?.SingleOrDefault() as PriorityAttribute)?.Priority ?? 0;
+                (
+                    type
+                    ?.GetCustomAttributes(typeof(PriorityAttribute), inherit: false)
+                    ?.SingleOrDefault() as PriorityAttribute
+                )
+                ?.Priority
+                ?? 0
                 ;
         }
 
@@ -206,7 +229,7 @@ namespace H.Necessaire
             if (identifier.IsEmpty())
                 return Enumerable.Empty<Type>();
 
-            return 
+            return
                 type
                 .GetAllImplementations(assembliesToScan)
                 .Where(x => x.IsMatch(identifier))

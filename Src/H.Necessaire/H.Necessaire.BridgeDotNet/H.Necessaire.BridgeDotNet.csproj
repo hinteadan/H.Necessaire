@@ -60,9 +60,6 @@
     <Compile Include="..\H.Necessaire\Extensions\FileSystemExtensions.cs">
       <Link>Extensions\FileSystemExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\H.Necessaire\Extensions\IoCExtensions.cs">
-      <Link>Extensions\IoCExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\H.Necessaire\Extensions\NotificationExtensions.cs">
       <Link>Extensions\NotificationExtensions.cs</Link>
     </Compile>
@@ -685,6 +682,7 @@
       <Link>UI\UserInput\UserOptionSelectionResult.cs</Link>
     </Compile>
     <Compile Include="Extensions\BridgeDotNetExtensions.cs" />
+    <Compile Include="Extensions\IoCExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Models\ConcurrentDictionary.cs" />
     <Compile Include="Models\ConcurrentQueue.cs" />
