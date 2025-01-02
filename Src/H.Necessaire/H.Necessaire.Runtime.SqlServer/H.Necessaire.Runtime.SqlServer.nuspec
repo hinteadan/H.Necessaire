@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>H.Necessaire.Runtime.SqlServer</id>
-    <version>2.43.2</version>
+    <version>2.43.3</version>
     <title>H's Necessaire Runtime with SQL Server-backed storage</title>
     <projectUrl>https://h.necessaire.dev</projectUrl>
     <repository type="git" url="https://github.com/hinteadan/H.Necessaire.git" branch="master" />
@@ -17,10 +17,10 @@
     <copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</copyright>
     <tags>hintea dan alexandru .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections batch task array rad rapid application development framework raven ravendb nosql</tags>
     <dependencies>
-      <dependency id="H.Necessaire" version="2.43.2" />
-      <dependency id="H.Necessaire.Runtime" version="2.43.2" />
-      <dependency id="H.Necessaire.Dapper" version="2.43.2" />
-      <dependency id="H.Necessaire.Serialization" version="2.43.2" />
+      <dependency id="H.Necessaire" version="2.43.3" />
+      <dependency id="H.Necessaire.Runtime" version="2.43.3" />
+      <dependency id="H.Necessaire.Dapper" version="2.43.3" />
+      <dependency id="H.Necessaire.Serialization" version="2.43.3" />
     </dependencies>
   </metadata>
   <files>
