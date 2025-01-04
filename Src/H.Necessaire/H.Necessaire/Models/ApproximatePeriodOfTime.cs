@@ -35,6 +35,20 @@ namespace H.Necessaire
                 To = EndPeriod?.ToMaximumPeriodOfTime(fallbackYear)?.ClosestTime(asOf),
             }.FurthestTime(asOf);
 
+        public PeriodOfTime ToMinimumPeriodOfTime(DateTime? asOf = null, int? fallbackYear = null)
+            => new PeriodOfTime
+            {
+                From = ClosestStartTime(asOf, fallbackYear),
+                To = ClosestEndTime(asOf, fallbackYear),
+            };
+
+        public PeriodOfTime ToMaximumPeriodOfTime(DateTime? asOf = null, int? fallbackYear = null)
+            => new PeriodOfTime
+            {
+                From = FurthestStartTime(asOf, fallbackYear),
+                To = FurthestEndTime(asOf, fallbackYear),
+            };
+
 
         public bool IsSinceForever => (StartPeriod is null) || StartPeriod.IsTimeless;
         public bool IsUntilForever => (EndPeriod is null) || EndPeriod.IsTimeless;
