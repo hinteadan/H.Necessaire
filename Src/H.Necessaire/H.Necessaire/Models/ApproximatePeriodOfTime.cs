@@ -63,7 +63,17 @@ namespace H.Necessaire
         public TimeSpan? AverageDuration => IsInfinite ? (null as TimeSpan?) : TimeSpan.FromTicks((MaximumDuration.Value.Ticks - MinimumDuration.Value.Ticks) / 2);
 
 
-        public bool IsPrecise() => !IsTimeless && StartPeriod.IsPrecise() && EndPeriod.IsPrecise();
+        public bool IsPrecise() => IsPreciseDate() && IsPreciseTime();
+        public bool IsPreciseDate() => !IsTimeless && StartPeriod.IsPreciseDate() && EndPeriod.IsPreciseDate();
+        public bool IsPartialDate() => !IsTimeless && StartPeriod.IsPartialDate() && EndPeriod.IsPartialDate();
+        public bool IsPreciseTime() => !IsTimeless && StartPeriod.IsPreciseTime() && EndPeriod.IsPreciseTime();
+        public bool IsPartialTime() => !IsTimeless && StartPeriod.IsPartialTime() && EndPeriod.IsPartialTime();
+        public bool IsWheneverDate() => !IsTimeless && StartPeriod.IsWheneverDate() && EndPeriod.IsWheneverDate();
+        public bool IsWheneverTime() => !IsTimeless && StartPeriod.IsWheneverTime() && EndPeriod.IsWheneverTime();
+        public bool IsPreciseDateOnly() => IsPreciseDate() && IsWheneverTime();
+        public bool IsPreciseTimeOnly() => IsWheneverDate() && IsPreciseTime();
+        public bool IsPartialDateOnly() => IsPartialDate() && IsWheneverTime();
+        public bool IsPartialTimeOnly() => IsWheneverDate() && IsPartialTime();
 
         public bool HasPossiblyEnded(DateTime? asOf = null, bool isIntervalMarginConsideredEnded = false)
         {
@@ -329,6 +339,17 @@ namespace H.Necessaire
             ApproximatePeriodOfTime gapPeriodIfAny;
             return Unite(other, out gapPeriodIfAny);
         }
+
+        public ApproximatePeriodOfTime OnYear(int year) => Duplicate().And(x => { x.StartPeriod = x.StartPeriod?.OnYear(year); x.EndPeriod = x.EndPeriod?.OnYear(year); });
+        public ApproximatePeriodOfTime OnMonth(int month) => Duplicate().And(x => { x.StartPeriod = x.StartPeriod?.OnMonth(month); x.EndPeriod = x.EndPeriod?.OnMonth(month); });
+        public ApproximatePeriodOfTime OnDayOfMonth(int dayOfMonth) => Duplicate().And(x => { x.StartPeriod = x.StartPeriod?.OnDayOfMonth(dayOfMonth); x.EndPeriod = x.EndPeriod?.OnDayOfMonth(dayOfMonth); });
+        public ApproximatePeriodOfTime OnHour(int hour) => Duplicate().And(x => { x.StartPeriod = x.StartPeriod?.OnHour(hour); x.EndPeriod = x.EndPeriod?.OnHour(hour); });
+        public ApproximatePeriodOfTime OnMinute(int minute) => Duplicate().And(x => { x.StartPeriod = x.StartPeriod?.OnMinute(minute); x.EndPeriod = x.EndPeriod?.OnMinute(minute); });
+        public ApproximatePeriodOfTime OnSecond(int second) => Duplicate().And(x => { x.StartPeriod = x.StartPeriod?.OnSecond(second); x.EndPeriod = x.EndPeriod?.OnSecond(second); });
+        public ApproximatePeriodOfTime OnMillisecond(int millisecond) => Duplicate().And(x => { x.StartPeriod = x.StartPeriod?.OnMillisecond(millisecond); x.EndPeriod = x.EndPeriod?.OnMillisecond(millisecond); });
+        public ApproximatePeriodOfTime OnDate(DateTime date) => Duplicate().And(x => { x.StartPeriod = x.StartPeriod?.OnDate(date); x.EndPeriod = x.EndPeriod?.OnDate(date); });
+        public ApproximatePeriodOfTime OnTime(DateTime time) => Duplicate().And(x => { x.StartPeriod = x.StartPeriod?.OnTime(time); x.EndPeriod = x.EndPeriod?.OnTime(time); });
+        public ApproximatePeriodOfTime OnDateAndTime(DateTime dateAndTime) => Duplicate().And(x => { x.StartPeriod = x.StartPeriod?.OnDateAndTime(dateAndTime); x.EndPeriod = x.EndPeriod?.OnDateAndTime(dateAndTime); });
 
         public bool Equals(ApproximatePeriodOfTime other)
         {

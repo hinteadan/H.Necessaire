@@ -21,7 +21,17 @@ namespace H.Necessaire
         public bool IsTimeless => IsSinceForever && IsUntilForever;
 
 
-        public bool IsPrecise() => !IsTimeless && From.IsPrecise() && To.IsPrecise();
+        public bool IsPrecise() => IsPreciseDate() && IsPreciseTime();
+        public bool IsPreciseDate() => !IsTimeless && From.IsPreciseDate() && To.IsPreciseDate();
+        public bool IsPartialDate() => !IsTimeless && From.IsPartialDate() && To.IsPartialDate();
+        public bool IsPreciseTime() => !IsTimeless && From.IsPreciseTime() && To.IsPreciseTime();
+        public bool IsPartialTime() => !IsTimeless && From.IsPartialTime() && To.IsPartialTime();
+        public bool IsWheneverDate() => !IsTimeless && From.IsWheneverDate() && To.IsWheneverDate();
+        public bool IsWheneverTime() => !IsTimeless && From.IsWheneverTime() && To.IsWheneverTime();
+        public bool IsPreciseDateOnly() => IsPreciseDate() && IsWheneverTime();
+        public bool IsPreciseTimeOnly() => IsWheneverDate() && IsPreciseTime();
+        public bool IsPartialDateOnly() => IsPartialDate() && IsWheneverTime();
+        public bool IsPartialTimeOnly() => IsWheneverDate() && IsPartialTime();
 
 
         public PeriodOfTime ToMinimumPeriodOfTime(int? fallbackYear = null) => new PeriodOfTime { From = From.ToMaximumDateTime(fallbackYear), To = To.ToMinimumDateTime(fallbackYear) };
@@ -311,6 +321,17 @@ namespace H.Necessaire
             PartialPeriodOfTime gapPeriodIfAny;
             return Unite(other, out gapPeriodIfAny);
         }
+
+        public PartialPeriodOfTime OnYear(int year) => Duplicate().And(x => { x.From = x.From?.OnYear(year); x.To = x.To?.OnYear(year); });
+        public PartialPeriodOfTime OnMonth(int month) => Duplicate().And(x => { x.From = x.From?.OnMonth(month); x.To = x.To?.OnMonth(month); });
+        public PartialPeriodOfTime OnDayOfMonth(int dayOfMonth) => Duplicate().And(x => { x.From = x.From?.OnDayOfMonth(dayOfMonth); x.To = x.To?.OnDayOfMonth(dayOfMonth); });
+        public PartialPeriodOfTime OnHour(int hour) => Duplicate().And(x => { x.From = x.From?.OnHour(hour); x.To = x.To?.OnHour(hour); });
+        public PartialPeriodOfTime OnMinute(int minute) => Duplicate().And(x => { x.From = x.From?.OnMinute(minute); x.To = x.To?.OnMinute(minute); });
+        public PartialPeriodOfTime OnSecond(int second) => Duplicate().And(x => { x.From = x.From?.OnSecond(second); x.To = x.To?.OnSecond(second); });
+        public PartialPeriodOfTime OnMillisecond(int millisecond) => Duplicate().And(x => { x.From = x.From?.OnMillisecond(millisecond); x.To = x.To?.OnMillisecond(millisecond); });
+        public PartialPeriodOfTime OnDate(DateTime date) => Duplicate().And(x => { x.From = x.From?.OnDate(date); x.To = x.To?.OnDate(date); });
+        public PartialPeriodOfTime OnTime(DateTime time) => Duplicate().And(x => { x.From = x.From?.OnTime(time); x.To = x.To?.OnTime(time); });
+        public PartialPeriodOfTime OnDateAndTime(DateTime dateAndTime) => Duplicate().And(x => { x.From = x.From?.OnDateAndTime(dateAndTime); x.To = x.To?.OnDateAndTime(dateAndTime); });
 
         public bool Equals(PartialPeriodOfTime other)
         {

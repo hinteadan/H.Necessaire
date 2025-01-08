@@ -355,7 +355,7 @@ namespace H.Necessaire
             Millisecond = Millisecond ?? time.Millisecond,
             DateTimeKind = DateTimeKind == DateTimeKind.Unspecified ? time.Kind : DateTimeKind,
         };
-        public PartialDateTime OnDateAndtime(DateTime dateAndTime) => new PartialDateTime
+        public PartialDateTime OnDateAndTime(DateTime dateAndTime) => new PartialDateTime
         {
             Year = Year ?? dateAndTime.Year,
             Month = Month ?? dateAndTime.Month,
