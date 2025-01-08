@@ -17,7 +17,8 @@ namespace H.Necessaire.CLI.Host
         {
             public override Task<OperationResult> Run(params Note[] args)
             {
-                new LogEntry().ToJsonObject().CliUiPrintJson("Log Entry").ThrowOnFail();
+                PeriodOfTime periodOfTime = DateTime.Now.ToTimeOnlyPartialDateTime();
+
 
                 return OperationResult.Win().AsTask();
             }

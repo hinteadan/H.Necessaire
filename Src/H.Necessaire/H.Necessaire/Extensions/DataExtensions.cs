@@ -147,9 +147,19 @@ namespace H.Necessaire
                     Hour = dateTime.Hour,
                     Minute = dateTime.Minute,
                     Second = dateTime.Second,
+                    Millisecond = dateTime.Millisecond,
                     DateTimeKind = dateTime.Kind,
                 };
         }
+
+        public static PartialDateTime ToPartialDateTime(this DateTime dateTime, Action<PartialDateTime> modifier)
+            => dateTime.ToPartialDateTime().And(modifier);
+
+        public static PartialDateTime ToDateOnlyPartialDateTime(this DateTime dateTime)
+            => dateTime.ToPartialDateTime(x => { x.Hour = null; x.Minute = null; x.Second = null; x.Millisecond = null; });
+
+        public static PartialDateTime ToTimeOnlyPartialDateTime(this DateTime dateTime)
+            => dateTime.ToPartialDateTime(x => { x.Year = null; x.Month = null; x.DayOfMonth = null; });
 
         public static float TrimToPercent(this float value)
         {
