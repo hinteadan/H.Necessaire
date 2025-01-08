@@ -208,7 +208,7 @@ namespace H.Necessaire
             if (other is null)
             {
                 gapPeriodIfAny = null;
-                return this;
+                return this.Duplicate();
             }
 
             gapPeriodIfAny = IsOverlapping(other) ? null : new PeriodOfTime
@@ -283,6 +283,8 @@ namespace H.Necessaire
 
             return $"{From} ~ {To}";
         }
+
+        public PeriodOfTime Duplicate() => new PeriodOfTime { From = From, To = To, };
 
         public static implicit operator PeriodOfTime(DateTime dateTime) => new PeriodOfTime { From = dateTime, To = dateTime, };
         public static implicit operator PeriodOfTime(DateTime? dateTime) => new PeriodOfTime { From = dateTime, To = dateTime, };

@@ -306,7 +306,7 @@ namespace H.Necessaire
             if (other is null)
             {
                 gapPeriodIfAny = null;
-                return this;
+                return this.Duplicate();
             }
 
             gapPeriodIfAny = IsPossiblyOverlapping(other) ? null : new ApproximatePeriodOfTime
@@ -377,6 +377,8 @@ namespace H.Necessaire
 
             return $"[{StartPeriod}] ~~ [{EndPeriod}]";
         }
+
+        public ApproximatePeriodOfTime Duplicate() => new ApproximatePeriodOfTime { StartPeriod = StartPeriod?.Duplicate(), EndPeriod = EndPeriod?.Duplicate(), };
 
         public static implicit operator ApproximatePeriodOfTime(DateTime dateTime) => new ApproximatePeriodOfTime { StartPeriod = dateTime, EndPeriod = dateTime, };
         public static implicit operator ApproximatePeriodOfTime(DateTime? dateTime) => new ApproximatePeriodOfTime { StartPeriod = dateTime, EndPeriod = dateTime, };

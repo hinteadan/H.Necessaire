@@ -176,7 +176,7 @@ namespace H.Necessaire
                     ;
 
             return
-                IsAnyOr(Year, other.Year, Year < other.Year) 
+                IsAnyOr(Year, other.Year, Year < other.Year)
                 || (Year == other.Year && IsAnyOr(Month, other.Month, Month < other.Month))
                 || (Year == other.Year && Month == other.Month && IsAnyOr(DayOfMonth, other.DayOfMonth, DayOfMonth < other.DayOfMonth))
                 || (Year == other.Year && Month == other.Month && DayOfMonth == other.DayOfMonth && IsAnyOr(Hour, other.Hour, Hour < other.Hour))
@@ -265,8 +265,24 @@ namespace H.Necessaire
             if (IsPrecise())
                 return $"{ToDateTime()}";
 
-            return $"{Year?.ToString() ?? "[AnyYear]"}-{Month?.ToString("00") ?? "[AnyMonth]"}-{DayOfMonth?.ToString("00") ?? "[AnyDayOfMonth]"} {Hour?.ToString("00") ?? "[AnyHour]"}:{Minute?.ToString("00") ?? "[AnyMinute]"}:{Second?.ToString("00") ?? "[AnySecond]"}.{Millisecond?.ToString("000") ?? "[AnyMillisecond]"} {DateTimeKind}";
+            return $"{Year?.ToString() ?? "[*Y]"}-{Month?.ToString("00") ?? "[*M]"}-{DayOfMonth?.ToString("00") ?? "[*D]"} {Hour?.ToString("00") ?? "[*h]"}:{Minute?.ToString("00") ?? "[*m]"}:{Second?.ToString("00") ?? "[*s]"}.{Millisecond?.ToString("000") ?? "[*ms]"} {DateTimeKind}";
         }
+
+        public PartialDateTime Duplicate()
+        {
+            return new PartialDateTime
+            {
+                Year = Year,
+                Month = Month,
+                DayOfMonth = DayOfMonth,
+                Hour = Hour,
+                Minute = Minute,
+                Second = Second,
+                Millisecond = Millisecond,
+                DateTimeKind = DateTimeKind
+            };
+        }
+
 
         public static implicit operator DateTime?(PartialDateTime partialDateTime) => partialDateTime?.ToDateTime();
         public static implicit operator PartialDateTime(DateTime? dateTime) => dateTime is null ? new PartialDateTime() : dateTime.Value.ToPartialDateTime();

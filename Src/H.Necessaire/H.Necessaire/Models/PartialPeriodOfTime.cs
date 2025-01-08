@@ -10,7 +10,7 @@ namespace H.Necessaire
         PartialDateTime to;
         public PartialDateTime To { get => to; set { to = value; SwapFromAndToIfNecessary(); } }
 
-        public TimeSpan? MinimumDuration => IsInfinite ? (null as TimeSpan?) : (To.ToMinimumDateTime(DateTime.Today.Year) - From.ToMaximumDateTime(DateTime.Today.Year));
+        public TimeSpan? MinimumDuration => IsInfinite ? (null as TimeSpan?) : From == To ? TimeSpan.Zero : (To.ToMinimumDateTime(DateTime.Today.Year) - From.ToMaximumDateTime(DateTime.Today.Year));
         public TimeSpan? MaximumDuration => IsInfinite ? (null as TimeSpan?) : (To.ToMaximumDateTime(DateTime.Today.Year) - From.ToMinimumDateTime(DateTime.Today.Year));
         public TimeSpan? AverageDuration => IsInfinite ? (null as TimeSpan?) : TimeSpan.FromTicks((MaximumDuration.Value.Ticks - MinimumDuration.Value.Ticks) / 2);
 
@@ -288,7 +288,7 @@ namespace H.Necessaire
             if (other is null)
             {
                 gapPeriodIfAny = null;
-                return this;
+                return this.Duplicate();
             }
 
             gapPeriodIfAny = IsPossiblyOverlapping(other) ? null : new PartialPeriodOfTime
@@ -363,6 +363,8 @@ namespace H.Necessaire
 
             return $"{From} ~ {To}";
         }
+
+        public PartialPeriodOfTime Duplicate() => new PartialPeriodOfTime { From = From?.Duplicate(), To = To?.Duplicate(), };
 
         public static implicit operator PartialPeriodOfTime(DateTime dateTime) => new PartialPeriodOfTime { From = dateTime, To = dateTime, };
         public static implicit operator PartialPeriodOfTime(DateTime? dateTime) => new PartialPeriodOfTime { From = dateTime, To = dateTime, };
