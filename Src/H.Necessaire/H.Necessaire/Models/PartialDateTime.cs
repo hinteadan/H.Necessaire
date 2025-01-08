@@ -16,31 +16,70 @@ namespace H.Necessaire
 
         public DateTimeKind DateTimeKind { get; set; } = DateTimeKind.Utc;
 
-        public bool IsPrecise()
+        public bool IsPrecise() => IsPreciseDate() && IsPreciseTime();
+
+        public bool IsPreciseDate()
         {
             return
                 !(Year is null)
                 && !(Month is null)
                 && !(DayOfMonth is null)
-                && !(Hour is null)
-                && !(Minute is null)
-                && !(Second is null)
-                && !(Millisecond is null)
                 ;
         }
 
-        public bool IsWhenever()
+        public bool IsPartialDate()
+        {
+            return
+                !(Year is null)
+                || !(Month is null)
+                || !(DayOfMonth is null)
+                ;
+        }
+
+        public bool IsPreciseTime()
+        {
+            return
+                !(Hour is null)
+                && !(Minute is null)
+                && !(Second is null)
+                ;
+        }
+
+        public bool IsPartialTime()
+        {
+            return
+                !(Hour is null)
+                || !(Minute is null)
+                || !(Second is null)
+                || !(Millisecond is null)
+                ;
+        }
+
+        public bool IsWhenever() => IsWheneverDate() && IsWheneverTime();
+
+        public bool IsWheneverDate()
         {
             return
                 Year is null
                 && Month is null
                 && DayOfMonth is null
-                && Hour is null
+                ;
+        }
+
+        public bool IsWheneverTime()
+        {
+            return
+                Hour is null
                 && Minute is null
                 && Second is null
                 && Millisecond is null
                 ;
         }
+
+        public bool IsPreciseDateOnly() => IsPreciseDate() && IsWheneverTime();
+        public bool IsPreciseTimeOnly() => IsWheneverDate() && IsPreciseTime();
+        public bool IsPartialDateOnly() => IsPartialDate() && IsWheneverTime();
+        public bool IsPartialTimeOnly() => IsWheneverDate() && IsPartialTime();
 
         /// <summary>
         /// Checks if the current instance is overlapping with the other instance.
@@ -265,7 +304,19 @@ namespace H.Necessaire
             if (IsPrecise())
                 return $"{ToDateTime()}";
 
-            return $"{Year?.ToString() ?? "[*Y]"}-{Month?.ToString("00") ?? "[*M]"}-{DayOfMonth?.ToString("00") ?? "[*D]"} {Hour?.ToString("00") ?? "[*h]"}:{Minute?.ToString("00") ?? "[*m]"}:{Second?.ToString("00") ?? "[*s]"}.{Millisecond?.ToString("000") ?? "[*ms]"} {DateTimeKind}";
+            if (IsPreciseDateOnly())
+                return $"{Year.Value.ToString("0000")}-{Month.Value.ToString("00")}-{DayOfMonth.Value.ToString("00")}";
+
+            if (IsPartialDateOnly())
+                return $"{Year?.ToString("0000") ?? "<Y>"}-{Month?.ToString("00") ?? "<M>"}-{DayOfMonth?.ToString("00") ?? "<D>"}";
+
+            if (IsPreciseTimeOnly())
+                return $"{Hour.Value.ToString("00")}:{Minute.Value.ToString("00")}:{Second.Value.ToString("00")}{(Millisecond is null ? "" : $".{Millisecond.Value.ToString("000")}")}";
+
+            if (IsPartialTimeOnly())
+                return $"{Hour?.ToString("00") ?? "<h>"}:{Minute?.ToString("00") ?? "<m>"}:{Second?.ToString("00") ?? "<s>"}{(Millisecond is null ? "" : $".{Millisecond.Value.ToString("000")}")}";
+
+            return $"{Year?.ToString("0000") ?? "<Y>"}-{Month?.ToString("00") ?? "<M>"}-{DayOfMonth?.ToString("00") ?? "<D>"} {Hour?.ToString("00") ?? "<h>"}:{Minute?.ToString("00") ?? "<m>"}:{Second?.ToString("00") ?? "<s>"}{(Millisecond is null ? "" : $".{Millisecond.Value.ToString("000")}")}";
         }
 
         public PartialDateTime Duplicate()
@@ -282,6 +333,39 @@ namespace H.Necessaire
                 DateTimeKind = DateTimeKind
             };
         }
+
+        public PartialDateTime OnYear(int year) => Duplicate().And(x => x.Year = year);
+        public PartialDateTime OnMonth(int month) => Duplicate().And(x => x.Month = month);
+        public PartialDateTime OnDayOfMonth(int dayOfMonth) => Duplicate().And(x => x.DayOfMonth = dayOfMonth);
+        public PartialDateTime OnHour(int hour) => Duplicate().And(x => x.Hour = hour);
+        public PartialDateTime OnMinute(int minute) => Duplicate().And(x => x.Minute = minute);
+        public PartialDateTime OnSecond(int second) => Duplicate().And(x => x.Second = second);
+        public PartialDateTime OnMillisecond(int millisecond) => Duplicate().And(x => x.Millisecond = millisecond);
+        public PartialDateTime OnDate(DateTime date) => new PartialDateTime { 
+            Year = Year ?? date.Year,
+            Month = Month ?? date.Month,
+            DayOfMonth = DayOfMonth ?? date.Day,
+            DateTimeKind = DateTimeKind == DateTimeKind.Unspecified ? date.Kind : DateTimeKind,
+        };
+        public PartialDateTime OnTime(DateTime time) => new PartialDateTime
+        {
+            Hour = Hour ?? time.Hour,
+            Minute = Minute ?? time.Minute,
+            Second = Second ?? time.Second,
+            Millisecond = Millisecond ?? time.Millisecond,
+            DateTimeKind = DateTimeKind == DateTimeKind.Unspecified ? time.Kind : DateTimeKind,
+        };
+        public PartialDateTime OnDateAndtime(DateTime dateAndTime) => new PartialDateTime
+        {
+            Year = Year ?? dateAndTime.Year,
+            Month = Month ?? dateAndTime.Month,
+            DayOfMonth = DayOfMonth ?? dateAndTime.Day,
+            Hour = Hour ?? dateAndTime.Hour,
+            Minute = Minute ?? dateAndTime.Minute,
+            Second = Second ?? dateAndTime.Second,
+            Millisecond = Millisecond ?? dateAndTime.Millisecond,
+            DateTimeKind = DateTimeKind == DateTimeKind.Unspecified ? dateAndTime.Kind : DateTimeKind,
+        };
 
 
         public static implicit operator DateTime?(PartialDateTime partialDateTime) => partialDateTime?.ToDateTime();
