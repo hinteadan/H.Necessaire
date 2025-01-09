@@ -414,6 +414,12 @@ namespace H.Necessaire
 
         public static bool operator ==(ApproximatePeriodOfTime left, ApproximatePeriodOfTime right) => left is null ? right is null : left.IsSameAs(right);
         public static bool operator !=(ApproximatePeriodOfTime left, ApproximatePeriodOfTime right) => left is null ? !(right is null) : !left.IsSameAs(right);
+        public static bool operator ==(DateTime dateTime, ApproximatePeriodOfTime partialPeriodOfTime) => partialPeriodOfTime?.IsSurelyActive(asOf: dateTime) == true;
+        public static bool operator !=(DateTime dateTime, ApproximatePeriodOfTime partialPeriodOfTime) => partialPeriodOfTime?.IsSurelyInactive(asOf: dateTime) == true;
+        public static bool operator >(DateTime dateTime, ApproximatePeriodOfTime partialPeriodOfTime) => partialPeriodOfTime?.HasSurelyEnded(asOf: dateTime) == true;
+        public static bool operator <(DateTime dateTime, ApproximatePeriodOfTime partialPeriodOfTime) => partialPeriodOfTime?.HasPossiblyStarted(asOf: dateTime) == false;
+        public static bool operator >=(DateTime dateTime, ApproximatePeriodOfTime partialPeriodOfTime) => partialPeriodOfTime?.IsSurelyActive(asOf: dateTime) == true || partialPeriodOfTime?.HasSurelyEnded(asOf: dateTime) == true;
+        public static bool operator <=(DateTime dateTime, ApproximatePeriodOfTime partialPeriodOfTime) => partialPeriodOfTime?.IsSurelyActive(asOf: dateTime) == true || partialPeriodOfTime?.HasPossiblyStarted(asOf: dateTime) == false;
 
 
         bool IsSameAs(ApproximatePeriodOfTime other)

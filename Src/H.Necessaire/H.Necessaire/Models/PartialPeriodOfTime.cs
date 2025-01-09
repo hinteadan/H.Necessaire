@@ -34,7 +34,7 @@ namespace H.Necessaire
         public bool IsPartialTimeOnly() => IsWheneverDate() && IsPartialTime();
 
 
-        public PeriodOfTime ToMinimumPeriodOfTime(int? fallbackYear = null) => new PeriodOfTime { From = From.ToMaximumDateTime(fallbackYear), To = To.ToMinimumDateTime(fallbackYear) };
+        public PeriodOfTime ToMinimumPeriodOfTime(int? fallbackYear = null) => From == To ? From.ToMinimumDateTime(fallbackYear) : new PeriodOfTime { From = From.ToMaximumDateTime(fallbackYear), To = To.ToMinimumDateTime(fallbackYear) };
         public PeriodOfTime ToMaximumPeriodOfTime(int? fallbackYear = null) => new PeriodOfTime { From = From.ToMinimumDateTime(fallbackYear), To = To.ToMaximumDateTime(fallbackYear) };
 
         public bool HasPossiblyEnded(DateTime? asOf = null, bool isIntervalMarginConsideredEnded = false)
