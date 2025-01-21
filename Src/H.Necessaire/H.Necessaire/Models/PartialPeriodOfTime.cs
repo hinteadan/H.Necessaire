@@ -10,9 +10,7 @@ namespace H.Necessaire
         PartialDateTime to;
         public PartialDateTime To { get => to; set { to = value; SwapFromAndToIfNecessary(); } }
 
-        public TimeSpan? MinimumDuration => IsInfinite ? (null as TimeSpan?) : From == To ? TimeSpan.Zero : (To.ToMinimumDateTime(DateTime.Today.Year) - From.ToMaximumDateTime(DateTime.Today.Year));
-        public TimeSpan? MaximumDuration => IsInfinite ? (null as TimeSpan?) : (To.ToMaximumDateTime(DateTime.Today.Year) - From.ToMinimumDateTime(DateTime.Today.Year));
-        public TimeSpan? AverageDuration => IsInfinite ? (null as TimeSpan?) : TimeSpan.FromTicks((MaximumDuration.Value.Ticks - MinimumDuration.Value.Ticks) / 2);
+        public TimeSpan? Duration => CalculateDuration();
 
 
         public bool IsSinceForever => (From is null) || From.IsWhenever();
@@ -34,7 +32,7 @@ namespace H.Necessaire
         public bool IsPartialTimeOnly() => IsWheneverDate() && IsPartialTime();
 
 
-        public PeriodOfTime ToMinimumPeriodOfTime(int? fallbackYear = null) => new PeriodOfTime { From = From.ToMaximumDateTime(fallbackYear), To = To.ToMinimumDateTime(fallbackYear) };
+        public PeriodOfTime ToMinimumPeriodOfTime(int? fallbackYear = null) => From == To ? From.ToMinimumDateTime(fallbackYear) : new PeriodOfTime { From = From.ToMaximumDateTime(fallbackYear), To = To.ToMinimumDateTime(fallbackYear) };
         public PeriodOfTime ToMaximumPeriodOfTime(int? fallbackYear = null) => new PeriodOfTime { From = From.ToMinimumDateTime(fallbackYear), To = To.ToMaximumDateTime(fallbackYear) };
 
         public bool HasPossiblyEnded(DateTime? asOf = null, bool isIntervalMarginConsideredEnded = false)
@@ -387,13 +385,8 @@ namespace H.Necessaire
 
         public PartialPeriodOfTime Duplicate() => new PartialPeriodOfTime { From = From?.Duplicate(), To = To?.Duplicate(), };
 
-        public static implicit operator PartialPeriodOfTime(DateTime dateTime) => new PartialPeriodOfTime { From = dateTime, To = dateTime, };
-        public static implicit operator PartialPeriodOfTime(DateTime? dateTime) => new PartialPeriodOfTime { From = dateTime, To = dateTime, };
-        public static implicit operator PartialPeriodOfTime(PartialDateTime partialDateTime) => new PartialPeriodOfTime { From = partialDateTime, To = partialDateTime, };
-        public static implicit operator PartialPeriodOfTime((DateTime, DateTime) tuple) => new PartialPeriodOfTime { From = tuple.Item1, To = tuple.Item2, };
-        public static implicit operator PartialPeriodOfTime((DateTime?, DateTime?) tuple) => new PartialPeriodOfTime { From = tuple.Item1, To = tuple.Item2, };
-        public static implicit operator PartialPeriodOfTime((PartialDateTime, PartialDateTime) tuple) => new PartialPeriodOfTime { From = tuple.Item1, To = tuple.Item2, };
-        public static implicit operator PartialPeriodOfTime(PeriodOfTime periodOfTime) => new PartialPeriodOfTime { From = periodOfTime.From, To = periodOfTime.To, };
+        public static implicit operator PartialPeriodOfTime(PartialDateTime partialDateTime) => new PartialPeriodOfTime { From = partialDateTime?.Duplicate(), To = partialDateTime?.Duplicate(), };
+        public static implicit operator PartialPeriodOfTime((PartialDateTime, PartialDateTime) tuple) => new PartialPeriodOfTime { From = tuple.Item1?.Duplicate(), To = tuple.Item2?.Duplicate(), };
         public static implicit operator PeriodOfTime(PartialPeriodOfTime partialPeriodOfTime) => new PeriodOfTime { From = partialPeriodOfTime.From, To = partialPeriodOfTime.To, };
 
         public static bool operator ==(PartialPeriodOfTime left, PartialPeriodOfTime right) => left is null ? right is null : left.IsSameAs(right);
@@ -404,6 +397,40 @@ namespace H.Necessaire
         public static bool operator <(DateTime dateTime, PartialPeriodOfTime partialPeriodOfTime) => partialPeriodOfTime?.HasPossiblyStarted(asOf: dateTime) == false;
         public static bool operator >=(DateTime dateTime, PartialPeriodOfTime partialPeriodOfTime) => partialPeriodOfTime?.IsSurelyActive(asOf: dateTime) == true || partialPeriodOfTime?.HasSurelyEnded(asOf: dateTime) == true;
         public static bool operator <=(DateTime dateTime, PartialPeriodOfTime partialPeriodOfTime) => partialPeriodOfTime?.IsSurelyActive(asOf: dateTime) == true || partialPeriodOfTime?.HasPossiblyStarted(asOf: dateTime) == false;
+
+        TimeSpan? CalculateDuration()
+        {
+            if (IsInfinite)
+                return null;
+
+            DateTime now = DateTime.UtcNow;
+
+            int toYear = To.Year ?? now.Year;
+            int toMonth = To.Month ?? (To.IsYearOnly() ? 12 : now.Month);
+            DateTime to = To.OnDateAndTime(new DateTime(
+                toYear,
+                toMonth,
+                To.DayOfMonth ?? (To.IsPartialTimeOnly() ? now.Day : DateTime.DaysInMonth(toYear, toMonth)),
+                To.Hour ?? (To.IsPartialTimeOnly() ? now.Hour : 23),
+                To.Minute ?? (To.IsPartialTimeOnly() && To.Hour is null ? now.Minute : 59),
+                To.Second ?? (To.IsPartialTimeOnly() && To.Hour is null && To.Minute is null ? now.Second : 59),
+                To.Millisecond ?? (To.IsPartialTimeOnly() && To.Hour is null && To.Minute is null && To.Second is null ? now.Millisecond : 999),
+                DateTimeKind.Utc)
+            ).ToDateTime().Value;
+
+            DateTime from = From.OnDateAndTime(new DateTime(
+                From.Year ?? now.Year,
+                From.Month ?? (From.IsYearOnly() ? 1 : now.Month),
+                From.DayOfMonth ?? (From.IsPartialTimeOnly() ? now.Day : 1),
+                From.Hour ?? (From.IsPartialTimeOnly() ? now.Hour : 0),
+                From.Minute ?? (From.IsPartialTimeOnly() && From.Hour is null ? now.Minute : 0),
+                From.Second ?? (From.IsPartialTimeOnly() && From.Hour is null && From.Minute is null ? now.Second : 0),
+                From.Millisecond ?? (From.IsPartialTimeOnly() && From.Hour is null && From.Minute is null && From.Second is null ? now.Millisecond : 0),
+                DateTimeKind.Utc)
+            ).ToDateTime().Value;
+
+            return to - from;
+        }
 
         bool IsSameAs(PartialPeriodOfTime other)
         {

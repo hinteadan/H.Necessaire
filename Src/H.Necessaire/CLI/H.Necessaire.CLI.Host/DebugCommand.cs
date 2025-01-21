@@ -17,8 +17,28 @@ namespace H.Necessaire.CLI.Host
         {
             public override Task<OperationResult> Run(params Note[] args)
             {
-                PeriodOfTime periodOfTime = DateTime.Now.ToTimeOnlyPartialDateTime();
+                PartialPeriodOfTime january = (new PartialDateTime { Month = 1 }, new PartialDateTime { Month = 1 });
 
+                PartialPeriodOfTime monthlyReportingPerod = (new PartialDateTime { DayOfMonth = 1 }, new PartialDateTime { DayOfMonth = 25 });
+
+                PartialDateTime christmasDay = new PartialDateTime { DayOfMonth = 25, Month = 12 };
+
+                ApproximatePeriodOfTime approximatePeriodOfTime
+                    = (
+                        (PartialPeriodOfTime)(new DateTime(2010, 1, 1), new DateTime(2010, 6, 1)),
+                        (PartialPeriodOfTime)(new DateTime(2025, 1, 1), new DateTime(2025, 6, 1))
+                    );
+
+                Console.WriteLine($"Christmas in 2050 will be on a {christmasDay.ToDateTime(fallbackYear: 2050).PrintDayOfWeek()}");
+
+
+                PeriodOfTime thisYear = new PeriodOfTime
+                {
+                    From = new DateTime(year: DateTime.UtcNow.Year, month: 1, day: 1, hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0, DateTimeKind.Utc),
+                    To = new DateTime(year: DateTime.UtcNow.Year, month: 12, day: 31, hour: 23, minute: 59, second: 59, millisecond: 999, microsecond: 999, DateTimeKind.Utc),
+                };
+
+                PeriodOfTime fromNowOn = new PeriodOfTime { From = DateTime.UtcNow };
 
                 return OperationResult.Win().AsTask();
             }

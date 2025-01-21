@@ -613,5 +613,22 @@ namespace H.Necessaire
 
             return Regex.Replace(value, "(\\B([A-Z]|(\\d+)))", " $1");
         }
+
+        public static TimeSpan NoLessThan(this TimeSpan timeSpan, TimeSpan minimum)
+        {
+            return timeSpan < minimum ? minimum : timeSpan;
+        }
+        public static TimeSpan NoLessThanZero(this TimeSpan timeSpan) => timeSpan.NoLessThan(TimeSpan.Zero);
+        public static TimeSpan? NoLessThan(this TimeSpan? timeSpan, TimeSpan? minimum)
+        {
+            if (minimum is null)
+                return timeSpan;
+
+            if (timeSpan is null)
+                return minimum;
+
+            return timeSpan.Value.NoLessThan(minimum.Value);
+        }
+        public static TimeSpan? NoLessThanZero(this TimeSpan? timeSpan) => timeSpan.NoLessThan(TimeSpan.Zero);
     }
 }

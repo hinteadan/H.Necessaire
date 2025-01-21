@@ -20,8 +20,8 @@ namespace H.Necessaire
         public DateTime? FurthestStartTime(DateTime? asOf = null, int? fallbackYear = null)
             => new PeriodOfTime
             {
-                From = StartPeriod?.ToMinimumPeriodOfTime(fallbackYear)?.ClosestTime(asOf),
-                To = StartPeriod?.ToMaximumPeriodOfTime(fallbackYear)?.ClosestTime(asOf),
+                From = StartPeriod?.ToMinimumPeriodOfTime(fallbackYear)?.FurthestTime(asOf),
+                To = StartPeriod?.ToMaximumPeriodOfTime(fallbackYear)?.FurthestTime(asOf),
             }.FurthestTime(asOf);
 
         public DateTime? ClosestEndTime(DateTime? asOf = null, int? fallbackYear = null)
@@ -34,8 +34,8 @@ namespace H.Necessaire
         public DateTime? FurthestEndTime(DateTime? asOf = null, int? fallbackYear = null)
             => new PeriodOfTime
             {
-                From = EndPeriod?.ToMinimumPeriodOfTime(fallbackYear)?.ClosestTime(asOf),
-                To = EndPeriod?.ToMaximumPeriodOfTime(fallbackYear)?.ClosestTime(asOf),
+                From = EndPeriod?.ToMinimumPeriodOfTime(fallbackYear)?.FurthestTime(asOf),
+                To = EndPeriod?.ToMaximumPeriodOfTime(fallbackYear)?.FurthestTime(asOf),
             }.FurthestTime(asOf);
 
         public PeriodOfTime ToMinimumPeriodOfTime(DateTime? asOf = null, int? fallbackYear = null)
@@ -58,9 +58,9 @@ namespace H.Necessaire
         public bool IsInfinite => IsSinceForever || IsUntilForever;
         public bool IsTimeless => IsSinceForever && IsUntilForever;
 
-        public TimeSpan? MinimumDuration => IsInfinite ? (null as TimeSpan?) : (ClosestStartTime(asOf: StartPeriod.To.ToMaximumDateTime(DateTime.Today.Year), DateTime.Today.Year).Value - ClosestEndTime(asOf: EndPeriod.From.ToMinimumDateTime(DateTime.Today.Year), DateTime.Today.Year).Value);
-        public TimeSpan? MaximumDuration => IsInfinite ? (null as TimeSpan?) : (FurthestStartTime(asOf: StartPeriod.From.ToMinimumDateTime(DateTime.Today.Year), DateTime.Today.Year).Value - FurthestEndTime(asOf: EndPeriod.To.ToMaximumDateTime(DateTime.Today.Year), DateTime.Today.Year).Value);
-        public TimeSpan? AverageDuration => IsInfinite ? (null as TimeSpan?) : TimeSpan.FromTicks((MaximumDuration.Value.Ticks - MinimumDuration.Value.Ticks) / 2);
+        public TimeSpan? MinimumDuration => IsInfinite ? (null as TimeSpan?) : ToMinimumPeriodOfTime().Duration.NoLessThanZero();
+        public TimeSpan? MaximumDuration => IsInfinite ? (null as TimeSpan?) : ToMaximumPeriodOfTime().Duration.NoLessThanZero();
+        public TimeSpan? AverageDuration => IsInfinite ? (null as TimeSpan?) : TimeSpan.FromTicks((MaximumDuration.Value.Ticks + MinimumDuration.Value.Ticks) / 2).NoLessThanZero();
 
 
         public bool IsPrecise() => IsPreciseDate() && IsPreciseTime();
@@ -401,19 +401,20 @@ namespace H.Necessaire
 
         public ApproximatePeriodOfTime Duplicate() => new ApproximatePeriodOfTime { StartPeriod = StartPeriod?.Duplicate(), EndPeriod = EndPeriod?.Duplicate(), };
 
-        public static implicit operator ApproximatePeriodOfTime(DateTime dateTime) => new ApproximatePeriodOfTime { StartPeriod = dateTime, EndPeriod = dateTime, };
-        public static implicit operator ApproximatePeriodOfTime(DateTime? dateTime) => new ApproximatePeriodOfTime { StartPeriod = dateTime, EndPeriod = dateTime, };
-        public static implicit operator ApproximatePeriodOfTime(PeriodOfTime periodOfTime) => new ApproximatePeriodOfTime { StartPeriod = periodOfTime, EndPeriod = periodOfTime, };
         public static implicit operator ApproximatePeriodOfTime(PartialDateTime partialDateTime) => new ApproximatePeriodOfTime { StartPeriod = partialDateTime, EndPeriod = partialDateTime, };
+        public static implicit operator ApproximatePeriodOfTime((PartialDateTime, PartialDateTime) tuple) => new ApproximatePeriodOfTime { StartPeriod = tuple.Item1, EndPeriod = tuple.Item2, };
         public static implicit operator ApproximatePeriodOfTime(PartialPeriodOfTime partialPeriodOfTime) => new ApproximatePeriodOfTime { StartPeriod = partialPeriodOfTime, EndPeriod = partialPeriodOfTime, };
         public static implicit operator ApproximatePeriodOfTime((PartialPeriodOfTime, PartialPeriodOfTime) tuple) => new ApproximatePeriodOfTime { StartPeriod = tuple.Item1, EndPeriod = tuple.Item2, };
-        public static implicit operator ApproximatePeriodOfTime((PeriodOfTime, PeriodOfTime) tuple) => new ApproximatePeriodOfTime { StartPeriod = tuple.Item1, EndPeriod = tuple.Item2, };
-        public static implicit operator ApproximatePeriodOfTime((DateTime, DateTime) tuple) => new ApproximatePeriodOfTime { StartPeriod = tuple.Item1, EndPeriod = tuple.Item2, };
-        public static implicit operator ApproximatePeriodOfTime((DateTime?, DateTime?) tuple) => new ApproximatePeriodOfTime { StartPeriod = tuple.Item1, EndPeriod = tuple.Item2, };
-        public static implicit operator ApproximatePeriodOfTime((PartialDateTime, PartialDateTime) tuple) => new ApproximatePeriodOfTime { StartPeriod = tuple.Item1, EndPeriod = tuple.Item2, };
+        
 
         public static bool operator ==(ApproximatePeriodOfTime left, ApproximatePeriodOfTime right) => left is null ? right is null : left.IsSameAs(right);
         public static bool operator !=(ApproximatePeriodOfTime left, ApproximatePeriodOfTime right) => left is null ? !(right is null) : !left.IsSameAs(right);
+        public static bool operator ==(DateTime dateTime, ApproximatePeriodOfTime partialPeriodOfTime) => partialPeriodOfTime?.IsSurelyActive(asOf: dateTime) == true;
+        public static bool operator !=(DateTime dateTime, ApproximatePeriodOfTime partialPeriodOfTime) => partialPeriodOfTime?.IsSurelyInactive(asOf: dateTime) == true;
+        public static bool operator >(DateTime dateTime, ApproximatePeriodOfTime partialPeriodOfTime) => partialPeriodOfTime?.HasSurelyEnded(asOf: dateTime) == true;
+        public static bool operator <(DateTime dateTime, ApproximatePeriodOfTime partialPeriodOfTime) => partialPeriodOfTime?.HasPossiblyStarted(asOf: dateTime) == false;
+        public static bool operator >=(DateTime dateTime, ApproximatePeriodOfTime partialPeriodOfTime) => partialPeriodOfTime?.IsSurelyActive(asOf: dateTime) == true || partialPeriodOfTime?.HasSurelyEnded(asOf: dateTime) == true;
+        public static bool operator <=(DateTime dateTime, ApproximatePeriodOfTime partialPeriodOfTime) => partialPeriodOfTime?.IsSurelyActive(asOf: dateTime) == true || partialPeriodOfTime?.HasPossiblyStarted(asOf: dateTime) == false;
 
 
         bool IsSameAs(ApproximatePeriodOfTime other)

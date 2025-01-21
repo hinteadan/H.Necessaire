@@ -80,6 +80,7 @@ namespace H.Necessaire
         public bool IsPreciseTimeOnly() => IsWheneverDate() && IsPreciseTime();
         public bool IsPartialDateOnly() => IsPartialDate() && IsWheneverTime();
         public bool IsPartialTimeOnly() => IsWheneverDate() && IsPartialTime();
+        public bool IsYearOnly() => IsPartialDateOnly() && (Month is null && DayOfMonth is null);
 
         /// <summary>
         /// Checks if the current instance is overlapping with the other instance.
@@ -114,32 +115,63 @@ namespace H.Necessaire
                 ;
         }
 
-        public DateTime? ToDateTime(int? fallbackYear = null)
+        public DateTime? ToDateTime(int? fallbackYear = null, bool? isEntireDayIncluded = false)
         {
             if (IsWhenever())
                 return null;
 
+            DateTime now = DateTime.Now;
+            DateTime utcNow = DateTime.UtcNow;
+            int year = Year ?? fallbackYear ?? (DateTimeKind == DateTimeKind.Local ? now.Year : utcNow.Year);
+            int month = Month ?? (DateTimeKind == DateTimeKind.Local ? now.Month : utcNow.Month);
+            int dayOfMonth = DayOfMonth ?? (DateTimeKind == DateTimeKind.Local ? now.Day : utcNow.Day);
+
+
+            if (IsWheneverTime() && isEntireDayIncluded != null)
+            {
+                return
+                    new DateTime(
+                        year,
+                        month,
+                        dayOfMonth,
+                        hour: isEntireDayIncluded == false ? 0 : 23,
+                        minute: isEntireDayIncluded == false ? 0 : 59,
+                        second: isEntireDayIncluded == false ? 0 : 59,
+                        millisecond: isEntireDayIncluded == false ? 0 : 999,
+                        kind: DateTimeKind
+                    );
+            }
+
             return
                 new DateTime(
-                    Year ?? fallbackYear ?? DateTime.Today.Year,
-                    Month ?? 1,
-                    DayOfMonth ?? 1,
-                    Hour ?? 0,
-                    Minute ?? 0,
-                    Second ?? 0,
-                    Millisecond ?? 0,
+                    year,
+                    month,
+                    dayOfMonth,
+                    Hour ?? (isEntireDayIncluded is null ? (DateTimeKind == DateTimeKind.Local ? now.Hour : utcNow.Hour) : isEntireDayIncluded == false ? 0 : 23),
+                    Minute ?? (isEntireDayIncluded is null ? (DateTimeKind == DateTimeKind.Local ? now.Minute : utcNow.Minute) : isEntireDayIncluded == false ? 0 : 59),
+                    Second ?? (isEntireDayIncluded is null ? (DateTimeKind == DateTimeKind.Local ? now.Second : utcNow.Second) : isEntireDayIncluded == false ? 0 : 59),
+                    Millisecond ?? (isEntireDayIncluded is null ? (DateTimeKind == DateTimeKind.Local ? now.Millisecond : utcNow.Millisecond) : isEntireDayIncluded == false ? 0 : 999),
                     DateTimeKind
                 );
         }
+
+        public DateTime? ToDateTimeAtStartOfDay(int? fallbackYear = null) => ToDateTime(fallbackYear, isEntireDayIncluded: false);
+        public DateTime? ToDateTimeAtEndOfDay(int? fallbackYear = null) => ToDateTime(fallbackYear, isEntireDayIncluded: true);
 
         public DateTime? ToMinimumDateTime(int? fallbackYear = null)
         {
             if (IsWhenever())
                 return null;
 
+            DateTime now = DateTime.Now;
+            DateTime utcNow = DateTime.UtcNow;
+            int year = Year ?? fallbackYear ?? (DateTimeKind == DateTimeKind.Local ? now.Year : utcNow.Year);
+
+
+
             return
                 new DateTime(
-                    Year ?? fallbackYear ?? DateTime.Today.Year,
+                    year,
                     Month ?? 1,
                     DayOfMonth ?? 1,
                     Hour ?? 0,
@@ -155,11 +187,14 @@ namespace H.Necessaire
             if (IsWhenever())
                 return null;
 
+            var now = DateTime.Now;
+            var utcNow = DateTime.UtcNow;
+
             return
                 new DateTime(
-                    Year ?? fallbackYear ?? DateTime.Today.Year,
+                    Year ?? fallbackYear ?? (DateTimeKind == DateTimeKind.Local ? now.Year : utcNow.Year),
                     Month ?? 12,
-                    DayOfMonth ?? DateTime.DaysInMonth(Year ?? DateTime.Today.Year, Month ?? 12),
+                    DayOfMonth ?? DateTime.DaysInMonth(Year ?? (DateTimeKind == DateTimeKind.Local ? now.Year : utcNow.Year), Month ?? 12),
                     Hour ?? 23,
                     Minute ?? 59,
                     Second ?? 59,
@@ -341,7 +376,8 @@ namespace H.Necessaire
         public PartialDateTime OnMinute(int minute) => Duplicate().And(x => x.Minute = minute);
         public PartialDateTime OnSecond(int second) => Duplicate().And(x => x.Second = second);
         public PartialDateTime OnMillisecond(int millisecond) => Duplicate().And(x => x.Millisecond = millisecond);
-        public PartialDateTime OnDate(DateTime date) => new PartialDateTime { 
+        public PartialDateTime OnDate(DateTime date) => new PartialDateTime
+        {
             Year = Year ?? date.Year,
             Month = Month ?? date.Month,
             DayOfMonth = DayOfMonth ?? date.Day,
