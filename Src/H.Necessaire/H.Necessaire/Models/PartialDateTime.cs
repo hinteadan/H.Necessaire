@@ -16,6 +16,8 @@ namespace H.Necessaire
 
         public DateTimeKind DateTimeKind { get; set; } = DateTimeKind.Utc;
 
+        public DayOfWeek[] DaysOfWeek { get; set; } = null;
+
         public bool IsPrecise() => IsPreciseDate() && IsPreciseTime();
 
         public bool IsPreciseDate()
@@ -55,7 +57,7 @@ namespace H.Necessaire
                 ;
         }
 
-        public bool IsWhenever() => IsWheneverDate() && IsWheneverTime();
+        public bool IsWhenever() => IsWheneverDate() && IsWheneverTime() && DaysOfWeek.IsEmpty();
 
         public bool IsWheneverDate()
         {
@@ -201,6 +203,26 @@ namespace H.Necessaire
                     Millisecond ?? 999,
                     DateTimeKind
                 );
+        }
+
+        public bool IsMatchingDateTime(DateTime? dateTime)
+        {
+            if (dateTime is null)
+                return false;
+
+            if (IsWhenever())
+                return true;
+
+            return
+                IsAnyOrSame(Year, dateTime.Value.Year)
+                && IsAnyOrSame(Month, dateTime.Value.Month)
+                && IsAnyOrSame(DayOfMonth, dateTime.Value.Day)
+                && IsAnyOrSame(Hour, dateTime.Value.Hour)
+                && IsAnyOrSame(Minute, dateTime.Value.Minute)
+                && IsAnyOrSame(Second, dateTime.Value.Second)
+                && DateTimeKind == dateTime.Value.Kind
+                && (DaysOfWeek.IsEmpty() ? true : dateTime.Value.DayOfWeek.In(DaysOfWeek))
+                ;
         }
 
         public PeriodOfTime ToPeriodOfTime(int? fallbackStartYear = null, int? fallbackEndYear = null)
@@ -365,6 +387,7 @@ namespace H.Necessaire
                 Minute = Minute,
                 Second = Second,
                 Millisecond = Millisecond,
+                DaysOfWeek = DaysOfWeek,
                 DateTimeKind = DateTimeKind
             };
         }
@@ -402,6 +425,7 @@ namespace H.Necessaire
             Millisecond = Millisecond ?? dateAndTime.Millisecond,
             DateTimeKind = DateTimeKind == DateTimeKind.Unspecified ? dateAndTime.Kind : DateTimeKind,
         };
+        public PartialDateTime OnDaysOfWeek(params DayOfWeek[] daysOfWeek) => Duplicate().And(x => x.DaysOfWeek = daysOfWeek);
 
 
         public static implicit operator DateTime?(PartialDateTime partialDateTime) => partialDateTime?.ToDateTime();
@@ -414,6 +438,11 @@ namespace H.Necessaire
         public static bool operator <(PartialDateTime left, PartialDateTime right) => left is null ? false : left.IsBefore(right);
         public static bool operator >=(PartialDateTime left, PartialDateTime right) => left is null ? right is null : left.IsAftereOrEqual(right);
         public static bool operator <=(PartialDateTime left, PartialDateTime right) => left is null ? right is null : left.IsBeforeOrEqual(right);
+
+        public static bool operator ==(PartialDateTime left, DateTime? right) => left is null ? right is null : left.IsMatchingDateTime(right);
+        public static bool operator !=(PartialDateTime left, DateTime? right) => left is null ? !(right is null) : !left.IsMatchingDateTime(right);
+        public static bool operator ==(DateTime? left, PartialDateTime right) => right is null ? left is null : right.IsMatchingDateTime(left);
+        public static bool operator !=(DateTime? left, PartialDateTime right) => right is null ? !(left is null) : !right.IsMatchingDateTime(left);
 
         bool IsSameAs(PartialDateTime other)
         {

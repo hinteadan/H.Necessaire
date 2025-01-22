@@ -121,5 +121,36 @@ namespace H.Necessaire.Testicles.Unit
             whenever.OnMillisecond(now.Millisecond).ToDateTimeAtStartOfDay().Should().Be(new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, now.Millisecond, DateTimeKind.Utc), because: "Millisecond only at start of day is current date on given millisecond with minimum time");
             whenever.OnMillisecond(now.Millisecond).ToDateTimeAtEndOfDay().Should().Be(new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, now.Millisecond, DateTimeKind.Utc), because: "Millisecond only at end of day is current date on given millisecond with maximum time");
         }
+
+        [Fact(DisplayName = "PartialDateTime IsMatchingDateTime Works As Expected")]
+        public void PartialDateTime_IsMatchingDateTime_Works_As_Expected()
+        {
+            DateTime now = DateTime.UtcNow;
+
+            new PartialDateTime().IsMatchingDateTime(null).Should().BeFalse(because: "NULL date doesn't match anything");
+            ((null as PartialDateTime) == (null as DateTime?)).Should().BeTrue(because: "They're both NULL");
+            ((null as PartialDateTime) == (now as DateTime?)).Should().BeFalse(because: "partial is NULL");
+
+            PartialDateTime partial = new PartialDateTime();
+            
+            partial.IsMatchingDateTime(now).Should().BeTrue(because: "Whenever includes any datetime");
+
+            partial.OnYear(now.Year).IsMatchingDateTime(now).Should().BeTrue(because: "Year only should match any datetime on that year");
+            partial.OnMonth(now.Month).IsMatchingDateTime(now).Should().BeTrue(because: "Month only should match any datetime on that month");
+            partial.OnDayOfMonth(now.Day).IsMatchingDateTime(now).Should().BeTrue(because: "DayOfMonth only should match any datetime on that day");
+            partial.OnHour(now.Hour).IsMatchingDateTime(now).Should().BeTrue(because: "Hour only should match any datetime on that hour");
+            partial.OnMinute(now.Minute).IsMatchingDateTime(now).Should().BeTrue(because: "Minute only should match any datetime on that minute");
+            partial.OnSecond(now.Second).IsMatchingDateTime(now).Should().BeTrue(because: "Second only should match any datetime on that second");
+            partial.OnMillisecond(now.Millisecond).IsMatchingDateTime(now).Should().BeTrue(because: "Millisecond only should match any datetime on that millisecond");
+
+            partial.OnYear(now.Year).OnMonth(now.Month).IsMatchingDateTime(now).Should().BeTrue(because: "Month/year should match any datetime on that month/year");
+
+            partial.OnYear(now.Year).OnMonth(now.Month).OnDayOfMonth(now.Day).IsMatchingDateTime(now).Should().BeTrue(because: "Month/year/day should match any datetime on that month/year/day");
+
+            partial.OnHour(now.Hour).OnMinute(now.Minute).IsMatchingDateTime(now.AddMonths(1)).Should().BeTrue(because: "Hour/minute only partial matches any date within that hour/minute");
+
+            partial.OnDaysOfWeek(now.DayOfWeek).IsMatchingDateTime(now).Should().BeTrue(because: "Day of week should match any datetime on that day of week");
+            partial.OnDaysOfWeek(now.DayOfWeek).IsMatchingDateTime(now.AddDays(1)).Should().BeFalse(because: "Day of week should not match any datetime not on that day of week");
+        }
     }
 }
