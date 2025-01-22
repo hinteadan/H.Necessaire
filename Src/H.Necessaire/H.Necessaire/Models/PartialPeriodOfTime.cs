@@ -38,7 +38,7 @@ namespace H.Necessaire
 
         public bool HasPossiblyEnded(DateTime? asOf = null, bool isIntervalMarginConsideredEnded = false)
         {
-            DateTime referenceTime = asOf ?? DateTime.UtcNow;
+            DateTime referenceTime = asOf?.EnsureUtc() ?? DateTime.UtcNow;
             return
                 IsUntilForever
                 ? false
@@ -50,7 +50,7 @@ namespace H.Necessaire
 
         public bool HasSurelyEnded(DateTime? asOf = null, bool isIntervalMarginConsideredEnded = false)
         {
-            DateTime referenceTime = asOf ?? DateTime.UtcNow;
+            DateTime referenceTime = asOf?.EnsureUtc() ?? DateTime.UtcNow;
             return
                 IsUntilForever
                 ? false
@@ -62,7 +62,7 @@ namespace H.Necessaire
 
         public bool HasPossiblyStarted(DateTime? asOf = null, bool isIntervalMarginConsideredStarted = true)
         {
-            DateTime referenceTime = asOf ?? DateTime.UtcNow;
+            DateTime referenceTime = asOf?.EnsureUtc() ?? DateTime.UtcNow;
             return
                 IsSinceForever
                 ? true
@@ -74,7 +74,7 @@ namespace H.Necessaire
 
         public bool HasSurelyStarted(DateTime? asOf = null, bool isIntervalMarginConsideredStarted = true)
         {
-            DateTime referenceTime = asOf ?? DateTime.UtcNow;
+            DateTime referenceTime = asOf?.EnsureUtc() ?? DateTime.UtcNow;
             return
                 IsSinceForever
                 ? true
