@@ -149,8 +149,8 @@ namespace H.Necessaire.Testicles.Unit
 
             partial.OnHour(now.Hour).OnMinute(now.Minute).IsMatchingDateTime(now.AddMonths(1)).Should().BeTrue(because: "Hour/minute only partial matches any date within that hour/minute");
 
-            partial.OnDaysOfWeek(now.DayOfWeek).IsMatchingDateTime(now).Should().BeTrue(because: "Day of week should match any datetime on that day of week");
-            partial.OnDaysOfWeek(now.DayOfWeek).IsMatchingDateTime(now.AddDays(1)).Should().BeFalse(because: "Day of week should not match any datetime not on that day of week");
+            partial.OnWeekDays(now.DayOfWeek).IsMatchingDateTime(now).Should().BeTrue(because: "Day of week should match any datetime on that day of week");
+            partial.OnWeekDays(now.DayOfWeek).IsMatchingDateTime(now.AddDays(1)).Should().BeFalse(because: "Day of week should not match any datetime not on that day of week");
         }
     }
 }

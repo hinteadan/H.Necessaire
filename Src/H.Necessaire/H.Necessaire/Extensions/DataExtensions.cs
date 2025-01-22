@@ -149,7 +149,7 @@ namespace H.Necessaire
                     Second = dateTime.Second,
                     Millisecond = dateTime.Millisecond,
                     DateTimeKind = dateTime.Kind,
-                    DaysOfWeek = null,
+                    WeekDays = null,
                 };
         }
 

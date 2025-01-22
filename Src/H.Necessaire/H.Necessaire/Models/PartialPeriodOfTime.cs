@@ -6,10 +6,12 @@ namespace H.Necessaire
     public class PartialPeriodOfTime : IEquatable<PartialPeriodOfTime>, IComparable<PartialPeriodOfTime>
     {
         PartialDateTime from;
-        public PartialDateTime From { get => from; set { from = value; SwapFromAndToIfNecessary(); } }
+        public PartialDateTime From { get => from; set { from = value; SwapFromAndToIfNecessary(); UpdateWeekDays(); } }
 
         PartialDateTime to;
-        public PartialDateTime To { get => to; set { to = value; SwapFromAndToIfNecessary(); } }
+        public PartialDateTime To { get => to; set { to = value; SwapFromAndToIfNecessary(); UpdateWeekDays(); } }
+
+        public DayOfWeek[] WeekDays { get; private set; } = null;
 
         public TimeSpan? Duration => CalculateDuration();
 
@@ -31,6 +33,7 @@ namespace H.Necessaire
         public bool IsPreciseTimeOnly() => IsWheneverDate() && IsPreciseTime();
         public bool IsPartialDateOnly() => IsPartialDate() && IsWheneverTime();
         public bool IsPartialTimeOnly() => IsWheneverDate() && IsPartialTime();
+        public bool IsInSpecificWeekDays() => !WeekDays.IsEmpty();
 
 
         public PeriodOfTime ToMinimumPeriodOfTime(int? fallbackYear = null) => From == To ? From.ToMinimumDateTime(fallbackYear) : new PeriodOfTime { From = From.ToMaximumDateTime(fallbackYear), To = To.ToMinimumDateTime(fallbackYear) };
@@ -89,12 +92,14 @@ namespace H.Necessaire
             if (IsTimeless)
                 return true;
 
-            DateTime referenceTime = asOf ?? DateTime.UtcNow;
+            DateTime referenceTime = asOf?.EnsureUtc() ?? DateTime.UtcNow;
 
             return
                 HasPossiblyStarted(asOf: referenceTime, isIntervalMarginConsideredStarted)
                 &&
                 !HasSurelyEnded(asOf: referenceTime, isIntervalMarginConsideredEnded)
+                &&
+                IsDateTimeInPeriodSpecificWeekDays(referenceTime)
                 ;
         }
 
@@ -103,12 +108,14 @@ namespace H.Necessaire
             if (IsTimeless)
                 return true;
 
-            DateTime referenceTime = asOf ?? DateTime.UtcNow;
+            DateTime referenceTime = asOf?.EnsureUtc() ?? DateTime.UtcNow;
 
             return
                 HasSurelyStarted(asOf: referenceTime, isIntervalMarginConsideredStarted)
                 &&
                 !HasPossiblyEnded(asOf: referenceTime, isIntervalMarginConsideredEnded)
+                &&
+                IsDateTimeInPeriodSpecificWeekDays(referenceTime)
                 ;
         }
 
@@ -117,12 +124,14 @@ namespace H.Necessaire
             if (IsTimeless)
                 return false;
 
-            DateTime referenceTime = asOf ?? DateTime.UtcNow;
+            DateTime referenceTime = asOf?.EnsureUtc() ?? DateTime.UtcNow;
 
             return
                 !HasSurelyStarted(asOf: referenceTime, isIntervalMarginConsideredStarted)
                 ||
                 HasPossiblyEnded(asOf: referenceTime, isIntervalMarginConsideredEnded)
+                ||
+                !IsDateTimeInPeriodSpecificWeekDays(referenceTime)
                 ;
         }
 
@@ -131,12 +140,14 @@ namespace H.Necessaire
             if (IsTimeless)
                 return false;
 
-            DateTime referenceTime = asOf ?? DateTime.UtcNow;
+            DateTime referenceTime = asOf?.EnsureUtc() ?? DateTime.UtcNow;
 
             return
                 !HasPossiblyStarted(asOf: referenceTime, isIntervalMarginConsideredStarted)
                 ||
                 HasSurelyEnded(asOf: referenceTime, isIntervalMarginConsideredEnded)
+                ||
+                !IsDateTimeInPeriodSpecificWeekDays(referenceTime)
                 ;
         }
 
@@ -274,7 +285,7 @@ namespace H.Necessaire
                             Second = IntersectFromPart(From.Second, other.From.Second),
                             Millisecond = IntersectFromPart(From.Millisecond, other.From.Millisecond),
                             DateTimeKind = IntersectKind(From.DateTimeKind, other.From.DateTimeKind),
-                            DaysOfWeek = From.DaysOfWeek.IsEmpty() || other.From.DaysOfWeek.IsEmpty() ? null : From.DaysOfWeek.Intersect(other.From.DaysOfWeek).ToArray(),
+                            WeekDays = From.WeekDays.IsEmpty() || other.From.WeekDays.IsEmpty() ? null : From.WeekDays.Intersect(other.From.WeekDays).ToArray(),
                         },
                     To
                         = IsUntilForever && other.IsUntilForever
@@ -289,7 +300,7 @@ namespace H.Necessaire
                             Second = IntersectToPart(To.Second, other.To.Second),
                             Millisecond = IntersectToPart(To.Millisecond, other.To.Millisecond),
                             DateTimeKind = IntersectKind(To.DateTimeKind, other.To.DateTimeKind),
-                            DaysOfWeek = To.DaysOfWeek.IsEmpty() || other.To.DaysOfWeek.IsEmpty() ? null : To.DaysOfWeek.Intersect(other.To.DaysOfWeek).ToArray(),
+                            WeekDays = To.WeekDays.IsEmpty() || other.To.WeekDays.IsEmpty() ? null : To.WeekDays.Intersect(other.To.WeekDays).ToArray(),
                         },
                 };
         }
@@ -333,6 +344,7 @@ namespace H.Necessaire
         public PartialPeriodOfTime OnDate(DateTime date) => Duplicate().And(x => { x.From = x.From?.OnDate(date); x.To = x.To?.OnDate(date); });
         public PartialPeriodOfTime OnTime(DateTime time) => Duplicate().And(x => { x.From = x.From?.OnTime(time); x.To = x.To?.OnTime(time); });
         public PartialPeriodOfTime OnDateAndTime(DateTime dateAndTime) => Duplicate().And(x => { x.From = x.From?.OnDateAndTime(dateAndTime); x.To = x.To?.OnDateAndTime(dateAndTime); });
+        public PartialPeriodOfTime OnWeekDays(params DayOfWeek[] daysOfWeek) => Duplicate().And(x => { x.From = x.From?.OnWeekDays(daysOfWeek); x.To = x.To?.OnWeekDays(daysOfWeek); });
 
         public bool Equals(PartialPeriodOfTime other)
         {
@@ -460,6 +472,40 @@ namespace H.Necessaire
             PartialDateTime tmpTo = to;
             to = from;
             from = tmpTo;
+        }
+
+        void UpdateWeekDays()
+        {
+            if (From?.IsInSpecificWeekDays() != true && To?.IsInSpecificWeekDays() != true)
+            {
+                WeekDays = null;
+                return;
+            }
+
+            if (From?.IsInSpecificWeekDays() == true && To?.IsInSpecificWeekDays() != true)
+            {
+                WeekDays = From.WeekDays;
+                return;
+            }
+
+            if (From?.IsInSpecificWeekDays() != true && To?.IsInSpecificWeekDays() == true)
+            {
+                WeekDays = To.WeekDays;
+                return;
+            }
+
+            WeekDays = From.WeekDays.Intersect(To.WeekDays).ToArray();
+        }
+
+        bool IsDateTimeInPeriodSpecificWeekDays(DateTime? dateTime)
+        {
+            if (dateTime is null)
+                return false;
+
+            if (!IsInSpecificWeekDays())
+                return true;
+
+            return dateTime.Value.DayOfWeek.In(WeekDays);
         }
 
         static int? IntersectFromPart(int? left, int? right)

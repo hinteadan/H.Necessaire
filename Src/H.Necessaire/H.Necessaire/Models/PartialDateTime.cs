@@ -16,7 +16,7 @@ namespace H.Necessaire
 
         public DateTimeKind DateTimeKind { get; set; } = DateTimeKind.Utc;
 
-        public DayOfWeek[] DaysOfWeek { get; set; } = null;
+        public DayOfWeek[] WeekDays { get; set; } = null;
 
         public bool IsPrecise() => IsPreciseDate() && IsPreciseTime();
 
@@ -57,7 +57,7 @@ namespace H.Necessaire
                 ;
         }
 
-        public bool IsWhenever() => IsWheneverDate() && IsWheneverTime() && DaysOfWeek.IsEmpty();
+        public bool IsWhenever() => IsWheneverDate() && IsWheneverTime() && WeekDays.IsEmpty();
 
         public bool IsWheneverDate()
         {
@@ -83,6 +83,8 @@ namespace H.Necessaire
         public bool IsPartialDateOnly() => IsPartialDate() && IsWheneverTime();
         public bool IsPartialTimeOnly() => IsWheneverDate() && IsPartialTime();
         public bool IsYearOnly() => IsPartialDateOnly() && (Month is null && DayOfMonth is null);
+
+        public bool IsInSpecificWeekDays() => !WeekDays.IsEmpty();
 
         /// <summary>
         /// Checks if the current instance is overlapping with the other instance.
@@ -221,7 +223,7 @@ namespace H.Necessaire
                 && IsAnyOrSame(Minute, dateTime.Value.Minute)
                 && IsAnyOrSame(Second, dateTime.Value.Second)
                 && DateTimeKind == dateTime.Value.Kind
-                && (DaysOfWeek.IsEmpty() ? true : dateTime.Value.DayOfWeek.In(DaysOfWeek))
+                && (WeekDays.IsEmpty() ? true : dateTime.Value.DayOfWeek.In(WeekDays))
                 ;
         }
 
@@ -387,7 +389,7 @@ namespace H.Necessaire
                 Minute = Minute,
                 Second = Second,
                 Millisecond = Millisecond,
-                DaysOfWeek = DaysOfWeek,
+                WeekDays = WeekDays,
                 DateTimeKind = DateTimeKind,
             };
         }
@@ -425,7 +427,7 @@ namespace H.Necessaire
             x.Millisecond = x.Millisecond ?? dateAndTime.Millisecond;
             x.DateTimeKind = x.DateTimeKind == DateTimeKind.Unspecified ? dateAndTime.Kind : x.DateTimeKind;
         });
-        public PartialDateTime OnDaysOfWeek(params DayOfWeek[] daysOfWeek) => Duplicate().And(x => x.DaysOfWeek = daysOfWeek);
+        public PartialDateTime OnWeekDays(params DayOfWeek[] daysOfWeek) => Duplicate().And(x => x.WeekDays = daysOfWeek);
 
 
         public static implicit operator DateTime?(PartialDateTime partialDateTime) => partialDateTime?.ToDateTime();
