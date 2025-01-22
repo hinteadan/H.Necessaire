@@ -388,7 +388,7 @@ namespace H.Necessaire
                 Second = Second,
                 Millisecond = Millisecond,
                 DaysOfWeek = DaysOfWeek,
-                DateTimeKind = DateTimeKind
+                DateTimeKind = DateTimeKind,
             };
         }
 
@@ -399,32 +399,32 @@ namespace H.Necessaire
         public PartialDateTime OnMinute(int minute) => Duplicate().And(x => x.Minute = minute);
         public PartialDateTime OnSecond(int second) => Duplicate().And(x => x.Second = second);
         public PartialDateTime OnMillisecond(int millisecond) => Duplicate().And(x => x.Millisecond = millisecond);
-        public PartialDateTime OnDate(DateTime date) => new PartialDateTime
+        public PartialDateTime OnDate(DateTime date) => Duplicate().And(x =>
         {
-            Year = Year ?? date.Year,
-            Month = Month ?? date.Month,
-            DayOfMonth = DayOfMonth ?? date.Day,
-            DateTimeKind = DateTimeKind == DateTimeKind.Unspecified ? date.Kind : DateTimeKind,
-        };
-        public PartialDateTime OnTime(DateTime time) => new PartialDateTime
+            x.Year = x.Year ?? date.Year;
+            x.Month = x.Month ?? date.Month;
+            x.DayOfMonth = x.DayOfMonth ?? date.Day;
+            x.DateTimeKind = x.DateTimeKind == DateTimeKind.Unspecified ? date.Kind : x.DateTimeKind;
+        });
+        public PartialDateTime OnTime(DateTime time) => Duplicate().And(x =>
         {
-            Hour = Hour ?? time.Hour,
-            Minute = Minute ?? time.Minute,
-            Second = Second ?? time.Second,
-            Millisecond = Millisecond ?? time.Millisecond,
-            DateTimeKind = DateTimeKind == DateTimeKind.Unspecified ? time.Kind : DateTimeKind,
-        };
-        public PartialDateTime OnDateAndTime(DateTime dateAndTime) => new PartialDateTime
+            x.Hour = x.Hour ?? time.Hour;
+            x.Minute = x.Minute ?? time.Minute;
+            x.Second = x.Second ?? time.Second;
+            x.Millisecond = x.Millisecond ?? time.Millisecond;
+            x.DateTimeKind = x.DateTimeKind == DateTimeKind.Unspecified ? time.Kind : x.DateTimeKind;
+        });
+        public PartialDateTime OnDateAndTime(DateTime dateAndTime) => Duplicate().And(x =>
         {
-            Year = Year ?? dateAndTime.Year,
-            Month = Month ?? dateAndTime.Month,
-            DayOfMonth = DayOfMonth ?? dateAndTime.Day,
-            Hour = Hour ?? dateAndTime.Hour,
-            Minute = Minute ?? dateAndTime.Minute,
-            Second = Second ?? dateAndTime.Second,
-            Millisecond = Millisecond ?? dateAndTime.Millisecond,
-            DateTimeKind = DateTimeKind == DateTimeKind.Unspecified ? dateAndTime.Kind : DateTimeKind,
-        };
+            x.Year = x.Year ?? dateAndTime.Year;
+            x.Month = x.Month ?? dateAndTime.Month;
+            x.DayOfMonth = x.DayOfMonth ?? dateAndTime.Day;
+            x.Hour = x.Hour ?? dateAndTime.Hour;
+            x.Minute = x.Minute ?? dateAndTime.Minute;
+            x.Second = x.Second ?? dateAndTime.Second;
+            x.Millisecond = x.Millisecond ?? dateAndTime.Millisecond;
+            x.DateTimeKind = x.DateTimeKind == DateTimeKind.Unspecified ? dateAndTime.Kind : x.DateTimeKind;
+        });
         public PartialDateTime OnDaysOfWeek(params DayOfWeek[] daysOfWeek) => Duplicate().And(x => x.DaysOfWeek = daysOfWeek);
 
 

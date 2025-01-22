@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace H.Necessaire
 {
@@ -273,6 +274,7 @@ namespace H.Necessaire
                             Second = IntersectFromPart(From.Second, other.From.Second),
                             Millisecond = IntersectFromPart(From.Millisecond, other.From.Millisecond),
                             DateTimeKind = IntersectKind(From.DateTimeKind, other.From.DateTimeKind),
+                            DaysOfWeek = From.DaysOfWeek.IsEmpty() || other.From.DaysOfWeek.IsEmpty() ? null : From.DaysOfWeek.Intersect(other.From.DaysOfWeek).ToArray(),
                         },
                     To
                         = IsUntilForever && other.IsUntilForever
@@ -287,6 +289,7 @@ namespace H.Necessaire
                             Second = IntersectToPart(To.Second, other.To.Second),
                             Millisecond = IntersectToPart(To.Millisecond, other.To.Millisecond),
                             DateTimeKind = IntersectKind(To.DateTimeKind, other.To.DateTimeKind),
+                            DaysOfWeek = To.DaysOfWeek.IsEmpty() || other.To.DaysOfWeek.IsEmpty() ? null : To.DaysOfWeek.Intersect(other.To.DaysOfWeek).ToArray(),
                         },
                 };
         }
