@@ -2,7 +2,7 @@
 
 namespace H.Necessaire.Runtime.CLI.Common
 {
-    internal class CustomCommandRunner : ImADependency
+    public sealed class CustomCommandRunner : ImADependency
     {
         CliCommandFactory commandRunner;
         ArgsParser argsParser;
