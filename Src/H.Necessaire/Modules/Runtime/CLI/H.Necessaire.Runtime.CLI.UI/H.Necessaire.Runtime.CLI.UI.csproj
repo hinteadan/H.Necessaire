@@ -5,20 +5,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="🏭IoCExtensions.cs~RFfaa11c2.TMP" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Include="Costura.Fody" Version="6.0.0">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>compile; runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	  </PackageReference>
-	  <PackageReference Include="Fody" Version="6.9.1">
-	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive;</IncludeAssets>
-	  </PackageReference>
-	  <PackageReference Include="Spectre.Console" Version="0.49.1" PrivateAssets="compile" />
-	  <PackageReference Include="Spectre.Console.Json" Version="0.49.1" PrivateAssets="compile" />
+	  <PackageReference Include="Spectre.Console" Version="0.49.1" />
+	  <PackageReference Include="Spectre.Console.Json" Version="0.49.1" />
 	</ItemGroup>
 
 	<ItemGroup>
