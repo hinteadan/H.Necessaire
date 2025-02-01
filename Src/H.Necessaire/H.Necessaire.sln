@@ -73,6 +73,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.Runtime.CLI.UI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.Runtime.CLI.Common", "Modules\Runtime\CLI\H.Necessaire.Runtime.CLI.Common\H.Necessaire.Runtime.CLI.Common.csproj", "{D031DD48-7550-44DD-9403-AABF1DD65C4E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.Runtime.MAUI", "H.Necessaire.Runtime.MAUI\H.Necessaire.Runtime.MAUI.csproj", "{1E3117C5-9D75-4270-830A-034A65C2550D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.Runtime.MAUIAppSample", "Apps\H.Necessaire.Runtime.MAUIAppSample\H.Necessaire.Runtime.MAUIAppSample.csproj", "{FD2931BA-ED9D-44AF-A47B-AF171DDC5C3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -171,6 +175,14 @@ Global
 		{D031DD48-7550-44DD-9403-AABF1DD65C4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D031DD48-7550-44DD-9403-AABF1DD65C4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D031DD48-7550-44DD-9403-AABF1DD65C4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E3117C5-9D75-4270-830A-034A65C2550D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E3117C5-9D75-4270-830A-034A65C2550D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E3117C5-9D75-4270-830A-034A65C2550D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E3117C5-9D75-4270-830A-034A65C2550D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD2931BA-ED9D-44AF-A47B-AF171DDC5C3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD2931BA-ED9D-44AF-A47B-AF171DDC5C3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD2931BA-ED9D-44AF-A47B-AF171DDC5C3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD2931BA-ED9D-44AF-A47B-AF171DDC5C3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -193,6 +205,8 @@ Global
 		{8A108811-843E-4765-90DA-BC8763D82740} = {7799523B-1EC1-4877-AD67-B6A805DEA765}
 		{9E175801-EF60-4BB0-9951-5DA239E205AC} = {8A108811-843E-4765-90DA-BC8763D82740}
 		{D031DD48-7550-44DD-9403-AABF1DD65C4E} = {8A108811-843E-4765-90DA-BC8763D82740}
+		{1E3117C5-9D75-4270-830A-034A65C2550D} = {382E206E-21B0-4973-B5C8-0B1705BE3A09}
+		{FD2931BA-ED9D-44AF-A47B-AF171DDC5C3D} = {BF4926CE-985C-40B3-B5F4-6C240B41F3DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52A5ABFD-D5C1-4438-AA09-AACE151366B9}
