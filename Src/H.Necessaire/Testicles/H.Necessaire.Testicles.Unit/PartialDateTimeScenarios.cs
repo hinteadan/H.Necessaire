@@ -82,16 +82,16 @@ namespace H.Necessaire.Testicles.Unit
 
             DateTime now = DateTime.UtcNow;
 
-            whenever.OnYear(now.Year).ToMaximumDateTime().Should().Be(new DateTime(now.Year, 12, DateTime.DaysInMonth(now.Year, now.Month), 23, 59, 59, 999, now.Kind), because: "Year only should be maximum datetime of that year");
+            whenever.OnYear(now.Year).ToMaximumDateTime().Should().Be(new DateTime(now.Year, 12, DateTime.DaysInMonth(now.Year, 12), 23, 59, 59, 999, now.Kind), because: "Year only should be maximum datetime of that year");
             whenever.OnMonth(now.Month).ToMaximumDateTime().Should().Be(new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month), 23, 59, 59, 999, now.Kind), because: "Month only should be maximum day of that month and current year and maximum time");
             whenever.OnDayOfMonth(now.Day).ToMaximumDateTime().Should().Be(new DateTime(now.Year, 12, now.Day, 23, 59, 59, 999, now.Kind), because: "DayOfMonth only should be maximum month and current year and maximum time");
-            whenever.OnHour(now.Hour).ToMaximumDateTime().Should().Be(new DateTime(now.Year, 12, DateTime.DaysInMonth(now.Year, now.Month), now.Hour, 59, 59, 999, now.Kind), because: "Hour only should be maximum date on current year and maximum time of that hour");
-            whenever.OnMinute(now.Minute).ToMaximumDateTime().Should().Be(new DateTime(now.Year, 12, DateTime.DaysInMonth(now.Year, now.Month), 23, now.Minute, 59, 999, now.Kind), because: "Minute only should be maximum date on current year and maximum hour and maximum time of that minute");
-            whenever.OnSecond(now.Second).ToMaximumDateTime().Should().Be(new DateTime(now.Year, 12, DateTime.DaysInMonth(now.Year, now.Month), 23, 59, now.Second, 999, now.Kind), because: "Second only should be maximum date on current year and maximum hour and maximum minute and that given second");
-            whenever.OnMillisecond(now.Millisecond).ToMaximumDateTime().Should().Be(new DateTime(now.Year, 12, DateTime.DaysInMonth(now.Year, now.Month), 23, 59, 59, now.Millisecond, now.Kind), because: "Millisecond only should be maximum date on current year and maximum time and that given millisecond");
+            whenever.OnHour(now.Hour).ToMaximumDateTime().Should().Be(new DateTime(now.Year, 12, DateTime.DaysInMonth(now.Year, 12), now.Hour, 59, 59, 999, now.Kind), because: "Hour only should be maximum date on current year and maximum time of that hour");
+            whenever.OnMinute(now.Minute).ToMaximumDateTime().Should().Be(new DateTime(now.Year, 12, DateTime.DaysInMonth(now.Year, 12), 23, now.Minute, 59, 999, now.Kind), because: "Minute only should be maximum date on current year and maximum hour and maximum time of that minute");
+            whenever.OnSecond(now.Second).ToMaximumDateTime().Should().Be(new DateTime(now.Year, 12, DateTime.DaysInMonth(now.Year, 12), 23, 59, now.Second, 999, now.Kind), because: "Second only should be maximum date on current year and maximum hour and maximum minute and that given second");
+            whenever.OnMillisecond(now.Millisecond).ToMaximumDateTime().Should().Be(new DateTime(now.Year, 12, DateTime.DaysInMonth(now.Year, 12), 23, 59, 59, now.Millisecond, now.Kind), because: "Millisecond only should be maximum date on current year and maximum time and that given millisecond");
 
             now.ToDateOnlyPartialDateTime().ToMaximumDateTime().Should().Be(new DateTime(now.Year, now.Month, now.Day, 23, 59, 59, 999, now.Kind), because: "Date only should be maximum time of that date");
-            now.ToTimeOnlyPartialDateTime().ToMaximumDateTime().Should().Be(new DateTime(now.Year, 12, DateTime.DaysInMonth(now.Year, now.Month), now.Hour, now.Minute, now.Second, now.Millisecond, now.Kind), because: "Time only should be maximum date of that time");
+            now.ToTimeOnlyPartialDateTime().ToMaximumDateTime().Should().Be(new DateTime(now.Year, 12, DateTime.DaysInMonth(now.Year, 12), now.Hour, now.Minute, now.Second, now.Millisecond, now.Kind), because: "Time only should be maximum date of that time");
 
             whenever.OnYear(now.Year).OnMonth(now.Month).ToMaximumDateTime().Should().Be(new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month), 23, 59, 59, 999, now.Kind), because: "Month/year should be maximum day and time of that month/year");
 
