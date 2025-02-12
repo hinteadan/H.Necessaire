@@ -21,7 +21,7 @@ namespace H.Necessaire
         public Debouncer(Func<Task> asyncActionToTame, TimeSpan debounceInterval) : this(asyncActionToTame, debounceInterval, ConcreteFactory.BuildNewPeriodicAction) { }
         #endregion
 
-        public async Task Invoke()
+        public Task Invoke()
         {
             periodicActionExecutioner?.Stop();
             (periodicActionExecutioner as IDisposable)?.Dispose();
@@ -32,7 +32,7 @@ namespace H.Necessaire
                 await asyncActionToTame?.Invoke();
             });
 
-            await true.AsTask();
+            return true.AsTask();
         }
 
         public void Dispose()

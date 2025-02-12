@@ -64,6 +64,14 @@ namespace H.Necessaire
                 ;
         }
 
+        public static string GetDisplayLabel(this PropertyInfo propertyInfo)
+        {
+            return
+                (propertyInfo?.GetCustomAttributes(typeof(DisplayLabelAttribute), false)?.SingleOrDefault() as DisplayLabelAttribute)?.DisplayLabel
+                ?? propertyInfo?.Name.ToDisplayLabel()
+                ;
+        }
+
         public static string[] GetAliases(this Type type)
         {
             return
@@ -75,6 +83,40 @@ namespace H.Necessaire
         {
             return
                 type?.GetCustomAttributes(typeof(CategoryAttribute), true)?.SelectMany(noteAttr => (noteAttr as CategoryAttribute)?.Categories)?.Distinct()?.ToArray()
+                ;
+        }
+
+        public static string[] GetCategories(this PropertyInfo propertyInfo)
+        {
+            return
+                propertyInfo
+                ?.GetCustomAttributes(typeof(CategoryAttribute), inherit: true)
+                ?.SelectMany(
+                    noteAttr => (noteAttr as CategoryAttribute)?.Categories
+                )
+                ?.Distinct()
+                ?.ToArray()
+                ;
+        }
+
+        public static int GetPriority(this Type type)
+        {
+            return
+                (
+                    type
+                    ?.GetCustomAttributes(typeof(PriorityAttribute), inherit: false)
+                    ?.SingleOrDefault() as PriorityAttribute
+                )
+                ?.Priority
+                ?? 0
+                ;
+        }
+
+        public static int GetPriority(this PropertyInfo propertyInfo)
+        {
+            return
+                (propertyInfo?.GetCustomAttributes(typeof(PriorityAttribute), false)?.SingleOrDefault() as PriorityAttribute)?.Priority
+                ?? 0
                 ;
         }
 

@@ -129,6 +129,9 @@
     <Compile Include="..\H.Necessaire\Models\Attributes\CategoryAttribute.cs">
       <Link>Models\Attributes\CategoryAttribute.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Models\Attributes\DisplayLabelAttribute.cs">
+      <Link>Models\Attributes\DisplayLabelAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Models\Attributes\IDAttribute.cs">
       <Link>Models\Attributes\IDAttribute.cs</Link>
     </Compile>
@@ -477,6 +480,9 @@
     <Compile Include="..\H.Necessaire\Operations\Analytics\ImANetworkAddressAnalyticsProvider.cs">
       <Link>Operations\Analytics\ImANetworkAddressAnalyticsProvider.cs</Link>
     </Compile>
+    <Compile Include="..\H.Necessaire\Operations\AsyncEventRaiser.cs">
+      <Link>Operations\AsyncEventRaiser.cs</Link>
+    </Compile>
     <Compile Include="..\H.Necessaire\Operations\Auditing\ImAnAuditingService.cs">
       <Link>Operations\Auditing\ImAnAuditingService.cs</Link>
     </Compile>
@@ -612,12 +618,6 @@
     <Compile Include="..\H.Necessaire\Operations\Sync\Concrete\CatchAllSyncRequestProcessor.cs">
       <Link>Operations\Sync\Concrete\CatchAllSyncRequestProcessor.cs</Link>
     </Compile>
-    <Compile Include="..\H.Necessaire\Operations\Sync\Concrete\SyncableBrowser.cs">
-      <Link>Operations\Sync\Concrete\SyncableBrowser.cs</Link>
-    </Compile>
-    <Compile Include="..\H.Necessaire\Operations\Sync\Concrete\SyncRequestProcessorFactory.cs">
-      <Link>Operations\Sync\Concrete\SyncRequestProcessorFactory.cs</Link>
-    </Compile>
     <Compile Include="..\H.Necessaire\Operations\Sync\ImASyncableBrowser.cs">
       <Link>Operations\Sync\ImASyncableBrowser.cs</Link>
     </Compile>
@@ -694,6 +694,8 @@
     <Compile Include="Operations\Concrete\JsPeriodicAction.cs" />
     <Compile Include="Operations\Logging\Concrete\ConsoleLogProcessor.cs" />
     <Compile Include="Operations\Logging\Concrete\LogEntryDecorator.cs" />
+    <Compile Include="Operations\Sync\Concrete\SyncableBrowser.cs" />
+    <Compile Include="Operations\Sync\Concrete\SyncRequestProcessorFactory.cs" />
     <Compile Include="Operations\Versioning\VersioningDependencyGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

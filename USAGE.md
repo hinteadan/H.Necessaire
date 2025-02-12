@@ -24,3 +24,30 @@ public class CodeAnalysisProgressiveScope : ProgressiveScope
     public static ProgressReporter GetReporter() => ProgressReporter.Get("CodeAnalysisProgressiveScope") ?? new ProgressReporter();
 }
 ```
+
+
+# Async Events
+
+```csharp
+readonly AsyncEventRaiser<ProgressEventArgs> progressRaiser;
+
+//Construct
+Constructor() {
+    progressRaiser = new AsyncEventRaiser<ProgressEventArgs>(this);
+}
+
+//Declare event
+public event AsyncEventHandler<ProgressEventArgs> OnProgress { add => progressRaiser.OnEvent += value; remove => progressRaiser.OnEvent -= value; }
+
+//Raise
+private async Task RaiseOnProgressAction(params string[] additionalInfo)
+{
+    await progressRaiser.Raise(new ProgressEventArgs(
+        currentActionName,
+        percentNormalizer.From,
+        progressSourceValue,
+        percentNormalizer.Do(progressSourceValue),
+        additionalInfo
+    ));
+}
+```

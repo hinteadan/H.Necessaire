@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,11 +9,13 @@ namespace H.Necessaire
         DataNormalizer percentNormalizer;
         decimal progressSourceValue = 0;
         string currentActionName;
+        readonly AsyncEventRaiser<ProgressEventArgs> progressRaiser;
 
         public ProgressReporter() : this(null) { }
         public ProgressReporter(string identifier)
         {
             ID = identifier.IsEmpty() ? Guid.NewGuid().ToString() : identifier;
+            progressRaiser = new AsyncEventRaiser<ProgressEventArgs>(this);
         }
 
         public string ID { get; }
@@ -25,32 +26,8 @@ namespace H.Necessaire
             return this;
         }
 
-        readonly object onProgressLocker = new object();
-        readonly List<AsyncEventHandler<ProgressEventArgs>> onProgressHandlers = new List<AsyncEventHandler<ProgressEventArgs>>();
 
-        public event AsyncEventHandler<ProgressEventArgs> OnProgress
-        {
-            add
-            {
-                if (value is null)
-                    return;
-
-                lock (onProgressLocker)
-                {
-                    onProgressHandlers.Add(value);
-                }
-            }
-            remove
-            {
-                if (value is null)
-                    return;
-
-                lock (onProgressLocker)
-                {
-                    onProgressHandlers.Remove(value);
-                }
-            }
-        }
+        public event AsyncEventHandler<ProgressEventArgs> OnProgress { add => progressRaiser.OnEvent += value; remove => progressRaiser.OnEvent -= value; }
 
         public async Task RaiseOnProgress(string currentActionName, decimal progressSourceValue, params string[] additionalInfo)
         {
@@ -65,28 +42,13 @@ namespace H.Necessaire
             if (percentNormalizer == null)
                 return;
 
-            await
-                new Func<Task>(async () =>
-                {
-                    if (onProgressHandlers.IsEmpty())
-                        return;
-
-                    await Task.WhenAll(
-                        onProgressHandlers.Select(handler =>
-                            handler.Invoke(
-                                this,
-                                new ProgressEventArgs(
-                                    currentActionName,
-                                    percentNormalizer.From,
-                                    progressSourceValue,
-                                    percentNormalizer.Do(progressSourceValue),
-                                    additionalInfo
-                                )
-                            )
-                        )
-                    );
-                })
-                .TryOrFailWithGrace(onFail: ex => { });
+            await progressRaiser.Raise(new ProgressEventArgs(
+                currentActionName,
+                percentNormalizer.From,
+                progressSourceValue,
+                percentNormalizer.Do(progressSourceValue),
+                additionalInfo
+            ));
         }
 
         public static ProgressReporter Get(string scopeIdentifier)

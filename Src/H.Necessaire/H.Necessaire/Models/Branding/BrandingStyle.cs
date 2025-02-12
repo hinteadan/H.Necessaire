@@ -30,10 +30,10 @@
         public virtual ColorInfo MutedTextColor { get; } = new ColorInfo(0, 0, 0, .35f);
         public virtual ColorInfo HighlightTextColor => Colors.Primary.Darker(10);
 
-        public virtual ColorInfo SuccessColor { get; } = new ColorInfo("#0b6b31");
-        public virtual ColorInfo WarningColor { get; } = new ColorInfo("#b36f1d");
-        public virtual ColorInfo DangerColor { get; } = new ColorInfo("#911717");
-        public virtual ColorInfo InformationColor { get; } = new ColorInfo("#0e6355");
+        public virtual ColorInfo SuccessColor { get; } = new ColorInfo("#11A74C");
+        public virtual ColorInfo WarningColor { get; } = new ColorInfo("#EA850B");
+        public virtual ColorInfo DangerColor { get; } = new ColorInfo("#D41111");
+        public virtual ColorInfo InformationColor { get; } = new ColorInfo("#0F957E");
         public virtual ColorInfo MuteColor { get; } = new ColorInfo(0, 0, 0, .5f);
     }
 }

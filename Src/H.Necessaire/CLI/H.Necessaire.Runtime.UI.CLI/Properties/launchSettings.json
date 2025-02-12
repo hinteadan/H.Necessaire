@@ -1,0 +1,18 @@
+{
+  "profiles": {
+
+    "CLI debug": {
+      "commandName": "Project",
+      "commandLineArgs": "debug"
+    },
+
+    "CLI fluent-ui index-icons": {
+      "commandName": "Project",
+      "commandLineArgs": "fluent-ui index-icons"
+    },
+
+    "CLI": {
+      "commandName": "Project"
+    }
+  }
+}

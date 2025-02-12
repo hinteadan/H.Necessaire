@@ -32,7 +32,7 @@ namespace H.Necessaire.Runtime.CLI
 
         private static void AddAllCommandsInAllAssemblies(ImADependencyRegistry registry)
         {
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetNonCoreAssemblies();
 
             Type useCaseInterfaceType = typeof(ImACliCommand);
             Type[] useCaseTypes = assemblies.SelectMany(assembly => assembly.GetTypes().Where(p => useCaseInterfaceType.IsAssignableFrom(p) && !p.IsAbstract)).ToArray();
@@ -45,7 +45,7 @@ namespace H.Necessaire.Runtime.CLI
 
         private static void AddAllSubCommandsInAllAssemblies(ImADependencyRegistry registry)
         {
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetNonCoreAssemblies();
 
             Type subCommandInterfaceType = typeof(ImACliSubCommand);
             Type[] subCommandsTypes = assemblies.SelectMany(assembly => assembly.GetTypes().Where(p => subCommandInterfaceType.IsAssignableFrom(p) && !p.IsAbstract)).ToArray();

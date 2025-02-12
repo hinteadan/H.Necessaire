@@ -25,7 +25,7 @@ namespace H.Necessaire.Dapper
 
         public static void InitializeHNecessaireDapperMappers()
         {
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetNonCoreAssemblies();
 
             Type sqlMapperType = typeof(ISqlEntityMapper);
 
