@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
-using H.Necessaire.Runtime.MAUI.Core;
+using H.Necessaire.Runtime.MAUI.Components.Abstracts;
+using H.Necessaire.Runtime.MAUI.Components.Pages;
 using H.Necessaire.Runtime.MAUI.WellKnown;
 using H.Necessaire.Runtime.UI;
 using System.Reflection;
@@ -12,6 +13,7 @@ namespace H.Necessaire.Runtime.MAUI
         {
             dependencyRegistry
                 .WithHNecessaireRuntimeUI()
+                .Register<Core.DependencyGroup>(() => new Core.DependencyGroup())
                 .Register<Components.DependencyGroup>(() => new Components.DependencyGroup())
                 .Register<HMauiApp>(() => hMauiApp ?? HMauiApp.Default)
                 ;
@@ -39,25 +41,52 @@ namespace H.Necessaire.Runtime.MAUI
         }
         public static MauiAppBuilder WithHNecessaire(this MauiAppBuilder appBuilder) => appBuilder.WithHNecessaire(HMauiApp.Default);
 
+        public static TApp InitializeHNecessaireApp<TApp>(this TApp app) where TApp : Application
+        {
+            RegisterPageRoutes();
+
+            return app;
+        }
+
+        static void RegisterPageRoutes()
+        {
+            Type[] pageTypes = typeof(HMauiPageBase).GetAllImplementations();
+
+            foreach (Type pageType in pageTypes)
+            {
+                if (pageType == typeof(MainPage))
+                    continue;
+
+                string routeName
+                    = pageType.GetID()
+                    ?? pageType.Name.Substring(0, pageType.Name.Length - "Page".Length);
+                string[] routeCategories = pageType.GetCategories();
+
+                if (routeCategories.IsEmpty())
+                    Routing.RegisterRoute(routeName, pageType);
+                else
+                    foreach (string category in routeCategories)
+                        Routing.RegisterRoute($"{category}/{routeName}", pageType);
+            }
+        }
 
         public static IServiceCollection AddDotNetDependenciesToHNecessaire(this IServiceCollection services, ImADependencyRegistry dependencyRegistry)
         {
             //if (services == null)
             //    return services;
 
-            dependencyRegistry.RegisterAlwaysNew<ImAUseCaseContextProvider>(() =>
-            {
-                //IServiceProvider netCoreServiceProvider = services.BuildServiceProvider();
-                return
-                    new MauiAppToUseCaseContextProvider();
-            });
+            //dependencyRegistry.RegisterAlwaysNew<ImAUseCaseContextProvider>(() =>
+            //{
+            //    //IServiceProvider netCoreServiceProvider = services.BuildServiceProvider();
+            //    return
+            //        new MauiAppToUseCaseContextProvider();
+            //});
 
             return services;
         }
 
         public static IServiceCollection AddHNecessaireDependenciesToDotNet(this IServiceCollection services, ImADependencyRegistry dependencyRegistry)
         {
-            services.AddSingleton<ImADependencyRegistry>(dependencyRegistry);
             services.AddSingleton<ImADependencyProvider>(dependencyRegistry);
 
             //dependencyRegistry.Register<ImAConfigProvider>(() =>

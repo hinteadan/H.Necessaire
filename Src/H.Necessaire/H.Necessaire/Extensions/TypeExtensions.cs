@@ -122,6 +122,14 @@ namespace H.Necessaire
                 ;
         }
 
+        public static string GetDisplayLabel(this Type type)
+        {
+            return
+                (type?.GetCustomAttributes(typeof(DisplayLabelAttribute), false)?.SingleOrDefault() as DisplayLabelAttribute)?.DisplayLabel
+                ?? type?.Name.ToDisplayLabel()
+                ;
+        }
+
         public static string[] GetAliases(this Type type)
         {
             return

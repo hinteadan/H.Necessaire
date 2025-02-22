@@ -492,9 +492,9 @@ namespace H.Necessaire
             return string.Equals(stringValue, comparedTo, isCaseSensitive ? StringComparison.InvariantCulture : StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsEmpty(this string stringValue)
+        public static bool IsEmpty(this string stringValue, bool isWhitespaceConsideredEmpty = true)
         {
-            return string.IsNullOrWhiteSpace(stringValue);
+            return isWhitespaceConsideredEmpty ? string.IsNullOrWhiteSpace(stringValue) : string.IsNullOrEmpty(stringValue);
         }
 
         public static bool IsEmpty(this GeoAddressArea geoAddressArea)
@@ -631,5 +631,10 @@ namespace H.Necessaire
             return timeSpan.Value.NoLessThan(minimum.Value);
         }
         public static TimeSpan? NoLessThanZero(this TimeSpan? timeSpan) => timeSpan.NoLessThan(TimeSpan.Zero);
+
+        public static bool In(this decimal value, NumberInterval numberInterval)
+        {
+            return numberInterval.Contains(value);
+        }
     }
 }

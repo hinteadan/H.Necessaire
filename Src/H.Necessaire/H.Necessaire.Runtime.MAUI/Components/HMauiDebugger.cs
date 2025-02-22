@@ -2,23 +2,24 @@
 using H.Necessaire.Runtime.MAUI.Components.Controls;
 using H.Necessaire.Runtime.MAUI.Components.Elements;
 using H.Necessaire.Runtime.MAUI.Components.HUI;
+using H.Necessaire.Runtime.MAUI.Components.HUI.Debugging;
+using H.Necessaire.Runtime.MAUI.Core;
 using H.Necessaire.Runtime.MAUI.Extensions;
-using H.Necessaire.Runtime.UI.Concrete;
 using Microsoft.Maui.Layouts;
 
 namespace H.Necessaire.Runtime.MAUI.Components
 {
-    public class HMauiDebugger : HMauiComponent
+    public class HMauiDebugger : HMauiComponentBase
     {
         protected override View ConstructDefaultContent()
         {
-            View loginComponent = Get<HMauiGenericComponent<HUILoginComponent>>();
+            View huiDebuggingComponent = Get<HMauiHUIGenericComponent<DebuggingHUIComponent>>();
 
             return
                 new VerticalStackLayout().And(layout =>
                 {
 
-                    layout.Add(loginComponent);
+                    layout.Add(huiDebuggingComponent);
 
                     layout.Add(new FlexLayout { Direction = FlexDirection.Row }.And(layout =>
                     {
@@ -45,13 +46,18 @@ namespace H.Necessaire.Runtime.MAUI.Components
                         );
                     }));
 
+                    layout.Add(
+                        new HTextField { Label = "Clearable Textfield" }
+                    );
 
+                    layout.Add(
+                        new HTextField { Label = "Not Clearable Textfield", IsClearOptionEnabled = false, }
+                    );
 
                     layout.Add(
                         new HButton
                         {
                             Text = "Debug Button",
-                            WidthRequest = SizingUnit * 10,
                         }.And(button =>
                         {
                             button.Clicked += Button_Clicked;
@@ -59,7 +65,24 @@ namespace H.Necessaire.Runtime.MAUI.Components
                     );
 
                     layout.Add(
-                        new HTextEditor {
+                        new HButton
+                        {
+                            Text = "Create or Ressurect Consumer",
+                        }.And(button =>
+                        {
+                            button.Clicked += async (sender, args) =>
+                            {
+                                using (new ScopedRunner(() => button.IsEnabled = false, () => button.IsEnabled = true))
+                                {
+                                    ConsumerIdentity consumer = await Get<ConsumerIdentityManager>().CreateOrResurrect();
+                                }
+                            };
+                        })
+                    );
+
+                    layout.Add(
+                        new HTextEditor
+                        {
                             Placeholder = "Simple",
                             UserInputValidator = async (v, t) => { if (v.Is("error")) return OperationResult.Fail().WithPayload(v); return v.ToWinResult(); },
                         }
@@ -136,7 +159,8 @@ namespace H.Necessaire.Runtime.MAUI.Components
                             $"{(content.IsEmpty() ? "<No Content>" : content)}";
                     }
                 }
-                ).TryOrFailWithGrace(onFail: ex => {
+                ).TryOrFailWithGrace(onFail: ex =>
+                {
                     result = $"Request failed for {url}{Environment.NewLine}. Reason: {ex.Message}" +
                             $"-----{Environment.NewLine}" +
                             $"{ex}";

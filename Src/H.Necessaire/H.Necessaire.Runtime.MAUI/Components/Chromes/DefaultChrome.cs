@@ -1,12 +1,16 @@
 ﻿using H.Necessaire.Runtime.MAUI.Components.Abstracts;
 using H.Necessaire.Runtime.MAUI.Components.Controls;
 using H.Necessaire.Runtime.MAUI.Extensions;
+using H.Necessaire.Runtime.UI;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Chromes
 {
-    public class DefaultChrome : HMauiComponent
+    public class DefaultChrome : HMauiComponentBase
     {
+        HLabel headerBrandingLabel = null;
+        HLabel footerBrandingLabel = null;
         readonly ContentPresenter contentPresenter = new();
+
         protected override View ConstructDefaultContent() => ConstructChromedContent();
         protected override View WrapReceivedContent(View content)
         {
@@ -14,16 +18,14 @@ namespace H.Necessaire.Runtime.MAUI.Components.Chromes
             return base.WrapReceivedContent(content);
         }
 
-        int HeaderSize => SizingUnit * 5;
-        int FooterSize => SizingUnit * 2;
         View ConstructChromedContent()
         {
             Grid result = new Grid
             {
                 RowDefinitions = [
-                    new RowDefinition { Height = new GridLength(HeaderSize, GridUnitType.Absolute) },
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) },
                     new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength(FooterSize, GridUnitType.Absolute) }
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) }
                 ]
             }
             .And(grid =>
@@ -60,6 +62,10 @@ namespace H.Necessaire.Runtime.MAUI.Components.Chromes
                 }
             }.And(grid =>
             {
+                grid.Add(new HLabel
+                {
+                    Text = "Header Branding",
+                }.And(x => headerBrandingLabel = x));
                 //grid.Add(new Image
                 //{
                 //    Source = ImageSource.FromStream(() => "IconLogo.png".OpenEmbeddedResource(typeof(DefaultChrome).Assembly)),
@@ -87,8 +93,56 @@ namespace H.Necessaire.Runtime.MAUI.Components.Chromes
                     FontSize = Branding.Typography.FontSizeSmaller,
                     HorizontalOptions = LayoutOptions.Center,
                     VerticalOptions = LayoutOptions.Center,
-                });
+                    Margin = new Thickness(horizontalSize: 0, verticalSize: Branding.SizingUnitInPixels / 4),
+                }.And(x => footerBrandingLabel = x));
             });
+        }
+
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+
+            footerBrandingLabel.IsVisible = true;
+            headerBrandingLabel.IsVisible = true;
+            headerBrandingLabel.FontSize = Branding.Typography.FontSize;
+            footerBrandingLabel.Margin = new Thickness(horizontalSize: 0, verticalSize: Branding.SizingUnitInPixels / 4);
+
+            height.OnHeightCategory(
+
+                HHeightCategory.XSmall.WithAction(x =>
+                {
+                    headerBrandingLabel.IsVisible = false;
+                    footerBrandingLabel.IsVisible = false;
+                }),
+
+                HHeightCategory.Small.WithAction(x =>
+                {
+                    headerBrandingLabel.Margin = new Thickness(horizontalSize: 0, verticalSize: Branding.SizingUnitInPixels / 2);
+                    headerBrandingLabel.FontSize = Branding.Typography.FontSizeSmall;
+                    footerBrandingLabel.Margin = new Thickness(horizontalSize: 0, verticalSize: 0);
+                }),
+
+                HHeightCategory.Medium.WithAction(x =>
+                {
+                    headerBrandingLabel.Margin = new Thickness(horizontalSize: 0, verticalSize: Branding.SizingUnitInPixels);
+                    footerBrandingLabel.Margin = new Thickness(horizontalSize: 0, verticalSize: 1);
+                }),
+
+                HHeightCategory.Large.WithAction(x =>
+                {
+                    headerBrandingLabel.Margin = new Thickness(horizontalSize: 0, verticalSize: Branding.SizingUnitInPixels * 2);
+                }),
+
+                HHeightCategory.XLarge.WithAction(x =>
+                {
+                    headerBrandingLabel.Margin = new Thickness(horizontalSize: 0, verticalSize: Branding.SizingUnitInPixels * 2);
+                }),
+
+                HHeightCategory.XXLarge.WithAction(x =>
+                {
+                    headerBrandingLabel.Margin = new Thickness(horizontalSize: 0, verticalSize: Branding.SizingUnitInPixels * 4);
+                })
+            );
         }
     }
 }

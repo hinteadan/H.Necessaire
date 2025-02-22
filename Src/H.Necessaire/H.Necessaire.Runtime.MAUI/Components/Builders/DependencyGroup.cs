@@ -5,7 +5,8 @@
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry
-                .Register<ImAHMauiPropertyComponentBuilder>(() => new HMauiPropertyComponentBuilder())
+                .Register<ImAHMauiHUIPropertyComponentBuilder>(() => new HMauiHUIPropertyComponentBuilder())
+                .Register<ImAHMauiHUIComponentBuilder>(() => new HMauiHUIComponentBuilder())
                 ;
         }
     }

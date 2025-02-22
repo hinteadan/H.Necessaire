@@ -11,7 +11,7 @@ namespace H.Necessaire.Runtime.MAUIAppSample
             MauiAppBuilder builder = MauiApp.CreateBuilder();
 #pragma warning disable MCT001 // `.UseMauiCommunityToolkit()` Not Found on MauiAppBuilder
             builder
-                .UseMauiApp<App>()
+                .UseMauiApp<App>(sp => new App().InitializeHNecessaireApp())
                 .WithHNecessaire()
                 .ConfigureFonts(fonts =>
                 {

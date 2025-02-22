@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <?xaml-comp compile="true" ?>
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -6,12 +6,12 @@
 
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
 
-    <Color x:Key="Primary">#512BD4</Color>
-    <Color x:Key="PrimaryDark">#ac99ea</Color>
-    <Color x:Key="PrimaryDarkText">#242424</Color>
-    <Color x:Key="Secondary">#DFD8F7</Color>
-    <Color x:Key="SecondaryDarkText">#9880e5</Color>
-    <Color x:Key="Tertiary">#2B0B98</Color>
+    <Color x:Key="Primary">#006AAC</Color>
+    <Color x:Key="PrimaryDark">#004069</Color>
+    <Color x:Key="PrimaryDarkText">#000000</Color>
+    <Color x:Key="Secondary">#59A1F5</Color>
+    <Color x:Key="SecondaryDarkText">#022753</Color>
+    <Color x:Key="Tertiary">#34C89B</Color>
 
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">Black</Color>

@@ -4,110 +4,44 @@ using Microsoft.Maui.Controls.Shapes;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
-    internal class HTextEditor : HMauiComponent
+    internal class HTextEditor : HMauiLabelAndDescriptionComponentBase
     {
-        static readonly TimeSpan textChangedDebounceInternal = TimeSpan.FromSeconds(.35);
-        Debouncer textChangedDebouncer;
-        VerticalStackLayout layout;
-        HLabel label;
-        HLabel description;
         Editor editor;
         Grid editorGrid;
         RoundRectangle validationLedIndicator;
         protected override async Task Destroy()
         {
-            textChangedDebouncer.Dispose();
             await base.Destroy();
         }
         protected override void Construct()
         {
             base.Construct();
-            textChangedDebouncer = new Debouncer(OnTextChanged, textChangedDebounceInternal);
+            Content = ConstructContent();
         }
-        protected override View ConstructDefaultContent()
+        View ConstructContent()
         {
+            double cornerRadius = Branding.SizingUnitInPixels / 4;
+            double iconSize = Branding.SizingUnitInPixels * .75d;
+
             return
-                new VerticalStackLayout()
+                new Grid { }
                 .And(layout =>
                 {
-                    this.layout = layout;
 
-                    label = new HLabel
-                    {
-                        FontSize = Branding.Typography.FontSizeSmall,
-                        TextColor = Branding.PrimaryColor.ToMaui(),
-                    };
-                    double cornerRadius = Branding.SizingUnitInPixels / 4;
-                    double iconSize = Branding.SizingUnitInPixels * .75d;
                     layout.Add(
-                        new Border
-                        {
-                            Stroke = Branding.PrimaryColor.ToMaui(),
-                            StrokeShape = new RoundRectangle { CornerRadius = cornerRadius },
-                            StrokeThickness = 1,
-                            Content = new Grid { }.And(layout =>
-                            {
-
-                                layout.Add(
-                                    ConstructEditor()
-                                );
-
-                                layout.Add(ConstructValidationLedIndicator(cornerRadius, iconSize));
-
-                            }).And(x => editorGrid = x),
-                        }
+                        ConstructEditor()
                     );
 
-                    description = new HLabel
-                    {
-                        FontSize = Branding.Typography.FontSizeSmaller,
-                        TextColor = Branding.SecondaryColor.ToMaui(),
-                    };
+                    layout.Add(ConstructValidationLedIndicator(cornerRadius, iconSize));
 
-                });
+                })
+                .And(x => editorGrid = x)
+                .Bordered()
+                ;
         }
 
-        RoundRectangle ConstructValidationLedIndicator(double cornerRadius, double iconSize)
-        {
-            return new RoundRectangle
-            {
-                WidthRequest = iconSize,
-                HeightRequest = iconSize,
-                CornerRadius = new CornerRadius(cornerRadius * 4, 0, 0, cornerRadius),
-                BackgroundColor = Branding.PrimaryColor.ToMaui(),
-                HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.End,
-            }.And(x => validationLedIndicator = x);
-        }
-
+        public event EventHandler<TextChangedEventArgs> TextChanged;
         public Editor Editor => editor;
-
-        public string Label
-        {
-            get => label.Text;
-            set
-            {
-                label.Text = value;
-                if (value.IsEmpty())
-                    layout.Remove(label);
-                else
-                    layout.Insert(0, label);
-            }
-        }
-
-        public string Description
-        {
-            get => description.Text;
-            set
-            {
-                description.Text = value;
-                if (value.IsEmpty())
-                    layout.Remove(description);
-                else
-                    layout.Add(description);
-            }
-        }
-
         public string Text { get => editor.Text; set => editor.Text = value; }
         public string Placeholder { get => editor.Placeholder; set => editor.Placeholder = value; }
         public Func<string, CancellationToken, Task<OperationResult<string>>> UserInputValidator { get; set; }
@@ -124,9 +58,22 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 VerticalTextAlignment = TextAlignment.Center,
                 AutoSize = EditorAutoSizeOption.TextChanges,
             }
-            .And(x => x.TextChanged += async (sender, args) => { await textChangedDebouncer.Invoke(); })
+            .And(x => x.TextChanged += async (sender, args) => { await OnTextChanged(); })
             .And(x => editor = x)
             ;
+        }
+
+        RoundRectangle ConstructValidationLedIndicator(double cornerRadius, double iconSize)
+        {
+            return new RoundRectangle
+            {
+                WidthRequest = iconSize,
+                HeightRequest = iconSize,
+                CornerRadius = new CornerRadius(cornerRadius * 4, 0, 0, cornerRadius),
+                BackgroundColor = Branding.PrimaryColor.ToMaui(),
+                HorizontalOptions = LayoutOptions.End,
+                VerticalOptions = LayoutOptions.End,
+            }.And(x => validationLedIndicator = x);
         }
 
         async Task OnTextChanged()
@@ -146,6 +93,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
             editorGrid.Remove(validationLedIndicator);
             editorGrid.Add(validationLedIndicator);
+
+            TextChanged?.Invoke(this, new TextChangedEventArgs(null, Text));
         }
     }
 }

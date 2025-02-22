@@ -19,12 +19,12 @@
 
   <ItemGroup>
     <None Update="IconLogo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.46.1" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.47.1" />
   </ItemGroup>
 
 </Project>

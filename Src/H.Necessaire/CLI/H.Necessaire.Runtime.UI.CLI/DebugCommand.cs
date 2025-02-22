@@ -16,15 +16,17 @@ namespace H.Necessaire.Runtime.UI.CLI
 
         public override async Task<OperationResult> Run()
         {
-            var data = loginComponent.ViewModel.As<LoginCommand>();
+            //var data = loginComponent.ViewModel.As<LoginCommand>();
 
-            foreach (var property in loginComponent.ViewModel.Properties)
-            {
-                property.Value = (await property.Label.CliUiAskForAnyInput<string>(isSecret: property.ID.Is("password"))).ThrowOnFailOrReturn();
-            }
+            //foreach (var property in loginComponent.ViewModel.Properties)
+            //{
+            //    property.Value = (await property.Label.CliUiAskForAnyInput<string>(isSecret: property.ID.Is("password"))).ThrowOnFailOrReturn();
+            //}
 
 
             var viewModel = new HViewModel<DateTime>().WithData(DateTime.Today);
+
+            HViewModelProperty prop = viewModel.Property(x => x.DayOfWeek);
 
             await Task.Delay(1000);
 

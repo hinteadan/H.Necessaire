@@ -2,7 +2,7 @@
 
 namespace H.Necessaire
 {
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
     public class DisplayLabelAttribute : Attribute
     {
         public DisplayLabelAttribute(string label)

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" enable-background="new 0 0 448 432" version="1.1" xml:space="preserve">
+ <!-- Created with SVG-edit - https://github.com/SVG-Edit/svgedit-->
+
+ <g class="layer">
+  <title>Layer 1</title>
+  <circle cx="250" cy="250" fill="#000000" fill-opacity="0" id="svg_5" r="217.41" stroke="#000000" stroke-dasharray="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="5"/>
+  <g id="svg_1" transform="translate(0, -10) translate(0, -10) translate(0, -10) translate(0, 1) translate(0, 1) translate(0, -1) translate(0, -1) translate(2.005) matrix(0.776549, 0, 0, 0.776549, 53.8617, 79.1621)">
+   <text fill="#000000" font-family="Helvetica" font-size="229.17" font-weight="bold" id="svg_6" stroke="#000000" stroke-dasharray="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" text-anchor="middle" transform="matrix(1, 0, 0, 1, -0.005, 13.785)" x="250" xml:space="preserve" y="270.42">H</text>
+   <text fill="#000000" font-family="Helvetica" font-size="57.14" font-weight="bold" id="svg_7" stroke="#000000" stroke-dasharray="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" text-anchor="middle" transform="matrix(1, 0, 0, 1, -0.005, 13.785)" x="250" xml:space="preserve" y="337.9">necessaire</text>
+  </g>
+ </g>
+</svg>

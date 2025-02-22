@@ -5,7 +5,7 @@ using H.Necessaire.Runtime.MAUI.WellKnown.FluentUI;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Elements
 {
-    public class HFontIcon : HMauiComponent
+    public class HFontIcon : HMauiComponentBase
     {
         FontImageSource fontImageSource;
         Image fontImage;
@@ -17,7 +17,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
             {
                 FontFamily = WellKnownTypography.FluentSystemIconsFilled,
                 Glyph = null,
-                Size = Branding.SizingUnitInPixels * 100,
+                Size = Branding.SizingUnitInPixels * 50,
                 FontAutoScalingEnabled = true,
                 Color = Branding.TextColor.ToMaui(),
             };

@@ -7,15 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="H.Necessaire.CLI" Version="2.43.19" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="BLL\Templates\**\*" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Modules\Runtime\UI\H.Necessaire.Runtime.UI\H.Necessaire.Runtime.UI.csproj" />
+    <ProjectReference Include="..\H.Necessaire.CLI\H.Necessaire.CLI.csproj" />
   </ItemGroup>
 
 </Project>

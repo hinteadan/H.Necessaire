@@ -5,10 +5,10 @@ namespace H.Necessaire.Runtime.MAUI.Extensions
 {
     public static class HUIExtensions
     {
-        public static HMauiGenericComponent<THUIComponent> ToHMauiComponent<THUIComponent>(this THUIComponent hUIComponent)
+        public static HMauiHUIGenericComponent<THUIComponent> ToHMauiComponent<THUIComponent>(this THUIComponent hUIComponent)
             where THUIComponent : ImAnHUIComponent
         {
-            return new HMauiGenericComponent<THUIComponent>(hUIComponent);
+            return new HMauiHUIGenericComponent<THUIComponent>(hUIComponent);
         }
     }
 }

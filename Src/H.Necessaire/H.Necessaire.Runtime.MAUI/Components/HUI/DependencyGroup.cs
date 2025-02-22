@@ -9,7 +9,9 @@ namespace H.Necessaire.Runtime.MAUI.Components.HUI
         {
             dependencyRegistry
 
-                .RegisterAlwaysNew<HMauiGenericComponent<HUILoginComponent>>(() => dependencyRegistry.Get<HUILoginComponent>().ToHMauiComponent())
+                .Register<Debugging.DependencyGroup>(() => new Debugging.DependencyGroup())
+
+                .RegisterAlwaysNew<HMauiHUIGenericComponent<HUILoginComponent>>(() => dependencyRegistry.Get<HUILoginComponent>().ToHMauiComponent())
 
                 ;
         }

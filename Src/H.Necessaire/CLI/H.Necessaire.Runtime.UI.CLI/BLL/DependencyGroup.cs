@@ -9,6 +9,9 @@
                 .Register<FluentUiGlyphsParser>(() => new FluentUiGlyphsParser())
                 .Register<FluentUiGlyphsExporter>(() => new FluentUiGlyphsExporter())
                 .Register<HNecessaireMauiRepoFinder>(() => new HNecessaireMauiRepoFinder())
+                .Register<ColorPaletteFinder>(() => new ColorPaletteFinder())
+                .Register<AppColorConfigProcessor>(() => new AppColorConfigProcessor())
+                .Register<AppIconConfigProcessor>(() => new AppIconConfigProcessor())
                 ;
         }
     }

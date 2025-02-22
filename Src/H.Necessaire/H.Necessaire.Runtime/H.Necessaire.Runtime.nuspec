@@ -19,7 +19,7 @@
     <dependencies>
       <dependency id="H.Necessaire" version="2.43.21" />
       <dependency id="H.Necessaire.Serialization" version="2.43.21" />
-      <dependency id="Microsoft.Bcl.AsyncInterfaces" version="9.0.1" />
+      <dependency id="Microsoft.Bcl.AsyncInterfaces" version="9.0.2" />
       <dependency id="Newtonsoft.Json" version="13.0.3" />
       <dependency id="StandardSocketsHttpHandler" version="2.2.0.8" />
       <dependency id="UrlBase64" version="2.0.0" />

@@ -15,6 +15,18 @@ namespace H.Necessaire.Runtime.MAUI.Platforms.Android
                 h.PlatformView.BackgroundTintList = ColorStateList.ValueOf(HUiToolkit.Current.Branding.BackgroundColorTranslucent.ToMaui().ToPlatform());
             });
 
+            // Remove Entry control underline
+            Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoUnderline", (h, v) =>
+            {
+                h.PlatformView.BackgroundTintList = ColorStateList.ValueOf(HUiToolkit.Current.Branding.BackgroundColorTranslucent.ToMaui().ToPlatform());
+            });
+
+            // Remove Picker control underline
+            Microsoft.Maui.Handlers.PickerHandler.Mapper.AppendToMapping("NoUnderline", (h, v) =>
+            {
+                h.PlatformView.BackgroundTintList = ColorStateList.ValueOf(HUiToolkit.Current.Branding.BackgroundColorTranslucent.ToMaui().ToPlatform());
+            });
+
             return mauiApp;
         }
     }

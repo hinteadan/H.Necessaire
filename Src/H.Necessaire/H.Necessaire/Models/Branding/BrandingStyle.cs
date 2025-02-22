@@ -26,6 +26,7 @@
         public virtual ColorInfo SecondaryColorFaded => Colors.PrimaryIsh().Lighter(2);
 
         public virtual ColorInfo TextColor { get; } = new ColorInfo(0, 0, 0);
+        public virtual ColorInfo ButtonTextColor => Colors.Complementary.Lighter(10);
         public virtual ColorInfo LightTextColor { get; } = new ColorInfo(255, 255, 255, .85f);
         public virtual ColorInfo MutedTextColor { get; } = new ColorInfo(0, 0, 0, .35f);
         public virtual ColorInfo HighlightTextColor => Colors.Primary.Darker(10);
