@@ -52,7 +52,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             return base.WrapReceivedContent(content);
         }
 
-        protected override View ConstructContent() => layout;
+        protected sealed override View ConstructContent() => layout;
 
         protected virtual View ConstructLabeledContent() => null;
 
