@@ -48,7 +48,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Builders.Abstracts
 
         static View BuildTimeSpanPropertyComponent(HViewModelProperty viewModelProperty)
         {
-            return new HNumberIntervalEditor().And(editor => {
+            return new HTimeSpanEditor().And(editor => {
                 editor.Label = viewModelProperty.Label;
             });
         }

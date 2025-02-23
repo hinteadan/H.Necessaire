@@ -17,5 +17,6 @@
         public int IntegerNumber { get; set; }
 
         public NumberInterval NumberInterval { get; set; }
+        public TimeSpan TimeSpan { get; set; }
     }
 }

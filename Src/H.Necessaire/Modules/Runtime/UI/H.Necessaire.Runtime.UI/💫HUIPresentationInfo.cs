@@ -56,6 +56,9 @@ namespace H.Necessaire.Runtime.UI
             if (dataType.In(typeof(NumberInterval), typeof(NumberInterval?)))
                 return HUIPresentationType.NumberInterval;
 
+            if (dataType.In(typeof(TimeSpan), typeof(TimeSpan?)))
+                return HUIPresentationType.TimeSpan;
+
             if (dataType.In(typeof(DateTime), typeof(DateTime?)))
                 return HUIPresentationType.DateAndTime;
 

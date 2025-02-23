@@ -48,7 +48,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         hoursEditor = x;
                     })
                     ,
-                    column: 0
+                    column: 1
                 );
                 layout.Add(
                     new HNumberEditor
@@ -62,7 +62,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         minutesEditor = x;
                     })
                     ,
-                    column: 0
+                    column: 2
                 );
                 layout.Add(
                     new HNumberEditor
@@ -76,7 +76,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         secondsEditor = x;
                     })
                     ,
-                    column: 0
+                    column: 3
                 );
                 layout.Add(
                     new HNumberEditor
@@ -90,7 +90,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         millisecondsEditor = x;
                     })
                     ,
-                    column: 0
+                    column: 4
                 );
             });
         }
