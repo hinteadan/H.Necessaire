@@ -7,7 +7,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
     {
         Switch @switch;
         HLabel label;
-        protected override View ConstructDefaultContent()
+        protected override View ConstructContent()
         {
             return new Grid
             {

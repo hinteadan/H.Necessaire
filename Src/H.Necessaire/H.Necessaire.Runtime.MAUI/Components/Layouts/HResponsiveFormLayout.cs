@@ -7,7 +7,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Layouts
     {
         View parent;
         VerticalStackLayout rootLayout;
-        protected override View ConstructDefaultContent()
+        protected override View ConstructContent()
         {
             return
                 new VerticalStackLayout

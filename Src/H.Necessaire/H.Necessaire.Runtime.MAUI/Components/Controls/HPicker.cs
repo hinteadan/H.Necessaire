@@ -8,14 +8,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
     {
         Picker editor;
 
-        protected override void Construct()
-        {
-            base.Construct();
-
-            Content = ConstructContent();
-        }
-
-        View ConstructContent()
+        protected override View ConstructLabeledContent()
         {
             return
                 new Grid { }.And(layout =>

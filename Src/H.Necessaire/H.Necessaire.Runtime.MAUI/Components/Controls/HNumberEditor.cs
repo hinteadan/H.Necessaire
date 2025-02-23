@@ -17,11 +17,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             isStepperOnLeftSide = (bool)constructionArgs[0];
             isStepperHidden = (bool)constructionArgs[1];
         }
-        protected override void Construct()
-        {
-            base.Construct();
-            Content = ConstructContent();
-        }
 
         public event EventHandler NumberChanged;
 
@@ -45,7 +40,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         public decimal IncrementUnit { get => stepper?.IncrementUnit ?? 0; set { if (stepper is not null) stepper.IncrementUnit = value; } }
         public Func<decimal?, CancellationToken, Task<OperationResult<decimal?>>> UserInputValidator { get; set; }
 
-        View ConstructContent()
+        protected override View ConstructLabeledContent()
         {
             double cornerRadius = Branding.SizingUnitInPixels / 4;
             double iconSize = Branding.SizingUnitInPixels * .75d;

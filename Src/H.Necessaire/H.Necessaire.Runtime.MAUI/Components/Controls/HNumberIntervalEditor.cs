@@ -45,7 +45,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             }
         }
 
-        View ConstructContent()
+        protected override View ConstructLabeledContent()
         {
             return new Grid
             {

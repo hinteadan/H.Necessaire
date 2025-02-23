@@ -11,7 +11,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Chromes
         HLabel footerBrandingLabel = null;
         readonly ContentPresenter contentPresenter = new();
 
-        protected override View ConstructDefaultContent() => ConstructChromedContent();
+        protected override View ConstructContent() => ConstructChromedContent();
         protected override View WrapReceivedContent(View content)
         {
             contentPresenter.Content = content;

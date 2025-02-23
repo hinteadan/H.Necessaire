@@ -15,7 +15,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.HUI.Components
             viewModel = constructionArgs[0] as HViewModel;
         }
 
-        protected override View ConstructDefaultContent()
+        protected override View ConstructContent()
         {
             return
                 new VerticalStackLayout()

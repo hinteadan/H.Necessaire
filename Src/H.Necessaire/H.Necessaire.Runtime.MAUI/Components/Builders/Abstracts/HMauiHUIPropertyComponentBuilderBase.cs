@@ -29,6 +29,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Builders.Abstracts
                     return BuildNumberIntervalPropertyComponent(viewModelProperty).And(x => viewModelProperty.ReferenceNativeUIControl(x));
 
                 case HUIPresentationType.TimeSpan:
+                    return BuildTimeSpanPropertyComponent(viewModelProperty).And(x => viewModelProperty.ReferenceNativeUIControl(x));
+
                 case HUIPresentationType.Date:
                 case HUIPresentationType.Time:
                 case HUIPresentationType.DateAndTime:
@@ -42,6 +44,13 @@ namespace H.Necessaire.Runtime.MAUI.Components.Builders.Abstracts
                 default:
                     return new HUINotYetSupportedComponent(viewModelProperty).And(x => viewModelProperty.ReferenceNativeUIControl(x));
             }
+        }
+
+        static View BuildTimeSpanPropertyComponent(HViewModelProperty viewModelProperty)
+        {
+            return new HNumberIntervalEditor().And(editor => {
+                editor.Label = viewModelProperty.Label;
+            });
         }
 
         static View BuildNumberIntervalPropertyComponent(HViewModelProperty viewModelProperty)

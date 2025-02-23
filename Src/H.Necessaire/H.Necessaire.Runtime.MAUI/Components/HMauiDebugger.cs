@@ -11,7 +11,7 @@ namespace H.Necessaire.Runtime.MAUI.Components
 {
     public class HMauiDebugger : HMauiComponentBase
     {
-        protected override View ConstructDefaultContent()
+        protected override View ConstructContent()
         {
             View huiDebuggingComponent = Get<HMauiHUIGenericComponent<DebuggingHUIComponent>>();
 

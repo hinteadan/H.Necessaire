@@ -40,7 +40,7 @@ public abstract class HMauiComponentBase : ContentView
     protected IDisposable DisabledScopeFor(View view) => HUiToolkit.Current.DisabledScopeFor(view);
 
     protected virtual View WrapReceivedContent(View content) => wrappedReceivedContent;
-    protected virtual View ConstructDefaultContent() => null;
+    protected virtual View ConstructContent() => null;
     protected virtual void EnsureDependencies(params object[] constructionArgs) { }
     protected virtual void Construct()
     {
@@ -48,7 +48,7 @@ public abstract class HMauiComponentBase : ContentView
         Unloaded += HMauiComponent_Unloaded;
         PropertyChanged += HMauiComponent_PropertyChanged;
 
-        wrappedReceivedContent = ConstructDefaultContent();
+        wrappedReceivedContent = ConstructContent();
 
         Content = wrappedReceivedContent;
     }

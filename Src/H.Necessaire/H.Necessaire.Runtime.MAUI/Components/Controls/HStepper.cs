@@ -7,7 +7,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         decimal incrementUnit = .5m;
         HGlyphButton incrementButton;
         HGlyphButton decrementButton;
-        protected override View ConstructDefaultContent()
+        protected override View ConstructContent()
         {
             return
                 new Grid

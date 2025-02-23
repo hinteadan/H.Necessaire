@@ -9,7 +9,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
     {
         FontImageSource fontImageSource;
         Image fontImage;
-        protected override View ConstructDefaultContent() => ConstructFontIcon();
+        protected override View ConstructContent() => ConstructFontIcon();
 
         View ConstructFontIcon()
         {

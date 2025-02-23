@@ -33,13 +33,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         {
             await base.Destroy();
         }
-        protected override void Construct()
-        {
-            base.Construct();
-            Content = ConstructContent();
-        }
 
-        View ConstructContent()
+        protected override View ConstructLabeledContent()
         {
             double cornerRadius = Branding.SizingUnitInPixels / 4;
             double iconSize = Branding.SizingUnitInPixels * .75d;
