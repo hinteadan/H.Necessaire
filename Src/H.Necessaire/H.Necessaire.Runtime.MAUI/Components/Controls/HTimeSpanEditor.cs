@@ -5,15 +5,16 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
     class HTimeSpanEditor : HMauiLabelAndDescriptionComponentBase
     {
         HNumberEditor daysEditor;
-        HPicker hoursEditor;
-        HPicker minutesEditor;
-        HPicker secondsEditor;
+        HNumberEditor hoursEditor;
+        HNumberEditor minutesEditor;
+        HNumberEditor secondsEditor;
         HNumberEditor millisecondsEditor;
         protected override View ConstructLabeledContent()
         {
             return new Grid
             {
                 ColumnDefinitions = [
+                    new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
                     new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
                     new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
                     new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
@@ -26,6 +27,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                     new HNumberEditor
                     {
                         Label = "Day(s)",
+                        Min = 0,
                     }.And(x =>
                     {
                         daysEditor = x;
@@ -34,9 +36,11 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                     column: 0
                 );
                 layout.Add(
-                    new HPicker
+                    new HNumberEditor
                     {
                         Label = "Hours(s)",
+                        Min = 0,
+                        Max = 59,
                     }.And(x =>
                     {
                         hoursEditor = x;

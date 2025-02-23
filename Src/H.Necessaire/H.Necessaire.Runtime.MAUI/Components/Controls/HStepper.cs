@@ -107,7 +107,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             if (Value is null)
             {
                 Value = Min ?? default(decimal);
-                OnValueChanged?.Invoke(this, EventArgs.Empty);
                 return;
             }
 
@@ -115,11 +114,15 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 return;
 
             if (Max is not null && Value == Max)
+            {
+                if (Min is null)
+                    return;
+
+                Value = Min;
                 return;
+            }
 
             Value += incrementUnit;
-
-            OnValueChanged?.Invoke(this, EventArgs.Empty);
         }
 
         void Decrement()
@@ -127,7 +130,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             if (Value is null)
             {
                 Value = Max ?? default(decimal);
-                OnValueChanged?.Invoke(this, EventArgs.Empty);
                 return;
             }
 
@@ -135,10 +137,15 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 return;
 
             if (Min is not null && Value == Min)
+            {
+                if (Max is null)
+                    return;
+
+                Value = Max;
                 return;
+            }
 
             Value -= incrementUnit;
-            OnValueChanged?.Invoke(this, EventArgs.Empty);
         }
 
         void ApplyMinChangeIfNecessary()
@@ -147,7 +154,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 return;
 
             Value = min;
-            OnValueChanged?.Invoke(this, EventArgs.Empty);
         }
 
         void ApplyMaxChangeIfNecessary()
@@ -156,7 +162,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 return;
 
             Value = max;
-            OnValueChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }
