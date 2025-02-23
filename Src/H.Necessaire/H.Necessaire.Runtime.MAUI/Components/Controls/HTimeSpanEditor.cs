@@ -1,14 +1,14 @@
 ﻿using H.Necessaire.Runtime.MAUI.Components.Abstracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
     class HTimeSpanEditor : HMauiLabelAndDescriptionComponentBase
     {
+        HNumberEditor daysEditor;
+        HPicker hoursEditor;
+        HPicker minutesEditor;
+        HPicker secondsEditor;
+        HNumberEditor millisecondsEditor;
         protected override View ConstructLabeledContent()
         {
             return new Grid
@@ -22,7 +22,28 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             }
             .And(layout =>
             {
-
+                layout.Add(
+                    new HNumberEditor
+                    {
+                        Label = "Day(s)",
+                    }.And(x =>
+                    {
+                        daysEditor = x;
+                    })
+                    ,
+                    column: 0
+                );
+                layout.Add(
+                    new HPicker
+                    {
+                        Label = "Hours(s)",
+                    }.And(x =>
+                    {
+                        hoursEditor = x;
+                    })
+                    ,
+                    column: 0
+                );
             });
         }
     }

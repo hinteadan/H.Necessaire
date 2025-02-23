@@ -36,6 +36,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 preValue = value;
             }
         }
+        public decimal? Min { get => stepper.Min; set => stepper.Min = value; }
+        public decimal? Max { get => stepper.Max; set => stepper.Max = value; }
         public string Placeholder { get => editor.Placeholder; set => editor.Placeholder = value; }
         public decimal IncrementUnit { get => stepper?.IncrementUnit ?? 0; set { if (stepper is not null) stepper.IncrementUnit = value; } }
         public Func<decimal?, CancellationToken, Task<OperationResult<decimal?>>> UserInputValidator { get; set; }

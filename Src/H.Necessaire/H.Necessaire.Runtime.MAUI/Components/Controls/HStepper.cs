@@ -50,8 +50,46 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
         public event EventHandler OnValueChanged;
         public decimal IncrementUnit { get => incrementUnit; set => incrementUnit = Math.Abs(value); }
-        public decimal? Value { get; set; } = null;
-        public new bool IsEnabled 
+
+        decimal? value = null;
+        public decimal? Value
+        {
+            get => value;
+            set
+            {
+                decimal? preValue = this.value;
+                decimal? newValue = value;
+
+                this.value = newValue;
+
+                if (newValue != preValue)
+                    OnValueChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        decimal? min;
+        public decimal? Min
+        {
+            get => min;
+            set
+            {
+                min = value;
+                ApplyMinChangeIfNecessary();
+            }
+        }
+
+        decimal? max;
+        public decimal? Max
+        {
+            get => max;
+            set
+            {
+                max = value;
+                ApplyMaxChangeIfNecessary();
+            }
+        }
+
+        public new bool IsEnabled
         {
             get => incrementButton?.IsEnabled ?? true;
             set
@@ -68,7 +106,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         {
             if (Value is null)
             {
-                Value = default(decimal);
+                Value = Min ?? default(decimal);
                 OnValueChanged?.Invoke(this, EventArgs.Empty);
                 return;
             }
@@ -76,7 +114,11 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             if (incrementUnit == 0)
                 return;
 
+            if (Max is not null && Value == Max)
+                return;
+
             Value += incrementUnit;
+
             OnValueChanged?.Invoke(this, EventArgs.Empty);
         }
 
@@ -84,7 +126,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         {
             if (Value is null)
             {
-                Value = default(decimal);
+                Value = Max ?? default(decimal);
                 OnValueChanged?.Invoke(this, EventArgs.Empty);
                 return;
             }
@@ -92,7 +134,28 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             if (incrementUnit == 0)
                 return;
 
+            if (Min is not null && Value == Min)
+                return;
+
             Value -= incrementUnit;
+            OnValueChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        void ApplyMinChangeIfNecessary()
+        {
+            if (Value is null || min is null || Value >= min)
+                return;
+
+            Value = min;
+            OnValueChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        void ApplyMaxChangeIfNecessary()
+        {
+            if (Value is null || max is null || Value <= max)
+                return;
+
+            Value = max;
             OnValueChanged?.Invoke(this, EventArgs.Empty);
         }
     }
