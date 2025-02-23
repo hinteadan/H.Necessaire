@@ -32,6 +32,7 @@ namespace H.Necessaire.Runtime.UI
                 return HUIPresentationType.Boolean;
 
             if (dataType.In(
+                typeof(sbyte), typeof(sbyte?),
                 typeof(byte), typeof(byte?),
 
                 typeof(short), typeof(short?),
