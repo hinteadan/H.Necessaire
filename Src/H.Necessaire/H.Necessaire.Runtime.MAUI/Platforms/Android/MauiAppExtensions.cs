@@ -27,6 +27,18 @@ namespace H.Necessaire.Runtime.MAUI.Platforms.Android
                 h.PlatformView.BackgroundTintList = ColorStateList.ValueOf(HUiToolkit.Current.Branding.BackgroundColorTranslucent.ToMaui().ToPlatform());
             });
 
+            // Remove Picker control underline
+            Microsoft.Maui.Handlers.DatePickerHandler.Mapper.AppendToMapping("NoUnderline", (h, v) =>
+            {
+                h.PlatformView.BackgroundTintList = ColorStateList.ValueOf(HUiToolkit.Current.Branding.BackgroundColorTranslucent.ToMaui().ToPlatform());
+            });
+
+            // Remove Picker control underline
+            Microsoft.Maui.Handlers.TimePickerHandler.Mapper.AppendToMapping("NoUnderline", (h, v) =>
+            {
+                h.PlatformView.BackgroundTintList = ColorStateList.ValueOf(HUiToolkit.Current.Branding.BackgroundColorTranslucent.ToMaui().ToPlatform());
+            });
+
             return mauiApp;
         }
     }
