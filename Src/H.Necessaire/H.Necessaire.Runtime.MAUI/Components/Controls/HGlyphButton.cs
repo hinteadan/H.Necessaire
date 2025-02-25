@@ -4,7 +4,7 @@ using H.Necessaire.Runtime.MAUI.WellKnown.FluentUI;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
-    class HGlyphButton : ImageButton
+    public class HGlyphButton : ImageButton
     {
         string glyphName = null;
         readonly FontImageSource fontImageSource;

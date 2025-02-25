@@ -3,7 +3,7 @@ using H.Necessaire.Runtime.MAUI.Extensions;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
-    class HDatePicker : HMauiLabelAndDescriptionComponentBase
+    public class HDatePicker : HMauiLabelAndDescriptionComponentBase
     {
         protected override View ConstructLabeledContent()
         {

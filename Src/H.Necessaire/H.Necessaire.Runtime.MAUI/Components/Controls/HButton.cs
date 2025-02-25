@@ -2,7 +2,7 @@
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
-    internal class HButton : Button
+    public class HButton : Button
     {
         public HButton()
         {

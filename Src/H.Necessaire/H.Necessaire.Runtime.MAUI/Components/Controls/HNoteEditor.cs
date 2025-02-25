@@ -2,7 +2,7 @@
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
-    class HNoteEditor : HMauiLabelAndDescriptionComponentBase
+    public class HNoteEditor : HMauiLabelAndDescriptionComponentBase
     {
         protected override View ConstructLabeledContent()
         {

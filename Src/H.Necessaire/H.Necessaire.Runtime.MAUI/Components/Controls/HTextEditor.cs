@@ -4,7 +4,7 @@ using Microsoft.Maui.Controls.Shapes;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
-    internal class HTextEditor : HMauiLabelAndDescriptionComponentBase
+    public class HTextEditor : HMauiLabelAndDescriptionComponentBase
     {
         Editor editor;
         Grid editorGrid;

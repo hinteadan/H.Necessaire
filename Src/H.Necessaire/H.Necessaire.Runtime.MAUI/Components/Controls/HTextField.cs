@@ -4,7 +4,7 @@ using Microsoft.Maui.Controls.Shapes;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
-    class HTextField : HMauiLabelAndDescriptionComponentBase
+    public class HTextField : HMauiLabelAndDescriptionComponentBase
     {
         Entry editor;
         Grid editorStack;

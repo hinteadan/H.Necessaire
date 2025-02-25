@@ -3,7 +3,7 @@ using H.Necessaire.Runtime.MAUI.Extensions;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 {
-    class HMauiLabelAndDescriptionComponentBase : HMauiComponentBase
+    public abstract class HMauiLabelAndDescriptionComponentBase : HMauiComponentBase
     {
         ContentPresenter contentPresenter;
         VerticalStackLayout layout;

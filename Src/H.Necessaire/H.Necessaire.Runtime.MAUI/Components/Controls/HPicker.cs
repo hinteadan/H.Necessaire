@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
-    class HPicker : HMauiLabelAndDescriptionComponentBase
+    public class HPicker : HMauiLabelAndDescriptionComponentBase
     {
         Picker editor;
 

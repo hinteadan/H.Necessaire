@@ -3,7 +3,7 @@ using H.Necessaire.Runtime.MAUI.Extensions;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
-    class HNumberIntervalEditor : HMauiLabelAndDescriptionComponentBase
+    public class HNumberIntervalEditor : HMauiLabelAndDescriptionComponentBase
     {
         CheckBox minIncludeCheck;
         CheckBox maxIncludeCheck;

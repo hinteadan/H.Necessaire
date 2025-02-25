@@ -2,7 +2,7 @@
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
-    class HTimeSpanEditor : HMauiLabelAndDescriptionComponentBase
+    public class HTimeSpanEditor : HMauiLabelAndDescriptionComponentBase
     {
         HNumberEditor daysEditor;
         HNumberEditor hoursEditor;

@@ -2,7 +2,7 @@
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
-    class HStepper : HMauiComponentBase
+    public class HStepper : HMauiComponentBase
     {
         decimal incrementUnit = .5m;
         HGlyphButton incrementButton;

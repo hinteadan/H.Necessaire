@@ -3,7 +3,7 @@ using H.Necessaire.Runtime.MAUI.Extensions;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
-    class HNumberEditor : HMauiLabelAndDescriptionComponentBase
+    public class HNumberEditor : HMauiLabelAndDescriptionComponentBase
     {
         Entry editor;
         HStepper stepper;
