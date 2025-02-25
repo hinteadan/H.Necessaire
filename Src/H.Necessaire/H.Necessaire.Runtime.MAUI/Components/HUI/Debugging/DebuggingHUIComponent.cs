@@ -9,10 +9,13 @@ namespace H.Necessaire.Runtime.MAUI.Components.HUI.Debugging
             : base(
                 new DebuggingDataModel()
                 .ToHViewModel(title: "HUI Controls Debugger")
-                .And(vm => {
-                    vm.Property(x => x.Selection).SetPresentation(new HUIPresentationInfo {
+                .And(vm =>
+                {
+                    vm.Property(x => x.Selection).SetPresentation(new HUIPresentationInfo
+                    {
                         Type = HUIPresentationType.Selection,
-                        Selection = new HUISelectionPresentationInfo {
+                        Selection = new HUISelectionPresentationInfo
+                        {
                             Options = ["Selection Option 1", "Selection Option 2", "Selection Option 3", "Selection Option 4"],
                         },
                     });

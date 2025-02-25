@@ -242,6 +242,10 @@ namespace H.Necessaire.Runtime.UI
             {
                 presentationInfo.Selection = new HUISelectionPresentationInfo();
             }
+            else if (presentationInfo.Type >= HUIPresentationType.Date && presentationInfo.Type <= HUIPresentationType.ApproximatePeriodOfTime)
+            {
+                presentationInfo.DateTime = new HUIDateTimePresentationInfo();
+            }
             else if (presentationInfo.Type == HUIPresentationType.Collection)
             {
                 presentationInfo.Collection = new HUICollectionPresentationInfo();

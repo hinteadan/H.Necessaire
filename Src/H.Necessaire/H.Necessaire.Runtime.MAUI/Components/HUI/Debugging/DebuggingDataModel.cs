@@ -18,5 +18,7 @@
 
         public NumberInterval NumberInterval { get; set; }
         public TimeSpan TimeSpan { get; set; }
+
+        public DateOnly Date { get; set; }
     }
 }
