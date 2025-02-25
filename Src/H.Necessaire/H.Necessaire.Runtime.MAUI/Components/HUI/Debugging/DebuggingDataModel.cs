@@ -24,5 +24,7 @@
         public TimeOnly Time { get; set; }
 
         public DateTime DateTime { get; set; }
+
+        public PeriodOfTime PeriodOfTime { get; set; }
     }
 }
