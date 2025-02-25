@@ -22,5 +22,7 @@
         public DateOnly Date { get; set; }
 
         public TimeOnly Time { get; set; }
+
+        public DateTime DateTime { get; set; }
     }
 }
