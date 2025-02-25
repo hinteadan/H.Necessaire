@@ -13,9 +13,11 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         {
             return new Grid
             {
+                RowDefinitions = [
+                    new RowDefinition(new GridLength(1, GridUnitType.Auto)),
+                    new RowDefinition(new GridLength(1, GridUnitType.Auto)),
+                ],
                 ColumnDefinitions = [
-                    new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
-                    new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
                     new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
                     new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
                     new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
@@ -34,7 +36,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         daysEditor = x;
                     })
                     ,
-                    column: 0
+                    column: 0, row: 0
                 );
                 layout.Add(
                     new HNumberEditor
@@ -48,7 +50,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         hoursEditor = x;
                     })
                     ,
-                    column: 1
+                    column: 1, row: 0
                 );
                 layout.Add(
                     new HNumberEditor
@@ -62,7 +64,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         minutesEditor = x;
                     })
                     ,
-                    column: 2
+                    column: 2, row: 0
                 );
                 layout.Add(
                     new HNumberEditor
@@ -71,12 +73,13 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         Min = 0,
                         Max = 59,
                         IncrementUnit = 1,
+                        Margin = new Thickness(0, Branding.SizingUnitInPixels / 4, 0, 0),
                     }.And(x =>
                     {
                         secondsEditor = x;
                     })
                     ,
-                    column: 3
+                    column: 1, row: 1
                 );
                 layout.Add(
                     new HNumberEditor
@@ -85,12 +88,13 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         Min = 0,
                         Max = 999,
                         IncrementUnit = 1,
+                        Margin = new Thickness(0, Branding.SizingUnitInPixels / 4, 0, 0),
                     }.And(x =>
                     {
                         millisecondsEditor = x;
                     })
                     ,
-                    column: 4
+                    column: 2, row: 1
                 );
             });
         }

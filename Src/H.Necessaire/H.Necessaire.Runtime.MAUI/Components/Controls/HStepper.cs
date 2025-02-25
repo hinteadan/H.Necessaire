@@ -153,6 +153,9 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             if (Value is null || min is null || Value >= min)
                 return;
 
+            if (Max is not null && min > Max)
+                Max = min;
+
             Value = min;
         }
 
@@ -160,6 +163,9 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         {
             if (Value is null || max is null || Value <= max)
                 return;
+
+            if (Min is not null && max < Min)
+                Min = max;
 
             Value = max;
         }

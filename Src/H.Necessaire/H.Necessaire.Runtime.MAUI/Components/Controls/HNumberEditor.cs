@@ -29,6 +29,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             {
                 decimal? oldValue = preValue;
                 decimal? newValue = value;
+                value = ApplyMinMaxIfNecessary(value);
                 stepper.Value = value;
                 editor.Text = value?.ToString();
                 if (newValue != oldValue)
@@ -36,6 +37,24 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 preValue = value;
             }
         }
+
+        private decimal? ApplyMinMaxIfNecessary(decimal? value)
+        {
+            if (value is null)
+                return value;
+
+            if (Min is null && Max is null)
+                return value;
+
+            if (Min is not null && value < Min)
+                return Min;
+
+            if (Max is not null && value > Max)
+                return Max;
+
+            return value;
+        }
+
         public decimal? Min { get => stepper.Min; set => stepper.Min = value; }
         public decimal? Max { get => stepper.Max; set => stepper.Max = value; }
         public string Placeholder { get => editor.Placeholder; set => editor.Placeholder = value; }
