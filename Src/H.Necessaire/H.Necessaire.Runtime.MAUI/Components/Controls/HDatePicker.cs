@@ -16,7 +16,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
             }.And(layout =>
             {
-
                 layout.Add(
                     new Switch
                     {
