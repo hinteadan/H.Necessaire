@@ -7,28 +7,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
     {
         protected override View ConstructLabeledContent()
         {
-            return new Grid
-            {
-
-                ColumnDefinitions = [
-                    new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
-                    new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
-                ],
-
-            }.And(layout =>
-            {
-                layout.Add(
-                    new Switch
-                    {
-                        OnColor = Branding.Colors.Primary.Lighter().ToMaui(),
-                        HorizontalOptions = LayoutOptions.Start,
-                        VerticalOptions = LayoutOptions.Center,
-                        Margin = new Thickness(Branding.SizingUnitInPixels / 4, 0),
-                        IsToggled = true,
-                    }
-                );
-
-                layout.Add(new DatePicker
+            return
+                new DatePicker
                 {
                     FontFamily = HUiToolkit.Current.Branding.Typography.FontFamily,
                     FontSize = HUiToolkit.Current.Branding.Typography.FontSize,
@@ -36,9 +16,10 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                     Format = HUiToolkit.Current.Branding.DateFormat,
                     HorizontalOptions = LayoutOptions.End,
                     VerticalOptions = LayoutOptions.Center,
-                }, column: 1);
-
-            }).Bordered();
+                }
+                .Nullable()
+                .Bordered()
+                ;
         }
     }
 }
