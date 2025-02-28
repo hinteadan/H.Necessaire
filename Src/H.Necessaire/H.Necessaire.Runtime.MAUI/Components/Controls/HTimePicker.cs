@@ -7,21 +7,22 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
     {
         protected override View ConstructLabeledContent()
         {
-            PatchedTimePicker timePicker = new PatchedTimePicker
-            {
-                FontFamily = HUiToolkit.Current.Branding.Typography.FontFamily,
-                FontSize = HUiToolkit.Current.Branding.Typography.FontSize,
-                TextColor = HUiToolkit.Current.Branding.TextColor.ToMaui(),
-                Format = "HH:mm:ss",
-                HorizontalOptions = LayoutOptions.End,
-            };
-
             return new Grid().And(layout =>
             {
 
-                layout.Add(timePicker);
+                layout.Add(new PatchedTimePicker
+                {
+                    FontFamily = HUiToolkit.Current.Branding.Typography.FontFamily,
+                    FontSize = HUiToolkit.Current.Branding.Typography.FontSize,
+                    TextColor = HUiToolkit.Current.Branding.TextColor.ToMaui(),
+                    Format = "HH:mm:ss",
+                    HorizontalOptions = LayoutOptions.End,
+                });
 
-            }).Bordered();
+            })
+            .Nullable()
+            .Bordered()
+            ;
         }
     }
 }
