@@ -7,7 +7,7 @@
         public virtual int SizingUnitInPixels { get; } = 10;
 
         public virtual string DateFormat { get; } = "dd-MMM-yyyy";
-        public virtual string TimeFormat { get; } = "HH:mm:ss";
+        public virtual string TimeFormat { get; } = "HH:mm";
         public virtual string DateTimeFormat { get; } = "dd-MMM-yyyy HH:mm:ss";
 
         //public ColorPalette Colors { get; } = ColorPalette.Default;
