@@ -7,7 +7,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
     {
         protected override View ConstructLabeledContent()
         {
-            return new Grid { 
+            return new Grid
+            {
 
                 ColumnDefinitions = [
                     new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
@@ -22,6 +23,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         OnColor = Branding.Colors.Primary.Lighter().ToMaui(),
                         HorizontalOptions = LayoutOptions.Start,
                         VerticalOptions = LayoutOptions.Center,
+                        Margin = new Thickness(Branding.SizingUnitInPixels / 4, 0),
                         IsToggled = true,
                     }
                 );
