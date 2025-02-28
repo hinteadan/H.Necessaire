@@ -43,7 +43,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                     {
                         Label = "Hours(s)",
                         Min = 0,
-                        Max = 59,
+                        Max = 23,
                         IncrementUnit = 1,
                     }.And(x =>
                     {

@@ -26,5 +26,7 @@
         public DateTime DateTime { get; set; }
 
         public PeriodOfTime PeriodOfTime { get; set; }
+
+        public PartialDateTime PartialDateTime { get; set; }
     }
 }

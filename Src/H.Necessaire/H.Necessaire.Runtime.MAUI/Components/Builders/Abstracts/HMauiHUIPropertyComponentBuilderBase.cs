@@ -44,6 +44,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Builders.Abstracts
                     return BuildPeriodOfTimePropertyComponent(viewModelProperty).And(x => viewModelProperty.ReferenceNativeUIControl(x));
 
                 case HUIPresentationType.PartialDateTime:
+                    return BuildPartialDateTimePropertyComponent(viewModelProperty).And(x => viewModelProperty.ReferenceNativeUIControl(x));
+
                 case HUIPresentationType.PartialPeriodOfTime:
                 case HUIPresentationType.ApproximatePeriodOfTime:
                 case HUIPresentationType.Collection:
@@ -52,6 +54,14 @@ namespace H.Necessaire.Runtime.MAUI.Components.Builders.Abstracts
                 default:
                     return new HUINotYetSupportedComponent(viewModelProperty).And(x => viewModelProperty.ReferenceNativeUIControl(x));
             }
+        }
+
+        static View BuildPartialDateTimePropertyComponent(HViewModelProperty viewModelProperty)
+        {
+            return new HPartialDateTimeEditor().And(editor =>
+            {
+                editor.Label = viewModelProperty.Label;
+            });
         }
 
         static View BuildPeriodOfTimePropertyComponent(HViewModelProperty viewModelProperty)

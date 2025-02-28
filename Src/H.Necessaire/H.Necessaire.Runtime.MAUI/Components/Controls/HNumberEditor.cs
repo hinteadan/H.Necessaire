@@ -18,7 +18,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             isStepperHidden = (bool)constructionArgs[1];
         }
 
-        public event EventHandler NumberChanged;
+        public event EventHandler<NumberChangedEventArgs> NumberChanged;
 
         public Entry Editor => editor;
         decimal? preValue = null;
@@ -31,9 +31,11 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 decimal? newValue = value;
                 value = ApplyMinMaxIfNecessary(value);
                 stepper.Value = value;
-                editor.Text = value?.ToString();
+                string valueAsString = value?.ToString();
+                if (editor.Text != valueAsString)
+                    editor.Text = valueAsString;
                 if (newValue != oldValue)
-                    NumberChanged?.Invoke(this, EventArgs.Empty);
+                    NumberChanged?.Invoke(this, new NumberChangedEventArgs(oldValue, newValue));
                 preValue = value;
             }
         }
@@ -143,6 +145,19 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
             if (UserInputValidator is not null)
                 validationResult = await UserInputValidator.Invoke(Number, CancellationToken.None);
+        }
+
+
+        public class NumberChangedEventArgs : EventArgs
+        {
+            public NumberChangedEventArgs(decimal? oldValue, decimal? newValue)
+            {
+                OldValue = oldValue;
+                NewValue = newValue;
+            }
+
+            public decimal? OldValue { get; }
+            public decimal? NewValue { get; }
         }
     }
 }
