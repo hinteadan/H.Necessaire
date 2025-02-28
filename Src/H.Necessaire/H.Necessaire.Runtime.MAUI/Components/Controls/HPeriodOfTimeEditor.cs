@@ -1,5 +1,4 @@
 ﻿using H.Necessaire.Runtime.MAUI.Components.Abstracts;
-using H.Necessaire.Runtime.MAUI.Extensions;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
@@ -13,43 +12,24 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                     new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
                     new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
                 ],
-                RowDefinitions = [
-                    new RowDefinition(new GridLength(1, GridUnitType.Auto)),
-                    new RowDefinition(new GridLength(1, GridUnitType.Auto)),
-                ],
             }.And(layout =>
             {
 
-                layout.Add(new HorizontalStackLayout().And(layout => {
+                layout.Add(
+                    new HDateTimePicker
+                    {
+                        Label = "From",
+                    },
+                    column: 0
+                );
 
-                    layout.Add(
-                        new CheckBox
-                        {
-                            IsChecked = true,
-                            Color = Branding.PrimaryColor.ToMaui(),
-                        }
-                    );
-
-                    layout.Add(
-                        new HDateTimePicker
-                        {
-                            Label = "From",
-                        }
-                    );
-
-                }), column: 0, row: 0);
-
-
-                layout.Add(new HorizontalStackLayout().And(layout => {
-
-                    layout.Add(
-                        new HDateTimePicker
-                        {
-                            Label = "To",
-                        }
-                    );
-
-                }), column: 0, row: 1);
+                layout.Add(
+                    new HDateTimePicker
+                    {
+                        Label = "To",
+                    },
+                    column: 1
+                );
 
             });
         }
