@@ -26,7 +26,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                     );
 
                     layout.Add(
-                        new TimePicker
+                        new PatchedTimePicker
                         {
                             FontFamily = HUiToolkit.Current.Branding.Typography.FontFamily,
                             FontSize = HUiToolkit.Current.Branding.Typography.FontSize,
