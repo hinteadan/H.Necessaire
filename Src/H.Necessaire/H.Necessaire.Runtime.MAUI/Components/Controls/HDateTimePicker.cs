@@ -19,7 +19,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                             FontFamily = HUiToolkit.Current.Branding.Typography.FontFamily,
                             FontSize = HUiToolkit.Current.Branding.Typography.FontSize,
                             TextColor = HUiToolkit.Current.Branding.TextColor.ToMaui(),
-                            Format = "yyyy/MM/dd",
+                            Format = HUiToolkit.Current.Branding.DateFormat,
                             HorizontalOptions = LayoutOptions.End,
                             VerticalOptions = LayoutOptions.Center,
                         }
@@ -28,10 +28,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                     layout.Add(
                         new PatchedTimePicker
                         {
-                            FontFamily = HUiToolkit.Current.Branding.Typography.FontFamily,
-                            FontSize = HUiToolkit.Current.Branding.Typography.FontSize,
-                            TextColor = HUiToolkit.Current.Branding.TextColor.ToMaui(),
-                            Format = "HH:mm:ss",
                             HorizontalOptions = LayoutOptions.End,
                             VerticalOptions = LayoutOptions.Center,
                         }

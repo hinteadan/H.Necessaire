@@ -4,15 +4,17 @@
     {
         public static readonly BrandingStyle Default = new BrandingStyle();
 
-        #region Construct
-        public virtual int SizingUnitInPixels { get;  } = 10;
+        public virtual int SizingUnitInPixels { get; } = 10;
+
+        public virtual string DateFormat { get; } = "dd-MMM-yyyy";
+        public virtual string TimeFormat { get; } = "HH:mm:ss";
+        public virtual string DateTimeFormat { get; } = "dd-MMM-yyyy HH:mm:ss";
 
         //public ColorPalette Colors { get; } = ColorPalette.Default;
-        public virtual ColorPalette Colors { get;  } = ColorPalette.CyanMate;
+        public virtual ColorPalette Colors { get; } = ColorPalette.CyanMate;
 
         //public Typography Typography { get; } = Typography.Default;
         public virtual Typography Typography { get; } = Typography.FiraSans;
-        #endregion
 
         public virtual ColorInfo BackgroundColor => Colors.Complementary.Lighter(10);
         public virtual ColorInfo BackgroundColorTranslucent => Colors.Complementary.Lighter(10).Clone().And(x => x.Opacity = .83f);
