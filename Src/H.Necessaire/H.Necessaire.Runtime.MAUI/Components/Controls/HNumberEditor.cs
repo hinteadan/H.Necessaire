@@ -114,7 +114,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         View ConstructEditor()
         {
             return
-                new HTextField()
+                new HTextField { IsValidationIndicatorEnabled = false }
                 .And(x =>
                 {
                     x.Editor.FontFamily = Branding.Typography.FontFamily;
@@ -133,6 +133,9 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         async Task OnTextChanged(object sender, TextChangedEventArgs e)
         {
             string newValue = e.NewTextValue;
+            if (newValue == "-")
+                return;
+
             decimal? parsedValue = newValue.ParseToDecimalOrFallbackTo(null);
             Number = parsedValue;
 

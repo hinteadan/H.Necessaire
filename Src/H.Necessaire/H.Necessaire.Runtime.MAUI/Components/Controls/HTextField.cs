@@ -12,6 +12,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         RoundRectangle validationLedIndicator;
         HGlyphButton clearButton;
         bool isClearOptionEnabled = true;
+        bool isValidationIndicatorEnabled = true;
 
         public event EventHandler<TextChangedEventArgs> TextChanged;
 
@@ -27,6 +28,16 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 RefreshClearOptionView();
             }
         }
+        public bool IsValidationIndicatorEnabled
+        {
+            get => isValidationIndicatorEnabled;
+            set
+            {
+                isValidationIndicatorEnabled = value;
+                RefreshValidationIndicatorView();
+            }
+        }
+
         public Func<string, CancellationToken, Task<OperationResult<string>>> UserInputValidator { get; set; }
 
         protected override async Task Destroy()
@@ -158,6 +169,11 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 return;
 
             editorStack.Add(clearButton, column: 1);
+        }
+
+        void RefreshValidationIndicatorView()
+        {
+            validationLedIndicator.IsVisible = isValidationIndicatorEnabled;
         }
     }
 }
