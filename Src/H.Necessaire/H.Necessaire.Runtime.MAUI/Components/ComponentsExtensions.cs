@@ -10,9 +10,13 @@ namespace H.Necessaire.Runtime.MAUI.Components
             return new HBorderedContent(view);
         }
 
-        public static View Nullable(this View view)
+        public static View Nullable(this View view, string nullText = "Any")
         {
-            return new HNullableControl { Content = view };
+            return new HNullableControl
+            {
+                Content = view,
+                NullText = nullText,
+            };
         }
     }
 }

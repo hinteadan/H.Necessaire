@@ -15,6 +15,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
         public bool IsNull => nullSwitch?.IsToggled == false;
 
+        public virtual string NullText { get; set; } = "Any";
+
         protected override View ConstructContent()
         {
             return new Grid
@@ -80,7 +82,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         {
             return new HLabel
             {
-                Text = "Not set",
+                Text = NullText,
                 HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.Center,
                 VerticalTextAlignment = TextAlignment.Center,
