@@ -68,6 +68,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         {
             if (IsNull)
             {
+                nullIndicator.HeightRequest = nullableContent.Height;
                 contentPresenter.Content = nullIndicator;
                 return;
             }
@@ -77,7 +78,14 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
         protected virtual View ConstructNullIndicator()
         {
-            return new HLabel { Text = "Not set" };
+            return new HLabel
+            {
+                Text = "Not set",
+                HorizontalOptions = LayoutOptions.End,
+                VerticalOptions = LayoutOptions.Center,
+                VerticalTextAlignment = TextAlignment.Center,
+                Margin = new Thickness(0, 0, Branding.SizingUnitInPixels / 2, 0),
+            };
         }
     }
 }
