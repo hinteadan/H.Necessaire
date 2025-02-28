@@ -35,7 +35,10 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
                 }));
 
-            }).Bordered();
+            })
+            .Nullable()
+            .Bordered()
+            ;
         }
     }
 }
