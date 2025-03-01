@@ -12,7 +12,8 @@
             <Border
             Canvas.ZIndex="1" 
             VerticalAlignment="Stretch"
-            Margin="0,0,0,0">
+            Margin="0,0,0,0" 
+            Height="40">
                 <StackPanel Orientation="Horizontal" Margin="12, 0, 0, 0" x:Name="RootStackPanel">
                     <Image 
                     x:Name="AppFontIcon"
