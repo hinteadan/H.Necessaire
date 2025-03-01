@@ -1,4 +1,5 @@
 ﻿using Microsoft.UI.Xaml;
+using H.Necessaire.Runtime.MAUI.Platforms.Windows;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -19,7 +20,7 @@ namespace H.Necessaire.Runtime.MAUIAppSample.WinUI
             this.InitializeComponent();
         }
 
-        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp().InitializeHNecessaireMauiApp();
     }
 
 }

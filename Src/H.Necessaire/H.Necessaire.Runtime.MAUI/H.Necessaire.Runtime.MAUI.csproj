@@ -35,7 +35,6 @@
 	  <Folder Include="Platforms\iOS\" />
 	  <Folder Include="Platforms\MacCatalyst\" />
 	  <Folder Include="Platforms\Tizen\" />
-	  <Folder Include="Platforms\Windows\" />
 	  <Folder Include="WellKnown\FluentUI\Glyphs\" />
 	</ItemGroup>
 
