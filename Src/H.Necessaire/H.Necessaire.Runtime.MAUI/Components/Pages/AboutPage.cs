@@ -6,7 +6,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Pages
     [Category("Main")]
     class AboutPage : HMauiPageBase
     {
-        public AboutPage()
+        protected override View ConstructContent()
         {
             View content = null;
             TimeSpan contentBuildDuration = TimeSpan.Zero;
@@ -16,7 +16,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Pages
                 content = new Label().And(x => lbl = x);
             }
             lbl.Text = contentBuildDuration.ToString();
-            Content = content;
+
+            return content;
         }
     }
 }

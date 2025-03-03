@@ -7,16 +7,16 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 {
     public abstract class HMauiPageBase : ContentPage
     {
+        readonly bool isHeavyInitializer = false;
         const int animationDurationInMs = 350;
-        protected HMauiPageBase()
+        protected HMauiPageBase(bool isHeavyInitializer)
         {
+            this.isHeavyInitializer = isHeavyInitializer;
+
             Title = GetType().GetDisplayLabel();
             if (Title.EndsWith(" Page"))
                 Title = Title.Substring(0, Title.Length - " Page".Length);
-
-            Shell.SetForegroundColor(this, Branding.TextColor.ToMaui());
-            Shell.SetTitleColor(this, Branding.TextColor.ToMaui());
-            Shell.SetBackgroundColor(this, Branding.PrimaryColorTranslucent.ToMaui());
+            SetShellBrandingColors();
             Shell.SetTitleView(this, new HLabel
             {
                 Text = Title,
@@ -31,17 +31,27 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             Appearing += HMauiPageBase_Appearing;
             Disappearing += HMauiPageBase_Disappearing;
 
-            Content = ConstructPageInitializingView();
+            Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
+
+            Application.Current.RequestedThemeChanged += Current_RequestedThemeChanged;
         }
+
+        protected HMauiPageBase() : this(isHeavyInitializer: false) { }
 
         protected HMauiApp App => HUiToolkit.Current.App;
         protected T Get<T>() => HUiToolkit.Current.Get<T>();
         protected T Build<T>(string id) where T : class => HUiToolkit.Current.Build<T>(id);
         protected int SizingUnit => App?.SizingUnit ?? 10;
         protected BrandingStyle Branding => App?.Branding ?? HMauiAppBranding.Default;
-        protected virtual Task Initialize()
+        protected virtual View ConstructContent() => null;
+        protected virtual async Task Initialize()
         {
-            return Task.Delay(animationDurationInMs);
+            if (!isHeavyInitializer)
+                return;
+
+            await Task.Delay(animationDurationInMs);
+
+            Content = ConstructContent();
         }
         protected virtual Task Destroy()
         {
@@ -123,6 +133,27 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         async void HMauiPageBase_Disappearing(object sender, EventArgs e)
         {
             await OnLeaving();
+        }
+
+        async void Current_RequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
+        {
+            await OnThemeChangeRequest(e.RequestedTheme);
+        }
+
+        void SetShellBrandingColors()
+        {
+            Shell.SetForegroundColor(this, Branding.TextColor.ToMaui());
+            Shell.SetTitleColor(this, Branding.TextColor.ToMaui());
+            Shell.SetBackgroundColor(this, Branding.PrimaryColorTranslucent.ToMaui());
+        }
+
+        protected virtual async Task OnThemeChangeRequest(AppTheme requestedTheme)
+        {
+            SetShellBrandingColors();
+
+            Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
+
+            await new Func<Task>(Initialize).TryOrFailWithGrace(onFail: null);
         }
     }
 }

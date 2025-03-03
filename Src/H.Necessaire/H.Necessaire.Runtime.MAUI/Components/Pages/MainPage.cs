@@ -7,9 +7,20 @@ namespace H.Necessaire.Runtime.MAUI.Components.Pages
 {
     public class MainPage : HMauiPageBase
     {
-        public MainPage()
+        protected override View ConstructContent()
         {
-            Content = new DefaultChrome
+            Shell.Current.FlyoutFooter = new Grid().And(layout =>
+            {
+                layout.Add(new HLabel
+                {
+                    Text = "v0.0.0",
+                    FontSize = Branding.Typography.FontSizeSmaller,
+                    HorizontalOptions = LayoutOptions.Center,
+                    Margin = new Thickness(0, Branding.SizingUnitInPixels / 2, 0, Branding.SizingUnitInPixels / 2),
+                });
+            });
+
+            return new DefaultChrome
             {
                 Content = new VerticalStackLayout().And(layout =>
                 {
@@ -54,22 +65,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Pages
                     layout.Add(new ScrollView().And(view => view.Content = new HLabel().And(l => debugEntriesLabel = l)));
                 }),
             };
-        }
-
-        protected override async Task Initialize()
-        {
-            Shell.Current.FlyoutFooter = new Grid().And(layout =>
-            {
-                layout.Add(new HLabel
-                {
-                    Text = "v0.0.0",
-                    FontSize = Branding.Typography.FontSizeSmaller,
-                    HorizontalOptions = LayoutOptions.Center,
-                    Margin = new Thickness(0, Branding.SizingUnitInPixels / 2, 0, Branding.SizingUnitInPixels / 2),
-                });
-            });
-
-            await base.Initialize();
         }
     }
 }

@@ -6,11 +6,11 @@ namespace H.Necessaire.Runtime.MAUI.Components.Pages
     [Category("Main")]
     class DebuggerPage : HMauiPageBase
     {
-        protected override async Task Initialize()
-        {
-            await base.Initialize();
+        public DebuggerPage() : base(isHeavyInitializer: true) { }
 
-            Content = new DefaultChrome
+        protected override View ConstructContent()
+        {
+            return new DefaultChrome
             {
                 Content = new HMauiDebugger(),
             };
