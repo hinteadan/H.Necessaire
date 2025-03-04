@@ -9,16 +9,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Pages
     {
         protected override View ConstructContent()
         {
-            Shell.Current.FlyoutFooter = new Grid().And(layout =>
-            {
-                layout.Add(new HLabel
-                {
-                    Text = "v0.0.0",
-                    FontSize = Branding.Typography.FontSizeSmaller,
-                    HorizontalOptions = LayoutOptions.Center,
-                    Margin = new Thickness(0, Branding.SizingUnitInPixels / 2, 0, Branding.SizingUnitInPixels / 2),
-                });
-            });
+            ConstructFlyoutFooter();
 
             return new DefaultChrome
             {
@@ -65,6 +56,27 @@ namespace H.Necessaire.Runtime.MAUI.Components.Pages
                     layout.Add(new ScrollView().And(view => view.Content = new HLabel().And(l => debugEntriesLabel = l)));
                 }),
             };
+        }
+
+        private void ConstructFlyoutFooter()
+        {
+            Shell.Current.FlyoutFooter = new Grid().And(layout =>
+            {
+                layout.Add(new HLabel
+                {
+                    Text = "v0.0.0",
+                    FontSize = Branding.Typography.FontSizeSmaller,
+                    HorizontalOptions = LayoutOptions.Center,
+                    Margin = new Thickness(0, Branding.SizingUnitInPixels / 2, 0, Branding.SizingUnitInPixels / 2),
+                });
+            });
+        }
+
+        protected override async Task OnThemeChangeRequest(AppTheme requestedTheme)
+        {
+            await base.OnThemeChangeRequest(requestedTheme);
+
+            ConstructFlyoutFooter();
         }
     }
 }
