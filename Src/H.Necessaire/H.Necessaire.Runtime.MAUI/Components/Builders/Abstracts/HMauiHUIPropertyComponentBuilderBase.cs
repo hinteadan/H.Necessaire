@@ -142,7 +142,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Builders.Abstracts
             return new HPicker().And(picker =>
             {
                 picker.Label = viewModelProperty.Label;
-                picker.ItemSource = viewModelProperty.PresentationInfo.Selection.Options;
+                picker.SetDataSource(viewModelProperty.PresentationInfo.Selection.Options);
             });
         }
 

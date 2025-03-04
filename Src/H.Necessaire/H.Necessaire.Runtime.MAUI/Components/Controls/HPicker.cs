@@ -1,6 +1,6 @@
 ﻿using H.Necessaire.Runtime.MAUI.Components.Abstracts;
 using H.Necessaire.Runtime.MAUI.Extensions;
-using System.Collections;
+using System.Linq.Expressions;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
@@ -26,9 +26,52 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         public Picker Picker => editor;
 
         public int SelectedIndex { get => editor.SelectedIndex; set => editor.SelectedIndex = value; }
-        public object SelectedItem { get => editor.SelectedItem; set => editor.SelectedItem = value; }
-        public IList ItemSource { get => editor.ItemsSource; set => editor.ItemsSource = value; }
-        public IList<string> Items => editor.Items;
+        public object SelectedItem
+        {
+            get
+            {
+                if (dataSource.IsEmpty())
+                    return null;
+
+                if (SelectedIndex < 0 || SelectedIndex >= dataSource.Length)
+                    return null;
+
+                return dataSource[editor.SelectedIndex];
+            }
+            set
+            {
+                if (dataSource.IsEmpty())
+                    return;
+
+                SelectedIndex = Array.IndexOf(dataSource, value);
+
+            }
+        }
+
+        object[] dataSource;
+        Delegate displayPropertySelector = null;
+        public HPicker SetDataSource<TDataSource, TProperty>(IEnumerable<TDataSource> dataSource, Expression<Func<TDataSource, TProperty>> selector)
+        {
+            displayPropertySelector = selector?.Compile();
+            this.dataSource = dataSource?.Select(x => x as object).ToArray();
+            RefreshEditorItems();
+            return this;
+        }
+        public HPicker SetDataSource<TDataSource>(IEnumerable<TDataSource> dataSource)
+            => SetDataSource<TDataSource, object>(dataSource, null);
+        public string[] ItemsDisplayed
+        {
+            get
+            {
+                if (dataSource.IsEmpty())
+                    return null;
+
+                if (displayPropertySelector is null)
+                    return dataSource.Select(x => x?.ToString()).ToArray();
+
+                return dataSource.Select(x => displayPropertySelector.DynamicInvoke(x)?.ToString()).ToArray();
+            }
+        }
 
         BindingBase itemDisplayBinding = null;
         public BindingBase ItemDisplayBinding
@@ -51,8 +94,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 TextColor = Branding.TextColor.ToMaui(),
                 BackgroundColor = Branding.BackgroundColorTranslucent.ToMaui(),
                 VerticalTextAlignment = TextAlignment.Center,
-                ItemDisplayBinding = itemDisplayBinding,
             }
+            .And(x => x.ItemDisplayBinding = itemDisplayBinding)
             .And(x => x.SelectedIndexChanged += OnPickerSelectedIndexChanged)
             .And(x => editor = x)
             ;
@@ -61,6 +104,14 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         void OnPickerSelectedIndexChanged(object sender, EventArgs e)
         {
             SelectedIndexChanged?.Invoke(sender, e);
+        }
+
+        void RefreshEditorItems()
+        {
+            if (editor is null)
+                return;
+
+            editor.ItemsSource = ItemsDisplayed?.ToList();
         }
     }
 }

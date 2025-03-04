@@ -4,30 +4,27 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
     public class HThemeSelector : HMauiComponentBase
     {
-        static readonly KeyValuePair<string, AppTheme>[] options = new KeyValuePair<string, AppTheme>[] {
-            new KeyValuePair<string, AppTheme>("System", AppTheme.Unspecified),
-            new KeyValuePair<string, AppTheme>("Light", AppTheme.Light),
-            new KeyValuePair<string, AppTheme>("Dark", AppTheme.Dark),
-        };
+        static readonly IReadOnlyDictionary<AppTheme, string> options = new Dictionary<AppTheme, string> {
+            { AppTheme.Unspecified, "System" },
+            { AppTheme.Light, "Light" },
+            { AppTheme.Dark, "Dark" },
+        }.AsReadOnly();
 
         protected override View ConstructContent()
         {
-            AppTheme currentTheme = GetCurrentTheme();
+            AppTheme currentTheme = Application.Current.UserAppTheme;
 
             return new Grid { }.And(layout =>
             {
 
-                layout.Add(new HPicker
+                layout.Add(new HPicker()
+                .SetDataSource(options, x => x.Value)
+                .And(picker =>
                 {
-                    ItemSource = options,
-                    ItemDisplayBinding = Binding.Create(static (KeyValuePair<string, AppTheme> entry) => entry.Key),
-                    SelectedIndex = Array.IndexOf(options, options.Single(x => x.Value == currentTheme)),
-
-                }.And(picker =>
-                {
+                    picker.SelectedItem = options.Single(x => x.Key == currentTheme);
                     picker.SelectedIndexChanged += (s, e) =>
                     {
-                        AppTheme selectedTheme = ((KeyValuePair<string, AppTheme>)picker.SelectedItem).Value;
+                        AppTheme selectedTheme = ((KeyValuePair<AppTheme, string>)picker.SelectedItem).Key;
 
                         Application.Current.UserAppTheme = selectedTheme;
 
@@ -35,15 +32,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 }));
 
             });
-        }
-
-        static AppTheme GetCurrentTheme()
-        {
-            AppTheme? theme = Application.Current?.UserAppTheme;
-            if (theme is not null && theme != AppTheme.Unspecified)
-                return theme.Value;
-
-            return Application.Current?.RequestedTheme ?? AppTheme.Unspecified;
         }
     }
 }

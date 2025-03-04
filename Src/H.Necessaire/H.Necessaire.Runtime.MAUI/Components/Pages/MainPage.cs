@@ -62,13 +62,28 @@ namespace H.Necessaire.Runtime.MAUI.Components.Pages
         {
             Shell.Current.FlyoutFooter = new Grid().And(layout =>
             {
-                layout.Add(new HLabel
-                {
-                    Text = "v0.0.0",
-                    FontSize = Branding.Typography.FontSizeSmaller,
-                    HorizontalOptions = LayoutOptions.Center,
-                    Margin = new Thickness(0, Branding.SizingUnitInPixels / 2, 0, Branding.SizingUnitInPixels / 2),
-                });
+                layout.Add(
+
+                    new VerticalStackLayout().And(layout =>
+                    {
+
+                        layout.Add(new HThemeSelector
+                        {
+                            HorizontalOptions = LayoutOptions.Center,
+                            Margin = new Thickness(0, Branding.SizingUnitInPixels / 2, 0, Branding.SizingUnitInPixels / 2),
+                        });
+
+                        layout.Add(new HLabel
+                        {
+                            Text = "v0.0.0",
+                            FontSize = Branding.Typography.FontSizeSmaller,
+                            HorizontalOptions = LayoutOptions.Center,
+                            Margin = new Thickness(0, Branding.SizingUnitInPixels / 2, 0, Branding.SizingUnitInPixels / 2),
+                        });
+
+                    })
+                );
+
             });
         }
 
