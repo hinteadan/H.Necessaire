@@ -17,19 +17,21 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             return new Grid { }.And(layout =>
             {
 
-                layout.Add(new HPicker()
-                .SetDataSource(options, x => x.Value)
-                .And(picker =>
-                {
-                    picker.SelectedItem = options.Single(x => x.Key == currentTheme);
-                    picker.SelectedIndexChanged += (s, e) =>
+                layout.Add(
+                    new HPicker { FontSize = Branding.Typography.FontSizeSmaller }
+                    .SetDataSource(options, x => x.Value)
+                    .And(picker =>
                     {
-                        AppTheme selectedTheme = ((KeyValuePair<AppTheme, string>)picker.SelectedItem).Key;
+                        picker.SelectedItem = options.Single(x => x.Key == currentTheme);
+                        picker.SelectedIndexChanged += (s, e) =>
+                        {
+                            AppTheme selectedTheme = ((KeyValuePair<AppTheme, string>)picker.SelectedItem).Key;
 
-                        Application.Current.UserAppTheme = selectedTheme;
+                            Application.Current.UserAppTheme = selectedTheme;
 
-                    };
-                }));
+                        };
+                    })
+                );
 
             });
         }

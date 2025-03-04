@@ -23,6 +23,18 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 ;
         }
 
+        double fontSize = HUiToolkit.Current.Branding.Typography.FontSize;
+        public double FontSize
+        {
+            get => fontSize;
+            set
+            {
+                fontSize = value;
+                if (editor is not null)
+                    editor.FontSize = fontSize;
+            }
+        }
+
         public Picker Picker => editor;
 
         public int SelectedIndex { get => editor.SelectedIndex; set => editor.SelectedIndex = value; }
@@ -90,7 +102,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             return new Picker
             {
                 FontFamily = Branding.Typography.FontFamily,
-                FontSize = Branding.Typography.FontSize,
+                FontSize = fontSize,
                 TextColor = Branding.TextColor.ToMaui(),
                 BackgroundColor = Branding.BackgroundColorTranslucent.ToMaui(),
                 VerticalTextAlignment = TextAlignment.Center,
