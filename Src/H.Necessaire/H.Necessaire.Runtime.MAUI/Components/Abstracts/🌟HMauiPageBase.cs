@@ -16,15 +16,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             Title = GetType().GetDisplayLabel();
             if (Title.EndsWith(" Page"))
                 Title = Title.Substring(0, Title.Length - " Page".Length);
+
             SetShellBrandingColors();
-            Shell.SetTitleView(this, new HLabel
-            {
-                Text = Title,
-                FontSize = Branding.Typography.FontSizeLarger,
-                VerticalOptions = LayoutOptions.Center,
-                VerticalTextAlignment = TextAlignment.Center,
-                Margin = new Thickness(Branding.SizingUnitInPixels, 0, 0, 0),
-            });
 
             Unloaded += HMauiPageBase_Unloaded;
             Loaded += HMauiPageBase_Loaded;
@@ -109,6 +102,15 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             };
         }
 
+        protected virtual async Task OnThemeChangeRequest(AppTheme requestedTheme)
+        {
+            SetShellBrandingColors();
+
+            Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
+
+            await new Func<Task>(Initialize).TryOrFailWithGrace(onFail: null);
+        }
+
         protected IDisposable Disable(View view) => HUiToolkit.Current.DisabledScopeFor(view);
 
         async void HMauiPageBase_Loaded(object sender, EventArgs e)
@@ -142,18 +144,18 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
         void SetShellBrandingColors()
         {
+            Shell.SetTitleView(this, new HLabel
+            {
+                Text = Title,
+                FontSize = Branding.Typography.FontSizeLarger,
+                VerticalOptions = LayoutOptions.Center,
+                VerticalTextAlignment = TextAlignment.Center,
+                Margin = new Thickness(Branding.SizingUnitInPixels, 0, 0, 0),
+            });
+
             Shell.SetForegroundColor(this, Branding.TextColor.ToMaui());
             Shell.SetTitleColor(this, Branding.TextColor.ToMaui());
             Shell.SetBackgroundColor(this, Branding.PrimaryColorTranslucent.ToMaui());
-        }
-
-        protected virtual async Task OnThemeChangeRequest(AppTheme requestedTheme)
-        {
-            SetShellBrandingColors();
-
-            Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
-
-            await new Func<Task>(Initialize).TryOrFailWithGrace(onFail: null);
         }
     }
 }
