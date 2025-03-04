@@ -64,6 +64,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Chromes
             {
                 grid.Add(new HLabel
                 {
+                    TextColor = Branding.ButtonTextColor.ToMaui(),
                     Text = "Header Branding",
                 }.And(x => headerBrandingLabel = x));
                 //grid.Add(new Image
