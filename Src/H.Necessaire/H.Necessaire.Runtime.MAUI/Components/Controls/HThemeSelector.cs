@@ -18,7 +18,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             {
 
                 layout.Add(
-                    new HPicker { FontSize = Branding.Typography.FontSizeSmaller }
+                    new HPicker()
                     .SetDataSource(options, x => x.Value)
                     .And(picker =>
                     {
