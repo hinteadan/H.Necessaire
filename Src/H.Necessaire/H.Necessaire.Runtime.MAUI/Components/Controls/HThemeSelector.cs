@@ -18,7 +18,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             {
 
                 layout.Add(
-                    new HPicker()
+                    new HPicker { Label = "Theme" }
                     .SetDataSource(options, x => x.Value)
                     .And(picker =>
                     {
