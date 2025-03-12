@@ -12,11 +12,22 @@ namespace H.Necessaire.CLI.Host
 
         class DefaultSubCommand : SubCommandBase
         {
-            public override Task<OperationResult> Run(params Note[] args)
+            ImAPeriodicAction periodicAction;
+            public override void ReferDependencies(ImADependencyProvider dependencyProvider)
             {
+                base.ReferDependencies(dependencyProvider);
+                periodicAction = dependencyProvider.Get<ImAPeriodicAction>();
+            }
 
+            public override async Task<OperationResult> Run(params Note[] args)
+            {
+                periodicAction.Start(TimeSpan.FromSeconds(.5), async () => {
+                    await Logger.LogInfo("Period Action's action");
+                });
 
-                return OperationResult.Win().AsTask();
+                await Task.Delay(TimeSpan.FromSeconds(5));
+
+                return OperationResult.Win();
             }
         }
 

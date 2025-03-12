@@ -29,6 +29,7 @@ namespace H.Necessaire.Operations.Concrete
                 isStarted = true;
             }
 
+            this.action = action;
             this.interval = interval <= TimeSpan.Zero ? TimeSpan.Zero : interval;
 
             try
