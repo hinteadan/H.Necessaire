@@ -25,7 +25,17 @@ namespace H.Necessaire.CLI.Host
                     await Logger.LogInfo("Period Action's action");
                 });
 
+                await Task.Delay(TimeSpan.FromSeconds(2));
+
+                periodicAction.Stop();
+
+                periodicAction.StartDelayed(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(.1), async () => {
+                    await Logger.LogInfo("Period Action's action");
+                });
+
                 await Task.Delay(TimeSpan.FromSeconds(5));
+
+                periodicAction.Stop();
 
                 return OperationResult.Win();
             }

@@ -10,7 +10,7 @@ namespace H.Necessaire.Operations.Concrete
         bool isStarted = false;
         TimeSpan interval = TimeSpan.Zero;
         Func<Task> action = null;
-        readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         CancellationToken CancellationToken => cancellationTokenSource.Token;
 
         public void Start(TimeSpan interval, Func<Task> action)
@@ -57,6 +57,8 @@ namespace H.Necessaire.Operations.Concrete
             }
 
             cancellationTokenSource.Cancel();
+            cancellationTokenSource.Dispose();
+            cancellationTokenSource = new CancellationTokenSource();
         }
 
         async Task DelayRunAndQueueAnother()
