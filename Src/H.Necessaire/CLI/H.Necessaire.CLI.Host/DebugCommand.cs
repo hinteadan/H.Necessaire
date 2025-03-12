@@ -2,6 +2,8 @@
 using H.Necessaire.Runtime.CLI.UI;
 using H.Necessaire.Runtime.ExternalCommandRunner;
 using System;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Host
@@ -12,30 +14,30 @@ namespace H.Necessaire.CLI.Host
 
         class DefaultSubCommand : SubCommandBase
         {
-            ImAPeriodicAction periodicAction;
-            public override void ReferDependencies(ImADependencyProvider dependencyProvider)
-            {
-                base.ReferDependencies(dependencyProvider);
-                periodicAction = dependencyProvider.Get<ImAPeriodicAction>();
-            }
-
             public override async Task<OperationResult> Run(params Note[] args)
             {
-                periodicAction.Start(TimeSpan.FromSeconds(.5), async () => {
-                    await Logger.LogInfo("Period Action's action");
-                });
+                var semaphore = new SemaphoreSlim(0, 1);
 
-                await Task.Delay(TimeSpan.FromSeconds(2));
+                Throttler throttler = new Throttler(async () => {
+                    await Logger.LogInfo("Throttled action");
+                }, TimeSpan.FromSeconds(1));
 
-                periodicAction.Stop();
+                new Thread(async () => {
 
-                periodicAction.StartDelayed(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(.1), async () => {
-                    await Logger.LogInfo("Period Action's action");
-                });
+                    var start = Stopwatch.GetTimestamp();
+                    while (Stopwatch.GetElapsedTime(start) < TimeSpan.FromSeconds(5))
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(.1));
+                        await throttler.Invoke();
+                    }
 
-                await Task.Delay(TimeSpan.FromSeconds(5));
+                    await Task.Delay(TimeSpan.FromSeconds(1.2));
 
-                periodicAction.Stop();
+                    semaphore.Release();
+
+                }).Start();
+
+                await semaphore.WaitAsync();
 
                 return OperationResult.Win();
             }
