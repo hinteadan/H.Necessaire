@@ -60,8 +60,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{E1F3BD0C-9A89-4ADF-B835-A21B90961824}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\CODE_OF_CONDUCT.md = ..\..\CODE_OF_CONDUCT.md
-		..\..\README.md = ..\..\README.md
 		..\..\Docs\H_UI_Runtime_Arch.mmd = ..\..\Docs\H_UI_Runtime_Arch.mmd
+		..\..\README.md = ..\..\README.md
 		..\..\TODO.md = ..\..\TODO.md
 		..\..\USAGE.md = ..\..\USAGE.md
 	EndProjectSection
