@@ -301,9 +301,9 @@ namespace H.Necessaire
             return data;
         }
 
-        public static IDisposableEnumerable<T> AsDisposableEnumerable<T>(this IEnumerable<T> collection)
+        public static IDisposableEnumerable<T> AsDisposableEnumerable<T>(this IEnumerable<T> collection, params IDisposable[] otherDisposables)
         {
-            return new Operations.Concrete.DataStream<T>(collection);
+            return new Operations.Concrete.DataStream<T>(collection, otherDisposables);
         }
 
         public static async Task<string> ReadAsStringAsync(this Stream stream, bool isStreamLeftOpen = true, Encoding encoding = null, bool detectEncodingFromByteOrderMarks = false, int bufferSize = 1024)
