@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace H.Necessaire.Operations.Concrete
@@ -6,13 +7,24 @@ namespace H.Necessaire.Operations.Concrete
     class DataStream<T> : IDisposableEnumerable<T>
     {
         readonly IEnumerable<T> data;
+        readonly IDisposable[] otherDisposables;
 
-        public DataStream(IEnumerable<T> data)
+        public DataStream(IEnumerable<T> data, params IDisposable[] otherDisposables)
         {
             this.data = data;
+            this.otherDisposables = otherDisposables;
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+            if (otherDisposables.IsEmpty())
+                return;
+
+            foreach (IDisposable disposable in otherDisposables)
+            {
+                new Action(disposable.Dispose).TryOrFailWithGrace();
+            }
+        }
 
         public IEnumerator<T> GetEnumerator()
         {
