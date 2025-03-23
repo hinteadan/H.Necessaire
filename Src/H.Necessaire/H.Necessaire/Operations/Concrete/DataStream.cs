@@ -12,7 +12,7 @@ namespace H.Necessaire.Operations.Concrete
         public DataStream(IEnumerable<T> data, params IDisposable[] otherDisposables)
         {
             this.data = data;
-            this.otherDisposables = otherDisposables;
+            this.otherDisposables = otherDisposables?.ToNoNullsArray();
         }
 
         public void Dispose()
