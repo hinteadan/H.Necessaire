@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CLI - couchbase": {
+      "commandName": "Project",
+      "commandLineArgs": "couch"
+    }
+  }
+}
