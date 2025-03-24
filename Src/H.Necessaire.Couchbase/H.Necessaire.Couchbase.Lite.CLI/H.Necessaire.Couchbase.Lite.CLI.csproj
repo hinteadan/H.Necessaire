@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="H.Necessaire.CLI" Version="2.43.24" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\H.Necessaire.Couchbase.Lite\H.Necessaire.Couchbase.Lite.csproj" />
   </ItemGroup>
 

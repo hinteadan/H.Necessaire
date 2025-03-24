@@ -1,12 +1,19 @@
-﻿using System;
+﻿using H.Necessaire.CLI;
+using H.Necessaire.Runtime.CLI;
+using System.Threading.Tasks;
 
 namespace H.Necessaire.Couchbase.Lite.CLI
 {
     internal class Program
     {
-        static void Main(string[] args)
+        public static async Task Main()
         {
-            Console.WriteLine("Hello, World!");
+            await new CliApp()
+                .WithEverything()
+                //.WithDefaultRuntimeConfig()
+                //.With(x => x.Register<CLIDependencyGroup>(() => new CLIDependencyGroup()))
+                .Run()
+                ;
         }
     }
 }
