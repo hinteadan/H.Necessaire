@@ -12,6 +12,7 @@ namespace H.Necessaire.Couchbase.Lite.CLI
                 .WithEverything()
                 //.WithDefaultRuntimeConfig()
                 //.With(x => x.Register<CLIDependencyGroup>(() => new CLIDependencyGroup()))
+                .With(x => x.WithHNecessaireCouchbaseLite())
                 .Run()
                 ;
         }
