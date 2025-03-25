@@ -19,6 +19,13 @@ namespace H.Necessaire.Couchbase.Lite.CLI
             {
                 await Task.CompletedTask;
 
+                var couch = new CouchbaseInteractor("dev-play-db");
+
+                using (var scope = couch.NewOperationScope())
+                {
+                    scope.Select<DataBinMeta>(x => x.Description.)
+                }
+
                 return OperationResult.Win();
             }
         }

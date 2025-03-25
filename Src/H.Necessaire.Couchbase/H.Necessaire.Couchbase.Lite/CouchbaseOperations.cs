@@ -28,7 +28,7 @@ namespace H.Necessaire.Couchbase.Lite
 
         public SelectOperationResult<T> SelectAll<T>() => operationScope.SelectAll<T>();
         public SelectOperationResult<T> SelectCount<T>() => operationScope.SelectCount<T>();
-        public SelectOperationResult<T> SelectCustom<T>(params Expression<Func<T, object>>[] selectors) => operationScope.SelectCustom(selectors);
+        public SelectOperationResult<T> Select<T>(params Expression<Func<T, object>>[] selectors) => operationScope.Select(selectors);
 
 
         public Task<OperationResult<T>> Save<T, TID>(T document, Func<TID, string> storageIdBuilder = null) where T : IDentityType<TID>

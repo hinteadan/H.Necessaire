@@ -18,7 +18,7 @@ namespace H.Necessaire.Couchbase.Lite.Querying
                 new SelectOperationResult<T>(DataSource.Collection(operationScope.Collection), CouchbaseLinqExpressionInterpreter.Instance.SelectCount());
         }
 
-        public static SelectOperationResult<T> SelectCustom<T>(this CouchbaseOperationScope operationScope, params Expression<Func<T, object>>[] selectors)
+        public static SelectOperationResult<T> Select<T>(this CouchbaseOperationScope operationScope, params Expression<Func<T, object>>[] selectors)
         {
             return
                 new SelectOperationResult<T>(DataSource.Collection(operationScope.Collection), CouchbaseLinqExpressionInterpreter.Instance.Select(selectors));
