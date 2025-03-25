@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "CLI - couchbase": {
+    "CLI - couchbase debug": {
       "commandName": "Project",
-      "commandLineArgs": "couch"
+      "commandLineArgs": "couch debug"
     }
   }
 }

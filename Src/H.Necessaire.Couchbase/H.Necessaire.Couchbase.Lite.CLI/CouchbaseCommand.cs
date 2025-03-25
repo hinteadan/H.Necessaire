@@ -6,9 +6,21 @@ namespace H.Necessaire.Couchbase.Lite.CLI
     [Alias("couch")]
     internal class CouchbaseCommand : CommandBase
     {
-        public override Task<OperationResult> Run()
+        static readonly string[] usageSyntax = [
+            "couchbase|couch debug"
+        ];
+        protected override string[] GetUsageSyntaxes() => usageSyntax;
+
+        public override Task<OperationResult> Run() => RunSubCommand();
+
+        class DebugSubCommand : SubCommandBase
         {
-            return OperationResult.Fail("Not yet implemented").AsTask();
+            public override async Task<OperationResult> Run(params Note[] args)
+            {
+                await Task.CompletedTask;
+
+                return OperationResult.Win();
+            }
         }
     }
 }
