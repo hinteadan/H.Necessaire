@@ -1,4 +1,5 @@
 ﻿using H.Necessaire.CLI.Commands;
+using System;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.Couchbase.Lite.CLI
@@ -21,13 +22,33 @@ namespace H.Necessaire.Couchbase.Lite.CLI
 
                 var couch = new CouchbaseInteractor("dev-play-db");
 
-                using (var scope = couch.NewOperationScope())
+                using (var personScope = couch.NewOperationScope(collectionName: nameof(Person)))
+                using (var addressScope = couch.NewOperationScope(collectionName: nameof(GeoAddressWithID)))
                 {
-                    scope.Select<DataBinMeta>(x => x.Description.)
+                    var address = new GeoAddressWithID();
+                    var person = new Person { GeoAddressID = address.ID };
+
+                    (await addressScope.Save<GeoAddressWithID, Guid>(address)).ThrowOnFail();
+                    (await personScope.Save<Person, Guid>(person)).ThrowOnFail();
                 }
 
                 return OperationResult.Win();
             }
         }
+    }
+
+    class Person : EphemeralTypeBase, IGuidIdentity
+    {
+        public Person() => DoNotExpire();
+
+        public Guid ID { get; set; } = Guid.NewGuid();
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public Guid? GeoAddressID { get; set; }
+    }
+
+    class GeoAddressWithID : GeoAddress, IGuidIdentity
+    {
+        public Guid ID { get; set; } = Guid.NewGuid();
     }
 }
