@@ -25,11 +25,13 @@ namespace H.Necessaire.Couchbase.Lite.CLI
                 using (var personScope = couch.NewOperationScope(collectionName: nameof(Person)))
                 using (var addressScope = couch.NewOperationScope(collectionName: nameof(GeoAddressWithID)))
                 {
-                    var address = new GeoAddressWithID();
-                    var person = new Person { GeoAddressID = address.ID };
+                    //var address = new GeoAddressWithID();
+                    //var person = new Person { GeoAddressID = address.ID };
 
-                    (await addressScope.Save<GeoAddressWithID, Guid>(address)).ThrowOnFail();
-                    (await personScope.Save<Person, Guid>(person)).ThrowOnFail();
+                    //(await addressScope.Save<GeoAddressWithID, Guid>(address)).ThrowOnFail();
+                    //(await personScope.Save<Person, Guid>(person)).ThrowOnFail();
+
+
                 }
 
                 return OperationResult.Win();
