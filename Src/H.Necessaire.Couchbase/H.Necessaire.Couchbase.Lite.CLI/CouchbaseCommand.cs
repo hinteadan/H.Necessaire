@@ -31,7 +31,7 @@ namespace H.Necessaire.Couchbase.Lite.CLI
                     //(await addressScope.Save<GeoAddressWithID, Guid>(address)).ThrowOnFail();
                     //(await personScope.Save<Person, Guid>(person)).ThrowOnFail();
 
-                    personScope.SelectAll().Where(x => x)
+                    personScope.SelectAll<Person>().Where(x => true);
                 }
 
                 return OperationResult.Win();
