@@ -405,6 +405,14 @@ namespace H.Necessaire.Couchbase.Lite.Querying
                 case "Regex":
                     return BuildCouchbaseExpressionFromLinqExpression(methodArgs[0], fromAlias).Regex(BuildCouchbaseExpressionFromLinqExpression(methodArgs[1], fromAlias));
 
+                case nameof(CouchbaseExtraQueryMethods.FromAlias):
+                    return BuildCouchbaseExpressionFromLinqExpression(
+                        methodArgs[0], 
+                        (methodArgs[1] as ConstantExpression)?.Value as string
+                        ?? ((methodArgs[1] is MemberExpression aliasMemberExpr) ? ReadMemberValue(aliasMemberExpr, (aliasMemberExpr?.Expression as ConstantExpression)) as string : null) 
+                        ?? ((methodArgs[1] is MethodCallExpression aliasMethodExpr) ? Expression.Lambda(aliasMethodExpr).Compile().DynamicInvoke() as string : null)
+                    );
+
                 default:
                     return CouchbaseExpression.Value(Expression.Lambda(methodExpression).Compile().DynamicInvoke());
             }
@@ -412,6 +420,9 @@ namespace H.Necessaire.Couchbase.Lite.Querying
 
         static object ReadMemberValue(MemberExpression memberExpression, object owner = null)
         {
+            if (memberExpression is null)
+                return null;
+
             return
                 memberExpression.Member.MemberType == MemberTypes.Property
                 ? (memberExpression.Member as PropertyInfo).GetValue(owner)
