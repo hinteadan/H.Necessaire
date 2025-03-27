@@ -32,7 +32,8 @@ namespace H.Necessaire.Couchbase.Lite.CLI
                     //(await addressScope.Save<GeoAddressWithID, Guid>(address)).ThrowOnFail();
                     //(await personScope.Save<Person, Guid>(person)).ThrowOnFail();
 
-                    personScope.SelectAll<Person>().Where(x => x.CreatedAt.FromAlias(nameof(Person)) >= DateTime.UtcNow);
+                    var query = personScope.SelectAll<Person>().Where(x => x.CreatedAt.FromAlias(nameof(Person)) >= DateTime.UtcNow).ToQuery();
+
                 }
 
                 return OperationResult.Win();
