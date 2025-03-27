@@ -1,6 +1,7 @@
 ﻿using H.Necessaire.CLI.Commands;
 using System;
 using System.Threading.Tasks;
+using H.Necessaire.Couchbase.Lite.Querying;
 
 namespace H.Necessaire.Couchbase.Lite.CLI
 {
@@ -31,7 +32,7 @@ namespace H.Necessaire.Couchbase.Lite.CLI
                     //(await addressScope.Save<GeoAddressWithID, Guid>(address)).ThrowOnFail();
                     //(await personScope.Save<Person, Guid>(person)).ThrowOnFail();
 
-                    personScope.SelectAll<Person>().Where(x => true);
+                    personScope.SelectAll<Person>().Where(x => x.CreatedAt.FromAlias("") >= DateTime.UtcNow);
                 }
 
                 return OperationResult.Win();

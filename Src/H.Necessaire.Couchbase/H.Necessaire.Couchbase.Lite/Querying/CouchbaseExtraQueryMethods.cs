@@ -2,7 +2,7 @@
 
 namespace H.Necessaire.Couchbase.Lite.Querying
 {
-    internal static class CouchbaseExtraQueryMethods
+    public static class CouchbaseExtraQueryMethods
     {
         public static void Average(this Expression expression) { }
         public static void Avg(this Expression expression) { }
@@ -30,5 +30,6 @@ namespace H.Necessaire.Couchbase.Lite.Querying
         public static bool Like(this string left, string right) => true;
         public static void Regex(this Expression left, Expression right) { }
         public static bool Regex(this string left, string right) => true;
+        public static T FromAlias<T>(this T any, string alias) => any;
     }
 }
