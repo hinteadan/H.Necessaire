@@ -13,11 +13,11 @@ namespace H.Necessaire.Couchbase.Lite.Querying
     {
         public static readonly CouchbaseLinqExpressionInterpreter Instance = new CouchbaseLinqExpressionInterpreter();
 
-        public ISelectResult[] SelectAll() => new ISelectResult[] { SelectResult.All() };
+        public ISelectResult[] SelectAll(string alias = null) => new ISelectResult[] { SelectResult.All() };
 
-        public ISelectResult[] SelectCount() => new ISelectResult[] { SelectResult.Expression(Function.Count(CouchbaseExpression.All())).As("Count") };
+        public ISelectResult[] SelectCount(string alias = null) => new ISelectResult[] { SelectResult.Expression(Function.Count(CouchbaseExpression.All())).As("Count") };
 
-        public ISelectResult[] Select<T>(params Expression<Func<T, object>>[] selectors)
+        public ISelectResult[] Select<T>(string alias, params Expression<Func<T, object>>[] selectors)
         {
             IExpression[] propExpressions = selectors?.Select(x => BuildPropertySelectorFromExpression(x)).ToNoNullsArray();
 
@@ -30,6 +30,8 @@ namespace H.Necessaire.Couchbase.Lite.Querying
                 .ToArray()
                 ;
         }
+
+        public ISelectResult[] Select<T>(params Expression<Func<T, object>>[] selectors) => Select(alias: null, selectors);
 
         public IExpression Where<T>(Expression<Func<T, bool>> filter) => BuildWhereFromExpression(filter);
         public IExpression GroupBy<T>(Expression<Func<T, object>> selector)
