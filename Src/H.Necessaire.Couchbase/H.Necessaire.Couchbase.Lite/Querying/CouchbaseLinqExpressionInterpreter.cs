@@ -13,13 +13,13 @@ namespace H.Necessaire.Couchbase.Lite.Querying
     {
         public static readonly CouchbaseLinqExpressionInterpreter Instance = new CouchbaseLinqExpressionInterpreter();
 
-        public ISelectResult[] SelectAll(string alias = null) => new ISelectResult[] { SelectResult.All() };
+        public ISelectResult[] SelectAll(string alias = null) => new ISelectResult[] { alias.IsEmpty() ? SelectResult.All() : SelectResult.All().From(alias) };
 
-        public ISelectResult[] SelectCount(string alias = null) => new ISelectResult[] { SelectResult.Expression(Function.Count(CouchbaseExpression.All())).As("Count") };
+        public ISelectResult[] SelectCount(string alias = null) => new ISelectResult[] { alias.IsEmpty() ? SelectResult.Expression(Function.Count(CouchbaseExpression.All())).As("Count") : SelectResult.Expression(Function.Count(CouchbaseExpression.All().From(alias))).As("Count") };
 
         public ISelectResult[] Select<T>(string alias, params Expression<Func<T, object>>[] selectors)
         {
-            IExpression[] propExpressions = selectors?.Select(x => BuildPropertySelectorFromExpression(x)).ToNoNullsArray();
+            IExpression[] propExpressions = selectors?.Select(x => BuildPropertySelectorFromExpression(x, alias)).ToNoNullsArray();
 
             if (propExpressions.IsEmpty())
                 return null;
@@ -49,13 +49,13 @@ namespace H.Necessaire.Couchbase.Lite.Querying
         public IExpression Offset<T>(long? offset = null)
             => offset is null ? null : CouchbaseExpression.Long(offset.Value);
 
-        static IExpression BuildPropertySelectorFromExpression<T>(Expression<Func<T, object>> propertySelector)
-            => BuildCouchbaseExpressionFromLinqExpression(propertySelector.Body);
+        static IExpression BuildPropertySelectorFromExpression<T>(Expression<Func<T, object>> propertySelector, string fromAlias = null)
+            => BuildCouchbaseExpressionFromLinqExpression(propertySelector.Body, fromAlias);
 
         static IExpression BuildWhereFromExpression<T>(Expression<Func<T, bool>> expression)
             => BuildCouchbaseExpressionFromLinqExpression(expression.Body);
 
-        static IExpression BuildCouchbaseExpressionFromLinqExpression(Expression expression)
+        static IExpression BuildCouchbaseExpressionFromLinqExpression(Expression expression, string fromAlias = null)
         {
             switch (expression.NodeType)
             {
@@ -65,110 +65,110 @@ namespace H.Necessaire.Couchbase.Lite.Querying
 
                 case ExpressionType.Call:
                     MethodCallExpression methodCallExpression = expression as MethodCallExpression;
-                    return BuildCouchbaseMethodCallExpression(methodCallExpression);
+                    return BuildCouchbaseMethodCallExpression(methodCallExpression, fromAlias);
 
                 case ExpressionType.MemberAccess:
                     MemberExpression memberAccessExpression = expression as MemberExpression;
-                    return BuildCouchbaseMemberAccessExpression(memberAccessExpression);
+                    return BuildCouchbaseMemberAccessExpression(memberAccessExpression, fromAlias);
 
                 case ExpressionType.Add:
                 case ExpressionType.AddChecked:
                     BinaryExpression binaryExpression = expression as BinaryExpression;
-                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left).Add(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right));
+                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left, fromAlias).Add(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right, fromAlias));
 
                 case ExpressionType.Subtract:
                 case ExpressionType.SubtractChecked:
                     binaryExpression = expression as BinaryExpression;
-                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left).Subtract(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right));
+                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left, fromAlias).Subtract(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right, fromAlias));
 
                 case ExpressionType.And:
                 case ExpressionType.AndAlso:
                     binaryExpression = expression as BinaryExpression;
-                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left).And(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right));
+                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left, fromAlias).And(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right, fromAlias));
 
                 case ExpressionType.Or:
                 case ExpressionType.OrElse:
                     binaryExpression = expression as BinaryExpression;
-                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left).Or(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right));
+                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left, fromAlias).Or(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right, fromAlias));
 
                 case ExpressionType.ArrayLength:
                     UnaryExpression unaryExpression = expression as UnaryExpression;
-                    return ArrayFunction.Length(BuildCouchbaseExpressionFromLinqExpression(unaryExpression.Operand));
+                    return ArrayFunction.Length(BuildCouchbaseExpressionFromLinqExpression(unaryExpression.Operand, fromAlias));
 
                 case ExpressionType.Convert:
                 case ExpressionType.ConvertChecked:
                     unaryExpression = expression as UnaryExpression;
-                    return BuildCouchbaseExpressionFromLinqExpression(unaryExpression.Operand);
+                    return BuildCouchbaseExpressionFromLinqExpression(unaryExpression.Operand, fromAlias);
 
                 case ExpressionType.Divide:
                     binaryExpression = expression as BinaryExpression;
-                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left).Divide(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right));
+                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left, fromAlias).Divide(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right, fromAlias));
 
                 case ExpressionType.Equal:
                     binaryExpression = expression as BinaryExpression;
-                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left).EqualTo(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right));
+                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left, fromAlias).EqualTo(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right, fromAlias));
 
                 case ExpressionType.NotEqual:
                     binaryExpression = expression as BinaryExpression;
-                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left).NotEqualTo(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right));
+                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left, fromAlias).NotEqualTo(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right, fromAlias));
 
                 case ExpressionType.GreaterThan:
                     binaryExpression = expression as BinaryExpression;
-                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left).GreaterThan(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right));
+                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left, fromAlias).GreaterThan(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right, fromAlias));
 
                 case ExpressionType.GreaterThanOrEqual:
                     binaryExpression = expression as BinaryExpression;
-                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left).GreaterThanOrEqualTo(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right));
+                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left, fromAlias).GreaterThanOrEqualTo(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right, fromAlias));
 
                 case ExpressionType.LessThan:
                     binaryExpression = expression as BinaryExpression;
-                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left).LessThan(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right));
+                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left, fromAlias).LessThan(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right, fromAlias));
 
                 case ExpressionType.LessThanOrEqual:
                     binaryExpression = expression as BinaryExpression;
-                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left).LessThanOrEqualTo(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right));
+                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left, fromAlias).LessThanOrEqualTo(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right, fromAlias));
 
                 case ExpressionType.Modulo:
                     binaryExpression = expression as BinaryExpression;
-                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left).Modulo(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right));
+                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left, fromAlias).Modulo(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right, fromAlias));
 
                 case ExpressionType.Multiply:
                 case ExpressionType.MultiplyChecked:
                     binaryExpression = expression as BinaryExpression;
-                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left).Multiply(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right));
+                    return BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left, fromAlias).Multiply(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right, fromAlias));
 
                 case ExpressionType.Power:
                     binaryExpression = expression as BinaryExpression;
-                    return Function.Power(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left), BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right));
+                    return Function.Power(BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Left, fromAlias), BuildCouchbaseExpressionFromLinqExpression(binaryExpression.Right, fromAlias));
 
                 case ExpressionType.Negate:
                 case ExpressionType.NegateChecked:
-                    return CouchbaseExpression.Int(-1).Multiply(BuildCouchbaseExpressionFromLinqExpression((expression as UnaryExpression).Operand));
+                    return CouchbaseExpression.Int(-1).Multiply(BuildCouchbaseExpressionFromLinqExpression((expression as UnaryExpression).Operand, fromAlias));
 
                 case ExpressionType.Increment:
-                    return BuildCouchbaseExpressionFromLinqExpression((expression as UnaryExpression).Operand).Add(CouchbaseExpression.Int(1));
+                    return BuildCouchbaseExpressionFromLinqExpression((expression as UnaryExpression).Operand, fromAlias).Add(CouchbaseExpression.Int(1));
 
                 case ExpressionType.Decrement:
-                    return BuildCouchbaseExpressionFromLinqExpression((expression as UnaryExpression).Operand).Subtract(CouchbaseExpression.Int(1));
+                    return BuildCouchbaseExpressionFromLinqExpression((expression as UnaryExpression).Operand, fromAlias).Subtract(CouchbaseExpression.Int(1));
 
                 case ExpressionType.Not:
-                    return CouchbaseExpression.Not(BuildCouchbaseExpressionFromLinqExpression((expression as UnaryExpression).Operand));
+                    return CouchbaseExpression.Not(BuildCouchbaseExpressionFromLinqExpression((expression as UnaryExpression).Operand, fromAlias));
 
                 case ExpressionType.IsTrue:
-                    return BuildCouchbaseExpressionFromLinqExpression((expression as UnaryExpression).Operand).EqualTo(CouchbaseExpression.Boolean(true));
+                    return BuildCouchbaseExpressionFromLinqExpression((expression as UnaryExpression).Operand, fromAlias).EqualTo(CouchbaseExpression.Boolean(true));
 
                 case ExpressionType.IsFalse:
-                    return BuildCouchbaseExpressionFromLinqExpression((expression as UnaryExpression).Operand).EqualTo(CouchbaseExpression.Boolean(false));
+                    return BuildCouchbaseExpressionFromLinqExpression((expression as UnaryExpression).Operand, fromAlias).EqualTo(CouchbaseExpression.Boolean(false));
 
                 case ExpressionType.Lambda:
-                    return BuildCouchbaseExpressionFromLinqExpression((expression as LambdaExpression).Body);
+                    return BuildCouchbaseExpressionFromLinqExpression((expression as LambdaExpression).Body, fromAlias);
 
                 case ExpressionType.Invoke:
                     InvocationExpression invocationExpression = expression as InvocationExpression;
-                    return BuildCouchbaseExpressionFromLinqExpression(invocationExpression.Expression);
+                    return BuildCouchbaseExpressionFromLinqExpression(invocationExpression.Expression, fromAlias);
 
                 case ExpressionType.Quote:
-                    return BuildCouchbaseExpressionFromLinqExpression((expression as UnaryExpression).Operand);
+                    return BuildCouchbaseExpressionFromLinqExpression((expression as UnaryExpression).Operand, fromAlias);
 
                 case ExpressionType.Parameter:
                     ParameterExpression parameterExpression = expression as ParameterExpression;
@@ -229,7 +229,7 @@ namespace H.Necessaire.Couchbase.Lite.Querying
             }
         }
 
-        static IExpression BuildCouchbaseMemberAccessExpression(MemberExpression memberExpression)
+        static IExpression BuildCouchbaseMemberAccessExpression(MemberExpression memberExpression, string fromAlias = null)
         {
             if (memberExpression.Expression is null)
                 return CouchbaseExpression.Value(ReadMemberValue(memberExpression));
@@ -240,7 +240,7 @@ namespace H.Necessaire.Couchbase.Lite.Querying
                     return CouchbaseExpression.Value(ReadMemberValue(memberExpression, (memberExpression.Expression as ConstantExpression).Value));
                 case ExpressionType.Parameter:
                 default:
-                    return CouchbaseExpression.Property(BuildPropertyPathFromExpression(memberExpression));
+                    return fromAlias.IsEmpty() ? CouchbaseExpression.Property(BuildPropertyPathFromExpression(memberExpression)) : CouchbaseExpression.Property(BuildPropertyPathFromExpression(memberExpression)).From(fromAlias);
             }
         }
 
@@ -289,7 +289,7 @@ namespace H.Necessaire.Couchbase.Lite.Querying
             return CouchbaseExpression.Value(constantExpression.Value);
         }
 
-        static IExpression BuildCouchbaseMethodCallExpression(MethodCallExpression methodExpression)
+        static IExpression BuildCouchbaseMethodCallExpression(MethodCallExpression methodExpression, string fromAlias = null)
         {
             string methodName = methodExpression.Method.Name;
             Type declaringType = methodExpression.Method.DeclaringType;
@@ -298,110 +298,110 @@ namespace H.Necessaire.Couchbase.Lite.Querying
             switch (methodName)
             {
                 case nameof(Math.Abs):
-                    return Function.Abs(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Abs(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Acos):
-                    return Function.Acos(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Acos(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Asin):
-                    return Function.Asin(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Asin(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Atan):
-                    return Function.Atan(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Atan(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Atan2):
-                    return Function.Atan2(BuildCouchbaseExpressionFromLinqExpression(methodArgs[0]), BuildCouchbaseExpressionFromLinqExpression(methodArgs[1]));
+                    return Function.Atan2(BuildCouchbaseExpressionFromLinqExpression(methodArgs[0], fromAlias), BuildCouchbaseExpressionFromLinqExpression(methodArgs[1], fromAlias));
                 case "Average":
                 case "Avg":
-                    return Function.Avg(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Avg(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Ceiling):
                 case "Ceil":
-                    return Function.Ceil(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Ceil(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(string.Contains):
                     return declaringType == typeof(string)
-                        ? Function.Contains(BuildCouchbaseExpressionFromLinqExpression(target), BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()))
-                        : ArrayFunction.Contains(BuildCouchbaseExpressionFromLinqExpression(methodArgs[0]), BuildCouchbaseExpressionFromLinqExpression(methodArgs[1]))
+                        ? Function.Contains(BuildCouchbaseExpressionFromLinqExpression(target, fromAlias), BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias))
+                        : ArrayFunction.Contains(BuildCouchbaseExpressionFromLinqExpression(methodArgs[0], fromAlias), BuildCouchbaseExpressionFromLinqExpression(methodArgs[1], fromAlias))
                         ;
                 case nameof(Math.Cos):
-                    return Function.Cos(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Cos(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case "Count":
-                    return Function.Count(methodArgs.IsEmpty() ? CouchbaseExpression.All() : BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Count(methodArgs.IsEmpty() ? (fromAlias.IsEmpty() ? CouchbaseExpression.All() : CouchbaseExpression.All().From(fromAlias)) : BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case "Degrees":
                 case "RadiansToDegrees":
                 case "RadToDeg":
                 case "RadDeg":
-                    return Function.Degrees(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Degrees(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Exp):
-                    return Function.Exp(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Exp(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Floor):
-                    return Function.Floor(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Floor(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(string.Length):
-                    return Function.Length(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Length(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Log):
-                    return Function.Ln(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Ln(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Log10):
-                    return Function.Log(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Log(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(string.ToLower):
                 case nameof(string.ToLowerInvariant):
-                    return Function.Lower(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Lower(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(string.TrimStart):
-                    return Function.Ltrim(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Ltrim(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Max):
-                    return Function.Max(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Max(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case "MillisToString":
                 case "MsToString":
-                    return Function.MillisToString(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.MillisToString(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case "MillisToUTC":
                 case "MsToUTC":
-                    return Function.MillisToUTC(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.MillisToUTC(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Min):
-                    return Function.Min(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Min(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Pow):
-                    return Function.Power(BuildCouchbaseExpressionFromLinqExpression(methodArgs[0]), BuildCouchbaseExpressionFromLinqExpression(methodArgs[1]));
+                    return Function.Power(BuildCouchbaseExpressionFromLinqExpression(methodArgs[0], fromAlias), BuildCouchbaseExpressionFromLinqExpression(methodArgs[1], fromAlias));
                 case "Radians":
                 case "DegreesToRadians":
                 case "DegToRad":
                 case "DegRad":
-                    return Function.Radians(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Radians(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Round):
                     return methodArgs.Length == 1
-                        ? Function.Round(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()))
-                        : Function.Round(BuildCouchbaseExpressionFromLinqExpression(methodArgs[0]), BuildCouchbaseExpressionFromLinqExpression(methodArgs[1]))
+                        ? Function.Round(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias))
+                        : Function.Round(BuildCouchbaseExpressionFromLinqExpression(methodArgs[0], fromAlias), BuildCouchbaseExpressionFromLinqExpression(methodArgs[1], fromAlias))
                         ;
                 case nameof(Math.Sign):
-                    return Function.Sign(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Sign(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Sin):
-                    return Function.Sin(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Sin(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Sqrt):
-                    return Function.Sqrt(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Sqrt(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case "StringToMillis":
                 case "StringToMs":
-                    return Function.StringToMillis(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.StringToMillis(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case "StringToUTC":
-                    return Function.StringToUTC(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.StringToUTC(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case "Sum":
-                    return Function.Sum(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Sum(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(Math.Tan):
-                    return Function.Tan(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Tan(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case nameof(string.Trim):
-                    return Function.Trim(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Trim(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
                 case "Trunc":
                 case nameof(decimal.Truncate):
                     return methodArgs.Length == 1
-                        ? Function.Trunc(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()))
-                        : Function.Trunc(BuildCouchbaseExpressionFromLinqExpression(methodArgs[0]), BuildCouchbaseExpressionFromLinqExpression(methodArgs[1]))
+                        ? Function.Trunc(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias))
+                        : Function.Trunc(BuildCouchbaseExpressionFromLinqExpression(methodArgs[0], fromAlias), BuildCouchbaseExpressionFromLinqExpression(methodArgs[1], fromAlias))
                         ;
                 case nameof(string.ToUpper):
                 case nameof(string.ToUpperInvariant):
-                    return Function.Upper(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single()));
+                    return Function.Upper(BuildCouchbaseExpressionFromLinqExpression(methodArgs.Single(), fromAlias));
 
                 case nameof(CollectionExtensions.In):
-                    return ArrayFunction.Contains(BuildCouchbaseExpressionFromLinqExpression(methodArgs[1]), BuildCouchbaseExpressionFromLinqExpression(methodArgs[0]));
+                    return ArrayFunction.Contains(BuildCouchbaseExpressionFromLinqExpression(methodArgs[1], fromAlias), BuildCouchbaseExpressionFromLinqExpression(methodArgs[0], fromAlias));
 
                 case nameof(CollectionExtensions.NotIn):
-                    return CouchbaseExpression.Not(ArrayFunction.Contains(BuildCouchbaseExpressionFromLinqExpression(methodArgs[1]), BuildCouchbaseExpressionFromLinqExpression(methodArgs[0])));
+                    return CouchbaseExpression.Not(ArrayFunction.Contains(BuildCouchbaseExpressionFromLinqExpression(methodArgs[1], fromAlias), BuildCouchbaseExpressionFromLinqExpression(methodArgs[0], fromAlias)));
 
                 case "Like":
-                    return Function.Lower(BuildCouchbaseExpressionFromLinqExpression(methodArgs[0])).Like(Function.Lower(BuildCouchbaseExpressionFromLinqExpression(methodArgs[1])));
+                    return Function.Lower(BuildCouchbaseExpressionFromLinqExpression(methodArgs[0], fromAlias)).Like(Function.Lower(BuildCouchbaseExpressionFromLinqExpression(methodArgs[1], fromAlias)));
 
                 case "Regex":
-                    return BuildCouchbaseExpressionFromLinqExpression(methodArgs[0]).Regex(BuildCouchbaseExpressionFromLinqExpression(methodArgs[1]));
+                    return BuildCouchbaseExpressionFromLinqExpression(methodArgs[0], fromAlias).Regex(BuildCouchbaseExpressionFromLinqExpression(methodArgs[1], fromAlias));
 
                 default:
                     return CouchbaseExpression.Value(Expression.Lambda(methodExpression).Compile().DynamicInvoke());
