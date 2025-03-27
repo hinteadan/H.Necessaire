@@ -33,6 +33,8 @@ namespace H.Necessaire.Couchbase.Lite.Querying
 
         public ISelectResult[] Select<T>(params Expression<Func<T, object>>[] selectors) => Select(alias: null, selectors);
 
+        public IJoins Join(params CouchbaseJoinInfo[] joinInfos) => throw new NotImplementedException();
+
         public IExpression Where<T>(Expression<Func<T, bool>> filter) => BuildWhereFromExpression(filter);
         public IExpression GroupBy<T>(Expression<Func<T, object>> selector)
             => BuildCouchbaseExpressionFromLinqExpression(selector);
