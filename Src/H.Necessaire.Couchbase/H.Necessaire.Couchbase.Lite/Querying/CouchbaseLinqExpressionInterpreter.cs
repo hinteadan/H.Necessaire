@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using CouchbaseExpression = Couchbase.Lite.Query.Expression;
+using CouchbaseJoin = Couchbase.Lite.Query.Join;
 using Expression = System.Linq.Expressions.Expression;
 
 namespace H.Necessaire.Couchbase.Lite.Querying
@@ -33,7 +34,49 @@ namespace H.Necessaire.Couchbase.Lite.Querying
 
         public ISelectResult[] Select<T>(params Expression<Func<T, object>>[] selectors) => Select(alias: null, selectors);
 
-        public IJoins Join(params CouchbaseJoinInfo[] joinInfos) => throw new NotImplementedException();
+        public IJoin Join<TThis, TThat>(CouchbaseJoinInfo<TThis, TThat> joinInfo)
+        {
+            if (joinInfo?.JoinBy is null)
+                return null;
+
+            if (joinInfo.JoinType == CouchbaseJoinType.Cross)
+                return
+                    CouchbaseJoin
+                    .CrossJoin(
+                        joinInfo.CollectionAlias.IsEmpty() ? DataSource.Collection(joinInfo.Collection) : DataSource.Collection(joinInfo.Collection).As(joinInfo.CollectionAlias)
+                    )
+                    ;
+
+            if (joinInfo.JoinBy is null)
+                return null;
+
+            IExpression joinExpression = BuildCouchbaseExpressionFromLinqExpression(joinInfo.JoinBy);
+
+            if (joinExpression is null)
+                return null;
+
+            switch (joinInfo.JoinType)
+            {
+                case CouchbaseJoinType.Inner:
+                    return
+                        CouchbaseJoin
+                        .InnerJoin(
+                            joinInfo.CollectionAlias.IsEmpty() ? DataSource.Collection(joinInfo.Collection) : DataSource.Collection(joinInfo.Collection).As(joinInfo.CollectionAlias)
+                        )
+                        .On(joinExpression)
+                        ;
+
+                case CouchbaseJoinType.LeftOuter:
+                default:
+                    return
+                        CouchbaseJoin
+                        .LeftOuterJoin(
+                            joinInfo.CollectionAlias.IsEmpty() ? DataSource.Collection(joinInfo.Collection) : DataSource.Collection(joinInfo.Collection).As(joinInfo.CollectionAlias)
+                        )
+                        .On(joinExpression)
+                        ;
+            }
+        }
 
         public IExpression Where<T>(Expression<Func<T, bool>> filter) => BuildWhereFromExpression(filter);
         public IExpression GroupBy<T>(Expression<Func<T, object>> selector)
@@ -407,9 +450,9 @@ namespace H.Necessaire.Couchbase.Lite.Querying
 
                 case nameof(CouchbaseExtraQueryMethods.FromAlias):
                     return BuildCouchbaseExpressionFromLinqExpression(
-                        methodArgs[0], 
+                        methodArgs[0],
                         (methodArgs[1] as ConstantExpression)?.Value as string
-                        ?? ((methodArgs[1] is MemberExpression aliasMemberExpr) ? ReadMemberValue(aliasMemberExpr, (aliasMemberExpr?.Expression as ConstantExpression)) as string : null) 
+                        ?? ((methodArgs[1] is MemberExpression aliasMemberExpr) ? ReadMemberValue(aliasMemberExpr, (aliasMemberExpr?.Expression as ConstantExpression)) as string : null)
                         ?? ((methodArgs[1] is MethodCallExpression aliasMethodExpr) ? Expression.Lambda(aliasMethodExpr).Compile().DynamicInvoke() as string : null)
                     );
 

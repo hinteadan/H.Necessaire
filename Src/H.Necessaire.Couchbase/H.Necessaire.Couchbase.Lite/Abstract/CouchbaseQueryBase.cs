@@ -26,7 +26,7 @@ namespace H.Necessaire.Couchbase.Lite.Abstract
 
         protected TQuery CompileCount() => CompileQuery(parent?.ToCountQuery() ?? CompileCountSelect());
 
-        IFrom CompileSelect() => QueryBuilder.Select(selects).From(dataSource);
+        IFrom CompileSelect() => QueryBuilder.Select(selects).From(dataSource).Join();
         IFrom CompileCountSelect() => QueryBuilder.Select(CouchbaseLinqExpressionInterpreter.Instance.SelectCount()).From(dataSource);
     }
 }
