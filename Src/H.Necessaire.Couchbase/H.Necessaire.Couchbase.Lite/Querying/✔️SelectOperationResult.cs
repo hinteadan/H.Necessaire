@@ -20,7 +20,7 @@ namespace H.Necessaire.Couchbase.Lite.Querying
 
         public JoinOperationResult<T> Join()
         {
-            return new JoinOperationResult<T>();
+            return new JoinOperationResult<T>(this);
         }
 
         public WhereOperationResult<T> Where(Expression<Func<T, bool>> filter)
