@@ -22,7 +22,13 @@ namespace H.Necessaire.Couchbase.Lite.Querying
         public string CollectionAlias { get; }
         public Expression<Func<TThis, TThat, bool>> JoinBy { get; }
 
-        public static implicit operator CouchbaseJoinInfo<TThis, TThat>((Collection, Expression<Func<TThis, TThat, bool>>) joinBy)
-            => new CouchbaseJoinInfo<TThis, TThat>(joinBy.Item1, joinBy.Item2);
+        public static implicit operator CouchbaseJoinInfo<TThis, TThat>((Collection collection, Expression<Func<TThis, TThat, bool>> joinExpression) joinBy)
+            => new CouchbaseJoinInfo<TThis, TThat>(joinBy.collection, joinBy.joinExpression);
+        public static implicit operator CouchbaseJoinInfo<TThis, TThat>((Collection collection, string collectionAlias, Expression<Func<TThis, TThat, bool>> joinExpression) joinBy)
+            => new CouchbaseJoinInfo<TThis, TThat>(joinBy.collection, joinBy.collectionAlias, joinBy.joinExpression);
+        public static implicit operator CouchbaseJoinInfo<TThis, TThat>((Collection collection, string collectionAlias, Expression<Func<TThis, TThat, bool>> joinExpression, CouchbaseJoinType joinType) joinBy)
+            => new CouchbaseJoinInfo<TThis, TThat>(joinBy.collection, joinBy.collectionAlias, joinBy.joinExpression, joinBy.joinType);
+        public static implicit operator CouchbaseJoinInfo<TThis, TThat>((Collection collection, Expression<Func<TThis, TThat, bool>> joinExpression, CouchbaseJoinType joinType) joinBy)
+            => new CouchbaseJoinInfo<TThis, TThat>(joinBy.collection, joinBy.joinExpression, joinBy.joinType);
     }
 }
