@@ -32,7 +32,7 @@ namespace H.Necessaire.Couchbase.Lite.CLI
                     //(await addressScope.Save<GeoAddressWithID, Guid>(address)).ThrowOnFail();
                     //(await personScope.Save<Person, Guid>(person)).ThrowOnFail();
 
-                    var query = personScope.SelectAll<Person>().To//.Where(x => x.CreatedAt.FromAlias(nameof(Person)) >= DateTime.UtcNow).ToQuery().Join;
+                    personScope.Select(p => p.)
 
                 }
 
@@ -54,5 +54,10 @@ namespace H.Necessaire.Couchbase.Lite.CLI
     class GeoAddressWithID : GeoAddress, IGuidIdentity
     {
         public Guid ID { get; set; } = Guid.NewGuid();
+    }
+
+    class PersonWithAddress
+    {
+
     }
 }

@@ -14,13 +14,13 @@ namespace H.Necessaire.Couchbase.Lite.Querying
     {
         public static readonly CouchbaseLinqExpressionInterpreter Instance = new CouchbaseLinqExpressionInterpreter();
 
-        public ISelectResult[] SelectAll(string alias = null) => new ISelectResult[] { alias.IsEmpty() ? SelectResult.All() : SelectResult.All().From(alias) };
+        public ISelectResult[] SelectAll(string fromAlias = null) => new ISelectResult[] { fromAlias.IsEmpty() ? SelectResult.All() : SelectResult.All().From(fromAlias) };
 
-        public ISelectResult[] SelectCount(string alias = null) => new ISelectResult[] { alias.IsEmpty() ? SelectResult.Expression(Function.Count(CouchbaseExpression.All())).As("Count") : SelectResult.Expression(Function.Count(CouchbaseExpression.All().From(alias))).As("Count") };
+        public ISelectResult[] SelectCount(string fromAlias = null) => new ISelectResult[] { fromAlias.IsEmpty() ? SelectResult.Expression(Function.Count(CouchbaseExpression.All())).As("Count") : SelectResult.Expression(Function.Count(CouchbaseExpression.All().From(fromAlias))).As("Count") };
 
-        public ISelectResult[] Select<T>(string alias, params Expression<Func<T, object>>[] selectors)
+        public ISelectResult[] Select<T>(string fromAlias, params Expression<Func<T, object>>[] selectors)
         {
-            IExpression[] propExpressions = selectors?.Select(x => BuildPropertySelectorFromExpression(x, alias)).ToNoNullsArray();
+            IExpression[] propExpressions = selectors?.Select(x => BuildPropertySelectorFromExpression(x, fromAlias)).ToNoNullsArray();
 
             if (propExpressions.IsEmpty())
                 return null;
@@ -32,7 +32,7 @@ namespace H.Necessaire.Couchbase.Lite.Querying
                 ;
         }
 
-        public ISelectResult[] Select<T>(params Expression<Func<T, object>>[] selectors) => Select(alias: null, selectors);
+        public ISelectResult[] Select<T>(params Expression<Func<T, object>>[] selectors) => Select(fromAlias: null, selectors);
 
         public IJoin Join<TThis, TThat>(CouchbaseJoinInfo<TThis, TThat> joinInfo)
         {
