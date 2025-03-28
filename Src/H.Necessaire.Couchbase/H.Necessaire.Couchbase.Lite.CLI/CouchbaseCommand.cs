@@ -32,7 +32,7 @@ namespace H.Necessaire.Couchbase.Lite.CLI
                     //(await addressScope.Save<GeoAddressWithID, Guid>(address)).ThrowOnFail();
                     //(await personScope.Save<Person, Guid>(person)).ThrowOnFail();
 
-                    personScope.Select(p => p.)
+                    //personScope.Select(p => p.)
 
                 }
 
