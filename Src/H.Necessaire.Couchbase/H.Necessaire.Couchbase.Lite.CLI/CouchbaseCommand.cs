@@ -2,6 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using H.Necessaire.Couchbase.Lite.Querying;
+using System.Linq;
 
 namespace H.Necessaire.Couchbase.Lite.CLI
 {
@@ -32,7 +33,17 @@ namespace H.Necessaire.Couchbase.Lite.CLI
                     //(await addressScope.Save<GeoAddressWithID, Guid>(address)).ThrowOnFail();
                     //(await personScope.Save<Person, Guid>(person)).ThrowOnFail();
 
-                    //personScope.Select(p => p.)
+                    var query = personScope.Select<Person>(
+                        HCb.Select<Person>((x => x.ID, nameof(Person), nameof(PersonWithAddress.PersonID)))
+                        , HCb.Select<Person>((x => x.FirstName, nameof(Person), nameof(PersonWithAddress.FirstName)))
+                        , HCb.Select<Person>((x => x.LastName, nameof(Person), nameof(PersonWithAddress.LastName)))
+                        , HCb.Select<GeoAddressWithID>((x => x.ID, nameof(GeoAddressWithID), nameof(PersonWithAddress.AddressID)))
+                        , HCb.Select<GeoAddressWithID>((x => x.StreetAddress, nameof(GeoAddressWithID), nameof(PersonWithAddress.StreetAddress)))
+                        , HCb.Select<GeoAddressWithID>((x => x.Country, nameof(GeoAddressWithID), nameof(PersonWithAddress.Country)))
+                    ).Join().With<Person, GeoAddressWithID>(addressScope, nameof(GeoAddressWithID), (p, a) => p.GeoAddressID == a.ID)
+                    ;
+
+                    var results = (await personScope.StreamQuery<PersonWithAddress>(query)).ThrowOnFailOrReturn().ToArray();
 
                 }
 
@@ -56,8 +67,11 @@ namespace H.Necessaire.Couchbase.Lite.CLI
         public Guid ID { get; set; } = Guid.NewGuid();
     }
 
-    class PersonWithAddress
+    class PersonWithAddress : GeoAddress
     {
-
+        public Guid PersonID { get; set; }
+        public Guid AddressID { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

@@ -23,33 +23,33 @@ namespace H.Necessaire.Couchbase.Lite.Querying
         }
 
 
-        public JoinOperationResult<T> With<TThis, TThat>(Collection collection, Expression<Func<TThis, TThat, bool>> joinExpression)
+        public JoinOperationResult<T> With<TThis, TThat>(CouchbaseOperations couchbaseOperations, Expression<Func<TThis, TThat, bool>> joinExpression)
         {
             joinersQueue.Enqueue(
-                CouchbaseLinqExpressionInterpreter.Instance.Join<TThis, TThat>((collection, joinExpression))
+                CouchbaseLinqExpressionInterpreter.Instance.Join<TThis, TThat>((couchbaseOperations.Scope.Collection, joinExpression))
             );
             return this;
         }
-        public JoinOperationResult<T> With<TThis, TThat>(Collection collection, string collectionAlias, Expression<Func<TThis, TThat, bool>> joinExpression)
+        public JoinOperationResult<T> With<TThis, TThat>(CouchbaseOperations couchbaseOperations, string collectionAlias, Expression<Func<TThis, TThat, bool>> joinExpression)
         {
             joinersQueue.Enqueue(
-                CouchbaseLinqExpressionInterpreter.Instance.Join<TThis, TThat>((collection, collectionAlias, joinExpression))
-            );
-            return this;
-        }
-
-        public JoinOperationResult<T> With<TThis, TThat>(Collection collection, string collectionAlias, Expression<Func<TThis, TThat, bool>> joinExpression, CouchbaseJoinType joinType)
-        {
-            joinersQueue.Enqueue(
-                CouchbaseLinqExpressionInterpreter.Instance.Join<TThis, TThat>((collection, collectionAlias, joinExpression, joinType))
+                CouchbaseLinqExpressionInterpreter.Instance.Join<TThis, TThat>((couchbaseOperations.Scope.Collection, collectionAlias, joinExpression))
             );
             return this;
         }
 
-        public JoinOperationResult<T> With<TThis, TThat>(Collection collection, Expression<Func<TThis, TThat, bool>> joinExpression, CouchbaseJoinType joinType)
+        public JoinOperationResult<T> With<TThis, TThat>(CouchbaseOperations couchbaseOperations, string collectionAlias, Expression<Func<TThis, TThat, bool>> joinExpression, CouchbaseJoinType joinType)
         {
             joinersQueue.Enqueue(
-                CouchbaseLinqExpressionInterpreter.Instance.Join<TThis, TThat>((collection, joinExpression, joinType))
+                CouchbaseLinqExpressionInterpreter.Instance.Join<TThis, TThat>((couchbaseOperations.Scope.Collection, collectionAlias, joinExpression, joinType))
+            );
+            return this;
+        }
+
+        public JoinOperationResult<T> With<TThis, TThat>(CouchbaseOperations couchbaseOperations, Expression<Func<TThis, TThat, bool>> joinExpression, CouchbaseJoinType joinType)
+        {
+            joinersQueue.Enqueue(
+                CouchbaseLinqExpressionInterpreter.Instance.Join<TThis, TThat>((couchbaseOperations.Scope.Collection, joinExpression, joinType))
             );
             return this;
         }

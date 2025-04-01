@@ -21,6 +21,8 @@ namespace H.Necessaire.Couchbase.Lite
             this.operationScope = operationScope;
         }
 
+        internal CouchbaseOperationScope Scope => operationScope;
+
         public void Dispose()
         {
             new Action(operationScope.Dispose).TryOrFailWithGrace();
@@ -28,7 +30,8 @@ namespace H.Necessaire.Couchbase.Lite
 
         public SelectOperationResult<T> SelectAll<T>() => operationScope.SelectAll<T>();
         public SelectOperationResult<T> SelectCount<T>() => operationScope.SelectCount<T>();
-        public SelectOperationResult<T> Select<T>(params Expression<Func<T, object>>[] selectors) => operationScope.Select(selectors);
+        public SelectOperationResult<T> Select<T>(params Expression<Func<T, object>>[] selectors) => operationScope.Select<T>(selectors);
+        public SelectOperationResult<T> Select<T>(params ISelectResult[] selects) => operationScope.Select<T>(selects);
 
 
         public Task<OperationResult<T>> Save<T, TID>(T document, Func<TID, string> storageIdBuilder = null) where T : IDentityType<TID>
