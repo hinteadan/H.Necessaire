@@ -50,7 +50,7 @@ namespace H.Necessaire.Couchbase.Lite.Querying
 
         public ISelectResult[] Select<T>(params Expression<Func<T, object>>[] selectors) => Select(fromAlias: null, selectors);
 
-        public IJoin Join<TThis, TThat>(CouchbaseJoinInfo<TThis, TThat> joinInfo)
+        public IJoin Join<TThis, TThat>(CouchbaseJoinInfo<TThis, TThat> joinInfo, string fromAlias = null)
         {
             if (joinInfo?.JoinBy is null)
                 return null;
@@ -66,10 +66,17 @@ namespace H.Necessaire.Couchbase.Lite.Querying
             if (joinInfo.JoinBy is null)
                 return null;
 
-            IExpression joinExpression = BuildCouchbaseExpressionFromLinqExpression(joinInfo.JoinBy);
-
-            if (joinExpression is null)
+            BinaryExpression joinBinaryExpression = joinInfo.JoinBy.Body as BinaryExpression;
+            if (joinBinaryExpression is null)
                 return null;
+
+            var left = BuildCouchbaseExpressionFromLinqExpression(joinBinaryExpression.Left, fromAlias);
+            var right = BuildCouchbaseExpressionFromLinqExpression(joinBinaryExpression.Right, joinInfo.CollectionAlias);
+
+            if (left is null || right is null)
+                return null;
+
+            IExpression joinExpression = left.EqualTo(right);
 
             switch (joinInfo.JoinType)
             {

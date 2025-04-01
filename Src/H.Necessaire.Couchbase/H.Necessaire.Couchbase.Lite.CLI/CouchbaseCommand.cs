@@ -37,6 +37,7 @@ namespace H.Necessaire.Couchbase.Lite.CLI
                         HCb.Select<Person>((x => x.ID, nameof(Person), nameof(PersonWithAddress.PersonID)))
                         , HCb.Select<Person>((x => x.FirstName, nameof(Person), nameof(PersonWithAddress.FirstName)))
                         , HCb.Select<Person>((x => x.LastName, nameof(Person), nameof(PersonWithAddress.LastName)))
+                        , HCb.Select<Person>((x => x.GeoAddressID, nameof(Person), nameof(Person.GeoAddressID)))
                         , HCb.Select<GeoAddressWithID>((x => x.ID, nameof(GeoAddressWithID), nameof(PersonWithAddress.AddressID)))
                         , HCb.Select<GeoAddressWithID>((x => x.StreetAddress, nameof(GeoAddressWithID), nameof(PersonWithAddress.StreetAddress)))
                         , HCb.Select<GeoAddressWithID>((x => x.Country, nameof(GeoAddressWithID), nameof(PersonWithAddress.Country)))
