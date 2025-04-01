@@ -32,6 +32,22 @@ namespace H.Necessaire.Couchbase.Lite.Querying
                 ;
         }
 
+        public ISelectResult Select<T>(CouchbaseSelectInfo<T> selectInfo)
+        {
+            if (selectInfo is null)
+                return null;
+
+            IExpression propExpression = BuildPropertySelectorFromExpression(selectInfo.Selector, selectInfo.FromAlias);
+            if (propExpression is null)
+                return null;
+
+            return
+                selectInfo.NameAlias.IsEmpty()
+                ? SelectResult.Expression(propExpression)
+                : SelectResult.Expression(propExpression).As(selectInfo.NameAlias)
+                ;
+        }
+
         public ISelectResult[] Select<T>(params Expression<Func<T, object>>[] selectors) => Select(fromAlias: null, selectors);
 
         public IJoin Join<TThis, TThat>(CouchbaseJoinInfo<TThis, TThat> joinInfo)
