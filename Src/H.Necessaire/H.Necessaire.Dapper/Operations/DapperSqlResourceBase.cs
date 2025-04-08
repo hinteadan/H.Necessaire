@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using H.Necessaire.Dapper.Operations.Concrete;
-using Microsoft.Data.SqlClient;
 using System;
+using System.Data;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
@@ -218,7 +218,7 @@ namespace H.Necessaire.Dapper
             await
                 new Func<Task>(async () => {
 
-                    using (SqlConnection dbConnection = new SqlConnection(connectionString))
+                    using (IDbConnection dbConnection = new SqlConnection(connectionString))
                     {
                         databaseExists = await dbConnection.ExecuteScalarAsync<bool>($"SELECT CASE WHEN ISNULL(DB_ID('{databaseName}'), 0) = 0 THEN 0 ELSE 1 END");
                         if (databaseExists)
@@ -237,7 +237,7 @@ namespace H.Necessaire.Dapper
                 await
                     new Func<Task>(async () => {
 
-                        using (SqlConnection dbConnection = new SqlConnection(connectionStringWithoutDatabase))
+                        using (IDbConnection dbConnection = new SqlConnection(connectionStringWithoutDatabase))
                         {
                             databaseExists = await dbConnection.ExecuteScalarAsync<bool>($"SELECT CASE WHEN ISNULL(DB_ID('{databaseName}'), 0) = 0 THEN 0 ELSE 1 END");
                             if (databaseExists)
@@ -288,7 +288,7 @@ namespace H.Necessaire.Dapper
                     return;
                 }
 
-                using (SqlConnection dbConnection = new SqlConnection(connectionString))
+                using (IDbConnection dbConnection = new SqlConnection(connectionString))
                 {
                     foreach (SqlMigration migrationToRun in migrationsToRun)
                     {

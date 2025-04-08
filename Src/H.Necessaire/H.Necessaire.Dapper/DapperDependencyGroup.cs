@@ -4,6 +4,8 @@ namespace H.Necessaire.Dapper
 {
     public class DapperDependencyGroup : ImADependencyGroup
     {
+
+
         public virtual void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry

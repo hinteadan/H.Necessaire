@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,7 +21,7 @@ namespace H.Necessaire.Dapper
             if (isDatabaseEnsured)
                 return;
 
-            using (SqlConnection dbConnection = new SqlConnection(connectionString))
+            using (IDbConnection dbConnection = new SqlConnection(connectionString))
             {
                 bool migrationTableExists = await dbConnection.ExecuteScalarAsync<bool>("IF (EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  TABLE_NAME = 'H.Necessaire.Migration')) BEGIN SELECT 1 END ELSE BEGIN SELECT 0 END");
 

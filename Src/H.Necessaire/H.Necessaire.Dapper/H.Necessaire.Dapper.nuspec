@@ -20,7 +20,6 @@
       <dependency id="H.Necessaire" version="2.43.24" />
       <dependency id="Dapper" version="2.1.66" />
       <dependency id="Microsoft.Bcl.AsyncInterfaces" version="9.0.3" />
-      <dependency id="Microsoft.Data.SqlClient" version="5.2.2" />
     </dependencies>
   </metadata>
   <files>
