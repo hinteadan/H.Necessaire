@@ -32,6 +32,7 @@ namespace H.Necessaire.Dapper
         }
 
         protected abstract Task EnsureDatabase();
+        protected abstract ImADapperContext NewDbContext(string tableName = null);
 
         protected virtual string GetCoreDatabaseName(ImADependencyProvider dependencyProvider)
         {
@@ -215,8 +216,6 @@ namespace H.Necessaire.Dapper
             }
         }
 
-        
-
         protected virtual async Task EnsureMigrations()
         {
             if (isMigrating)
@@ -261,11 +260,6 @@ namespace H.Necessaire.Dapper
 
                 isMigrationEnsured = true;
             }
-        }
-
-        protected ImADapperContext NewDbContext(string tableName = null)
-        {
-            return new DapperSqlContext(sqlConnectionFactory.BuildNewConnection(connectionString), tableName ?? this.tableName);
         }
 
         protected virtual bool IsCoreDatabase()
