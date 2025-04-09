@@ -47,6 +47,28 @@ namespace H.Necessaire.Dapper
             return this;
         }
 
+        public Note? Get(string key)
+        {
+            if (connectionStringParts.TryGetValue(key.ToLowerInvariant(), out Note result))
+                return result;
+
+            return null;
+        }
+
+        public Note? GetFirst(params string[] keys)
+        {
+            if (keys.IsEmpty())
+                return null;
+
+            foreach (string key in keys)
+            {
+                if (connectionStringParts.TryGetValue(key.ToLowerInvariant(), out Note result))
+                    return result;
+            }
+
+            return null;
+        }
+
         public override string ToString()
         {
             return string.Join(partsSeparator, connectionStringParts.Select(x => ConnectionStringPartToString(x.Value)));
