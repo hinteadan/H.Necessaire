@@ -33,6 +33,7 @@ namespace H.Necessaire.Dapper
 
         protected abstract Task EnsureDatabase();
         protected abstract ImADapperContext NewDbContext(string tableName = null);
+        protected abstract Task<SqlMigration[]> GetAllMigrations();
 
         protected virtual string GetCoreDatabaseName(ImADependencyProvider dependencyProvider)
         {
@@ -61,8 +62,6 @@ namespace H.Necessaire.Dapper
             if (this.databaseName != this.connectionString?.GetDatabaseName())
                 this.connectionString = this.connectionString?.WithDatabase(this.databaseName);
         }
-
-        protected abstract Task<SqlMigration[]> GetAllMigrations();
         #endregion
 
         protected async Task EnsureDatabaseAndMigrations()
