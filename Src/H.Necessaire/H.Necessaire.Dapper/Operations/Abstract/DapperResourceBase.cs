@@ -19,8 +19,6 @@ namespace H.Necessaire.Dapper
         protected string connectionStringWithoutDatabase;
         protected string databaseName;
         protected string tableName;
-
-        bool isDatabaseEnsured = false;
         bool isMigrationEnsured = false;
         bool isMigrating = false;
 
@@ -32,6 +30,8 @@ namespace H.Necessaire.Dapper
             this.databaseName = databaseName;
             if (this.databaseName != this.connectionString?.GetDatabaseName()) this.connectionString = this.connectionString?.WithDatabase(this.databaseName);
         }
+
+        protected abstract Task EnsureDatabase();
 
         protected virtual string GetCoreDatabaseName(ImADependencyProvider dependencyProvider)
         {
@@ -64,7 +64,7 @@ namespace H.Necessaire.Dapper
         protected abstract Task<SqlMigration[]> GetAllMigrations();
         #endregion
 
-        protected virtual async Task EnsureDatabaseAndMigrations()
+        protected async Task EnsureDatabaseAndMigrations()
         {
             await EnsureDatabase();
             await EnsureMigrations();
@@ -215,54 +215,7 @@ namespace H.Necessaire.Dapper
             }
         }
 
-        protected virtual async Task EnsureDatabase()
-        {
-            if (isDatabaseEnsured)
-                return;
-
-            bool databaseExists = false;
-
-            await
-                new Func<Task>(async () =>
-                {
-
-                    using (IDbConnection dbConnection = sqlConnectionFactory.BuildNewConnection(connectionString))
-                    {
-                        databaseExists = await dbConnection.ExecuteScalarAsync<bool>($"SELECT CASE WHEN ISNULL(DB_ID('{databaseName}'), 0) = 0 THEN 0 ELSE 1 END");
-                        if (databaseExists)
-                        {
-                            isDatabaseEnsured = true;
-                            return;
-                        }
-
-                        await dbConnection.ExecuteAsync($"CREATE DATABASE [{databaseName}]");
-                    }
-
-                }).TryOrFailWithGrace(onFail: ex => databaseExists = false);
-
-            if (!databaseExists)
-            {
-                await
-                    new Func<Task>(async () =>
-                    {
-
-                        using (IDbConnection dbConnection = sqlConnectionFactory.BuildNewConnection(connectionStringWithoutDatabase))
-                        {
-                            databaseExists = await dbConnection.ExecuteScalarAsync<bool>($"SELECT CASE WHEN ISNULL(DB_ID('{databaseName}'), 0) = 0 THEN 0 ELSE 1 END");
-                            if (databaseExists)
-                            {
-                                isDatabaseEnsured = true;
-                                return;
-                            }
-
-                            await dbConnection.ExecuteAsync($"CREATE DATABASE [{databaseName}]");
-                        }
-
-                    }).TryOrFailWithGrace(onFail: ex => databaseExists = false);
-            }
-
-            isDatabaseEnsured = true;
-        }
+        
 
         protected virtual async Task EnsureMigrations()
         {
@@ -310,7 +263,7 @@ namespace H.Necessaire.Dapper
             }
         }
 
-        protected virtual DapperSqlContext NewDbContext(string tableName = null)
+        protected DapperSqlContext NewDbContext(string tableName = null)
         {
             return new DapperSqlContext(sqlConnectionFactory.BuildNewConnection(connectionString), tableName ?? this.tableName);
         }
