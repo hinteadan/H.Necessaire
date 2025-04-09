@@ -71,7 +71,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 return await dapper.LoadEntityByID<TSqlEntity>(id, tableName, idColumnName);
             }
@@ -81,7 +81,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 return await dapper.LoadEntityByCustomCriteria<TSqlEntity>(sqlFilters, sqlParams, tableName);
             }
@@ -91,7 +91,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 return await dapper.LoadEntityByCustomSql<TSqlEntity>(sql, sqlParams);
             }
@@ -101,7 +101,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 return await dapper.LoadEntitiesByIDs<TSqlEntity>(ids, tableName, idColumnName);
             }
@@ -111,7 +111,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 return (await dapper.LoadEntitiesByCustomSql<TSqlEntity>(sql, sqlParams)).ToArray();
             }
@@ -121,7 +121,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 return await dapper.LoadEntitiesByCustomCriteria<TSqlEntity>(sqlFilters, sqlParams, sortCriterias, limitCriteria, tableName);
             }
@@ -158,7 +158,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 await dapper.InsertEntity(entity);
             }
@@ -168,7 +168,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 await dapper.UpsertEntityByID(entity, idColumnName: idColumnName);
             }
@@ -178,7 +178,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 await dapper.DeleteEntityByID<TSqlEntity>(id, tableName, idColumnName);
             }
@@ -188,7 +188,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 await dapper.DeleteEntitiesByIDs<TSqlEntity>(ids, tableName, idColumnName);
             }
@@ -198,7 +198,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 await dapper.DeleteEntitiesByByCustomCriteria<TSqlEntity>(sqlFilters, sqlParams, tableName);
             }
