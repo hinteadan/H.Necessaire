@@ -12,7 +12,7 @@ namespace H.Necessaire.Dapper
         readonly Dictionary<string, Note> connectionStringParts = new Dictionary<string, Note>();
         public ConnectionStringBuilder(string connectionString)
         {
-            foreach(Note part in ParseConnectionString(connectionString))
+            foreach (Note part in ParseConnectionString(connectionString))
             {
                 connectionStringParts.Add(part.ID.ToLowerInvariant(), part);
             }
@@ -27,7 +27,7 @@ namespace H.Necessaire.Dapper
 
             string key = part.ID.ToLowerInvariant();
 
-            if(connectionStringParts.ContainsKey(key))
+            if (connectionStringParts.ContainsKey(key))
             {
                 connectionStringParts[key] = part;
                 return this;
@@ -39,6 +39,13 @@ namespace H.Necessaire.Dapper
         }
         public ConnectionStringBuilder Set(string key, string value) => Set(new Note(key, value));
         public ConnectionStringBuilder Set(string flag) => Set(flag, null);
+
+        public ConnectionStringBuilder Zap(string key)
+        {
+            connectionStringParts.Remove(key.ToLowerInvariant());
+
+            return this;
+        }
 
         public override string ToString()
         {
