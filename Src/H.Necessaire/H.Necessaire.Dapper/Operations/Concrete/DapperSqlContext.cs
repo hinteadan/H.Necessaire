@@ -12,14 +12,16 @@ namespace H.Necessaire.Dapper.Operations.Concrete
         #region Construct
         readonly IDbConnection dbConnection;
         readonly string defaultTableName;
-        public DapperSqlContext(string sqlConnectionString, string defaultTableName = null)
+        public DapperSqlContext(IDbConnection dbConnection, string defaultTableName = null)
         {
             this.defaultTableName = defaultTableName;
-            dbConnection = new SqlConnection(sqlConnectionString);
+            this.dbConnection = dbConnection;
+            dbConnection.Open();
         }
 
         public void Dispose()
         {
+            new Action(dbConnection.Close).TryOrFailWithGrace();
             new Action(dbConnection.Dispose).TryOrFailWithGrace();
         }
         #endregion

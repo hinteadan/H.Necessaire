@@ -9,8 +9,15 @@ namespace H.Necessaire.Dapper
     internal class SqlMigrationStore : DapperSqlResourceBase, ImASqlMigrationStore
     {
         #region Construct
+        ImASqlConnectionFactory sqlConnectionFactory = null;
         bool isDatabaseEnsured = false;
         public SqlMigrationStore(string connectionString = null) : base(connectionString, tableName: "H.Necessaire.Migration", databaseName: "H.Necessaire.Core") { }
+
+        public override void ReferDependencies(ImADependencyProvider dependencyProvider)
+        {
+            base.ReferDependencies(dependencyProvider);
+            sqlConnectionFactory = dependencyProvider.Get<ImASqlConnectionFactory>();
+        }
 
         protected override Task<SqlMigration[]> GetAllMigrations() => new SqlMigration[0].AsTask();
 
@@ -21,7 +28,7 @@ namespace H.Necessaire.Dapper
             if (isDatabaseEnsured)
                 return;
 
-            using (IDbConnection dbConnection = new SqlConnection(connectionString))
+            using (IDbConnection dbConnection = sqlConnectionFactory.BuildNewConnection(connectionString))
             {
                 bool migrationTableExists = await dbConnection.ExecuteScalarAsync<bool>("IF (EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  TABLE_NAME = 'H.Necessaire.Migration')) BEGIN SELECT 1 END ELSE BEGIN SELECT 0 END");
 

@@ -312,7 +312,7 @@ namespace H.Necessaire.Dapper
 
         protected virtual DapperSqlContext NewDbContext(string tableName = null)
         {
-            return new DapperSqlContext(connectionString, tableName ?? this.tableName);
+            return new DapperSqlContext(sqlConnectionFactory.BuildNewConnection(connectionString), tableName ?? this.tableName);
         }
 
         protected virtual bool IsCoreDatabase()

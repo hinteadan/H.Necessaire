@@ -12,6 +12,7 @@ namespace H.Necessaire.Dapper
     public abstract class DapperSqlResourceBase : ImADependency
     {
         #region Construct
+        ImASqlConnectionFactory sqlConnectionFactory = null;
         ImASqlMigrationStore sqlMigrationStore = null;
 
         protected string connectionString;
@@ -34,6 +35,10 @@ namespace H.Necessaire.Dapper
 
         public virtual void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
+            sqlConnectionFactory = dependencyProvider.Get<ImASqlConnectionFactory>();
+            if (sqlConnectionFactory is null)
+                throw new ArgumentNullException(nameof(sqlConnectionFactory), $"A concrete implementation for {nameof(ImASqlConnectionFactory)} must be registered within the current dependecy registry");
+
             if (IsCoreDatabase())
             {
                 RuntimeConfig runtimeConfig = dependencyProvider?.GetRuntimeConfig();
@@ -218,7 +223,7 @@ namespace H.Necessaire.Dapper
                 new Func<Task>(async () =>
                 {
 
-                    using (IDbConnection dbConnection = new SqlConnection(connectionString))
+                    using (IDbConnection dbConnection = sqlConnectionFactory.BuildNewConnection(connectionString))
                     {
                         databaseExists = await dbConnection.ExecuteScalarAsync<bool>($"SELECT CASE WHEN ISNULL(DB_ID('{databaseName}'), 0) = 0 THEN 0 ELSE 1 END");
                         if (databaseExists)
@@ -238,7 +243,7 @@ namespace H.Necessaire.Dapper
                     new Func<Task>(async () =>
                     {
 
-                        using (IDbConnection dbConnection = new SqlConnection(connectionStringWithoutDatabase))
+                        using (IDbConnection dbConnection = sqlConnectionFactory.BuildNewConnection(connectionStringWithoutDatabase))
                         {
                             databaseExists = await dbConnection.ExecuteScalarAsync<bool>($"SELECT CASE WHEN ISNULL(DB_ID('{databaseName}'), 0) = 0 THEN 0 ELSE 1 END");
                             if (databaseExists)
@@ -289,7 +294,7 @@ namespace H.Necessaire.Dapper
                     return;
                 }
 
-                using (IDbConnection dbConnection = new SqlConnection(connectionString))
+                using (IDbConnection dbConnection = sqlConnectionFactory.BuildNewConnection(connectionString))
                 {
                     foreach (SqlMigration migrationToRun in migrationsToRun)
                     {
@@ -304,7 +309,7 @@ namespace H.Necessaire.Dapper
 
         protected virtual DapperSqlContext NewDbContext(string tableName = null)
         {
-            return new DapperSqlContext(connectionString, tableName ?? this.tableName);
+            return new DapperSqlContext(sqlConnectionFactory.BuildNewConnection(connectionString), tableName ?? this.tableName);
         }
 
         protected virtual bool IsCoreDatabase()
