@@ -20,6 +20,8 @@ namespace H.Necessaire.Dapper
             dbConnection.Open();
         }
 
+        protected abstract string PrintLimitSyntax(int offset, int count);
+
         public virtual void Dispose()
         {
             new Action(dbConnection.Close).TryOrFailWithGrace();
@@ -66,7 +68,7 @@ namespace H.Necessaire.Dapper
             string limitSql = string.Empty;
             if (limitCriteria != null)
             {
-                limitSql = $"OFFSET {limitCriteria.Offset} ROWS FETCH NEXT {limitCriteria.Count} ROWS ONLY";
+                limitSql = PrintLimitSyntax(limitCriteria.Offset, limitCriteria.Count);
                 if (string.IsNullOrWhiteSpace(sortSql))
                     sortSql = "[ID] ASC";
             }
@@ -98,6 +100,8 @@ namespace H.Necessaire.Dapper
             return result;
         }
 
+        
+
         public async Task<IEnumerable<TSqlEntity>> StreamAllByCustomCriteria<TSqlEntity>(ISqlFilterCriteria[] sqlFilters, object sqlParams, SqlSortCriteria[] sortCriterias, SqlLimitCriteria limitCriteria, string tableName) where TSqlEntity : ISqlEntry
         {
             string filterSql = string.Join(" AND ", sqlFilters.Select(x => x.ToString()));
@@ -109,7 +113,7 @@ namespace H.Necessaire.Dapper
             string limitSql = string.Empty;
             if (limitCriteria != null)
             {
-                limitSql = $"OFFSET {limitCriteria.Offset} ROWS FETCH NEXT {limitCriteria.Count} ROWS ONLY";
+                limitSql = PrintLimitSyntax(limitCriteria.Offset, limitCriteria.Count);
                 if (string.IsNullOrWhiteSpace(sortSql))
                     sortSql = "[ID] ASC";
             }

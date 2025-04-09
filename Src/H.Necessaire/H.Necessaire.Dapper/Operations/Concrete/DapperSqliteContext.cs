@@ -7,6 +7,7 @@ namespace H.Necessaire.Dapper.Operations.Concrete
         public DapperSqliteContext(IDbConnection dbConnection, string defaultTableName = null)
             : base(dbConnection, defaultTableName) { }
 
-        
+        protected override string PrintLimitSyntax(int offset, int count)
+            => $"LIMIT {count} OFFSET {offset}";
     }
 }
