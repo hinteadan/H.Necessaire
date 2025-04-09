@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Dapper.Operations.Concrete
 {
-    public class DapperSqlContext : IDisposable
+    public class DapperSqlContext : ImADapperContext
     {
         #region Construct
         readonly IDbConnection dbConnection;
@@ -54,7 +54,7 @@ namespace H.Necessaire.Dapper.Operations.Concrete
             return result;
         }
 
-        public async Task<DapperCustomQueryResult<TSqlEntity>> LoadEntitiesByCustomCriteria<TSqlEntity>(ISqlFilterCriteria[] sqlFilters, object sqlParams, SqlSortCriteria[] sortCriterias, SqlLimitCriteria limitCriteria, string tableName) where TSqlEntity : ISqlEntry
+        public async Task<ILimitedEnumerable<TSqlEntity>> LoadEntitiesByCustomCriteria<TSqlEntity>(ISqlFilterCriteria[] sqlFilters, object sqlParams, SqlSortCriteria[] sortCriterias, SqlLimitCriteria limitCriteria, string tableName) where TSqlEntity : ISqlEntry
         {
             string filterSql = string.Join(" AND ", sqlFilters.Select(x => x.ToString()));
 
@@ -84,7 +84,7 @@ namespace H.Necessaire.Dapper.Operations.Concrete
             return new DapperCustomQueryResult<TSqlEntity>(offset: limitCriteria?.Offset ?? 0, length: result.Length, totalNumberOfItems: totalCount, entries: result);
         }
 
-        public async Task<DapperCustomQueryResult<TSqlEntity>> LoadEntitiesByCustomSql<TSqlEntity>(string sql, object sqlParams) where TSqlEntity : ISqlEntry
+        public async Task<ILimitedEnumerable<TSqlEntity>> LoadEntitiesByCustomSql<TSqlEntity>(string sql, object sqlParams) where TSqlEntity : ISqlEntry
         {
             TSqlEntity[] result = (await dbConnection.QueryAsync<TSqlEntity>(sql, sqlParams)).ToArray();
             return new DapperCustomQueryResult<TSqlEntity>(offset: 0, length: result.Length, totalNumberOfItems: result.Length, entries: result);
