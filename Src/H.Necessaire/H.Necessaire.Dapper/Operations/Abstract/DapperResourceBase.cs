@@ -1,22 +1,19 @@
-﻿using Dapper;
-using H.Necessaire.Dapper.Operations.Concrete;
-using System;
+﻿using H.Necessaire.Dapper.Operations.Concrete;
 using System.Data;
-using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System;
 
 namespace H.Necessaire.Dapper
 {
-    public abstract class DapperSqlResourceBase : ImADependency
+    public abstract class DapperResourceBase : ImADependency
     {
         #region Construct
         ImASqlMigrationStore sqlMigrationStore = null;
 
         protected string connectionString;
-        protected string connectionStringWithoutDatabase;
         protected string databaseName;
         protected string tableName;
 
@@ -24,12 +21,11 @@ namespace H.Necessaire.Dapper
         bool isMigrationEnsured = false;
         bool isMigrating = false;
 
-        protected DapperSqlResourceBase(string connectionString = null, string tableName = null, string databaseName = null)
+        protected DapperResourceBase(string connectionString = null, string tableName = null, string databaseName = null)
         {
             this.connectionString = connectionString;
-            this.connectionStringWithoutDatabase = connectionString?.WithoutDatabase();
             this.tableName = tableName;
-            this.databaseName = databaseName ?? connectionString?.GetDatabaseName();
+            this.databaseName = databaseName;
             if (this.databaseName != this.connectionString?.GetDatabaseName()) this.connectionString = this.connectionString?.WithDatabase(this.databaseName);
         }
 
@@ -216,7 +212,8 @@ namespace H.Necessaire.Dapper
             bool databaseExists = false;
 
             await
-                new Func<Task>(async () => {
+                new Func<Task>(async () =>
+                {
 
                     using (IDbConnection dbConnection = new SqlConnection(connectionString))
                     {
@@ -235,7 +232,8 @@ namespace H.Necessaire.Dapper
             if (!databaseExists)
             {
                 await
-                    new Func<Task>(async () => {
+                    new Func<Task>(async () =>
+                    {
 
                         using (IDbConnection dbConnection = new SqlConnection(connectionStringWithoutDatabase))
                         {
