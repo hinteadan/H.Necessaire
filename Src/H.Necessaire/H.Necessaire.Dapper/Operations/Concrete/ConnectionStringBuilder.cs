@@ -9,17 +9,40 @@ namespace H.Necessaire.Dapper
         #region Construct
         const string partsSeparator = ";";
         const string kvSeparator = "=";
-        readonly List<Note> connectionStringParts = new List<Note>();
+        readonly Dictionary<string, Note> connectionStringParts = new Dictionary<string, Note>();
         public ConnectionStringBuilder(string connectionString)
         {
-            connectionStringParts.AddRange(ParseConnectionString(connectionString));
+            foreach(Note part in ParseConnectionString(connectionString))
+            {
+                connectionStringParts.Add(part.ID.ToLowerInvariant(), part);
+            }
         }
         public ConnectionStringBuilder() : this(null) { }
         #endregion
 
+        public ConnectionStringBuilder Set(Note part)
+        {
+            if (part.ID.IsEmpty())
+                return this;
+
+            string key = part.ID.ToLowerInvariant();
+
+            if(connectionStringParts.ContainsKey(key))
+            {
+                connectionStringParts[key] = part;
+                return this;
+            }
+
+            connectionStringParts.Add(key, part);
+
+            return this;
+        }
+        public ConnectionStringBuilder Set(string key, string value) => Set(new Note(key, value));
+        public ConnectionStringBuilder Set(string flag) => Set(flag, null);
+
         public override string ToString()
         {
-            return string.Join(partsSeparator, connectionStringParts.Select(ConnectionStringPartToString));
+            return string.Join(partsSeparator, connectionStringParts.Select(x => ConnectionStringPartToString(x.Value)));
         }
 
         static string ConnectionStringPartToString(Note connectionStringPart)
