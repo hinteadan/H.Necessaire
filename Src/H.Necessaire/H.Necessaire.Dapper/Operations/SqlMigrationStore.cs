@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Dapper
 {
-    internal class SqlMigrationStore : DapperSqlResourceBase, ImASqlMigrationStore
+    internal class SqlMigrationStore : DapperSqlServerResourceBase, ImASqlMigrationStore
     {
         #region Construct
         ImASqlConnectionFactory sqlConnectionFactory = null;

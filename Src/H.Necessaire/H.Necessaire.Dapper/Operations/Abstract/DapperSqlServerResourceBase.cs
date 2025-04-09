@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Dapper
 {
-    public abstract class DapperSqlResourceBase : DapperResourceBase
+    public abstract class DapperSqlServerResourceBase : DapperResourceBase
     {
         #region Construct
         ImASqlConnectionFactory sqlConnectionFactory = null;
         bool isDatabaseEnsured = false;
-        protected DapperSqlResourceBase(string connectionString = null, string tableName = null, string databaseName = null)
+        protected DapperSqlServerResourceBase(string connectionString = null, string tableName = null, string databaseName = null)
             : base(connectionString, tableName, databaseName) { }
 
         public override void ReferDependencies(ImADependencyProvider dependencyProvider)
@@ -77,7 +77,7 @@ namespace H.Necessaire.Dapper
 
         protected override ImADapperContext NewDbContext(string tableName = null)
         {
-            return new DapperSqlContext(sqlConnectionFactory.BuildNewConnection(connectionString), tableName ?? this.tableName);
+            return new DapperSqlServerContext(sqlConnectionFactory.BuildNewConnection(connectionString), tableName ?? this.tableName);
         }
     }
 }
