@@ -20,7 +20,7 @@ namespace H.Necessaire.Dapper
             dbConnection.Open();
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             new Action(dbConnection.Close).TryOrFailWithGrace();
             new Action(dbConnection.Dispose).TryOrFailWithGrace();
@@ -179,7 +179,7 @@ namespace H.Necessaire.Dapper
             await dbConnection.ExecuteAsync(sql, sqlParams);
         }
 
-        private static string PrintSqlColumns(params string[] columnNames)
+        protected virtual string PrintSqlColumns(params string[] columnNames)
         {
             return
                 string.Join(",", columnNames.Select(x => $"[{x}]"));
