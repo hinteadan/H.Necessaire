@@ -131,7 +131,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            DapperSqlContext dapper = NewDbContext(tableName);
+            ImADapperContext dapper = NewDbContext(tableName);
 
             return new DapperStream<TResult>(dapper, (await dapper.StreamAll<TSqlEntity>(tableName)).Select(projection));
         }
@@ -140,7 +140,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            DapperSqlContext dapper = NewDbContext(tableName);
+            ImADapperContext dapper = NewDbContext(tableName);
 
             return new DapperStream<TResult>(dapper, (await dapper.StreamAllByCustomCriteria<TSqlEntity>(sqlFilters, sqlParams, sortCriterias, limitCriteria, tableName)).Select(projection));
         }
@@ -149,7 +149,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            DapperSqlContext dapper = NewDbContext(tableName);
+            ImADapperContext dapper = NewDbContext(tableName);
 
             return new DapperStream<TResult>(dapper, (await dapper.StreamAllByCustomSql<TSqlEntity>(sql)).Select(projection));
         }
@@ -307,7 +307,7 @@ namespace H.Necessaire.Dapper
             }
         }
 
-        protected virtual DapperSqlContext NewDbContext(string tableName = null)
+        protected virtual ImADapperContext NewDbContext(string tableName = null)
         {
             return new DapperSqlContext(sqlConnectionFactory.BuildNewConnection(connectionString), tableName ?? this.tableName);
         }
