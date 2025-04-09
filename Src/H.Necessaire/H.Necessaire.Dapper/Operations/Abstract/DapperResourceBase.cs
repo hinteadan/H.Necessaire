@@ -14,6 +14,7 @@ namespace H.Necessaire.Dapper
         ImASqlMigrationStore sqlMigrationStore = null;
 
         protected string connectionString;
+        protected string connectionStringWithoutDatabase;
         protected string databaseName;
         protected string tableName;
 
@@ -24,19 +25,23 @@ namespace H.Necessaire.Dapper
         protected DapperResourceBase(string connectionString = null, string tableName = null, string databaseName = null)
         {
             this.connectionString = connectionString;
+            this.connectionStringWithoutDatabase = connectionString?.WithoutDatabase();
             this.tableName = tableName;
             this.databaseName = databaseName;
             if (this.databaseName != this.connectionString?.GetDatabaseName()) this.connectionString = this.connectionString?.WithDatabase(this.databaseName);
         }
 
+        protected virtual string GetCoreDatabaseName(ImADependencyProvider dependencyProvider)
+        {
+            RuntimeConfig runtimeConfig = dependencyProvider?.GetRuntimeConfig();
+            string coreDatabaseNameFromConfig = runtimeConfig?.Get("SqlConnections")?.Get("DatabaseNames")?.Get("Core")?.ToString();
+            return coreDatabaseNameFromConfig ?? this.databaseName;
+        }
+
         public virtual void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             if (IsCoreDatabase())
-            {
-                RuntimeConfig runtimeConfig = dependencyProvider?.GetRuntimeConfig();
-                string coreDatabaseNameFromConfig = runtimeConfig?.Get("SqlConnections")?.Get("DatabaseNames")?.Get("Core")?.ToString();
-                this.databaseName = coreDatabaseNameFromConfig ?? this.databaseName;
-            }
+                this.databaseName = GetCoreDatabaseName(dependencyProvider);
 
             this.sqlMigrationStore = typeof(ImASqlMigrationStore).IsAssignableFrom(this.GetType()) ? this as ImASqlMigrationStore : dependencyProvider.Get<ImASqlMigrationStore>();
             ImASqlEntityConnectionProvider sqlEntityConnectionProvider = dependencyProvider.Get<ImASqlEntityConnectionProvider>();
