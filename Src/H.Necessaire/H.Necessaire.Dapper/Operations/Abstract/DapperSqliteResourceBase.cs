@@ -52,17 +52,33 @@ namespace H.Necessaire.Dapper
 
         void ProcessSqliteConnectionString()
         {
-            string rawPath = new ConnectionStringBuilder(connectionString).GetFirst("Data Source")?.Value;
+            if (databaseName.IsEmpty())
+                return;
+
+            ConnectionStringBuilder connectionStringBuilder = new ConnectionStringBuilder(connectionString);
+
+            string rawPath = connectionStringBuilder.Get("Data Source")?.Value;
 
             if (rawPath.IsEmpty())
                 return;
 
             HSafe.Run(() => {
 
-                FileInfo databaseFile = new FileInfo(Uri.UnescapeDataString(new UriBuilder(rawPath).Path));
+                FileInfo databaseFile = new FileInfo(rawPath);
                 DirectoryInfo databaseFolder = databaseFile.Directory;
 
+                string dbFileName = databaseFile.Name;
+                string dbExtension = Path.GetExtension(dbFileName);
+                string dbName = Path.GetFileNameWithoutExtension(dbFileName);
 
+                if (databaseName.Is(dbName))
+                    return;
+
+                string newDbPath = Path.Combine(databaseFolder.FullName, $"{databaseName}{dbExtension}");
+
+                connectionStringBuilder.Set("Data Source", newDbPath);
+
+                connectionString = connectionStringBuilder.ToString();
 
             }, "process Sqlite ConnectionString");
         }
