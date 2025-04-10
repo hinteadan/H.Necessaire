@@ -1,5 +1,6 @@
 ﻿using H.Necessaire.Dapper.Operations.Concrete;
 using System;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.Dapper
@@ -7,6 +8,7 @@ namespace H.Necessaire.Dapper
     public abstract class DapperSqliteResourceBase : DapperResourceBase
     {
         #region Construct
+        bool isDatabaseEnsured = false;
         ImASqlConnectionFactory sqlConnectionFactory = null;
         protected DapperSqliteResourceBase(string connectionString = null, string tableName = null, string databaseName = null)
             : base(connectionString, tableName, databaseName) { }
@@ -20,7 +22,17 @@ namespace H.Necessaire.Dapper
         }
         #endregion
 
-        protected override Task EnsureDatabase() => Task.CompletedTask;
+        protected override Task EnsureDatabase()
+        {
+            if (isDatabaseEnsured)
+                return Task.CompletedTask;
+
+            using (IDbConnection db = sqlConnectionFactory.BuildNewConnection(connectionString)) { }
+
+            isDatabaseEnsured = true;
+
+            return Task.CompletedTask;
+        }
 
         protected override ImADapperContext NewDbContext(string tableName = null)
         {
