@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Dapper
 {
-    internal class SqlMigrationStore : DapperSqlServerResourceBase, ImASqlMigrationStore
+    internal class SqlServerMigrationStore : DapperSqlServerResourceBase, ImASqlMigrationStore
     {
         #region Construct
         ImASqlConnectionFactory sqlConnectionFactory = null;
         bool isDatabaseEnsured = false;
-        public SqlMigrationStore(string connectionString = null) : base(connectionString, tableName: "H.Necessaire.Migration", databaseName: "H.Necessaire.Core") { }
+        public SqlServerMigrationStore(string connectionString = null) : base(connectionString, tableName: "H.Necessaire.Migration", databaseName: "H.Necessaire.Core") { }
 
         public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {

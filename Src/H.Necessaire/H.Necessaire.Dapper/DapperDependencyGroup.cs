@@ -23,7 +23,7 @@ namespace H.Necessaire.Dapper
 
             dependencyRegistry
                 .Register<IKeyValueStorage>(() => new SqlKeyValueStore())
-                .Register<ImASqlMigrationStore>(() => new SqlMigrationStore())
+                .Register<ImASqlMigrationStore>(() => new SqlServerMigrationStore())
                 ;
 
             MappingExtensions.InitializeHNecessaireDapperMappers();
