@@ -31,7 +31,7 @@ namespace H.Necessaire.Dapper
 
             using (IDbConnection dbConnection = sqlConnectionFactory.BuildNewConnection(connectionString))
             {
-                bool migrationTableExists = await dbConnection.ExecuteScalarAsync<bool>("IF (EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  TABLE_NAME = 'H.Necessaire.Migration')) BEGIN SELECT 1 END ELSE BEGIN SELECT 0 END");
+                bool migrationTableExists = await dbConnection.ExecuteScalarAsync<bool>($"SELECT (case count(*) when 0 then 0 else 1 end) as [exists] FROM sqlite_master WHERE type='table' AND name='{tableName}'");
 
                 if (migrationTableExists)
                 {
@@ -39,7 +39,7 @@ namespace H.Necessaire.Dapper
                     return;
                 }
 
-                await dbConnection.ExecuteAsync(await ReadSqlFromEmbedResourceSql("Create_SqlServerMigration_Table.sql"));
+                await dbConnection.ExecuteAsync(await ReadSqlFromEmbedResourceSql("Create_SqliteMigration_Table.sql"));
             }
 
             isDatabaseEnsured = true;

@@ -209,7 +209,7 @@ namespace H.Necessaire.Dapper
 
         protected async Task<string> ReadSqlFromEmbedResourceSql(string sqlFileName, string sqlFileNamespace = "H.Necessaire.Dapper")
         {
-            using (Stream stream = Assembly.GetAssembly(typeof(DapperSqlServerResourceBase)).GetManifestResourceStream($"{sqlFileNamespace}.{sqlFileName}"))
+            using (Stream stream = Assembly.GetAssembly(typeof(DapperResourceBase)).GetManifestResourceStream($"{sqlFileNamespace}.{sqlFileName}"))
             {
                 return await stream.ReadAsStringAsync();
             }
