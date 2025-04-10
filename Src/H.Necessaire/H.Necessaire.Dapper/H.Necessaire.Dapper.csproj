@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Create_KeyValueStore_Table.sql" />
+    <EmbeddedResource Include="Create_SqliteMigration_Table.sql" />
     <EmbeddedResource Include="Create_SqlServerMigration_Table.sql" />
   </ItemGroup>
 
