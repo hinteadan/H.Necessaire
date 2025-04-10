@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Dapper
 {
-    [ID("SqlServer")]
-    internal class SqlServerMigrationStore : DapperSqlServerResourceBase, ImASqlMigrationStore
+    [ID("Sqlite")]
+    internal class SqliteMigrationStore : DapperSqliteResourceBase, ImASqlMigrationStore
     {
         #region Construct
         ImASqlConnectionFactory sqlConnectionFactory = null;
         bool isDatabaseEnsured = false;
-        public SqlServerMigrationStore(string connectionString = null) : base(connectionString, tableName: "H.Necessaire.Migration", databaseName: "H.Necessaire.Core") { }
+        public SqliteMigrationStore(string connectionString = null) : base(connectionString, tableName: "H.Necessaire.Migration", databaseName: "H.Necessaire.Core") { }
 
         public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
