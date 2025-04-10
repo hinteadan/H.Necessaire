@@ -39,7 +39,7 @@ namespace H.Necessaire.Dapper
                     return;
                 }
 
-                await dbConnection.ExecuteAsync(await ReadSqlFromEmbedResourceSql("Create_SqlMigration_Table.sql"));
+                await dbConnection.ExecuteAsync(await ReadSqlFromEmbedResourceSql("Create_SqlServerMigration_Table.sql"));
             }
 
             isDatabaseEnsured = true;

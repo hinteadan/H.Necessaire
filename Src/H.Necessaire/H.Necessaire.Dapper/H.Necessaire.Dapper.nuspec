@@ -25,6 +25,6 @@
   <files>
     <file src="IconLogo.png" target="images\" />
     <file src="Create_KeyValueStore_Table.sql" target="SQLs\" />
-    <file src="Create_SqlMigration_Table.sql" target="SQLs\" />
+    <file src="Create_SqlServerMigration_Table.sql" target="SQLs\" />
   </files>
 </package>

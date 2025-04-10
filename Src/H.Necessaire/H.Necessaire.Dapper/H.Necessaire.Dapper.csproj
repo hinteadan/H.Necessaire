@@ -6,12 +6,11 @@
 
   <ItemGroup>
     <None Remove="Create_KeyValueStore_Table.sql" />
-    <None Remove="Create_SqlMigration_Table.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Create_KeyValueStore_Table.sql" />
-    <EmbeddedResource Include="Create_SqlMigration_Table.sql" />
+    <EmbeddedResource Include="Create_SqlServerMigration_Table.sql" />
   </ItemGroup>
 
   <ItemGroup>
