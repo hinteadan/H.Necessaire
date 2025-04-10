@@ -1,13 +1,14 @@
 ﻿using Dapper;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using static Dapper.SqlMapper;
 
 namespace H.Necessaire.Dapper
 {
-    public abstract class DapperStorageResourceBase<TId, TEntity, TSqlEntity, TFilter>
-    : DapperSqlServerResourceBase
+    public abstract class DapperSqliteStorageResourceBase<TId, TEntity, TSqlEntity, TFilter>
+    : DapperSqliteResourceBase
         , ImAStorageService<TId, TEntity>
         , ImAStorageBrowserService<TEntity, TFilter>
         where TFilter : IPageFilter, ISortFilter
@@ -15,7 +16,7 @@ namespace H.Necessaire.Dapper
         where TSqlEntity : ISqlEntry, new()
     {
         #region Construct
-        protected DapperStorageResourceBase(string connectionString = null, string tableName = null, string databaseName = null)
+        protected DapperSqliteStorageResourceBase(string connectionString = null, string tableName = null, string databaseName = null)
             : base(connectionString, tableName, databaseName)
         { }
 
@@ -43,7 +44,7 @@ namespace H.Necessaire.Dapper
                 await EnsureDatabaseAndMigrations();
 
                 await base.DeleteEntitiesByCustomCriteria<TSqlEntity>(new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(id), "=").AsArray(), new { id });
-            });
+            }, $"delete entity by ID ({id})");
         }
 
         public async Task<OperationResult<TId>[]> DeleteByIDs(params TId[] ids)
@@ -53,7 +54,7 @@ namespace H.Necessaire.Dapper
                 await EnsureDatabaseAndMigrations();
 
                 await base.DeleteEntitiesByCustomCriteria<TSqlEntity>(new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(ids), "IN").AsArray(), new { ids });
-            });
+            }, $"delete entities by {ids?.Length ?? 0} IDs");
 
             return
                 result.IsSuccessful
@@ -75,7 +76,7 @@ namespace H.Necessaire.Dapper
                     )
                     ?.ToEntity<TEntity, TSqlEntity>()
                     ;
-            });
+            }, $"load entity by ID ({id})");
         }
 
         public async Task<OperationResult<TEntity>[]> LoadByIDs(params TId[] ids)
@@ -92,7 +93,7 @@ namespace H.Necessaire.Dapper
                     ?.Select(x => x.ToEntity<TEntity, TSqlEntity>())
                     .ToArray()
                     ;
-            });
+            }, $"load entities by {ids?.Length ?? 0} IDs");
 
             return
                 result.IsSuccessful
@@ -120,7 +121,7 @@ namespace H.Necessaire.Dapper
                             x => x.ToEntity<TEntity, TSqlEntity>()
                         ).ToArray()
                     );
-            });
+            }, $"load {typeof(TEntity).Name} page index {filter?.PageFilter?.PageIndex ?? 0} of size {filter?.PageFilter?.PageSize ?? 0}");
         }
 
         public async Task<OperationResult> Save(TEntity entity)
@@ -130,7 +131,7 @@ namespace H.Necessaire.Dapper
                 await EnsureDatabaseAndMigrations();
 
                 await base.SaveEntity(entity.ToSqlEntity<TEntity, TSqlEntity>());
-            });
+            }, $"save {typeof(TEntity).Name} entity with id {entity.SafeRead(x => x.ID.ToString(), "[Unknown ID]")}");
         }
 
         public async Task<OperationResult<IDisposableEnumerable<TEntity>>> Stream(TFilter filter)
@@ -143,7 +144,7 @@ namespace H.Necessaire.Dapper
 
                 return
                     await base.StreamAllByCustomCriteria<TSqlEntity, TEntity>(x => x.ToEntity<TEntity, TSqlEntity>(), ApplyFilter(filter, sqlParams), sqlParams, filter?.ToSqlSortCriteria(), filter?.ToSqlLimitCriteria());
-            });
+            }, $"stream filtered {typeof(TEntity).Name} entities");
         }
 
         public async Task<OperationResult<IDisposableEnumerable<TEntity>>> StreamAll()
@@ -154,7 +155,7 @@ namespace H.Necessaire.Dapper
 
                 return
                     await base.StreamAll<TSqlEntity, TEntity>(x => x.ToEntity<TEntity, TSqlEntity>());
-            });
+            }, $"stream all {typeof(TEntity).Name} entities");
         }
     }
 }
