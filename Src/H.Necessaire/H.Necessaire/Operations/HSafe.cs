@@ -89,6 +89,19 @@ namespace H.Necessaire
 
             return result;
         }
+        public static Task<OperationResult> Run<T1>(Func<T1, Task> action, T1 x1, string tag = null)
+            => Run(() => action(x1), tag);
+        public static Task<OperationResult> Run<T1, T2>(Func<T1, T2, Task> action, T1 x1, T2 x2, string tag = null)
+            => Run(() => action(x1, x2), tag);
+        public static Task<OperationResult> Run<T1, T2, T3>(Func<T1, T2, T3, Task> action, T1 x1, T2 x2, T3 x3, string tag = null)
+            => Run(() => action(x1, x2, x3), tag);
+        public static Task<OperationResult> Run<T1, T2, T3, T4>(Func<T1, T2, T3, T4, Task> action, T1 x1, T2 x2, T3 x3, T4 x4, string tag = null)
+            => Run(() => action(x1, x2, x3, x4), tag);
+        public static Task<OperationResult> Run<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, Task> action, T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, string tag = null)
+            => Run(() => action(x1, x2, x3, x4, x5), tag);
+        public static Task<OperationResult> Run<T1, T2, T3, T4, T5, T6>(Func<T1, T2, T3, T4, T5, T6, Task> action, T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, string tag = null)
+            => Run(() => action(x1, x2, x3, x4, x5, x6), tag);
+
         public static async Task<OperationResult<TResult>> Run<TResult>(Func<Task<TResult>> action, string tag = null)
         {
             if (action is null)
@@ -108,5 +121,17 @@ namespace H.Necessaire
 
             return result;
         }
+        public static Task<OperationResult<TResult>> Run<T1, TResult>(Func<T1, Task<TResult>> action, T1 x1, string tag = null)
+            => Run(() => action(x1), tag);
+        public static Task<OperationResult<TResult>> Run<T1, T2, TResult>(Func<T1, T2, Task<TResult>> action, T1 x1, T2 x2, string tag = null)
+            => Run(() => action(x1, x2), tag);
+        public static Task<OperationResult<TResult>> Run<T1, T2, T3, TResult>(Func<T1, T2, T3, Task<TResult>> action, T1 x1, T2 x2, T3 x3, string tag = null)
+            => Run(() => action(x1, x2, x3), tag);
+        public static Task<OperationResult<TResult>> Run<T1, T2, T3, T4, TResult>(Func<T1, T2, T3, T4, Task<TResult>> action, T1 x1, T2 x2, T3 x3, T4 x4, string tag = null)
+            => Run(() => action(x1, x2, x3, x4), tag);
+        public static Task<OperationResult<TResult>> Run<T1, T2, T3, T4, T5, TResult>(Func<T1, T2, T3, T4, T5, Task<TResult>> action, T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, string tag = null)
+            => Run(() => action(x1, x2, x3, x4, x5), tag);
+        public static Task<OperationResult<TResult>> Run<T1, T2, T3, T4, T5, T6, TResult>(Func<T1, T2, T3, T4, T5, T6, Task<TResult>> action, T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, string tag = null)
+            => Run(() => action(x1, x2, x3, x4, x5, x6), tag);
     }
 }
