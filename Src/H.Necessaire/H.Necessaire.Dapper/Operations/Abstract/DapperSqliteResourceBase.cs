@@ -60,7 +60,11 @@ namespace H.Necessaire.Dapper
             string rawPath = connectionStringBuilder.Get("Data Source")?.Value;
 
             if (rawPath.IsEmpty())
+            {
+                connectionStringBuilder.Set("Data Source", $"{databaseName}.sqlite3");
+                connectionString = connectionStringBuilder.ToString();
                 return;
+            }
 
             HSafe.Run(() => {
 
