@@ -19,7 +19,7 @@ namespace H.Necessaire
 
             }).TryOrFailWithGrace(onFail: ex =>
             {
-                result = OperationResult.Fail(ex, $"Error occured while trying to run {tag.IfEmpty("action")}. Reason: {(ex?.Message).IfEmpty("Unknown")}.");
+                result = OperationResult.Fail(ex, $"Error occured while trying to {tag.IfEmpty("run action")}. Reason: {(ex?.Message).IfEmpty("Unknown")}.");
             });
 
             return result;
@@ -51,7 +51,7 @@ namespace H.Necessaire
 
             }).TryOrFailWithGrace(onFail: ex =>
             {
-                result = OperationResult.Fail(ex, $"Error occured while trying to run {tag.IfEmpty("action")}. Reason: {(ex?.Message).IfEmpty("Unknown")}.").WithoutPayload<TResult>();
+                result = OperationResult.Fail(ex, $"Error occured while trying to {tag.IfEmpty("run action")}. Reason: {(ex?.Message).IfEmpty("Unknown")}.").WithoutPayload<TResult>();
             });
 
             return result;
@@ -84,7 +84,7 @@ namespace H.Necessaire
 
             }).TryOrFailWithGrace(onFail: ex =>
             {
-                result = OperationResult.Fail(ex, $"Error occured while trying to run {tag.IfEmpty("action")}. Reason: {(ex?.Message).IfEmpty("Unknown")}.");
+                result = OperationResult.Fail(ex, $"Error occured while trying to {tag.IfEmpty("run action")}. Reason: {(ex?.Message).IfEmpty("Unknown")}.");
             });
 
             return result;
@@ -116,7 +116,7 @@ namespace H.Necessaire
 
             }).TryOrFailWithGrace(onFail: ex =>
             {
-                result = OperationResult.Fail(ex, $"Error occured while trying to run {tag.IfEmpty("action")}. Reason: {(ex?.Message).IfEmpty("Unknown")}.").WithoutPayload<TResult>();
+                result = OperationResult.Fail(ex, $"Error occured while trying to {tag.IfEmpty("run action")}. Reason: {(ex?.Message).IfEmpty("Unknown")}.").WithoutPayload<TResult>();
             });
 
             return result;
