@@ -108,7 +108,7 @@ namespace H.Necessaire.Dapper
 
             string[] kv = part.Split(kvSeparator.AsArray(), 2, StringSplitOptions.RemoveEmptyEntries);
 
-            return (kv.Length > 1 ? kv[1] : null).NoteAs(kv[0]);
+            return (kv.Length > 1 ? kv[1].Trim() : null).NoteAs(kv[0].Trim());
         }
     }
 }
