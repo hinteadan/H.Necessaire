@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using static Dapper.SqlMapper;
 
 namespace H.Necessaire.Dapper
 {
@@ -37,204 +38,123 @@ namespace H.Necessaire.Dapper
 
         public async Task<OperationResult> DeleteByID(TId id)
         {
-            OperationResult result = OperationResult.Fail();
+            return await HSafe.Run(async () =>
+            {
+                await EnsureDatabaseAndMigrations();
 
-            await
-                new Func<Task>(
-                    async () =>
-                    {
-                        await EnsureDatabaseAndMigrations();
-
-                        await base.DeleteEntitiesByCustomCriteria<TSqlEntity>(new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(id), "=").AsArray(), new { id });
-
-                        result = OperationResult.Win();
-                    }
-                )
-                .TryOrFailWithGrace(
-                    onFail: ex => result = OperationResult.Fail(ex)
-                );
-
-            return result;
+                await base.DeleteEntitiesByCustomCriteria<TSqlEntity>(new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(id), "=").AsArray(), new { id });
+            });
         }
 
         public async Task<OperationResult<TId>[]> DeleteByIDs(params TId[] ids)
         {
-            OperationResult<TId>[] result = new OperationResult<TId>[0];
+            OperationResult result = await HSafe.Run(async () =>
+            {
+                await EnsureDatabaseAndMigrations();
 
-            await
-                new Func<Task>(
-                    async () =>
-                    {
-                        await EnsureDatabaseAndMigrations();
+                await base.DeleteEntitiesByCustomCriteria<TSqlEntity>(new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(ids), "IN").AsArray(), new { ids });
+            });
 
-                        await base.DeleteEntitiesByCustomCriteria<TSqlEntity>(new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(ids), "IN").AsArray(), new { ids });
-
-                        result = ids.Select(x => OperationResult.Win().WithPayload(x)).ToArray();
-                    }
-                )
-                .TryOrFailWithGrace(
-                    onFail: ex => result = ids.Select(x => OperationResult.Fail(ex).WithPayload(x)).ToArray()
-                );
-
-            return result;
+            return
+                result.IsSuccessful
+                ? ids.Select(x => OperationResult.Win().WithPayload(x)).ToArray()
+                : ids.Select(x => result.WithPayload(x)).ToArray()
+                ;
         }
 
         public async Task<OperationResult<TEntity>> LoadByID(TId id)
         {
-            OperationResult<TEntity> result = OperationResult.Fail().WithoutPayload<TEntity>();
+            return await HSafe.Run(async () =>
+            {
+                await EnsureDatabaseAndMigrations();
 
-            await
-                new Func<Task>(
-                    async () =>
-                    {
-                        await EnsureDatabaseAndMigrations();
-
-                        TEntity entity =
-                            (await base.LoadEntityByCustomCriteria<TSqlEntity>(
-                                new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(id), "=").AsArray(),
-                                new { id })
-                            )?.ToEntity<TEntity, TSqlEntity>();
-                        result = OperationResult.Win().WithPayload(entity);
-                    }
-                )
-                .TryOrFailWithGrace(
-                    onFail: ex => result = OperationResult.Fail(ex).WithoutPayload<TEntity>()
-                );
-
-            return result;
+                return
+                    (await base.LoadEntityByCustomCriteria<TSqlEntity>(
+                        new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(id), "=").AsArray(),
+                        new { id })
+                    )
+                    ?.ToEntity<TEntity, TSqlEntity>()
+                    ;
+            });
         }
 
         public async Task<OperationResult<TEntity>[]> LoadByIDs(params TId[] ids)
         {
-            OperationResult<TEntity>[] result = new OperationResult<TEntity>[0];
+            OperationResult<TEntity[]> result = await HSafe.Run(async () =>
+            {
+                await EnsureDatabaseAndMigrations();
 
-            await
-                new Func<Task>(
-                    async () =>
-                    {
-                        await EnsureDatabaseAndMigrations();
+                return
+                    (await base.LoadEntitiesByCustomCriteria<TSqlEntity>(
+                        new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(ids), "IN").AsArray(),
+                        new { ids })
+                    )
+                    ?.Select(x => x.ToEntity<TEntity, TSqlEntity>())
+                    .ToArray()
+                    ;
+            });
 
-                        TEntity[] entities =
-                            (await base.LoadEntitiesByCustomCriteria<TSqlEntity>(
-                                new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(ids), "IN").AsArray(),
-                                new { ids })
-                            )
-                            ?.Select(x => x.ToEntity<TEntity, TSqlEntity>())
-                            .ToArray()
-                            ;
-
-                        result = entities.Select(x => OperationResult.Win().WithPayload(x)).ToArray();
-                    }
-                )
-                .TryOrFailWithGrace(
-                    onFail: ex => result = ids.Select(id => OperationResult.Fail(ex).WithComment($"{nameof(IDentityType<TId>.ID)}:{id}").WithoutPayload<TEntity>()).ToArray()
-                );
-
-            return result;
+            return
+                result.IsSuccessful
+                ? result.Payload.Select(x => OperationResult.Win().WithPayload(x)).ToArray()
+                : ids.Select(id => result.WithComment($"{nameof(IDentityType<TId>.ID)}:{id}").WithoutPayload<TEntity>()).ToArray()
+                ;
         }
 
         public async Task<OperationResult<Page<TEntity>>> LoadPage(TFilter filter)
         {
-            OperationResult<Page<TEntity>> result = OperationResult.Fail().WithPayload(Page<TEntity>.Empty());
+            return await HSafe.Run(async () =>
+            {
+                await EnsureDatabaseAndMigrations();
 
-            await
-                new Func<Task>(
-                    async () =>
-                    {
-                        await EnsureDatabaseAndMigrations();
+                DynamicParameters sqlParams = new DynamicParameters().And(x => x.AddDynamicParams(filter));
 
-                        DynamicParameters sqlParams = new DynamicParameters().And(x => x.AddDynamicParams(filter));
+                ILimitedEnumerable<TSqlEntity> sqlResult
+                    = await base.LoadEntitiesByCustomCriteria<TSqlEntity>(ApplyFilter(filter, sqlParams), sqlParams, filter?.ToSqlSortCriteria(), filter?.ToSqlLimitCriteria());
 
-                        ILimitedEnumerable<TSqlEntity> sqlResult
-                            = await base.LoadEntitiesByCustomCriteria<TSqlEntity>(ApplyFilter(filter, sqlParams), sqlParams, filter?.ToSqlSortCriteria(), filter?.ToSqlLimitCriteria());
-
-                        result
-                            = OperationResult
-                            .Win()
-                            .WithPayload(
-                                Page<TEntity>.For(
-                                    filter,
-                                    sqlResult.TotalNumberOfItems,
-                                    sqlResult.Select(
-                                        x => x.ToEntity<TEntity, TSqlEntity>()
-                                    ).ToArray()
-                                )
-                            );
-                    }
-                )
-                .TryOrFailWithGrace(
-                    onFail: ex => result = OperationResult.Fail(ex).WithPayload(Page<TEntity>.Empty())
-                );
-
-            return result;
+                return
+                    Page<TEntity>.For(
+                        filter,
+                        sqlResult.TotalNumberOfItems,
+                        sqlResult.Select(
+                            x => x.ToEntity<TEntity, TSqlEntity>()
+                        ).ToArray()
+                    );
+            });
         }
 
         public async Task<OperationResult> Save(TEntity entity)
         {
-            OperationResult result = OperationResult.Fail();
+            return await HSafe.Run(async () =>
+            {
+                await EnsureDatabaseAndMigrations();
 
-            await
-                new Func<Task>(
-                    async () =>
-                    {
-                        await EnsureDatabaseAndMigrations();
-
-                        await base.SaveEntity(entity.ToSqlEntity<TEntity, TSqlEntity>());
-
-                        result = OperationResult.Win();
-                    }
-                )
-                .TryOrFailWithGrace(
-                    onFail: ex => result = OperationResult.Fail(ex)
-                );
-
-            return result;
+                await base.SaveEntity(entity.ToSqlEntity<TEntity, TSqlEntity>());
+            });
         }
 
         public async Task<OperationResult<IDisposableEnumerable<TEntity>>> Stream(TFilter filter)
         {
-            OperationResult<IDisposableEnumerable<TEntity>> result = OperationResult.Fail().WithoutPayload<IDisposableEnumerable<TEntity>>();
+            return await HSafe.Run(async () =>
+            {
+                await EnsureDatabaseAndMigrations();
 
-            await
-                new Func<Task>(
-                    async () =>
-                    {
-                        await EnsureDatabaseAndMigrations();
+                DynamicParameters sqlParams = new DynamicParameters().And(x => x.AddDynamicParams(filter));
 
-                        DynamicParameters sqlParams = new DynamicParameters().And(x => x.AddDynamicParams(filter));
-
-                        result = OperationResult.Win().WithPayload(
-                            await base.StreamAllByCustomCriteria<TSqlEntity, TEntity>(x => x.ToEntity<TEntity, TSqlEntity>(), ApplyFilter(filter, sqlParams), sqlParams, filter?.ToSqlSortCriteria(), filter?.ToSqlLimitCriteria())
-                            );
-                    }
-                )
-                .TryOrFailWithGrace(
-                    onFail: ex => result = OperationResult.Fail(ex).WithoutPayload<IDisposableEnumerable<TEntity>>()
-                );
-
-            return result;
+                return
+                    await base.StreamAllByCustomCriteria<TSqlEntity, TEntity>(x => x.ToEntity<TEntity, TSqlEntity>(), ApplyFilter(filter, sqlParams), sqlParams, filter?.ToSqlSortCriteria(), filter?.ToSqlLimitCriteria());
+            });
         }
 
         public async Task<OperationResult<IDisposableEnumerable<TEntity>>> StreamAll()
         {
-            OperationResult<IDisposableEnumerable<TEntity>> result = OperationResult.Fail().WithoutPayload<IDisposableEnumerable<TEntity>>();
+            return await HSafe.Run(async () =>
+            {
+                await EnsureDatabaseAndMigrations();
 
-            await
-                new Func<Task>(
-                    async () =>
-                    {
-                        await EnsureDatabaseAndMigrations();
-
-                        result = OperationResult.Win().WithPayload(
-                            await base.StreamAll<TSqlEntity, TEntity>(x => x.ToEntity<TEntity, TSqlEntity>())
-                            );
-                    }
-                )
-                .TryOrFailWithGrace(
-                    onFail: ex => result = OperationResult.Fail(ex).WithoutPayload<IDisposableEnumerable<TEntity>>()
-                );
-
-            return result;
+                return
+                    await base.StreamAll<TSqlEntity, TEntity>(x => x.ToEntity<TEntity, TSqlEntity>());
+            });
         }
     }
 }
