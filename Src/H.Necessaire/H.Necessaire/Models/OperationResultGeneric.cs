@@ -32,5 +32,7 @@
 
             return Payload;
         }
+
+        public T Return() => Payload;
     }
 }

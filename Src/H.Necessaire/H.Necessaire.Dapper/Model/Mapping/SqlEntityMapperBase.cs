@@ -58,7 +58,7 @@ namespace H.Necessaire.Dapper
                     if (!entityProperties.ContainsKey(actualPropertyName))
                         continue;
 
-                    long? ticks = (long?)property.GetValue(entity);
+                    long? ticks = (long?)property.GetValue(sqlEntity);
 
                     if (entityProperties[actualPropertyName].PropertyType == typeof(DateTime?))
                         HSafe.Run(() => sqlEntityProperties[actualPropertyName].SetValue(sqlEntity, ticks == null ? null as DateTime? : new DateTime(ticks.Value, DateTimeKind.Utc)));
@@ -79,16 +79,6 @@ namespace H.Necessaire.Dapper
                     continue;
 
                 HSafe.Run(() => entityProperty.SetValue(entity, property.GetValue(sqlEntity)));
-
-                string ticksPropName = $"{property.Name}Ticks";
-                if (sqlEntityProperties.ContainsKey(ticksPropName))
-                {
-                    if (property.PropertyType.In(typeof(DateTime), typeof(DateTime?)))
-                        HSafe.Run(() => sqlEntityProperties[ticksPropName].SetValue(sqlEntity, ((DateTime?)property.GetValue(entity))?.Ticks));
-
-                    else if (property.PropertyType.In(typeof(TimeSpan), typeof(TimeSpan?)))
-                        HSafe.Run(() => sqlEntityProperties[ticksPropName].SetValue(sqlEntity, ((TimeSpan?)property.GetValue(entity))?.Ticks));
-                }
             }
 
             return entity;
