@@ -55,7 +55,8 @@ namespace H.Necessaire.Dapper
             if (databaseName.IsEmpty())
                 return;
 
-            ConnectionStringBuilder connectionStringBuilder = new ConnectionStringBuilder(connectionString);
+            ConnectionStringBuilder connectionStringBuilder = new ConnectionStringBuilder(connectionString).Zap("Database");
+            connectionString = connectionStringBuilder.ToString();
 
             string rawPath = connectionStringBuilder.Get("Data Source")?.Value;
 
@@ -66,7 +67,8 @@ namespace H.Necessaire.Dapper
                 return;
             }
 
-            HSafe.Run(() => {
+            HSafe.Run(() =>
+            {
 
                 FileInfo databaseFile = new FileInfo(rawPath);
                 DirectoryInfo databaseFolder = databaseFile.Directory;
