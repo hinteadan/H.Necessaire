@@ -1,17 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace H.Necessaire.Dapper
 {
     public abstract class SqlEntityMapperBase<TEntity, TSqlEntity> : ISqlEntityMapper where TEntity : new() where TSqlEntity : new()
     {
         #region Construct
-        static readonly System.Reflection.PropertyInfo[] sqlEntityProperties;
-        static readonly System.Reflection.PropertyInfo[] entityProperties;
+        static readonly Dictionary<string, PropertyInfo> sqlEntityProperties;
+        static readonly Dictionary<string, PropertyInfo> entityProperties;
         static SqlEntityMapperBase()
         {
-            sqlEntityProperties = typeof(TSqlEntity).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-            entityProperties = typeof(TEntity).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            sqlEntityProperties = typeof(TSqlEntity).GetProperties(BindingFlags.Public | BindingFlags.Instance).ToDictionary(x => x.Name, x => x);
+            entityProperties = typeof(TEntity).GetProperties(BindingFlags.Public | BindingFlags.Instance).ToDictionary(x => x.Name, x => x);
         }
         #endregion
 
@@ -19,10 +21,13 @@ namespace H.Necessaire.Dapper
         {
             TSqlEntity sqlEntity = new TSqlEntity();
 
-            foreach (System.Reflection.PropertyInfo property in entityProperties)
+            foreach (PropertyInfo property in entityProperties.Values)
             {
-                System.Reflection.PropertyInfo sqlEntityProperty = sqlEntityProperties.SingleOrDefault(x => x.Name == property.Name && x.PropertyType == property.PropertyType);
-                if (sqlEntityProperty == null)
+                if (!sqlEntityProperties.ContainsKey(property.Name))
+                    continue;
+
+                PropertyInfo sqlEntityProperty = sqlEntityProperties[property.Name];
+                if (sqlEntityProperty.PropertyType != property.PropertyType)
                     continue;
 
                 new Action(() => sqlEntityProperty.SetValue(sqlEntity, property.GetValue(entity))).TryOrFailWithGrace();
@@ -35,10 +40,13 @@ namespace H.Necessaire.Dapper
         {
             TEntity entity = new TEntity();
 
-            foreach (System.Reflection.PropertyInfo property in sqlEntityProperties)
+            foreach (PropertyInfo property in sqlEntityProperties.Values)
             {
-                System.Reflection.PropertyInfo entityProperty = entityProperties.SingleOrDefault(x => x.Name == property.Name && x.PropertyType == property.PropertyType);
-                if (entityProperty == null)
+                if (!entityProperties.ContainsKey(property.Name))
+                    continue;
+
+                PropertyInfo entityProperty = entityProperties[property.Name];
+                if (entityProperty.PropertyType != property.PropertyType)
                     continue;
 
                 new Action(() => entityProperty.SetValue(entity, property.GetValue(sqlEntity))).TryOrFailWithGrace();
