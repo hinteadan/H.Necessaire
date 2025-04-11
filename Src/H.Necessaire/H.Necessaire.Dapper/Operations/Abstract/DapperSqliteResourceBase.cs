@@ -38,6 +38,14 @@ namespace H.Necessaire.Dapper
             if (isDatabaseEnsured)
                 return Task.CompletedTask;
 
+            HSafe.Run(() => {
+                ConnectionStringBuilder connectionStringBuilder = new ConnectionStringBuilder(connectionString);
+                string rawPath = connectionStringBuilder.Get("Data Source")?.Value;
+                FileInfo databaseFile = new FileInfo(rawPath);
+                DirectoryInfo databaseFolder = databaseFile.Directory;
+                databaseFolder.Create();
+            });
+
             using (IDbConnection db = sqlConnectionFactory.BuildNewConnection(connectionString)) { }
 
             isDatabaseEnsured = true;
@@ -52,6 +60,9 @@ namespace H.Necessaire.Dapper
 
         void ProcessSqliteConnectionString()
         {
+            if (connectionString.IsEmpty())
+                return;
+
             if (databaseName.IsEmpty())
                 return;
 
