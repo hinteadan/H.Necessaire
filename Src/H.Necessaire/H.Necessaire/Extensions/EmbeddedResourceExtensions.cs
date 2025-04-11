@@ -11,16 +11,15 @@ namespace H.Necessaire
         {
             string embeddedResourceFullName = null;
 
-            if (embeddedResourceAssembly is null)
+            if (embeddedResourceAssembly != null)
             {
-
+                embeddedResourceFullName = HSafe.Run(() => embeddedResourceAssembly.GetManifestResourceNames().FirstOrDefault(x => x.EndsWith(embeddedResourceName, StringComparison.InvariantCultureIgnoreCase))).Payload;
+            }
+            else
+            {
                 foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
                 {
-                    new Action(() =>
-                        {
-                            embeddedResourceFullName = assembly.GetManifestResourceNames().FirstOrDefault(x => x.EndsWith(embeddedResourceName, StringComparison.InvariantCultureIgnoreCase));
-                        }
-                    ).TryOrFailWithGrace();
+                    embeddedResourceFullName = HSafe.Run(() => assembly.GetManifestResourceNames().FirstOrDefault(x => x.EndsWith(embeddedResourceName, StringComparison.InvariantCultureIgnoreCase))).Payload;
 
                     if (embeddedResourceFullName != null)
                     {
