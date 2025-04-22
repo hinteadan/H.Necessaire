@@ -121,7 +121,7 @@ namespace H.Necessaire
                 ;
         }
 
-        public static IDisposableEnumerable<T> ToDisposableEnumerable<T>(this IEnumerable<T> collection) => new DataStream<T>(collection);
+        public static IDisposableEnumerable<T> ToDisposableEnumerable<T>(this IEnumerable<T> collection, params IDisposable[] otherDisposables) => new DataStream<T>(collection, otherDisposables);
 
         public static IDisposableEnumerable<TProjection> ProjectTo<TProjection, T>(this IDisposableEnumerable<T> disposableCollection, Func<T, TProjection> projector)
             => new ProjectedDisposableEnumerable<TProjection, T>(disposableCollection, projector);
@@ -247,6 +247,27 @@ namespace H.Necessaire
                 .Where(x => x != null)
                 .OrderByDescending(x => x.HappenedAt)
                 .FirstOrDefault();
+        }
+
+        public static bool IsEmpty<T>(this IEnumerable<T> collection)
+        {
+            return collection?.Any() != true;
+        }
+
+        public static void ProcessStream<T>(this IEnumerable<T> collection, Action<T> processor)
+        {
+            if (processor is null || collection.IsEmpty())
+                return;
+
+            foreach (T item in collection)
+            {
+                processor.Invoke(item);
+            }
+        }
+
+        public static bool IsEmpty<T>(this T[] collection)
+        {
+            return (collection?.Length ?? 0) == 0;
         }
 
         public static T[] NullIfEmpty<T>(this T[] value)

@@ -18,7 +18,7 @@ namespace H.Necessaire.CLI
                     Values = new[] {
                         "NuSpecRootFolderPath".ConfigWith(GetCodebaseFolderPath()),
                         "SqlConnections".ConfigWith(
-                            "DefaultConnectionString".ConfigWith(ReadConnectionStringFromFile("DebugConnectionString.txt")),
+                            "DefaultConnectionString".ConfigWith(ReadConfigFromFile("DebugConnectionString.txt")),
                             "DatabaseNames".ConfigWith(
                                 "Core".ConfigWith("H.Necessaire.Core.Debug")
                             )
@@ -28,7 +28,7 @@ namespace H.Necessaire.CLI
             ;
         }
 
-        private static string ReadConnectionStringFromFile(string filePath)
+        private static string ReadConfigFromFile(string filePath)
         {
             FileInfo fileInfo = new FileInfo(filePath);
 

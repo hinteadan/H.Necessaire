@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Spectre.Console" Version="0.50.0" />
+	  <PackageReference Include="Spectre.Console.Json" Version="0.50.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\H.Necessaire.Runtime\H.Necessaire.Runtime.csproj" />
+		<ProjectReference Include="..\..\..\..\H.Necessaire\H.Necessaire.csproj" />
+		<ProjectReference Include="..\H.Necessaire.Runtime.CLI.Common\H.Necessaire.Runtime.CLI.Common.csproj" />
+	</ItemGroup>
+
+</Project>

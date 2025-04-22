@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.4" />
   </ItemGroup>
 
     <ItemGroup>
@@ -43,10 +43,6 @@
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
 		<Exec Command="del /f &quot;$(SolutionDir)\Apps\H.Necessaire.AspNetCoreWebAppSample\version.txt&quot;" />
 		<Exec Command="&quot;$(SolutionDir)\CLI\H.Necessaire.CLI.Host\bin\$(Configuration)\net9.0\H.Necessaire.CLI.Host.exe&quot; version &gt; &quot;$(SolutionDir)\Apps\H.Necessaire.AspNetCoreWebAppSample\version.txt&quot;" />
-	</Target>
-
-	<Target Name="PostBuild" BeforeTargets="PostBuildEvent">
-		<Exec Command="&quot;$(SolutionDir)\CLI\H.Necessaire.CLI.Host\bin\$(Configuration)\net9.0\H.Necessaire.CLI.Host.exe&quot; bridgedotnet copy &quot;Src=$(SolutionDir)\Apps\H.Necessaire.ReactAppSample&quot; &quot;Dst=$(SolutionDir)\Apps\H.Necessaire.AspNetCoreWebAppSample&quot;" />
 	</Target>
 
 </Project>

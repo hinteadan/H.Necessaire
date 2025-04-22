@@ -47,6 +47,16 @@ namespace H.Necessaire
                 .First()
                 ;
 
+            if (concreteType.IsGenericTypeDefinition)
+            {
+                Type closedGenericConcreteType = null;
+                new Action(() => closedGenericConcreteType = concreteType.MakeGenericType(typeof(T).GenericTypeArguments)).TryOrFailWithGrace();
+                if (closedGenericConcreteType is null)
+                    return defaultTo;
+
+                concreteType = closedGenericConcreteType;
+            }
+
             return
                 (dependencyProvider.Get(concreteType) as T)
                 ??

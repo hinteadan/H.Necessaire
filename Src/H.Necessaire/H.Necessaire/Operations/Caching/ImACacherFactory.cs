@@ -2,6 +2,6 @@
 {
     public interface ImACacherFactory
     {
-        ImACacher<T> BuildCacher<T>(string cacherID = "InMemory");
+        ImACacher<T> BuildCacher<T>(string cacherID = null);
     }
 }

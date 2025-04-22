@@ -33,26 +33,6 @@ Updates all external NuGet Deps in NuSpec with the version specified in CSPROJs
 ```
 
 
-# Copy BridgeDotNet App
-
-_.\H.Necessaire.CLI.exe_ 
-
-**BridgeDotNet copy** 
-
-"Src=C:\H\H.Necessaire\Src\H.Necessaire\Apps\H.Necessaire.ReactAppSample"
-
-"Dst=C:\H\H.Necessaire\Src\H.Necessaire\Apps\H.Necessaire.AspNetCoreWebAppSample"
-
-"Dst=C:\H\H.Necessaire\Src\H.Necessaire\Apps\H.Necessaire.AspNetCoreWebAppSample2"
-
----
-
-#### CMD Copy-paste:
-```
-.\H.Necessaire.CLI.exe bridgedotnet copy "Src=C:\H\H.Necessaire\Src\H.Necessaire\Apps\H.Necessaire.ReactAppSample" "Dst=C:\H\H.Necessaire\Src\H.Necessaire\Apps\H.Necessaire.AspNetCoreWebAppSample"
-```
-
-
 # Run external command
 
 ```csharp
