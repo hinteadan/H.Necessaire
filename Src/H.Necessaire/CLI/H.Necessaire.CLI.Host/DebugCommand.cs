@@ -1,10 +1,9 @@
 ﻿using H.Necessaire.CLI.Commands;
 using H.Necessaire.Runtime.CLI.UI;
 using H.Necessaire.Runtime.ExternalCommandRunner;
-using H.Necessaire.Serialization;
 using System;
-using System.IO;
-using System.Linq;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Host
@@ -15,32 +14,42 @@ namespace H.Necessaire.CLI.Host
 
         class DefaultSubCommand : SubCommandBase
         {
-            public override Task<OperationResult> Run(params Note[] args)
+            public override async Task<OperationResult> Run(params Note[] args)
             {
-                PartialPeriodOfTime january = (new PartialDateTime { Month = 1 }, new PartialDateTime { Month = 1 });
+                await Task.CompletedTask;
+                return OperationResult.Win();
+            }
+        }
 
-                PartialPeriodOfTime monthlyReportingPerod = (new PartialDateTime { DayOfMonth = 1 }, new PartialDateTime { DayOfMonth = 25 });
+        [ID("tamers")]
+        class ExecutionTamersDebugSubCommand : SubCommandBase
+        {
+            public override async Task<OperationResult> Run(params Note[] args)
+            {
+                var semaphore = new SemaphoreSlim(0, 1);
 
-                PartialDateTime christmasDay = new PartialDateTime { DayOfMonth = 25, Month = 12 };
+                Throttler throttler = new Throttler(async () => {
+                    await Logger.LogInfo("Throttled action");
+                }, TimeSpan.FromSeconds(1));
 
-                ApproximatePeriodOfTime approximatePeriodOfTime
-                    = (
-                        (PartialPeriodOfTime)(new DateTime(2010, 1, 1), new DateTime(2010, 6, 1)),
-                        (PartialPeriodOfTime)(new DateTime(2025, 1, 1), new DateTime(2025, 6, 1))
-                    );
+                new Thread(async () => {
 
-                Console.WriteLine($"Christmas in 2050 will be on a {christmasDay.ToDateTime(fallbackYear: 2050).PrintDayOfWeek()}");
+                    var start = Stopwatch.GetTimestamp();
+                    while (Stopwatch.GetElapsedTime(start) < TimeSpan.FromSeconds(5))
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(.1));
+                        await throttler.Invoke();
+                    }
 
+                    await Task.Delay(TimeSpan.FromSeconds(1.2));
 
-                PeriodOfTime thisYear = new PeriodOfTime
-                {
-                    From = new DateTime(year: DateTime.UtcNow.Year, month: 1, day: 1, hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0, DateTimeKind.Utc),
-                    To = new DateTime(year: DateTime.UtcNow.Year, month: 12, day: 31, hour: 23, minute: 59, second: 59, millisecond: 999, microsecond: 999, DateTimeKind.Utc),
-                };
+                    semaphore.Release();
 
-                PeriodOfTime fromNowOn = new PeriodOfTime { From = DateTime.UtcNow };
+                }).Start();
 
-                return OperationResult.Win().AsTask();
+                await semaphore.WaitAsync();
+
+                return OperationResult.Win();
             }
         }
 
@@ -83,7 +92,7 @@ namespace H.Necessaire.CLI.Host
         {
             public override async Task<OperationResult> Run(params Note[] args)
             {
-                DateTime.Now.CliUiPrintCalendar(events: [new DateTime(2024, 12 ,25)]);
+                DateTime.Now.CliUiPrintCalendar(events: [new DateTime(2024, 12, 25)]);
 
                 Log("ALL Done");
 

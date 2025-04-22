@@ -8,12 +8,10 @@ namespace H.Necessaire
         #region Construct
         readonly Func<Task> asyncActionToTame;
         readonly TimeSpan debounceInterval = TimeSpan.Zero;
-        readonly Func<ImAPeriodicAction> periodicActionFactory;
         ImAPeriodicAction periodicActionExecutioner;
         public Debouncer(Func<Task> asyncActionToTame, TimeSpan debounceInterval, Func<ImAPeriodicAction> periodicActionFactory)
         {
             this.asyncActionToTame = asyncActionToTame;
-            this.periodicActionFactory = periodicActionFactory;
             this.debounceInterval = debounceInterval;
             this.periodicActionExecutioner = periodicActionFactory();
         }
@@ -23,13 +21,11 @@ namespace H.Necessaire
 
         public async Task Invoke()
         {
-            periodicActionExecutioner?.Stop();
-            (periodicActionExecutioner as IDisposable)?.Dispose();
-            periodicActionExecutioner = periodicActionFactory.Invoke();
+            periodicActionExecutioner.Stop();
             periodicActionExecutioner.StartDelayed(debounceInterval, debounceInterval, async () =>
             {
                 periodicActionExecutioner.Stop();
-                await asyncActionToTame?.Invoke();
+                await asyncActionToTame.Invoke();
             });
 
             await true.AsTask();
@@ -37,7 +33,7 @@ namespace H.Necessaire
 
         public void Dispose()
         {
-            periodicActionExecutioner?.Stop();
+            periodicActionExecutioner.Stop();
         }
     }
 }

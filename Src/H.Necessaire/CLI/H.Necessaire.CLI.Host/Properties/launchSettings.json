@@ -31,6 +31,10 @@
       "commandName": "Project",
       "commandLineArgs": "debug default"
     },
+    "CLI - debug tamers": {
+      "commandName": "Project",
+      "commandLineArgs": "debug tamers"
+    },
     "CLI - version": {
       "commandName": "Project",
       "commandLineArgs": "version"

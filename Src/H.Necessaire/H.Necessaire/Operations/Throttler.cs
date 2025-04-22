@@ -8,8 +8,6 @@ namespace H.Necessaire
         #region Construct
         readonly Func<Task> asyncActionToTame;
         readonly TimeSpan throttleInterval = TimeSpan.Zero;
-        readonly Func<ImAPeriodicAction> periodicActionFactory;
-        DateTime latestExecutionAt = DateTime.MinValue;
         ImAPeriodicAction periodicActionExecutioner;
         ImAPeriodicAction periodicActionDestroyer;
 
@@ -17,7 +15,6 @@ namespace H.Necessaire
         {
             this.asyncActionToTame = asyncActionToTame;
             this.throttleInterval = throttleInterval;
-            this.periodicActionFactory = periodicActionFactory;
             this.periodicActionExecutioner = periodicActionFactory();
             this.periodicActionDestroyer = periodicActionFactory();
         }
@@ -32,9 +29,7 @@ namespace H.Necessaire
                 await asyncActionToTame?.Invoke();
             });
 
-            periodicActionDestroyer?.Stop();
-            (periodicActionDestroyer as IDisposable)?.Dispose();
-            periodicActionDestroyer = periodicActionFactory.Invoke();
+            periodicActionDestroyer.Stop();
             periodicActionDestroyer.StartDelayed(throttleInterval, throttleInterval, () => { periodicActionExecutioner.Stop(); return true.AsTask(); });
 
             await Task.FromResult(true);
