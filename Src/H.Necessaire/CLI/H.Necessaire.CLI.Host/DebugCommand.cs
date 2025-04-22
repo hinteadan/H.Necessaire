@@ -1,10 +1,9 @@
 ﻿using H.Necessaire.CLI.Commands;
 using H.Necessaire.Runtime.CLI.UI;
 using H.Necessaire.Runtime.ExternalCommandRunner;
-using H.Necessaire.Serialization;
 using System;
-using System.IO;
-using System.Linq;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Host
@@ -31,6 +30,38 @@ namespace H.Necessaire.CLI.Host
                 OnDemo += async (sender, args) => { await Task.Delay(3000); Log($"Handler 2 event from {sender.TypeName() ?? "[Unknown]"}"); };
 
                 await demoEvent.Raise(EventArgs.Empty);
+
+                return OperationResult.Win();
+            }
+        }
+
+        [ID("tamers")]
+        class ExecutionTamersDebugSubCommand : SubCommandBase
+        {
+            public override async Task<OperationResult> Run(params Note[] args)
+            {
+                var semaphore = new SemaphoreSlim(0, 1);
+
+                Throttler throttler = new Throttler(async () => {
+                    await Logger.LogInfo("Throttled action");
+                }, TimeSpan.FromSeconds(1));
+
+                new Thread(async () => {
+
+                    var start = Stopwatch.GetTimestamp();
+                    while (Stopwatch.GetElapsedTime(start) < TimeSpan.FromSeconds(5))
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(.1));
+                        await throttler.Invoke();
+                    }
+
+                    await Task.Delay(TimeSpan.FromSeconds(1.2));
+
+                    semaphore.Release();
+
+                }).Start();
+
+                await semaphore.WaitAsync();
 
                 return OperationResult.Win();
             }
@@ -75,7 +106,7 @@ namespace H.Necessaire.CLI.Host
         {
             public override async Task<OperationResult> Run(params Note[] args)
             {
-                DateTime.Now.CliUiPrintCalendar(events: [new DateTime(2024, 12 ,25)]);
+                DateTime.Now.CliUiPrintCalendar(events: [new DateTime(2024, 12, 25)]);
 
                 Log("ALL Done");
 
