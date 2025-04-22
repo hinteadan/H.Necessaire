@@ -4,6 +4,6 @@ namespace H.Necessaire
 {
     static class ConcreteFactory
     {
-        public static ImAPeriodicAction BuildNewPeriodicAction() => new NetStandardPeriodicAction();
+        public static ImAPeriodicAction BuildNewPeriodicAction() => new TaskDelayPeriodicAction();
     }
 }
