@@ -25,7 +25,7 @@ namespace H.Necessaire.Operations.Caching.Concrete
                 housekeepingInterval = TimeSpan.FromSeconds(housekeepingIntervalFromConfig.Value);
         }
 
-        public ImACacher<T> BuildCacher<T>(string cacherID = "InMemory")
+        public ImACacher<T> BuildCacher<T>(string cacherID = null)
         {
             ImACacher existingCacher = null;
             if (cacherRegistry.TryGetValue(typeof(ImACacher<T>), out existingCacher))

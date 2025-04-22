@@ -121,7 +121,7 @@ namespace H.Necessaire
                 ;
         }
 
-        public static IDisposableEnumerable<T> ToDisposableEnumerable<T>(this IEnumerable<T> collection) => new DataStream<T>(collection);
+        public static IDisposableEnumerable<T> ToDisposableEnumerable<T>(this IEnumerable<T> collection, params IDisposable[] otherDisposables) => new DataStream<T>(collection, otherDisposables);
 
         public static IDisposableEnumerable<TProjection> ProjectTo<TProjection, T>(this IDisposableEnumerable<T> disposableCollection, Func<T, TProjection> projector)
             => new ProjectedDisposableEnumerable<TProjection, T>(disposableCollection, projector);

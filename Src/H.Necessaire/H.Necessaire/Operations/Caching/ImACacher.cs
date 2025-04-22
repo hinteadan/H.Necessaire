@@ -13,6 +13,7 @@ namespace H.Necessaire
     public interface ImACacher<T> : ImACacher
     {
         Task<T> GetOrAdd(string id, Func<string, Task<ImCachebale<T>>> cacheableItemFactory);
+        Task<T> AddOrUpdate(string id, Func<string, Task<ImCachebale<T>>> cacheableItemFactory);
         Task<OperationResult<T>> TryGet(string id);
     }
 }

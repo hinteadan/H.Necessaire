@@ -147,9 +147,20 @@ namespace H.Necessaire
                     Hour = dateTime.Hour,
                     Minute = dateTime.Minute,
                     Second = dateTime.Second,
+                    Millisecond = dateTime.Millisecond,
                     DateTimeKind = dateTime.Kind,
+                    WeekDays = null,
                 };
         }
+
+        public static PartialDateTime ToPartialDateTime(this DateTime dateTime, Action<PartialDateTime> modifier)
+            => dateTime.ToPartialDateTime().And(modifier);
+
+        public static PartialDateTime ToDateOnlyPartialDateTime(this DateTime dateTime)
+            => dateTime.ToPartialDateTime(x => { x.Hour = null; x.Minute = null; x.Second = null; x.Millisecond = null; });
+
+        public static PartialDateTime ToTimeOnlyPartialDateTime(this DateTime dateTime)
+            => dateTime.ToPartialDateTime(x => { x.Year = null; x.Month = null; x.DayOfMonth = null; });
 
         public static float TrimToPercent(this float value)
         {
@@ -290,9 +301,9 @@ namespace H.Necessaire
             return data;
         }
 
-        public static IDisposableEnumerable<T> AsDisposableEnumerable<T>(this IEnumerable<T> collection)
+        public static IDisposableEnumerable<T> AsDisposableEnumerable<T>(this IEnumerable<T> collection, params IDisposable[] otherDisposables)
         {
-            return new Operations.Concrete.DataStream<T>(collection);
+            return new Operations.Concrete.DataStream<T>(collection, otherDisposables);
         }
 
         public static async Task<string> ReadAsStringAsync(this Stream stream, bool isStreamLeftOpen = true, Encoding encoding = null, bool detectEncodingFromByteOrderMarks = false, int bufferSize = 1024)
@@ -603,5 +614,22 @@ namespace H.Necessaire
 
             return Regex.Replace(value, "(\\B([A-Z]|(\\d+)))", " $1");
         }
+
+        public static TimeSpan NoLessThan(this TimeSpan timeSpan, TimeSpan minimum)
+        {
+            return timeSpan < minimum ? minimum : timeSpan;
+        }
+        public static TimeSpan NoLessThanZero(this TimeSpan timeSpan) => timeSpan.NoLessThan(TimeSpan.Zero);
+        public static TimeSpan? NoLessThan(this TimeSpan? timeSpan, TimeSpan? minimum)
+        {
+            if (minimum is null)
+                return timeSpan;
+
+            if (timeSpan is null)
+                return minimum;
+
+            return timeSpan.Value.NoLessThan(minimum.Value);
+        }
+        public static TimeSpan? NoLessThanZero(this TimeSpan? timeSpan) => timeSpan.NoLessThan(TimeSpan.Zero);
     }
 }
