@@ -5,6 +5,7 @@
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry
+                .Register<SecureStorageKeyValueStore>(() => new SecureStorageKeyValueStore())
                 .Register<ConsumerIdentityManager>(() => new ConsumerIdentityManager())
                 .RegisterAlwaysNew<ImAUseCaseContextProvider>(() => new MauiAppUseCaseContextProvider())
                 ;
