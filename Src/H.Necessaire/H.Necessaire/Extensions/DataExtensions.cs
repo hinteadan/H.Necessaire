@@ -497,6 +497,8 @@ namespace H.Necessaire
             return isWhitespaceConsideredEmpty ? string.IsNullOrWhiteSpace(stringValue) : string.IsNullOrEmpty(stringValue);
         }
 
+        public static string IfEmpty(this string stringValue, string returnThis) => stringValue.IsEmpty() ? returnThis : stringValue;
+
         public static bool IsEmpty(this GeoAddressArea geoAddressArea)
         {
             return
