@@ -77,6 +77,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.Runtime.UI", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.Runtime.UI.CLI", "CLI\H.Necessaire.Runtime.UI.CLI\H.Necessaire.Runtime.UI.CLI.csproj", "{898430E1-37D3-4C2C-8D1E-D7DEBB7B0F3A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Necessaire.Runtime.Sqlite", "H.Necessaire.Runtime.Sqlite\H.Necessaire.Runtime.Sqlite.csproj", "{356A4D34-38D0-481E-BC9A-93F404D81BE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -180,6 +182,10 @@ Global
 		{898430E1-37D3-4C2C-8D1E-D7DEBB7B0F3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{898430E1-37D3-4C2C-8D1E-D7DEBB7B0F3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{898430E1-37D3-4C2C-8D1E-D7DEBB7B0F3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{356A4D34-38D0-481E-BC9A-93F404D81BE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{356A4D34-38D0-481E-BC9A-93F404D81BE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{356A4D34-38D0-481E-BC9A-93F404D81BE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{356A4D34-38D0-481E-BC9A-93F404D81BE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -205,6 +211,7 @@ Global
 		{7B3A45A9-7FF1-42E2-9978-ADF4F4D3BA6D} = {7799523B-1EC1-4877-AD67-B6A805DEA765}
 		{832A9DD8-6DD7-4A84-86F0-86D014BCD40D} = {7B3A45A9-7FF1-42E2-9978-ADF4F4D3BA6D}
 		{898430E1-37D3-4C2C-8D1E-D7DEBB7B0F3A} = {7B3A45A9-7FF1-42E2-9978-ADF4F4D3BA6D}
+		{356A4D34-38D0-481E-BC9A-93F404D81BE2} = {382E206E-21B0-4973-B5C8-0B1705BE3A09}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {52A5ABFD-D5C1-4438-AA09-AACE151366B9}
