@@ -1,26 +1,30 @@
 ﻿using Dapper;
-using Microsoft.Data.SqlClient;
+using H.Necessaire.Dapper.Operations.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace H.Necessaire.Dapper.Operations.Concrete
+namespace H.Necessaire.Dapper
 {
-    public class DapperSqlContext : IDisposable
+    public abstract class DapperContextBase : ImADapperContext
     {
         #region Construct
         readonly IDbConnection dbConnection;
         readonly string defaultTableName;
-        public DapperSqlContext(string sqlConnectionString, string defaultTableName = null)
+        public DapperContextBase(IDbConnection dbConnection, string defaultTableName = null)
         {
             this.defaultTableName = defaultTableName;
-            dbConnection = new SqlConnection(sqlConnectionString);
+            this.dbConnection = dbConnection;
+            dbConnection.Open();
         }
 
-        public void Dispose()
+        protected abstract string PrintLimitSyntax(int offset, int count);
+
+        public virtual void Dispose()
         {
+            new Action(dbConnection.Close).TryOrFailWithGrace();
             new Action(dbConnection.Dispose).TryOrFailWithGrace();
         }
         #endregion
@@ -53,7 +57,7 @@ namespace H.Necessaire.Dapper.Operations.Concrete
             return result;
         }
 
-        public async Task<DapperCustomQueryResult<TSqlEntity>> LoadEntitiesByCustomCriteria<TSqlEntity>(ISqlFilterCriteria[] sqlFilters, object sqlParams, SqlSortCriteria[] sortCriterias, SqlLimitCriteria limitCriteria, string tableName) where TSqlEntity : ISqlEntry
+        public async Task<ILimitedEnumerable<TSqlEntity>> LoadEntitiesByCustomCriteria<TSqlEntity>(ISqlFilterCriteria[] sqlFilters, object sqlParams, SqlSortCriteria[] sortCriterias, SqlLimitCriteria limitCriteria, string tableName) where TSqlEntity : ISqlEntry
         {
             string filterSql = string.Join(" AND ", sqlFilters.Select(x => x.ToString()));
 
@@ -64,7 +68,7 @@ namespace H.Necessaire.Dapper.Operations.Concrete
             string limitSql = string.Empty;
             if (limitCriteria != null)
             {
-                limitSql = $"OFFSET {limitCriteria.Offset} ROWS FETCH NEXT {limitCriteria.Count} ROWS ONLY";
+                limitSql = PrintLimitSyntax(limitCriteria.Offset, limitCriteria.Count);
                 if (string.IsNullOrWhiteSpace(sortSql))
                     sortSql = "[ID] ASC";
             }
@@ -83,7 +87,7 @@ namespace H.Necessaire.Dapper.Operations.Concrete
             return new DapperCustomQueryResult<TSqlEntity>(offset: limitCriteria?.Offset ?? 0, length: result.Length, totalNumberOfItems: totalCount, entries: result);
         }
 
-        public async Task<DapperCustomQueryResult<TSqlEntity>> LoadEntitiesByCustomSql<TSqlEntity>(string sql, object sqlParams) where TSqlEntity : ISqlEntry
+        public async Task<ILimitedEnumerable<TSqlEntity>> LoadEntitiesByCustomSql<TSqlEntity>(string sql, object sqlParams) where TSqlEntity : ISqlEntry
         {
             TSqlEntity[] result = (await dbConnection.QueryAsync<TSqlEntity>(sql, sqlParams)).ToArray();
             return new DapperCustomQueryResult<TSqlEntity>(offset: 0, length: result.Length, totalNumberOfItems: result.Length, entries: result);
@@ -96,6 +100,8 @@ namespace H.Necessaire.Dapper.Operations.Concrete
             return result;
         }
 
+        
+
         public async Task<IEnumerable<TSqlEntity>> StreamAllByCustomCriteria<TSqlEntity>(ISqlFilterCriteria[] sqlFilters, object sqlParams, SqlSortCriteria[] sortCriterias, SqlLimitCriteria limitCriteria, string tableName) where TSqlEntity : ISqlEntry
         {
             string filterSql = string.Join(" AND ", sqlFilters.Select(x => x.ToString()));
@@ -107,7 +113,7 @@ namespace H.Necessaire.Dapper.Operations.Concrete
             string limitSql = string.Empty;
             if (limitCriteria != null)
             {
-                limitSql = $"OFFSET {limitCriteria.Offset} ROWS FETCH NEXT {limitCriteria.Count} ROWS ONLY";
+                limitSql = PrintLimitSyntax(limitCriteria.Offset, limitCriteria.Count);
                 if (string.IsNullOrWhiteSpace(sortSql))
                     sortSql = "[ID] ASC";
             }
@@ -177,7 +183,7 @@ namespace H.Necessaire.Dapper.Operations.Concrete
             await dbConnection.ExecuteAsync(sql, sqlParams);
         }
 
-        private static string PrintSqlColumns(params string[] columnNames)
+        protected virtual string PrintSqlColumns(params string[] columnNames)
         {
             return
                 string.Join(",", columnNames.Select(x => $"[{x}]"));

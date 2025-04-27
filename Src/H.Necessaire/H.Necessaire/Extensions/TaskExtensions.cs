@@ -10,5 +10,12 @@ namespace H.Necessaire
         {
             return new Func<Task>(() => { action?.Invoke(); return true.AsTask(); });
         }
+
+        public static async Task ThrowOnFail(this Task<OperationResult> operationResultTask)
+            => (await operationResultTask).ThrowOnFail();
+        public static async Task<T> ThrowOnFailOrReturn<T>(this Task<OperationResult<T>> operationResultTask)
+            => (await operationResultTask).ThrowOnFailOrReturn();
+        public static async Task<T> Return<T>(this Task<OperationResult<T>> operationResultTask)
+            => (await operationResultTask).Payload;
     }
 }

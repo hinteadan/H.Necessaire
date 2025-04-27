@@ -34,5 +34,7 @@
         }
 
         public static implicit operator bool(OperationResult<T> operationResult) => operationResult.IsSuccessful;
+
+        public T Return() => Payload;
     }
 }

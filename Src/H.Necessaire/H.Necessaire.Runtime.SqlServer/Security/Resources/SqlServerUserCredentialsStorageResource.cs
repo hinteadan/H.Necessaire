@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.SqlServer.Security.Resources
 {
-    internal partial class SqlServerUserCredentialsStorageResource : DapperSqlResourceBase, ImAUserCredentialsStorageResource
+    internal partial class SqlServerUserCredentialsStorageResource : DapperSqlServerResourceBase, ImAUserCredentialsStorageResource
     {
         #region Construct
         public SqlServerUserCredentialsStorageResource()

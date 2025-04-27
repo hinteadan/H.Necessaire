@@ -20,12 +20,12 @@
       <dependency id="H.Necessaire" version="2.44.0" />
       <dependency id="Dapper" version="2.1.66" />
       <dependency id="Microsoft.Bcl.AsyncInterfaces" version="9.0.4" />
-      <dependency id="Microsoft.Data.SqlClient" version="5.2.2" />
     </dependencies>
   </metadata>
   <files>
     <file src="IconLogo.png" target="images\" />
     <file src="Create_KeyValueStore_Table.sql" target="SQLs\" />
-    <file src="Create_SqlMigration_Table.sql" target="SQLs\" />
+    <file src="Create_SqlServerMigration_Table.sql" target="SQLs\" />
+	<file src="Create_SqliteMigration_Table.sql" target="SQLs\" />
   </files>
 </package>

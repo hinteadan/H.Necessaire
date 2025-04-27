@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace H.Necessaire.Runtime.SqlServer
 {
     public abstract class DapperStorageServiceBase<TId, TEntity, TSqlEntity, TFilter>
-    : DapperSqlResourceBase
+    : DapperSqlServerResourceBase
         , ImAStorageService<TId, TEntity>
         , ImAStorageBrowserService<TEntity, TFilter>
         where TFilter : IPageFilter, ISortFilter
