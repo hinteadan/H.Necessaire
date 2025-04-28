@@ -263,10 +263,12 @@ namespace H.Necessaire.Dapper
 
         protected virtual bool IsCoreDatabase()
         {
+            Assembly assembly = GetType().Assembly;
+
             return
-                this.GetType().Assembly.In(
-                    typeof(DapperSqlServerResourceBase).Assembly
-                );
+                assembly == typeof(DapperSqlServerResourceBase).Assembly
+                || assembly.FullName.StartsWith("H.Necessaire.")
+                ;
         }
 
         protected static async Task<string> ReadMigrationSqlCommand(SqlMigration sqlMigration, params Assembly[] assembliesToScan)
