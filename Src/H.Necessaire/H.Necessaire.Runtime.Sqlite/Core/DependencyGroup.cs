@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using H.Necessaire.Runtime.Sqlite.Core.Resources;
+using System;
 
 namespace H.Necessaire.Runtime.Sqlite.Core
 {
@@ -8,11 +7,11 @@ namespace H.Necessaire.Runtime.Sqlite.Core
     {
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
-            //dependencyRegistry
-            //    .Register<TestDataModelSqliteStorageResource>(() => new TestDataModelSqliteStorageResource())
-            //    .Register<ImAStorageService<Guid, TestDataModel>>(() => dependencyRegistry.Get<TestDataModelSqliteStorageResource>())
-            //    .Register<ImAStorageBrowserService<TestDataModel, TestDataModelFilter>>(() => dependencyRegistry.Get<TestDataModelSqliteStorageResource>())
-            //    ;
+            dependencyRegistry
+                .Register<ConsumerIdentitySqliteRsx>(() => new ConsumerIdentitySqliteRsx())
+                .Register<ImAStorageService<Guid, ConsumerIdentity>>(() => dependencyRegistry.Get<ConsumerIdentitySqliteRsx>())
+                .Register<ImAStorageBrowserService<ConsumerIdentity, IDFilter<Guid>>>(() => dependencyRegistry.Get<ConsumerIdentitySqliteRsx>())
+                ;
         }
     }
 }

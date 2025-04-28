@@ -8,7 +8,13 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.Sqlite.Core.Resources
 {
-    internal class ConsumerIdentitySqliteRsx : DapperSqliteStorageResourceBase<Guid, ConsumerIdentity, ConsumerIdentitySqliteRsx.ConsumerIdentitySqlEntry, IDFilter<Guid>>
+    internal class ConsumerIdentitySqliteRsx
+        : DapperSqliteStorageResourceBase<
+            Guid, 
+            ConsumerIdentity, 
+            ConsumerIdentitySqliteRsx.ConsumerIdentitySqlEntry, 
+            IDFilter<Guid>
+        >
     {
         #region Construct
         static SqlMigration[] sqlMigrations = null;
