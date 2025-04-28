@@ -7,6 +7,18 @@ namespace H.Necessaire.Runtime.Sqlite.Core.Resources
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry
+                .Register<SyncRequestSqliteRsx>(() => new SyncRequestSqliteRsx())
+                .Register<ImAStorageService<string, SyncRequest>>(() => dependencyRegistry.Get<SyncRequestSqliteRsx>())
+                .Register<ImAStorageBrowserService<SyncRequest, SyncRequestFilter>>(() => dependencyRegistry.Get<SyncRequestSqliteRsx>())
+                ;
+
+            dependencyRegistry
+                .Register<ExiledSyncRequestSqliteRsx>(() => new ExiledSyncRequestSqliteRsx())
+                .Register<ImAStorageService<string, ExiledSyncRequest>>(() => dependencyRegistry.Get<ExiledSyncRequestSqliteRsx>())
+                .Register<ImAStorageBrowserService<ExiledSyncRequest, SyncRequestFilter>>(() => dependencyRegistry.Get<ExiledSyncRequestSqliteRsx>())
+                ;
+
+            dependencyRegistry
                 .Register<ConsumerIdentitySqliteRsx>(() => new ConsumerIdentitySqliteRsx())
                 .Register<ImAStorageService<Guid, ConsumerIdentity>>(() => dependencyRegistry.Get<ConsumerIdentitySqliteRsx>())
                 .Register<ImAStorageBrowserService<ConsumerIdentity, IDFilter<Guid>>>(() => dependencyRegistry.Get<ConsumerIdentitySqliteRsx>())
