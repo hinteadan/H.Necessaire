@@ -163,7 +163,7 @@ namespace H.Necessaire
 
             using (IDisposableEnumerable<LogEntry> logEntries = await StreamAllLogEntries())
             {
-                if (!logEntries?.Any() ?? true)
+                if (logEntries is null)
                     return;
 
                 foreach (LogEntry logEntry in logEntries)
