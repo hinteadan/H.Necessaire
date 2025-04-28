@@ -29,6 +29,8 @@ namespace H.Necessaire.Dapper
         }
         #endregion
 
+        public IDbTransaction BeginTransaction() => dbConnection.BeginTransaction();
+
         public async Task<TSqlEntity> LoadEntityByID<TSqlEntity>(Guid id, string tableName = null, string idColumnName = "ID") where TSqlEntity : ISqlEntry
         {
             string sql = $"SELECT {PrintSqlColumns(typeof(TSqlEntity).GetColumnNames())} FROM [{tableName ?? defaultTableName}] WHERE [{idColumnName}] = @{nameof(id)}";

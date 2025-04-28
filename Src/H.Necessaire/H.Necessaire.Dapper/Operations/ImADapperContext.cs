@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.Dapper
@@ -32,5 +33,7 @@ namespace H.Necessaire.Dapper
         Task DeleteEntitiesByByCustomCriteria<TSqlEntity>(ISqlFilterCriteria[] sqlFilters, object sqlParams, string tableName);
 
         Task TruncateTable(string tableName = null);
+
+        IDbTransaction BeginTransaction();
     }
 }
