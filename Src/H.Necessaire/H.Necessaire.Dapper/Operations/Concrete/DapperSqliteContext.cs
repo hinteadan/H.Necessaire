@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using Dapper;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace H.Necessaire.Dapper.Operations.Concrete
 {
@@ -9,5 +11,11 @@ namespace H.Necessaire.Dapper.Operations.Concrete
 
         protected override string PrintLimitSyntax(int offset, int count)
             => $"LIMIT {count} OFFSET {offset}";
+
+        public override async Task TruncateTable(string tableName = null)
+        {
+            string sql = $"DELETE FROM [{tableName ?? defaultTableName}]";
+            await dbConnection.ExecuteAsync(sql);
+        }
     }
 }

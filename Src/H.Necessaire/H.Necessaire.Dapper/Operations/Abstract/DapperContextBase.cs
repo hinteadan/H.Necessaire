@@ -11,8 +11,8 @@ namespace H.Necessaire.Dapper
     public abstract class DapperContextBase : ImADapperContext
     {
         #region Construct
-        readonly IDbConnection dbConnection;
-        readonly string defaultTableName;
+        protected readonly IDbConnection dbConnection;
+        protected readonly string defaultTableName;
         public DapperContextBase(IDbConnection dbConnection, string defaultTableName = null)
         {
             this.defaultTableName = defaultTableName;
@@ -100,7 +100,7 @@ namespace H.Necessaire.Dapper
             return result;
         }
 
-        
+
 
         public async Task<IEnumerable<TSqlEntity>> StreamAllByCustomCriteria<TSqlEntity>(ISqlFilterCriteria[] sqlFilters, object sqlParams, SqlSortCriteria[] sortCriterias, SqlLimitCriteria limitCriteria, string tableName) where TSqlEntity : ISqlEntry
         {
@@ -181,6 +181,12 @@ namespace H.Necessaire.Dapper
             string filterSql = string.Join(" AND ", sqlFilters.Select(x => x.ToString()));
             string sql = $"DELETE FROM [{tableName ?? defaultTableName}] WHERE {filterSql}";
             await dbConnection.ExecuteAsync(sql, sqlParams);
+        }
+
+        public virtual async Task TruncateTable(string tableName = null)
+        {
+            string sql = $"TRUNCATE TABLE [{tableName ?? defaultTableName}]";
+            await dbConnection.ExecuteAsync(sql);
         }
 
         protected virtual string PrintSqlColumns(params string[] columnNames)

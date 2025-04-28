@@ -30,5 +30,7 @@ namespace H.Necessaire.Dapper
         Task DeleteEntitiesByIDs<TSqlEntity>(Guid[] ids, string tableName = null, string idColumnName = "ID");
 
         Task DeleteEntitiesByByCustomCriteria<TSqlEntity>(ISqlFilterCriteria[] sqlFilters, object sqlParams, string tableName);
+
+        Task TruncateTable(string tableName = null);
     }
 }
