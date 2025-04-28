@@ -18,7 +18,7 @@ namespace H.Necessaire.Runtime.Sqlite.Core.Resources
     {
         #region Construct
         static SqlMigration[] sqlMigrations = null;
-        public ConsumerIdentitySqliteRsx() : base(connectionString: null, tableName: $"H.Necessaire.{nameof(ConsumerIdentity)}", databaseName: "H.Necessaire.Core") { }
+        public ConsumerIdentitySqliteRsx() : base(connectionString: null, tableName: "H.Necessaire.ConsumerIdentity", databaseName: "H.Necessaire.Core") { }
         protected override async Task<SqlMigration[]> GetAllMigrations()
         {
             if (sqlMigrations != null)

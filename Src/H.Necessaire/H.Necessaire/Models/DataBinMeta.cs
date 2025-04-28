@@ -16,8 +16,8 @@ namespace H.Necessaire
         {
             StringBuilder printer = new StringBuilder(ID.ToString());
 
-            if (!string.IsNullOrWhiteSpace(Format?.Extension))
-                printer.Append(".").Append(Format.Extension);
+            if (!(Format?.Extension).IsEmpty())
+                printer.Append(Format.Extension.StartsWith(".") ? "" : ".").Append(Format.Extension);
 
             return printer.ToString().ToSafeFileName();
         }
@@ -27,8 +27,8 @@ namespace H.Necessaire
             StringBuilder printer
                 = new StringBuilder($"{(string.IsNullOrWhiteSpace(Name) ? ID.ToString() : Name)}_AsOf_{AsOf.PrintTimeStampAsIdentifier()}".ToSafeFileName());
 
-            if (!string.IsNullOrWhiteSpace(Format?.Extension))
-                printer.Append(".").Append(Format.Extension);
+            if (!(Format?.Extension).IsEmpty())
+                printer.Append(Format.Extension.StartsWith(".") ? "" : ".").Append(Format.Extension);
 
             return printer.ToString().ToSafeFileName();
         }
