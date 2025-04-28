@@ -1,4 +1,4 @@
-﻿CREATE TABLE ConsumerIdentity (
+﻿CREATE TABLE [H.Necessaire.ConsumerIdentity] (
 
 	ID TEXT NOT NULL,
 	IDTag TEXT,
@@ -17,4 +17,24 @@
 	
 	
 	PRIMARY KEY(ID)
+);
+
+CREATE INDEX [IX_H.Necessaire.ConsumerIdentity_IDTag] ON [H.Necessaire.ConsumerIdentity]
+(
+	IDTag
+);
+
+CREATE INDEX [IX_H.Necessaire.ConsumerIdentity_DisplayName] ON [H.Necessaire.ConsumerIdentity]
+(
+	DisplayName
+);
+
+CREATE INDEX [IX_H.Necessaire.ConsumerIdentity_AsOf] ON [H.Necessaire.ConsumerIdentity]
+(
+	AsOf
+);
+
+CREATE INDEX [IX_H.Necessaire.ConsumerIdentity_AsOfTicks] ON [H.Necessaire.ConsumerIdentity]
+(
+	AsOfTicks
 );
