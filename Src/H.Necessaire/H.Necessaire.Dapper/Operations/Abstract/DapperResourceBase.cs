@@ -268,5 +268,14 @@ namespace H.Necessaire.Dapper
                     typeof(DapperSqlServerResourceBase).Assembly
                 );
         }
+
+        protected static async Task<string> ReadMigrationSqlCommand(SqlMigration sqlMigration, params Assembly[] assembliesToScan)
+        {
+            return
+                await $"{sqlMigration.ResourceIdentifier}_v{sqlMigration.VersionNumber.Major}-{sqlMigration.VersionNumber.Minor}.sql"
+                .OpenEmbeddedResource(assembliesToScan)
+                .ReadAsStringAsync(isStreamLeftOpen: false)
+                ;
+        }
     }
 }
