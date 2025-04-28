@@ -59,7 +59,7 @@ namespace H.Necessaire.Dapper
             return new DapperSqliteContext(sqlConnectionFactory.BuildNewConnection(connectionString), tableName ?? this.tableName);
         }
 
-        void ProcessSqliteConnectionString()
+        protected void ProcessSqliteConnectionString()
         {
             if (connectionString.IsEmpty())
                 return;
