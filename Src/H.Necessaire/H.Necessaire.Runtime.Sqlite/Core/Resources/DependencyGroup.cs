@@ -25,6 +25,18 @@ namespace H.Necessaire.Runtime.Sqlite.Core.Resources
                 ;
 
             dependencyRegistry
+               .Register<QdActionSqliteRsx>(() => new QdActionSqliteRsx())
+               .Register<ImAStorageService<Guid, QdAction>>(() => dependencyRegistry.Get<QdActionSqliteRsx>())
+               .Register<ImAStorageBrowserService<QdAction, QdActionFilter>>(() => dependencyRegistry.Get<QdActionSqliteRsx>())
+               ;
+
+            dependencyRegistry
+                .Register<QdActionResultSqliteRsx>(() => new QdActionResultSqliteRsx())
+                .Register<ImAStorageService<Guid, QdActionResult>>(() => dependencyRegistry.Get<QdActionResultSqliteRsx>())
+                .Register<ImAStorageBrowserService<QdActionResult, QdActionResultFilter>>(() => dependencyRegistry.Get<QdActionResultSqliteRsx>())
+                ;
+
+            dependencyRegistry
                .Register<DataBinSqliteRsx>(() => new DataBinSqliteRsx())
                .Register<ImAStorageService<Guid, DataBinMeta>>(() => dependencyRegistry.Get<DataBinSqliteRsx>())
                .Register<ImAStorageBrowserService<DataBinMeta, DataBinFilter>>(() => dependencyRegistry.Get<DataBinSqliteRsx>())
