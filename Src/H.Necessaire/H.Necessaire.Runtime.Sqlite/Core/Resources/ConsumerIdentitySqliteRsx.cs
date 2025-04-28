@@ -76,7 +76,7 @@ namespace H.Necessaire.Runtime.Sqlite.Core.Resources
                     .And(x =>
                     {
                         x.Notes = sqlEntity.NotesJson.DeserializeToNotes();
-                        x.AsOf = new DateTime(sqlEntity.AsOfTicks);
+                        x.AsOf = new DateTime(sqlEntity.AsOfTicks, DateTimeKind.Utc);
                         x.RuntimePlatform = sqlEntity.RuntimePlatformJson.JsonToObject<ConsumerPlatformInfo>();
                     });
             }
@@ -88,7 +88,7 @@ namespace H.Necessaire.Runtime.Sqlite.Core.Resources
                     .And(x =>
                     {
                         x.NotesJson = entity.Notes.ToJsonArray();
-                        x.AsOfTicks = entity.AsOf.Ticks;
+                        x.AsOfTicks = entity.AsOf.EnsureUtc().Ticks;
                         x.RuntimePlatformJson = entity.RuntimePlatform.ToJsonObject();
                     })
                     ;
