@@ -12,28 +12,6 @@
 	FormatEncoding TEXT,
 	NotesJson TEXT,
 	NotesString TEXT,
-
-
-
-	[Level] INTEGER NOT NULL,
-	LevelLabel TEXT NOT NULL,
-	ScopeID TEXT NOT NULL,
-	OperationContextJson TEXT,
-	HappenedAt TEXT NOT NULL,
-	HappenedAtTicks INTEGER NOT NULL,
-	[Message] TEXT,
-	Method TEXT,
-	StackTrace TEXT,
-	Component TEXT,
-	[Application] TEXT,
-	ExceptionJson TEXT,
-	PayloadJson TEXT,
-	NotesJson TEXT,
-	AppVersionJson TEXT,
-	AppVersionNumber TEXT,
-	AppVersionTimestamp TEXT,
-	AppVersionBranch TEXT,
-	AppVersionCommit TEXT,
 	
 	PRIMARY KEY(ID)
 );
