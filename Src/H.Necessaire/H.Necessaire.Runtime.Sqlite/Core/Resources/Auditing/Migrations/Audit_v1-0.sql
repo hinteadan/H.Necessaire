@@ -60,7 +60,7 @@ CREATE INDEX [IX_H.Necessaire.Audit_ActionType] ON [H.Necessaire.Audit]
 	ActionType
 );
 
-CREATE INDEX [IX_H.Necessaire.Audit_ActionType] ON [H.Necessaire.Audit]
+CREATE INDEX [IX_H.Necessaire.Audit_AppVersionNumber] ON [H.Necessaire.Audit]
 (
 	AppVersionNumber
 );
