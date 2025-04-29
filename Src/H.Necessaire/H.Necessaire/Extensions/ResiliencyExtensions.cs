@@ -68,5 +68,24 @@ namespace H.Necessaire
 
             return await doThis.Invoke();
         }
+
+        public static async Task<OperationResult<TNext>> Then<T, TNext>(this Task<OperationResult<T>> currentResult, Func<T, Task<OperationResult<TNext>>> doThis)
+        {
+            if (currentResult is null)
+                return OperationResult.Fail("currentResult is null").WithoutPayload<TNext>();
+
+            OperationResult<T> current = await currentResult;
+
+            if (current is null)
+                return OperationResult.Fail("currentResult is null").WithoutPayload<TNext>();
+
+            if (!current.IsSuccessful)
+                return current.WithoutPayload<TNext>();
+
+            if (doThis is null)
+                return current.WithoutPayload<TNext>();
+
+            return await doThis.Invoke(current.Payload);
+        }
     }
 }

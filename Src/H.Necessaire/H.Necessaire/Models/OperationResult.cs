@@ -95,5 +95,11 @@ namespace H.Necessaire
         }
 
         public static implicit operator bool(OperationResult operationResult) => operationResult.IsSuccessful;
+        public OperationResult Ref(out OperationResult result)
+        {
+            result = this;
+            return this;
+        }
+
     }
 }
