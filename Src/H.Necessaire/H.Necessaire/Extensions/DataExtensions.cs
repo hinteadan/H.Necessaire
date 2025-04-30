@@ -265,6 +265,12 @@ namespace H.Necessaire
                 (dateTime <= (to ?? DateTime.MaxValue));
         }
 
+        public static T RefTo<T>(this T data, out T refVar)
+        {
+            refVar = data;
+            return data;
+        }
+
         public static T And<T>(this T data, Action<T> doThis) { doThis(data); return data; }
         public static T AndIf<T>(this T data, bool condition, Action<T> doThis)
         {
