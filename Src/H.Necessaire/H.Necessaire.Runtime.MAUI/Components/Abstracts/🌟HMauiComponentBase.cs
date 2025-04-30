@@ -53,6 +53,15 @@ public abstract class HMauiComponentBase : ContentView
         Content = wrappedReceivedContent;
     }
 
+    protected virtual Task Refresh()
+    {
+        wrappedReceivedContent = ConstructContent();
+
+        Content = wrappedReceivedContent;
+
+        return Task.CompletedTask;
+    }
+
     async void HMauiComponentBase_ParentChanged(object sender, EventArgs e)
     {
         ParentChanged -= HMauiComponentBase_ParentChanged;

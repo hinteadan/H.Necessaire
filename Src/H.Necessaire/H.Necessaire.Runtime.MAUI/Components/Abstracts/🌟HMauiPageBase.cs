@@ -104,11 +104,18 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
         protected virtual async Task OnThemeChangeRequest(AppTheme requestedTheme)
         {
+            await Refresh();
+
+            await new Func<Task>(Initialize).TryOrFailWithGrace(onFail: null);
+        }
+
+        protected virtual Task Refresh()
+        {
             SetShellBrandingColors();
 
             Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
 
-            await new Func<Task>(Initialize).TryOrFailWithGrace(onFail: null);
+            return Task.CompletedTask;
         }
 
         protected IDisposable Disable(View view) => HUiToolkit.Current.DisabledScopeFor(view);
