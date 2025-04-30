@@ -17,7 +17,7 @@ namespace H.Necessaire.Operations.Versioning.Concrete
             if (currentVersion != null)
                 return currentVersion;
 
-            Assembly entryAssembly = Assembly.GetEntryAssembly();
+            Assembly entryAssembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
 
             string versionResourceName = entryAssembly.GetManifestResourceNames()?.FirstOrDefault(x => x.EndsWith("version.txt", StringComparison.InvariantCultureIgnoreCase));
 
