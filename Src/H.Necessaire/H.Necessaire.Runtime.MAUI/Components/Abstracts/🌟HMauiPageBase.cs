@@ -23,7 +23,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             Loaded += HMauiPageBase_Loaded;
             Appearing += HMauiPageBase_Appearing;
             Disappearing += HMauiPageBase_Disappearing;
-            HMauiAppStateBroadcaster.Default.OnAppStateChanged += OnAppStateChanged;
+            HAppStateBroadcaster.Default.OnAppStateChanged += OnAppStateChanged;
 
             Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
 
@@ -107,17 +107,15 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         protected virtual async Task OnThemeChangeRequest(AppTheme requestedTheme)
         {
             await Refresh();
-
-            await new Func<Task>(Initialize).TryOrFailWithGrace(onFail: null);
         }
 
-        protected virtual Task Refresh()
+        protected virtual async Task Refresh()
         {
             SetShellBrandingColors();
 
             Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
 
-            return Task.CompletedTask;
+            await HSafe.Run(Initialize);
         }
 
         protected IDisposable Disable(View view) => HUiToolkit.Current.DisabledScopeFor(view);
@@ -133,7 +131,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             Unloaded -= HMauiPageBase_Unloaded;
             Appearing -= HMauiPageBase_Appearing;
             Disappearing -= HMauiPageBase_Disappearing;
-            HMauiAppStateBroadcaster.Default.OnAppStateChanged -= OnAppStateChanged;
+            HAppStateBroadcaster.Default.OnAppStateChanged -= OnAppStateChanged;
             await new Func<Task>(Destroy).TryOrFailWithGrace(onFail: null);
         }
 

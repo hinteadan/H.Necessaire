@@ -29,7 +29,7 @@ public abstract class HMauiComponentBase : ContentView
     async void HMauiComponent_Unloaded(object sender, EventArgs e)
     {
         Unloaded -= HMauiComponent_Unloaded;
-        HMauiAppStateBroadcaster.Default.OnAppStateChanged -= OnAppStateChanged;
+        HAppStateBroadcaster.Default.OnAppStateChanged -= OnAppStateChanged;
         await new Func<Task>(Destroy).TryOrFailWithGrace(onFail: null);
     }
 
@@ -50,7 +50,7 @@ public abstract class HMauiComponentBase : ContentView
         ParentChanged += HMauiComponentBase_ParentChanged;
         Unloaded += HMauiComponent_Unloaded;
         PropertyChanged += HMauiComponent_PropertyChanged;
-        HMauiAppStateBroadcaster.Default.OnAppStateChanged += OnAppStateChanged;
+        HAppStateBroadcaster.Default.OnAppStateChanged += OnAppStateChanged;
 
         wrappedReceivedContent = ConstructContent();
 
@@ -65,13 +65,13 @@ public abstract class HMauiComponentBase : ContentView
         await Refresh();
     }
 
-    protected virtual Task Refresh()
+    protected virtual async Task Refresh()
     {
         wrappedReceivedContent = ConstructContent();
 
         Content = wrappedReceivedContent;
 
-        return Task.CompletedTask;
+        await HSafe.Run(Initialize);
     }
 
     async void HMauiComponentBase_ParentChanged(object sender, EventArgs e)
