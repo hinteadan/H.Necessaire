@@ -21,16 +21,12 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
             Unloaded += HMauiPageBase_Unloaded;
             Loaded += HMauiPageBase_Loaded;
-            Appearing += HMauiPageBase_Appearing;
-            Disappearing += HMauiPageBase_Disappearing;
-            HAppStateBroadcaster.Default.OnAppStateChanged += OnAppStateChanged;
 
             Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
 
             Application.Current.RequestedThemeChanged += Current_RequestedThemeChanged;
         }
 
-        protected bool IsAppStateChangeRefreshDisabled { get; set; } = false;
         protected HMauiPageBase() : this(isHeavyInitializer: false) { }
 
         protected HMauiApp App => HUiToolkit.Current.App;
@@ -45,6 +41,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                 return;
 
             await Task.Delay(animationDurationInMs);
+
+            SetShellBrandingColors();
 
             Content = ConstructContent();
         }
@@ -106,14 +104,16 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
         protected virtual async Task OnThemeChangeRequest(AppTheme requestedTheme)
         {
-            await Refresh();
+            await Refresh(isContentReconstructionEnabled: true);
         }
 
-        protected virtual async Task Refresh()
+        protected virtual async Task Refresh(bool isContentReconstructionEnabled = false)
         {
-            SetShellBrandingColors();
-
-            Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
+            if (isContentReconstructionEnabled)
+            {
+                SetShellBrandingColors();
+                Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
+            }
 
             await HSafe.Run(Initialize);
         }
@@ -122,16 +122,16 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
         async void HMauiPageBase_Loaded(object sender, EventArgs e)
         {
-            await new Func<Task>(Initialize).TryOrFailWithGrace(onFail: null);
-            Loaded -= HMauiPageBase_Loaded;
+            Appearing += HMauiPageBase_Appearing;
+            Disappearing += HMauiPageBase_Disappearing;
+
+            await HSafe.Run(Initialize);
         }
 
         async void HMauiPageBase_Unloaded(object sender, EventArgs e)
         {
-            Unloaded -= HMauiPageBase_Unloaded;
             Appearing -= HMauiPageBase_Appearing;
             Disappearing -= HMauiPageBase_Disappearing;
-            HAppStateBroadcaster.Default.OnAppStateChanged -= OnAppStateChanged;
             await new Func<Task>(Destroy).TryOrFailWithGrace(onFail: null);
         }
 
@@ -170,14 +170,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                 VerticalTextAlignment = TextAlignment.Center,
                 Margin = new Thickness(Branding.SizingUnitInPixels, 0, 0, 0),
             };
-        }
-
-        protected virtual async Task OnAppStateChanged(object sender, EventArgs e)
-        {
-            if (IsAppStateChangeRefreshDisabled)
-                return;
-
-            await Refresh();
         }
     }
 }

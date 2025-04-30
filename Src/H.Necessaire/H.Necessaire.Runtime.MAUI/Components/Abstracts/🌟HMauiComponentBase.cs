@@ -26,14 +26,15 @@ public abstract class HMauiComponentBase : ContentView
         Content = wrappedReceivedContent;
     }
 
-    async void HMauiComponent_Unloaded(object sender, EventArgs e)
+    async void HMauiComponentBase_Loaded(object sender, EventArgs e)
     {
-        Unloaded -= HMauiComponent_Unloaded;
-        HAppStateBroadcaster.Default.OnAppStateChanged -= OnAppStateChanged;
-        await new Func<Task>(Destroy).TryOrFailWithGrace(onFail: null);
+        await HSafe.Run(Initialize);
     }
 
-    protected bool IsAppStateChangeRefreshDisabled { get; set; } = false;
+    async void HMauiComponent_Unloaded(object sender, EventArgs e)
+    {
+        await HSafe.Run(Destroy);
+    }
 
     protected HMauiApp App => HUiToolkit.Current.App;
     protected T Get<T>() => HUiToolkit.Current.Get<T>();
@@ -48,28 +49,23 @@ public abstract class HMauiComponentBase : ContentView
     protected virtual void Construct()
     {
         ParentChanged += HMauiComponentBase_ParentChanged;
+        Loaded += HMauiComponentBase_Loaded;
         Unloaded += HMauiComponent_Unloaded;
         PropertyChanged += HMauiComponent_PropertyChanged;
-        HAppStateBroadcaster.Default.OnAppStateChanged += OnAppStateChanged;
 
         wrappedReceivedContent = ConstructContent();
 
         Content = wrappedReceivedContent;
     }
 
-    protected virtual async Task OnAppStateChanged(object sender, EventArgs e)
+    protected virtual async Task Refresh(bool isContentReconstructionEnabled = false)
     {
-        if (IsAppStateChangeRefreshDisabled)
-            return;
+        if (isContentReconstructionEnabled)
+        {
+            wrappedReceivedContent = ConstructContent();
 
-        await Refresh();
-    }
-
-    protected virtual async Task Refresh()
-    {
-        wrappedReceivedContent = ConstructContent();
-
-        Content = wrappedReceivedContent;
+            Content = wrappedReceivedContent;
+        }
 
         await HSafe.Run(Initialize);
     }
@@ -77,7 +73,7 @@ public abstract class HMauiComponentBase : ContentView
     async void HMauiComponentBase_ParentChanged(object sender, EventArgs e)
     {
         ParentChanged -= HMauiComponentBase_ParentChanged;
-        await new Func<Task>(Initialize).TryOrFailWithGrace(onFail: null);
+        await HSafe.Run(Initialize);
     }
 
     protected virtual Task Initialize()
