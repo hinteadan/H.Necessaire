@@ -144,7 +144,16 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
         void SetShellBrandingColors()
         {
-            Shell.SetTitleView(this, new HLabel
+            Shell.SetTitleView(this, ConstructTitleView());
+
+            Shell.SetForegroundColor(this, Branding.ButtonTextColor.ToMaui());
+            Shell.SetTitleColor(this, Branding.ButtonTextColor.ToMaui());
+            Shell.SetBackgroundColor(this, Branding.PrimaryColorTranslucent.ToMaui());
+        }
+
+        protected virtual View ConstructTitleView()
+        {
+            return new HLabel
             {
                 TextColor = Branding.ButtonTextColor.ToMaui(),
                 Text = Title,
@@ -152,11 +161,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                 VerticalOptions = LayoutOptions.Center,
                 VerticalTextAlignment = TextAlignment.Center,
                 Margin = new Thickness(Branding.SizingUnitInPixels, 0, 0, 0),
-            });
-
-            Shell.SetForegroundColor(this, Branding.ButtonTextColor.ToMaui());
-            Shell.SetTitleColor(this, Branding.ButtonTextColor.ToMaui());
-            Shell.SetBackgroundColor(this, Branding.PrimaryColorTranslucent.ToMaui());
+            };
         }
     }
 }
