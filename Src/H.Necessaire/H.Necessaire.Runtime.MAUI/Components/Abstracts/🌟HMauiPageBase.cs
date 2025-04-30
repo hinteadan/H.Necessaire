@@ -23,12 +23,14 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             Loaded += HMauiPageBase_Loaded;
             Appearing += HMauiPageBase_Appearing;
             Disappearing += HMauiPageBase_Disappearing;
+            HMauiAppStateBroadcaster.Default.OnAppStateChanged += OnAppStateChanged;
 
             Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
 
             Application.Current.RequestedThemeChanged += Current_RequestedThemeChanged;
         }
 
+        protected bool IsAppStateChangeRefreshDisabled { get; set; } = false;
         protected HMauiPageBase() : this(isHeavyInitializer: false) { }
 
         protected HMauiApp App => HUiToolkit.Current.App;
@@ -131,6 +133,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             Unloaded -= HMauiPageBase_Unloaded;
             Appearing -= HMauiPageBase_Appearing;
             Disappearing -= HMauiPageBase_Disappearing;
+            HMauiAppStateBroadcaster.Default.OnAppStateChanged -= OnAppStateChanged;
             await new Func<Task>(Destroy).TryOrFailWithGrace(onFail: null);
         }
 
@@ -169,6 +172,14 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                 VerticalTextAlignment = TextAlignment.Center,
                 Margin = new Thickness(Branding.SizingUnitInPixels, 0, 0, 0),
             };
+        }
+
+        protected virtual async Task OnAppStateChanged(object sender, EventArgs e)
+        {
+            if (IsAppStateChangeRefreshDisabled)
+                return;
+
+            await Refresh();
         }
     }
 }
