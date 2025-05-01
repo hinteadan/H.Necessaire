@@ -15,7 +15,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                 HorizontalOptions = LayoutOptions.Center,
                 ColumnDefinitions = [
                     new ColumnDefinition(new GridLength(1, GridUnitType.Auto)),
-                    new ColumnDefinition(new GridLength(1, GridUnitType.Auto)),
+                    new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
                 ],
             }.And(layout =>
             {
@@ -36,6 +36,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                     VerticalOptions = LayoutOptions.Center,
                     HorizontalTextAlignment = TextAlignment.Center,
                     HorizontalOptions = LayoutOptions.Center,
+
                 }.RefTo(out label), column: 1);
 
             });
@@ -44,6 +45,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
         public HLabel Label => label;
         public HFontIcon Icon => icon;
 
+        public LineBreakMode LineBreakMode { get => label.LineBreakMode; set => label.LineBreakMode = value; }
         public string Text { get => label.Text; set => label.Text = value; }
         public string Glyph { get => icon.Glyph; set => icon.Glyph = value; }
         public HFontIconLabel SetGlyph(string glyphName, string variant = null)
