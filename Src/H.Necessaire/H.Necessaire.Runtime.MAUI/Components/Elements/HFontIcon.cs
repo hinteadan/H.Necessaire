@@ -17,7 +17,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
             {
                 FontFamily = WellKnownTypography.FluentSystemIconsFilled,
                 Glyph = null,
-                Size = Branding.SizingUnitInPixels * 50,
+                Size = Branding.SizingUnitInPixels * 20,
                 FontAutoScalingEnabled = true,
                 Color = Branding.TextColor.ToMaui(),
             };
