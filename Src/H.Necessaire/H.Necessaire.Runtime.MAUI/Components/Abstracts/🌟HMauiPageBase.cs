@@ -33,7 +33,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         protected T Get<T>() => HUiToolkit.Current.Get<T>();
         protected T Build<T>(string id) where T : class => HUiToolkit.Current.Build<T>(id);
         protected int SizingUnit => App?.SizingUnit ?? 10;
-        protected BrandingStyle Branding => App?.Branding ?? HMauiAppBranding.Default;
+        protected HMauiAppBranding Branding => (App?.Branding as HMauiAppBranding) ?? HMauiAppBranding.Default;
         protected virtual View ConstructContent() => null;
         protected virtual async Task Initialize()
         {
