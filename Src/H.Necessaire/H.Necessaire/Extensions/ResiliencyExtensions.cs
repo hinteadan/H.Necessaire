@@ -87,5 +87,31 @@ namespace H.Necessaire
 
             return await doThis.Invoke(current.Payload);
         }
+
+        public static async Task<OperationResult<T>> LogError<T>(this Task<OperationResult<T>> currentResultTask, ImALogger logger, string actionName = null)
+            => await currentResultTask.Log(logger, actionName, isJustWarning: false);
+
+        public static async Task<OperationResult<T>> LogError<T>(this OperationResult<T> currentResult, ImALogger logger, string actionName = null)
+            => await currentResult.AsTask().Log(logger, actionName, isJustWarning: false);
+
+        public static async Task<OperationResult<T>> LogWarning<T>(this Task<OperationResult<T>> currentResultTask, ImALogger logger, string actionName = null)
+            => await currentResultTask.Log(logger, actionName, isJustWarning: true);
+
+        public static async Task<OperationResult<T>> LogWarning<T>(this OperationResult<T> currentResult, ImALogger logger, string actionName = null)
+            => await currentResult.AsTask().Log(logger, actionName, isJustWarning: true);
+
+        static async Task<OperationResult<T>> Log<T>(this Task<OperationResult<T>> currentResultTask, ImALogger logger, string actionName = null, bool isJustWarning = false)
+        {
+            OperationResult<T> currentResult = await currentResultTask;
+
+            if (currentResult.IsSuccessful)
+                return currentResult;
+
+            string message = actionName.IsEmpty() ? $"Error occured because {currentResult.Reason}" : $"Error occured while trying to {actionName}. Reason: {currentResult.Reason}";
+
+            await logger.LogError(message, currentResult.Payload, currentResult.Comments?.ToNotes("ErrorDetail"));
+
+            return currentResult;
+        }
     }
 }
