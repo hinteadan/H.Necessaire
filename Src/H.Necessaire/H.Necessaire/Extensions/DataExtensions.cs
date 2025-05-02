@@ -209,6 +209,18 @@ namespace H.Necessaire
             return fallbackValue;
         }
 
+        public static byte? ParseToByteOrFallbackTo(this string rawValue, byte? fallbackValue = null)
+        {
+            if (string.IsNullOrWhiteSpace(rawValue))
+                return fallbackValue;
+
+            byte parseResult;
+            if (byte.TryParse(rawValue, out parseResult))
+                return parseResult;
+
+            return fallbackValue;
+        }
+
         public static uint? ParseToUIntOrFallbackTo(this string rawValue, uint? fallbackValue = null)
         {
             if (string.IsNullOrWhiteSpace(rawValue))
