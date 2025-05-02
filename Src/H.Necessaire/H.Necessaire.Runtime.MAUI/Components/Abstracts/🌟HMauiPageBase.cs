@@ -22,8 +22,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             Loaded += HMauiPageBase_Loaded;
 
             Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
-
-            Application.Current.RequestedThemeChanged += Current_RequestedThemeChanged;
         }
 
         protected HMauiPageBase() : this(isHeavyInitializer: false) { }
@@ -123,6 +121,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         {
             Appearing += HMauiPageBase_Appearing;
             Disappearing += HMauiPageBase_Disappearing;
+            Application.Current.RequestedThemeChanged += Current_RequestedThemeChanged;
 
             await HSafe.Run(Initialize);
         }
@@ -131,6 +130,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         {
             Appearing -= HMauiPageBase_Appearing;
             Disappearing -= HMauiPageBase_Disappearing;
+            Application.Current.RequestedThemeChanged -= Current_RequestedThemeChanged;
             await new Func<Task>(Destroy).TryOrFailWithGrace(onFail: null);
         }
 
