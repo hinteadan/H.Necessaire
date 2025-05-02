@@ -1,5 +1,4 @@
-﻿using H.Necessaire.Models.Branding;
-using H.Necessaire.Runtime.MAUI.Components.Chromes;
+﻿using H.Necessaire.Runtime.MAUI.Components.Chromes;
 using H.Necessaire.Runtime.MAUI.Components.Controls;
 using H.Necessaire.Runtime.MAUI.Extensions;
 
@@ -170,6 +169,62 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                 VerticalTextAlignment = TextAlignment.Center,
                 Margin = new Thickness(Branding.SizingUnitInPixels, 0, 0, 0),
             };
+        }
+
+        protected IDisposable BusyIndicator(string label = null)
+        {
+            View originalContent = null;
+            return new ScopedRunner(
+                onStart: () =>
+                {
+                    originalContent = Content;
+                    Content = ConstructBusyIndicator(label);
+                },
+                onStop: () =>
+                {
+                    Content = originalContent;
+                }
+            );
+        }
+
+        protected virtual View ConstructBusyIndicator(string label = null)
+        {
+            return new Grid
+            {
+                Padding = SizingUnit,
+            }
+            .And(layout =>
+            {
+
+                layout.Add(new VerticalStackLayout
+                {
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center,
+
+                }.And(layout =>
+                {
+
+                    layout.Add(
+                        new ActivityIndicator
+                        {
+                            IsRunning = true,
+                            Color = Branding.Colors.Primary.Color.ToMaui(),
+                            Margin = new Thickness(0, 0, 0, SizingUnit),
+                        }
+                    );
+
+                    layout.Add(new HLabel
+                    {
+                        Text = label.IsEmpty() ? "Loading, please wait..." : label,
+                        TextColor = Branding.InformationColor.ToMaui(),
+                        HorizontalTextAlignment = TextAlignment.Center,
+                    });
+
+                }));
+
+
+
+            });
         }
     }
 }
