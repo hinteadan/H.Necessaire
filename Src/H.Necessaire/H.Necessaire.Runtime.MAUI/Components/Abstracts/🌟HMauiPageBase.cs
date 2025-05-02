@@ -125,6 +125,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         {
             Appearing += HMauiPageBase_Appearing;
             Disappearing += HMauiPageBase_Disappearing;
+            HSafe.Run(() => Application.Current.RequestedThemeChanged -= Current_RequestedThemeChanged);
             Application.Current.RequestedThemeChanged += Current_RequestedThemeChanged;
 
             await HSafe.Run(Initialize);

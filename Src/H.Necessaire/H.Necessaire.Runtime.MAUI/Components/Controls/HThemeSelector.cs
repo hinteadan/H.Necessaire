@@ -11,6 +11,16 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         }.AsReadOnly();
 
         HPicker themePicker = null;
+
+        public AppTheme Theme
+        {
+            get => ((KeyValuePair<AppTheme, string>)themePicker.SelectedItem).Key;
+            set
+            {
+                SelectTheme(value);
+            }
+        }
+
         protected override View ConstructContent()
         {
             return new Grid { }.And(layout =>
@@ -45,6 +55,15 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             AppTheme selectedTheme = ((KeyValuePair<AppTheme, string>)themePicker.SelectedItem).Key;
 
             Application.Current.UserAppTheme = selectedTheme;
+        }
+
+        void SelectTheme(AppTheme theme)
+        {
+            AppTheme selectedTheme = ((KeyValuePair<AppTheme, string>)themePicker.SelectedItem).Key;
+            if (theme == selectedTheme)
+                return;
+
+            themePicker.SelectedItem = options.Single(x => x.Key == theme);
         }
     }
 }
