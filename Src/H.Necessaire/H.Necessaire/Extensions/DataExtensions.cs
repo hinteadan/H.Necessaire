@@ -197,6 +197,18 @@ namespace H.Necessaire
             return fallbackValue;
         }
 
+        public static sbyte? ParseToSbyteOrFallbackTo(this string rawValue, sbyte? fallbackValue = null)
+        {
+            if (string.IsNullOrWhiteSpace(rawValue))
+                return fallbackValue;
+
+            sbyte parseResult;
+            if (sbyte.TryParse(rawValue, out parseResult))
+                return parseResult;
+
+            return fallbackValue;
+        }
+
         public static uint? ParseToUIntOrFallbackTo(this string rawValue, uint? fallbackValue = null)
         {
             if (string.IsNullOrWhiteSpace(rawValue))
