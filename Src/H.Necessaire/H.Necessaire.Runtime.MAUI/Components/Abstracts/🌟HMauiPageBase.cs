@@ -10,6 +10,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         const int animationDurationInMs = 350;
         protected HMauiPageBase(bool isHeavyInitializer)
         {
+            EnsureDependencies();
+
             this.isHeavyInitializer = isHeavyInitializer;
 
             Title = GetType().GetDisplayLabel();
@@ -23,6 +25,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
             Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
         }
+
+        protected virtual void EnsureDependencies() { }
 
         protected HMauiPageBase() : this(isHeavyInitializer: false) { }
 
