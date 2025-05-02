@@ -1,4 +1,6 @@
 using H.Necessaire.Models.Branding;
+using H.Necessaire.Runtime.MAUI.Components.Controls;
+using H.Necessaire.Runtime.MAUI.Extensions;
 using System.ComponentModel;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Abstracts;
@@ -84,5 +86,53 @@ public abstract class HMauiComponentBase : ContentView
     {
         PropertyChanged -= HMauiComponent_PropertyChanged;
         return Task.CompletedTask;
+    }
+
+    protected IDisposable BusyIndicator()
+    {
+        View originalContent = null;
+        return new ScopedRunner(
+            onStart: () =>
+            {
+                originalContent = Content;
+                Content = ConstructBusyIndicator();
+            },
+            onStop: () =>
+            {
+                Content = originalContent;
+            }
+        );
+    }
+
+    protected virtual View ConstructBusyIndicator()
+    {
+        return new Grid
+        {
+            Padding = SizingUnit,
+        }
+        .And(layout =>
+        {
+
+            layout.Add(new VerticalStackLayout
+            {
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+
+            }.And(layout =>
+            {
+
+                layout.Add(
+                    new ActivityIndicator
+                    {
+                        IsRunning = true,
+                        Color = Branding.Colors.Primary.Color.ToMaui(),
+                    }
+                );
+
+            }));
+
+
+
+        });
     }
 }
