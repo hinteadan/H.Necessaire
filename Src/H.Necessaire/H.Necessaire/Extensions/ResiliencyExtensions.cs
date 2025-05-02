@@ -93,11 +93,21 @@ namespace H.Necessaire
 
         public static async Task<OperationResult<T>> LogError<T>(this OperationResult<T> currentResult, ImALogger logger, string actionName = null)
             => await currentResult.AsTask().Log(logger, actionName, isJustWarning: false);
+        public static async Task<OperationResult> LogError(this Task<OperationResult> currentResultTask, ImALogger logger, string actionName = null)
+            => await currentResultTask.Log(logger, actionName, isJustWarning: false);
+
+        public static async Task<OperationResult> LogError(this OperationResult currentResult, ImALogger logger, string actionName = null)
+            => await currentResult.AsTask().Log(logger, actionName, isJustWarning: false);
 
         public static async Task<OperationResult<T>> LogWarning<T>(this Task<OperationResult<T>> currentResultTask, ImALogger logger, string actionName = null)
             => await currentResultTask.Log(logger, actionName, isJustWarning: true);
 
         public static async Task<OperationResult<T>> LogWarning<T>(this OperationResult<T> currentResult, ImALogger logger, string actionName = null)
+            => await currentResult.AsTask().Log(logger, actionName, isJustWarning: true);
+        public static async Task<OperationResult> LogWarning(this Task<OperationResult> currentResultTask, ImALogger logger, string actionName = null)
+            => await currentResultTask.Log(logger, actionName, isJustWarning: true);
+
+        public static async Task<OperationResult> LogWarning(this OperationResult currentResult, ImALogger logger, string actionName = null)
             => await currentResult.AsTask().Log(logger, actionName, isJustWarning: true);
 
         static async Task<OperationResult<T>> Log<T>(this Task<OperationResult<T>> currentResultTask, ImALogger logger, string actionName = null, bool isJustWarning = false)
@@ -110,6 +120,20 @@ namespace H.Necessaire
             string message = actionName.IsEmpty() ? $"Error occured because {currentResult.Reason}" : $"Error occured while trying to {actionName}. Reason: {currentResult.Reason}";
 
             await logger.LogError(message, currentResult.Payload, currentResult.Comments?.ToNotes("ErrorDetail"));
+
+            return currentResult;
+        }
+
+        static async Task<OperationResult> Log(this Task<OperationResult> currentResultTask, ImALogger logger, string actionName = null, bool isJustWarning = false)
+        {
+            OperationResult currentResult = await currentResultTask;
+
+            if (currentResult.IsSuccessful)
+                return currentResult;
+
+            string message = actionName.IsEmpty() ? $"Error occured because {currentResult.Reason}" : $"Error occured while trying to {actionName}. Reason: {currentResult.Reason}";
+
+            await logger.LogError(message, payload: null, currentResult.Comments?.ToNotes("ErrorDetail"));
 
             return currentResult;
         }
