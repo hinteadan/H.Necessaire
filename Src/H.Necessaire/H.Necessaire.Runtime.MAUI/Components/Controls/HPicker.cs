@@ -108,9 +108,21 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 VerticalTextAlignment = TextAlignment.Center,
             }
             .And(x => x.ItemDisplayBinding = itemDisplayBinding)
-            .And(x => x.SelectedIndexChanged += OnPickerSelectedIndexChanged)
             .And(x => editor = x)
             ;
+        }
+
+        protected override async Task Initialize()
+        {
+            await base.Initialize();
+            HSafe.Run(() => editor.SelectedIndexChanged -= OnPickerSelectedIndexChanged);
+            editor.SelectedIndexChanged += OnPickerSelectedIndexChanged;
+        }
+
+        protected override async Task Destroy()
+        {
+            editor.SelectedIndexChanged -= OnPickerSelectedIndexChanged;
+            await base.Destroy();
         }
 
         void OnPickerSelectedIndexChanged(object sender, EventArgs e)

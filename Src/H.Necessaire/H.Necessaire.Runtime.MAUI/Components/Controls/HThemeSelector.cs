@@ -10,30 +10,41 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             { AppTheme.Dark, "Dark" },
         }.AsReadOnly();
 
+        HPicker themePicker = null;
         protected override View ConstructContent()
         {
-            AppTheme currentTheme = Application.Current.UserAppTheme;
-
             return new Grid { }.And(layout =>
             {
-
                 layout.Add(
                     new HPicker { Label = "Theme" }
                     .SetDataSource(options, x => x.Value)
-                    .And(picker =>
-                    {
-                        picker.SelectedItem = options.Single(x => x.Key == currentTheme);
-                        picker.SelectedIndexChanged += (s, e) =>
-                        {
-                            AppTheme selectedTheme = ((KeyValuePair<AppTheme, string>)picker.SelectedItem).Key;
-
-                            Application.Current.UserAppTheme = selectedTheme;
-
-                        };
-                    })
+                    .RefTo(out themePicker)
                 );
-
             });
+        }
+
+        protected override async Task Initialize()
+        {
+            await base.Initialize();
+
+            AppTheme currentTheme = Application.Current.UserAppTheme;
+            HSafe.Run(() => themePicker.SelectedIndexChanged -= ThemePicker_SelectedIndexChanged);
+            themePicker.SelectedItem = options.Single(x => x.Key == currentTheme);
+            themePicker.SelectedIndexChanged += ThemePicker_SelectedIndexChanged;
+        }
+
+        protected override async Task Destroy()
+        {
+            HSafe.Run(() => themePicker.SelectedIndexChanged -= ThemePicker_SelectedIndexChanged);
+
+            await base.Destroy();
+        }
+
+        void ThemePicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AppTheme selectedTheme = ((KeyValuePair<AppTheme, string>)themePicker.SelectedItem).Key;
+
+            Application.Current.UserAppTheme = selectedTheme;
         }
     }
 }
