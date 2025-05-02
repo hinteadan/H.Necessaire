@@ -171,14 +171,14 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             };
         }
 
-        protected IDisposable BusyIndicator(string label = null)
+        protected IDisposable BusyIndicator(Color color = null, string label = null)
         {
             View originalContent = null;
             return new ScopedRunner(
                 onStart: () =>
                 {
                     originalContent = Content;
-                    Content = ConstructBusyIndicator(label);
+                    Content = ConstructBusyIndicator(color, label);
                 },
                 onStop: () =>
                 {
@@ -187,7 +187,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             );
         }
 
-        protected virtual View ConstructBusyIndicator(string label = null)
+        protected virtual View ConstructBusyIndicator(Color color = null, string label = null)
         {
             return new Grid
             {
@@ -208,7 +208,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                         new ActivityIndicator
                         {
                             IsRunning = true,
-                            Color = Branding.Colors.Primary.Color.ToMaui(),
+                            Color = color ?? Branding.InformationColor.ToMaui(),
                             Margin = new Thickness(0, 0, 0, SizingUnit),
                         }
                     );

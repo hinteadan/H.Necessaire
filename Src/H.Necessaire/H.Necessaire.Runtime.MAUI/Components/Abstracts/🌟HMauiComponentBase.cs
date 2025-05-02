@@ -88,14 +88,14 @@ public abstract class HMauiComponentBase : ContentView
         return Task.CompletedTask;
     }
 
-    protected IDisposable BusyIndicator()
+    protected IDisposable BusyIndicator(Color color = null)
     {
         View originalContent = null;
         return new ScopedRunner(
             onStart: () =>
             {
                 originalContent = Content;
-                Content = ConstructBusyIndicator();
+                Content = ConstructBusyIndicator(color);
             },
             onStop: () =>
             {
@@ -104,7 +104,7 @@ public abstract class HMauiComponentBase : ContentView
         );
     }
 
-    protected virtual View ConstructBusyIndicator()
+    protected virtual View ConstructBusyIndicator(Color color = null)
     {
         return new Grid
         {
@@ -124,8 +124,10 @@ public abstract class HMauiComponentBase : ContentView
                 layout.Add(
                     new ActivityIndicator
                     {
+                        WidthRequest = SizingUnit,
+                        HeightRequest = SizingUnit,
                         IsRunning = true,
-                        Color = Branding.Colors.Primary.Color.ToMaui(),
+                        Color = color ?? Branding.InformationColor.ToMaui(),
                     }
                 );
 
