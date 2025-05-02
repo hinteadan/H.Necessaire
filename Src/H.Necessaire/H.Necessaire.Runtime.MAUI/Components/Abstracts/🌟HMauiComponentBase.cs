@@ -91,14 +91,18 @@ public abstract class HMauiComponentBase : ContentView
     protected IDisposable BusyIndicator(Color color = null)
     {
         View originalContent = null;
+        View busyIndicatorView = null;
         return new ScopedRunner(
             onStart: () =>
             {
                 originalContent = Content;
-                Content = ConstructBusyIndicator(color);
+                Content = ConstructBusyIndicator(color).RefTo(out busyIndicatorView);
             },
             onStop: () =>
             {
+                if (Content != busyIndicatorView)
+                    return;
+
                 Content = originalContent;
             }
         );

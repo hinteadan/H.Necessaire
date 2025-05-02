@@ -174,14 +174,18 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         protected IDisposable BusyIndicator(Color color = null, string label = null)
         {
             View originalContent = null;
+            View busyIndicatorView = null;
             return new ScopedRunner(
                 onStart: () =>
                 {
                     originalContent = Content;
-                    Content = ConstructBusyIndicator(color, label);
+                    Content = ConstructBusyIndicator(color, label).RefTo(out busyIndicatorView);
                 },
                 onStop: () =>
                 {
+                    if (Content != busyIndicatorView)
+                        return;
+
                     Content = originalContent;
                 }
             );
