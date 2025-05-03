@@ -98,6 +98,11 @@ namespace H.Necessaire
 
         public static async Task<OperationResult> LogError(this OperationResult currentResult, ImALogger logger, string actionName = null)
             => await currentResult.AsTask().Log(logger, actionName, isJustWarning: false);
+        public static OperationResult<T> LogErrorSync<T>(this OperationResult<T> currentResult, ImALogger logger, string actionName = null)
+            => currentResult.AsTask().Log(logger, actionName, isJustWarning: false).ConfigureAwait(false).GetAwaiter().GetResult();
+        public static OperationResult LogErrorSync(this OperationResult currentResult, ImALogger logger, string actionName = null)
+            => currentResult.AsTask().Log(logger, actionName, isJustWarning: false).ConfigureAwait(false).GetAwaiter().GetResult();
+
 
         public static async Task<OperationResult<T>> LogWarning<T>(this Task<OperationResult<T>> currentResultTask, ImALogger logger, string actionName = null)
             => await currentResultTask.Log(logger, actionName, isJustWarning: true);
@@ -106,9 +111,12 @@ namespace H.Necessaire
             => await currentResult.AsTask().Log(logger, actionName, isJustWarning: true);
         public static async Task<OperationResult> LogWarning(this Task<OperationResult> currentResultTask, ImALogger logger, string actionName = null)
             => await currentResultTask.Log(logger, actionName, isJustWarning: true);
-
         public static async Task<OperationResult> LogWarning(this OperationResult currentResult, ImALogger logger, string actionName = null)
             => await currentResult.AsTask().Log(logger, actionName, isJustWarning: true);
+        public static OperationResult<T> LogWarningSync<T>(this OperationResult<T> currentResult, ImALogger logger, string actionName = null)
+            => currentResult.AsTask().Log(logger, actionName, isJustWarning: true).ConfigureAwait(true).GetAwaiter().GetResult();
+        public static OperationResult LogWarningSync(this OperationResult currentResult, ImALogger logger, string actionName = null)
+            => currentResult.AsTask().Log(logger, actionName, isJustWarning: true).ConfigureAwait(true).GetAwaiter().GetResult();
 
         static async Task<OperationResult<T>> Log<T>(this Task<OperationResult<T>> currentResultTask, ImALogger logger, string actionName = null, bool isJustWarning = false)
         {
