@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace H.Necessaire.Operations.Versioning.Concrete
 {
-    internal class EmbeddedResourceVersionProvider : EmbeddedResourceVersionProviderBase
+    public class EmbeddedResourceVersionProvider : EmbeddedResourceVersionProviderBase
     {
         public EmbeddedResourceVersionProvider() : base() { }
 
