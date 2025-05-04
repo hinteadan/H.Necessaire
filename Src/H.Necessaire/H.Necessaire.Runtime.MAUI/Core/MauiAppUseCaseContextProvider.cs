@@ -1,14 +1,14 @@
 ﻿namespace H.Necessaire.Runtime.MAUI.Core
 {
-    internal class MauiAppUseCaseContextProvider : ImAUseCaseContextProvider, ImADependency
+    public class MauiAppUseCaseContextProvider : ImAUseCaseContextProvider, ImADependency
     {
         ConsumerIdentity consumerIdentity;
-        public void ReferDependencies(ImADependencyProvider dependencyProvider)
+        public virtual void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             consumerIdentity = dependencyProvider.Get<ConsumerIdentity>();
         }
 
-        public Task<UseCaseContext> GetCurrentContext()
+        public virtual Task<UseCaseContext> GetCurrentContext()
         {
             return
                 new UseCaseContext
