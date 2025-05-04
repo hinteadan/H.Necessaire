@@ -30,6 +30,14 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         protected virtual void EnsureDependencies() { }
 
         protected HMauiPageBase() : this(isHeavyInitializer: false) { }
+        ~HMauiPageBase()
+        {
+            HSafe.Run(() => Unloaded -= HMauiPageBase_Unloaded);
+            HSafe.Run(() => Loaded -= HMauiPageBase_Loaded);
+            HSafe.Run(() => Appearing -= HMauiPageBase_Appearing);
+            HSafe.Run(() => Disappearing -= HMauiPageBase_Disappearing);
+            HSafe.Run(() => Application.Current.RequestedThemeChanged -= Current_RequestedThemeChanged);
+        }
 
         protected HMauiApp App => HUiToolkit.Current.App;
         protected T Get<T>() => HUiToolkit.Current.Get<T>();

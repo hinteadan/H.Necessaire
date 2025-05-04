@@ -14,6 +14,12 @@ public abstract class HMauiComponentBase : ContentView
 
         Construct();
     }
+    ~HMauiComponentBase() {
+        HSafe.Run(() => ParentChanged -= HMauiComponentBase_ParentChanged);
+        HSafe.Run(() => Loaded -= HMauiComponentBase_Loaded);
+        HSafe.Run(() => Unloaded -= HMauiComponent_Unloaded);
+        HSafe.Run(() => PropertyChanged -= HMauiComponent_PropertyChanged);
+    }
 
     void HMauiComponent_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
