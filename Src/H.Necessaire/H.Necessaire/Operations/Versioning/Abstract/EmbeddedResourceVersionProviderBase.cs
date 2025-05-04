@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Operations.Versioning.Abstract
 {
-    public abstract class EmbeddedResourceVersionProviderBase
+    public abstract class EmbeddedResourceVersionProviderBase : ImAVersionProvider
     {
         static readonly Version defaultVersion = Version.Unknown;
         static Version currentVersion = null;

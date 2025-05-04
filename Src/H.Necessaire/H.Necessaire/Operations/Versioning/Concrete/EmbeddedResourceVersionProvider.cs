@@ -4,6 +4,6 @@ namespace H.Necessaire.Operations.Versioning.Concrete
 {
     internal class EmbeddedResourceVersionProvider : EmbeddedResourceVersionProviderBase
     {
-
+        public EmbeddedResourceVersionProvider() : base() { }
     }
 }
