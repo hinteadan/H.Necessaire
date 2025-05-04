@@ -14,7 +14,7 @@ namespace H.Necessaire.Operations.Versioning.Abstract
         readonly string versionFileName = "version.txt";
         protected EmbeddedResourceVersionProviderBase(string versionFileName, params Assembly[] assembliesToScan)
         {
-            assembliesToScan = !assembliesToScan.IsEmpty() ? assembliesToScan : (Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly()).AsArray();
+            this.assembliesToScan = !assembliesToScan.IsEmpty() ? assembliesToScan : (Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly()).AsArray();
             this.versionFileName = versionFileName;
         }
         protected EmbeddedResourceVersionProviderBase(params Assembly[] assembliesToScan) : this(versionFileName: "version.txt", assembliesToScan) { }
