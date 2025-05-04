@@ -2,7 +2,7 @@
 
 namespace H.Necessaire.Runtime.MAUI.Core
 {
-    class ConsumerIdentityManager : ImADependency, ImADependencyGroup
+    class ConsumerIdentityManager : ImAConsumerUseCase, ImADependency, ImADependencyGroup
     {
         ConsumerIdentity consumerIdentity;
         string storageKey = "H-Necessaire-ConsumerIdentity";
