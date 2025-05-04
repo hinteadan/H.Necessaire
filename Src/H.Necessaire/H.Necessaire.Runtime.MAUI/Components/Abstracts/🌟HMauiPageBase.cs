@@ -6,6 +6,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 {
     public abstract class HMauiPageBase : ContentPage
     {
+        AppTheme currentPageTheme = AppTheme.Unspecified;
         readonly bool isHeavyInitializer = false;
         const int animationDurationInMs = 350;
         protected HMauiPageBase(bool isHeavyInitializer)
@@ -38,8 +39,15 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         protected virtual View ConstructContent() => null;
         protected virtual async Task Initialize()
         {
+            if (currentPageTheme != Application.Current.UserAppTheme)
+            {
+                await Refresh(isContentReconstructionEnabled: true);
+            }
+
             if (!isHeavyInitializer)
+            {
                 return;
+            }
 
             await Task.Delay(animationDurationInMs);
 
@@ -112,6 +120,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         {
             if (isContentReconstructionEnabled)
             {
+                currentPageTheme = Application.Current.UserAppTheme;
                 SetShellBrandingColors();
                 Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
             }
@@ -125,7 +134,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         {
             Appearing += HMauiPageBase_Appearing;
             Disappearing += HMauiPageBase_Disappearing;
-            HSafe.Run(() => Application.Current.RequestedThemeChanged -= Current_RequestedThemeChanged);
             Application.Current.RequestedThemeChanged += Current_RequestedThemeChanged;
 
             await HSafe.Run(Initialize);
