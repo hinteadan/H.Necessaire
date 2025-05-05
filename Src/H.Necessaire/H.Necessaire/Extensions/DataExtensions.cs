@@ -136,6 +136,11 @@ namespace H.Necessaire
             return dateTime.ToUniversalTime();
         }
 
+        public static DateTime ToDateTime(this long ticks, DateTimeKind dateTimeKind = DateTimeKind.Utc)
+        {
+            return new DateTime(ticks, dateTimeKind);
+        }
+
         public static PartialDateTime ToPartialDateTime(this DateTime dateTime)
         {
             return
