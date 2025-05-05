@@ -100,6 +100,5 @@ namespace H.Necessaire
             result = this;
             return this;
         }
-
     }
 }
