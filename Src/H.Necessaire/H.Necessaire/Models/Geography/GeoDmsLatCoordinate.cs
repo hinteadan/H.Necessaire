@@ -28,5 +28,10 @@ namespace H.Necessaire
         public double Minutes { get; set; }
         public double Seconds { get; set; }
         public GeoDmsLatDirection Direction { get; set; }
+
+        public static implicit operator GeoDmsLatCoordinate((double deg, double min, double sec, GeoDmsLatDirection dir) parts)
+            => new GeoDmsLatCoordinate(parts.deg, parts.min, parts.sec, parts.dir);
+        public static implicit operator GeoDmsLatCoordinate((double deg, double min, double sec) parts)
+            => new GeoDmsLatCoordinate(parts.deg, parts.min, parts.sec);
     }
 }
