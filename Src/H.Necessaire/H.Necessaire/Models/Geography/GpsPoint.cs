@@ -21,5 +21,7 @@ namespace H.Necessaire
                     LngInDegrees.ToString(CultureInfo.InvariantCulture)
                 );
         }
+
+        public static GpsPoint FromSignedDMS(double latD, double latM, double latS)
     }
 }
