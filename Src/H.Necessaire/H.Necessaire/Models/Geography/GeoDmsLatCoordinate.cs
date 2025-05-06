@@ -24,6 +24,24 @@ namespace H.Necessaire
             : this(Math.Abs(deg), Math.Abs(min), Math.Abs(sec), deg >= 0 ? GeoDmsLatDirection.North : GeoDmsLatDirection.South)
         { }
 
+        public GeoDmsLatCoordinate(double decimalDegrees)
+        {
+            if (decimalDegrees < -90) throw new ArgumentException("Degrees cannot be less than 90", nameof(decimalDegrees));
+            if (decimalDegrees > 90) throw new ArgumentException("Degrees cannot be more than 90", nameof(decimalDegrees));
+
+            Direction = decimalDegrees >= 0 ? GeoDmsLatDirection.North : GeoDmsLatDirection.South;
+            decimalDegrees = Math.Abs(decimalDegrees);
+
+            Degrees = (int)decimalDegrees;
+            decimalDegrees -= Degrees;
+            Minutes = (int)(decimalDegrees * 60);
+            decimalDegrees -= Minutes / 60;
+            Seconds = (int)(decimalDegrees * 3600);
+            decimalDegrees -= (double)Seconds / 3600;
+            Seconds += decimalDegrees;
+            Seconds = Math.Round(Seconds, 2);
+        }
+
         public double Degrees { get; set; }
         public double Minutes { get; set; }
         public double Seconds { get; set; }
@@ -36,5 +54,7 @@ namespace H.Necessaire
             => new GeoDmsLatCoordinate(parts.deg, parts.min, parts.sec, parts.dir);
         public static implicit operator GeoDmsLatCoordinate((double deg, double min, double sec) parts)
             => new GeoDmsLatCoordinate(parts.deg, parts.min, parts.sec);
+        public static implicit operator GeoDmsLatCoordinate(double deg)
+            => new GeoDmsLatCoordinate(deg);
     }
 }
