@@ -22,6 +22,6 @@ namespace H.Necessaire
                 );
         }
 
-        public static GpsPoint FromSignedDMS(double latD, double latM, double latS)
+        public static GpsPoint FromDMS(lat )
     }
 }

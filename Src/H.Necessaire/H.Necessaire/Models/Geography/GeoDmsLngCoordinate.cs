@@ -29,6 +29,9 @@ namespace H.Necessaire
         public double Seconds { get; set; }
         public GeoDmsLngDirection Direction { get; set; }
 
+        public double ToDegrees()
+            => (Direction == GeoDmsLngDirection.East ? 1 : -1) * (Degrees + Minutes / 60 + Seconds / 3600);
+
         public static implicit operator GeoDmsLngCoordinate((double deg, double min, double sec, GeoDmsLngDirection dir) parts)
             => new GeoDmsLngCoordinate(parts.deg, parts.min, parts.sec, parts.dir);
         public static implicit operator GeoDmsLngCoordinate((double deg, double min, double sec) parts)
