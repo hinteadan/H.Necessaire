@@ -2,7 +2,7 @@
 
 namespace H.Necessaire
 {
-    public class GeoDmsLatCoordinate
+    public struct GeoDmsLatCoordinate
     {
         public GeoDmsLatCoordinate(double deg, double min, double sec, GeoDmsLatDirection dir)
         {
