@@ -48,7 +48,7 @@ public abstract class HMauiComponentBase : ContentView
     protected T Get<T>() => HUiToolkit.Current.Get<T>();
     protected T Build<T>(string id) where T : class => HUiToolkit.Current.Build<T>(id);
     protected int SizingUnit => App?.SizingUnit ?? 10;
-    protected BrandingStyle Branding => App?.Branding ?? HMauiAppBranding.Default;
+    protected HMauiAppBranding Branding => (App?.Branding as HMauiAppBranding) ?? HMauiAppBranding.Default;
     protected IDisposable DisabledScopeFor(View view) => HUiToolkit.Current.DisabledScopeFor(view);
 
     protected virtual View WrapReceivedContent(View content) => wrappedReceivedContent;
