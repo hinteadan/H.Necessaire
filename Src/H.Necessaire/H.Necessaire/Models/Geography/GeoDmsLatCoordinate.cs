@@ -20,6 +20,10 @@ namespace H.Necessaire
             Direction = dir;
         }
 
+        public GeoDmsLatCoordinate(double deg, double min, double sec)
+            : this(Math.Abs(deg), Math.Abs(min), Math.Abs(sec), deg >= 0 ? GeoDmsLatDirection.North : GeoDmsLatDirection.South)
+        { }
+
         public double Degrees { get; set; }
         public double Minutes { get; set; }
         public double Seconds { get; set; }
