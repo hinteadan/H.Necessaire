@@ -56,5 +56,7 @@ namespace H.Necessaire
             => new GeoDmsLatCoordinate(parts.deg, parts.min, parts.sec);
         public static implicit operator GeoDmsLatCoordinate(double deg)
             => new GeoDmsLatCoordinate(deg);
+        public static implicit operator GeoDmsLatCoordinate(GpsPoint gpsPoint)
+            => new GeoDmsLatCoordinate(gpsPoint.LatInDegrees);
     }
 }
