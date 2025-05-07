@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using System;
 using Xunit;
 
 namespace H.Necessaire.Testicles.Unit
@@ -43,7 +44,25 @@ namespace H.Necessaire.Testicles.Unit
         [Fact(DisplayName = "GeographyGpsCoordinates are correctly being converted from DMS to Decimal")]
         public void GeographyGpsCoordinate_DMS_To_Decimal()
         {
+            GeoDmsCoordinates dmsPoint = ((46, 27, 32.8, GeoDmsLatDirection.North), (23, 33, 10.6, GeoDmsLngDirection.East));
+            GpsPoint gpsPoint = dmsPoint;
+            GpsPoint expectedGpsPoint = (46.459110, 23.552939);
+            AssertGpsCoordinates(gpsPoint, expectedGpsPoint, because: "that's the conversion Google Maps gives for NE hemisphere");
 
+            dmsPoint = ((47, 41, 10.0, GeoDmsLatDirection.North), (112, 41, 27.6, GeoDmsLngDirection.West));
+            gpsPoint = dmsPoint;
+            expectedGpsPoint = (47.686120, -112.690994);
+            AssertGpsCoordinates(gpsPoint, expectedGpsPoint, because: "that's the conversion Google Maps gives for NW hemisphere");
+
+            dmsPoint = ((33, 10, 7.3, GeoDmsLatDirection.South), (67, 8, 57.8, GeoDmsLngDirection.West));
+            gpsPoint = dmsPoint;
+            expectedGpsPoint = (-33.168682, -67.149395);
+            AssertGpsCoordinates(gpsPoint, expectedGpsPoint, because: "that's the conversion Google Maps gives for SW hemisphere");
+
+            dmsPoint = ((33, 55, 5.3, GeoDmsLatDirection.South), (141, 16, 6.3, GeoDmsLngDirection.East));
+            gpsPoint = dmsPoint;
+            expectedGpsPoint = (-33.918148, 141.268403);
+            AssertGpsCoordinates(gpsPoint, expectedGpsPoint, because: "that's the conversion Google Maps gives for SE hemisphere");
         }
 
         [Fact(DisplayName = "ToDMS(this double degrees, out int deg, out int min, out double sec) works as expected")]
@@ -90,6 +109,12 @@ namespace H.Necessaire.Testicles.Unit
             dmsPoint.Lng.Minutes.Should().Be(expectedDmsPoint.Lng.Minutes, because);
             dmsPoint.Lng.Seconds.Should().BeApproximately(expectedDmsPoint.Lng.Seconds, 1, because);
             dmsPoint.Lng.Direction.Should().Be(expectedDmsPoint.Lng.Direction, because);
+        }
+
+        static void AssertGpsCoordinates(GpsPoint gpsPoint, GpsPoint expectedGpsPoint, string because = null)
+        {
+            gpsPoint.LatInDegrees.Should().BeApproximately(expectedGpsPoint.LatInDegrees, 6, because);
+            gpsPoint.LngInDegrees.Should().BeApproximately(expectedGpsPoint.LngInDegrees, 6, because);
         }
     }
 }
