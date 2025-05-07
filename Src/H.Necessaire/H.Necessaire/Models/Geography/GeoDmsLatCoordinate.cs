@@ -46,6 +46,8 @@ namespace H.Necessaire
         public int Minutes { get; set; }
         public double Seconds { get; set; }
         public GeoDmsLatDirection Direction { get; set; }
+        public bool IsNorth() => Direction == GeoDmsLatDirection.North;
+        public bool IsSouth() => Direction == GeoDmsLatDirection.South;
 
         public double ToDegrees()
             => (Direction == GeoDmsLatDirection.North ? 1 : -1) * (Degrees + Minutes / 60d + Seconds / 3600d);
