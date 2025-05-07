@@ -55,14 +55,14 @@ namespace H.Necessaire.Testicles.Unit
             sec.Should().Be(0, because: "0.000000 has 0\"");
 
             45.000000.ToDMS(out deg, out min, out sec);
-            deg.Should().Be(0, because: "45.000000° has 45°");
+            deg.Should().Be(45, because: "45.000000° has 45°");
             min.Should().Be(0, because: "45.000000° has 0'");
             sec.Should().Be(0, because: "45.000000° has 0\"");
 
             15.125000.ToDMS(out deg, out min, out sec);
-            deg.Should().Be(0, because: "15.125000° has 15°");
-            min.Should().Be(0, because: "15.125000° has 7'");
-            sec.Should().Be(0, because: "15.125000° has 30.0\"");
+            deg.Should().Be(15, because: "15.125000° has 15°");
+            min.Should().Be(7, because: "15.125000° has 7'");
+            sec.Should().Be(30.0000, because: "15.125000° has 30.0000\"");
         }
 
         [Fact(DisplayName = "ToDegrees(int deg, int min, double sec) works as expected")]

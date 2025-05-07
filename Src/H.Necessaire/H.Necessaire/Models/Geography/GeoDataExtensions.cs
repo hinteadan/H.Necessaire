@@ -20,12 +20,16 @@ namespace H.Necessaire
             }
 
             degrees = Math.Abs(degrees);
+            double remainingDegress = degrees;
 
             int wholeDegrees = (int)degrees;
-            double remainingDegress = degrees - wholeDegrees;
+            remainingDegress -= wholeDegrees;
+
             double minutes = remainingDegress * 60;
             int wholeMinutes = (int)minutes;
-            double seconds = minutes * 60;
+            remainingDegress -= wholeMinutes / 60d;
+
+            double seconds = remainingDegress * 60 * 60;
             seconds = Math.Round(seconds, 4);
 
             deg = wholeDegrees;
