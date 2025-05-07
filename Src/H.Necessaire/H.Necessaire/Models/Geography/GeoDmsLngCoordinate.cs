@@ -50,7 +50,7 @@ namespace H.Necessaire
         public bool IsWest() => Direction == GeoDmsLngDirection.West;
 
         public double ToDegrees()
-            => (Direction == GeoDmsLngDirection.East ? 1 : -1) * (Degrees + Minutes / 60d + Seconds / 3600d);
+            => Math.Round((Direction == GeoDmsLngDirection.East ? 1 : -1) * (Degrees + Minutes / 60d + Seconds / 3600d), 6);
 
         public static implicit operator GeoDmsLngCoordinate((int deg, int min, double sec, GeoDmsLngDirection dir) parts)
             => new GeoDmsLngCoordinate(parts.deg, parts.min, parts.sec, parts.dir);
