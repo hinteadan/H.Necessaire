@@ -36,10 +36,10 @@ namespace H.Necessaire
             decimalDegrees -= Degrees;
             Minutes = (int)(decimalDegrees * 60);
             decimalDegrees -= Minutes / 60;
-            Seconds = decimalDegrees * 3600;
-            //decimalDegrees -= (double)Seconds / 3600;
-            //Seconds += decimalDegrees;
-            Seconds = Math.Round(Seconds, 2);
+            Seconds = Math.Floor(decimalDegrees * 60);
+            decimalDegrees -= Seconds / 60;
+            Seconds += decimalDegrees;
+            //Seconds = Math.Round(Seconds, 4);
         }
 
         public int Degrees { get; set; }
