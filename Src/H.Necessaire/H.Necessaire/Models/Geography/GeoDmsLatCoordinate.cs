@@ -31,7 +31,7 @@ namespace H.Necessaire
 
             Direction = decimalDegrees >= 0 ? GeoDmsLatDirection.North : GeoDmsLatDirection.South;
 
-            decimalDegrees.ToDMS(out var deg, out var min, out var sec);
+            decimalDegrees.ToDMS(out var deg, out var min, out var sec, isUnsigned: true);
 
             Degrees = deg;
             Minutes = min;
