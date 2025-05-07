@@ -36,9 +36,9 @@ namespace H.Necessaire
             decimalDegrees -= Degrees;
             Minutes = (int)(decimalDegrees * 60);
             decimalDegrees -= Minutes / 60;
-            Seconds = (int)(decimalDegrees * 3600);
-            decimalDegrees -= (double)Seconds / 3600;
-            Seconds += decimalDegrees;
+            Seconds = decimalDegrees * 3600;
+            //decimalDegrees -= (double)Seconds / 3600;
+            //Seconds += decimalDegrees;
             Seconds = Math.Round(Seconds, 2);
         }
 
