@@ -4,7 +4,7 @@ namespace H.Necessaire
 {
     public struct GeoDmsLngCoordinate
     {
-        public GeoDmsLngCoordinate(double deg, double min, double sec, GeoDmsLngDirection dir)
+        public GeoDmsLngCoordinate(int deg, int min, double sec, GeoDmsLngDirection dir)
         {
             if (deg < 0) throw new ArgumentException("Degrees cannot be less than 0", nameof(deg));
             if (deg > 180) throw new ArgumentException("Degrees cannot be more than 180", nameof(deg));
@@ -20,7 +20,7 @@ namespace H.Necessaire
             Direction = dir;
         }
 
-        public GeoDmsLngCoordinate(double deg, double min, double sec)
+        public GeoDmsLngCoordinate(int deg, int min, double sec)
             : this(Math.Abs(deg), Math.Abs(min), Math.Abs(sec), deg >= 0 ? GeoDmsLngDirection.East : GeoDmsLngDirection.West)
         { }
 
@@ -42,17 +42,17 @@ namespace H.Necessaire
             Seconds = Math.Round(Seconds, 2);
         }
 
-        public double Degrees { get; set; }
-        public double Minutes { get; set; }
+        public int Degrees { get; set; }
+        public int Minutes { get; set; }
         public double Seconds { get; set; }
         public GeoDmsLngDirection Direction { get; set; }
 
         public double ToDegrees()
             => (Direction == GeoDmsLngDirection.East ? 1 : -1) * (Degrees + Minutes / 60 + Seconds / 3600);
 
-        public static implicit operator GeoDmsLngCoordinate((double deg, double min, double sec, GeoDmsLngDirection dir) parts)
+        public static implicit operator GeoDmsLngCoordinate((int deg, int min, double sec, GeoDmsLngDirection dir) parts)
             => new GeoDmsLngCoordinate(parts.deg, parts.min, parts.sec, parts.dir);
-        public static implicit operator GeoDmsLngCoordinate((double deg, double min, double sec) parts)
+        public static implicit operator GeoDmsLngCoordinate((int deg, int min, double sec) parts)
             => new GeoDmsLngCoordinate(parts.deg, parts.min, parts.sec);
         public static implicit operator GeoDmsLngCoordinate(double deg)
             => new GeoDmsLngCoordinate(deg);
