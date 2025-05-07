@@ -48,7 +48,7 @@ namespace H.Necessaire
         public GeoDmsLatDirection Direction { get; set; }
 
         public double ToDegrees()
-            => (Direction == GeoDmsLatDirection.North ? 1 : -1) * (Degrees + Minutes / 60 + Seconds / 3600);
+            => (Direction == GeoDmsLatDirection.North ? 1 : -1) * (Degrees + Minutes / 60d + Seconds / 3600d);
 
         public static implicit operator GeoDmsLatCoordinate((int deg, int min, double sec, GeoDmsLatDirection dir) parts)
             => new GeoDmsLatCoordinate(parts.deg, parts.min, parts.sec, parts.dir);
