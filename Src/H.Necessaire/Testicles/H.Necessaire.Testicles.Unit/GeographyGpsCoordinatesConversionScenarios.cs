@@ -63,6 +63,11 @@ namespace H.Necessaire.Testicles.Unit
             deg.Should().Be(15, because: "15.125000° has 15°");
             min.Should().Be(7, because: "15.125000° has 7'");
             sec.Should().Be(30.0000, because: "15.125000° has 30.0000\"");
+
+            46.459110.ToDMS(out deg, out min, out sec);
+            deg.Should().Be(46, because: "46.459110° has 46°");
+            min.Should().Be(27, because: "46.459110° has 27'");
+            sec.Should().BeApproximately(32.8000, 1, because: "46.459110° has 32.8000\"");
         }
 
         [Fact(DisplayName = "ToDegrees(int deg, int min, double sec) works as expected")]
