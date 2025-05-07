@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using FluentAssertions;
+using Xunit;
 
 namespace H.Necessaire.Testicles.Unit
 {
@@ -18,7 +19,15 @@ namespace H.Necessaire.Testicles.Unit
         [Fact(DisplayName = "GeographyGpsCoordinates are correctly being converted from Decimal to DMS")]
         public void GeographyGpsCoordinates_Decimal_To_DMS()
         {
+            GpsPoint gpsPoint = (46.459110, 23.552939);
+            GeoDmsCoordinates dmsPoint = gpsPoint;
+            GeoDmsCoordinates expectedDmsPoint = ((46, 27, 32.8, GeoDmsLatDirection.North), (23, 33, 10.6, GeoDmsLngDirection.East));
+            dmsPoint.Should().Be(expectedDmsPoint, because: "that's the conversion Google Maps gives for NE hemisphere");
 
+            gpsPoint = (47.686120, -112.690994);
+            dmsPoint = gpsPoint;
+            expectedDmsPoint = ((47, 41, 10.0, GeoDmsLatDirection.North), (112, 41, 27.6, GeoDmsLngDirection.West));
+            dmsPoint.Should().Be(expectedDmsPoint, because: "that's the conversion Google Maps gives for NW hemisphere");
         }
 
         [Fact(DisplayName = "GeographyGpsCoordinates are correctly being converted from DMS to Decimal")]
