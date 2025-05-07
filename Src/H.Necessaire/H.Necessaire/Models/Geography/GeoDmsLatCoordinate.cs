@@ -30,16 +30,12 @@ namespace H.Necessaire
             if (decimalDegrees > 90) throw new ArgumentException("Degrees cannot be more than 90", nameof(decimalDegrees));
 
             Direction = decimalDegrees >= 0 ? GeoDmsLatDirection.North : GeoDmsLatDirection.South;
-            decimalDegrees = Math.Abs(decimalDegrees);
 
-            Degrees = (int)decimalDegrees;
-            decimalDegrees -= Degrees;
-            Minutes = (int)(decimalDegrees * 60);
-            decimalDegrees -= Minutes / 60;
-            Seconds = Math.Floor(decimalDegrees * 60);
-            decimalDegrees -= Seconds / 60;
-            Seconds += decimalDegrees;
-            //Seconds = Math.Round(Seconds, 4);
+            decimalDegrees.ToDMS(out var deg, out var min, out var sec);
+
+            Degrees = deg;
+            Minutes = min;
+            Seconds = sec;
         }
 
         public int Degrees { get; set; }
@@ -52,7 +48,10 @@ namespace H.Necessaire
         public bool IsNegative() => IsSouth();
 
         public double ToDegrees()
-            => Math.Round((Direction == GeoDmsLatDirection.North ? 1 : -1) * (Degrees + Minutes / 60d + Seconds / 3600d), 6);
+        {
+            double result = Degrees.ToDegrees(Minutes, Seconds);
+            return IsPositive() ? result : -result;
+        }
 
         public static implicit operator GeoDmsLatCoordinate((int deg, int min, double sec, GeoDmsLatDirection dir) parts)
             => new GeoDmsLatCoordinate(parts.deg, parts.min, parts.sec, parts.dir);
