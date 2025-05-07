@@ -48,6 +48,8 @@ namespace H.Necessaire
         public GeoDmsLatDirection Direction { get; set; }
         public bool IsNorth() => Direction == GeoDmsLatDirection.North;
         public bool IsSouth() => Direction == GeoDmsLatDirection.South;
+        public bool IsPositive() => IsNorth();
+        public bool IsNegative() => IsSouth();
 
         public double ToDegrees()
             => Math.Round((Direction == GeoDmsLatDirection.North ? 1 : -1) * (Degrees + Minutes / 60d + Seconds / 3600d), 6);

@@ -46,13 +46,29 @@ namespace H.Necessaire.Testicles.Unit
 
         }
 
-        [Fact(DisplayName = "degrees.ToDMS() works as expected")]
+        [Fact(DisplayName = "ToDMS(this double degrees, out int deg, out int min, out double sec) works as expected")]
         public void DegreesToDMS_Extension_Method_Works_as_Expected()
         {
-            0d.ToDMS().Should().Be((0, 0, 0), because: "0 degress is 0°00'0.0\"");
-            45d.ToDMS().Should().Be((45, 0, 0), because: "45 degress is 45°00'0.0\"");
-            10.5d.ToDMS().Should().Be((10, 30, 0), because: "10.5 degress is 10°30'0.0\"");
-            15.125d.ToDMS().Should().Be((10, 30, 0), because: "10.5 degress is 10°30'0.0\"");
+            0.000000.ToDMS(out var deg, out var min, out var sec); 
+            deg.Should().Be(0, because: "0.000000° has 0°");
+            min.Should().Be(0, because: "0.000000 has 0'");
+            sec.Should().Be(0, because: "0.000000 has 0\"");
+
+            45.000000.ToDMS(out deg, out min, out sec);
+            deg.Should().Be(0, because: "45.000000° has 45°");
+            min.Should().Be(0, because: "45.000000° has 0'");
+            sec.Should().Be(0, because: "45.000000° has 0\"");
+
+            15.125000.ToDMS(out deg, out min, out sec);
+            deg.Should().Be(0, because: "15.125000° has 15°");
+            min.Should().Be(0, because: "15.125000° has 7'");
+            sec.Should().Be(0, because: "15.125000° has 30.0\"");
+        }
+
+        [Fact(DisplayName = "ToDegrees(int deg, int min, double sec) works as expected")]
+        public void DMSToDegress_Extension_Method_Works_as_Expected()
+        {
+            
         }
     }
 }

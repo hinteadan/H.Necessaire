@@ -9,10 +9,15 @@ namespace H.Necessaire
             return new GeoAddressArea { Name = value, Code = code };
         }
 
-        public static (int deg, int min, double sec) ToDMS(this double degrees)
+        public static void ToDMS(this double degrees, out int deg, out int min, out double sec)
         {
             if (degrees == 0)
-                return (0, 0, 0);
+            {
+                deg = 0;
+                min = 0;
+                sec = 0;
+                return;
+            }
 
             degrees = Math.Abs(degrees);
 
@@ -23,7 +28,14 @@ namespace H.Necessaire
             double seconds = minutes * 60;
             seconds = Math.Round(seconds, 4);
 
-            return (wholeDegrees, wholeMinutes, seconds);
+            deg = wholeDegrees;
+            min = wholeMinutes;
+            sec = seconds;
+        }
+
+        public static double ToDegrees(int deg, int min, double sec)
+        {
+            return deg + min / 60d + sec / 3600d; 
         }
     }
 }
