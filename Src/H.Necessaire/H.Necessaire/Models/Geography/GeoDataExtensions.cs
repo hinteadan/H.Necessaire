@@ -19,6 +19,8 @@ namespace H.Necessaire
                 return;
             }
 
+            bool isPositive = degrees >= 0;
+
             degrees = Math.Abs(degrees);
             double remainingDegress = degrees;
 
@@ -32,14 +34,16 @@ namespace H.Necessaire
             double seconds = remainingDegress * 60 * 60;
             seconds = Math.Round(seconds, 4);
 
-            deg = wholeDegrees;
+            deg = isPositive ? wholeDegrees : -wholeDegrees;
             min = wholeMinutes;
             sec = seconds;
         }
 
         public static double ToDegrees(this int deg, int min, double sec)
         {
-            return deg + min / 60d + sec / 3600d; 
+            bool isPositive = deg >= 0;
+            double result = Math.Abs(deg) + Math.Abs(min) / 60d + Math.Abs(sec) / 3600d;
+            return isPositive ? result : -result;
         }
     }
 }
