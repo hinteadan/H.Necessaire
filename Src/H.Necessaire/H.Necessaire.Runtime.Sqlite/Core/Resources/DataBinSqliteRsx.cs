@@ -1,13 +1,10 @@
 ﻿using Dapper;
 using H.Necessaire.Dapper;
 using H.Necessaire.Serialization;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.Sqlite.Core.Resources
@@ -65,7 +62,7 @@ namespace H.Necessaire.Runtime.Sqlite.Core.Resources
                     if (dataFileInfo.Exists)
                         dataFileInfo.Delete();
 
-                    using(ImADataBinStream dataBinStream = await entity.OpenDataBinStream())
+                    using (ImADataBinStream dataBinStream = await entity.OpenDataBinStream())
                     {
                         if (dataBinStream?.DataStream is null)
                         {
@@ -267,6 +264,47 @@ namespace H.Necessaire.Runtime.Sqlite.Core.Resources
                 );
 
             return result;
+        }
+
+        async Task<OperationResult> ImAStorageService<Guid, DataBin>.DeleteByID(Guid id)
+        {
+            if (!(await (this as ImAStorageService<Guid, DataBinMeta>).LoadByID(id)).Ref(out var metaLoadResult, out var dataBinMeta))
+                return metaLoadResult;
+
+            if (dataBinMeta is null)
+                return OperationResult.Win($"DataBin with ID {id} doesn't exist, nothing to delete");
+
+            FileInfo dataFileInfo = GetDataFileInfo(dataBinMeta);
+
+            if (dataFileInfo.Exists)
+            {
+                if (!HSafe.Run(dataFileInfo.Delete, $"Delete DataBin file {dataFileInfo.FullName}").Ref(out var fileDeleteResult))
+                    return fileDeleteResult;
+            }
+
+            if (!(await (this as ImAStorageService<Guid, DataBinMeta>).DeleteByID(id)).Ref(out var metaDeleteResult))
+                return metaDeleteResult;
+
+            return OperationResult.Win();
+        }
+
+        async Task<OperationResult<Guid>[]> ImAStorageService<Guid, DataBin>.DeleteByIDs(params Guid[] ids)
+        {
+            OperationResult<DataBinMeta>[] loadResults = await (this as ImAStorageService<Guid, DataBinMeta>).LoadByIDs(ids);
+            if (loadResults.IsEmpty())
+                return ids?.Select(x => x.ToWinResult()).ToArray();
+
+            foreach (DataBinMeta meta in loadResults.Select(x => x.Payload))
+            {
+                FileInfo dataFileInfo = GetDataFileInfo(meta);
+                if (dataFileInfo.Exists)
+                {
+                    if (!HSafe.Run(dataFileInfo.Delete, $"Delete DataBin file {dataFileInfo.FullName}").Ref(out var fileDeleteResult))
+                        return fileDeleteResult.WithPayload(meta.ID).AsArray();
+                }
+            }
+
+            return await (this as ImAStorageService<Guid, DataBinMeta>).DeleteByIDs(ids);
         }
 
         protected override ISqlFilterCriteria[] ApplyFilter(DataBinFilter filter, DynamicParameters sqlParams)
