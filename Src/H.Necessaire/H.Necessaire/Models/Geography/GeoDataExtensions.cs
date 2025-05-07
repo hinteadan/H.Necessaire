@@ -37,7 +37,7 @@ namespace H.Necessaire
             sec = seconds;
         }
 
-        public static double ToDegrees(int deg, int min, double sec)
+        public static double ToDegrees(this int deg, int min, double sec)
         {
             return deg + min / 60d + sec / 3600d; 
         }

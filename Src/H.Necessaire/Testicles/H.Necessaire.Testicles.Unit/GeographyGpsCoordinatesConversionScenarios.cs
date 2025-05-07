@@ -73,7 +73,10 @@ namespace H.Necessaire.Testicles.Unit
         [Fact(DisplayName = "ToDegrees(int deg, int min, double sec) works as expected")]
         public void DMSToDegress_Extension_Method_Works_as_Expected()
         {
-            
+            0.ToDegrees(0, 0.0).Should().BeApproximately(0.000000, 6, because: "0°0'0\" is 0.000000°");
+            45.ToDegrees(0, 0.0).Should().BeApproximately(45.000000, 6, because: "45°0'0\" is 45.000000°");
+            15.ToDegrees(7, 30.0000).Should().BeApproximately(15.125000, 6, because: "15°07'30.00\" is 15.125000°");
+            46.ToDegrees(27, 32.8000).Should().BeApproximately(46.459110, 6, because: "46°27'32.80\" is 46.459110°");
         }
     }
 }
