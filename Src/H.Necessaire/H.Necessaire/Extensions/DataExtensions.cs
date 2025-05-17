@@ -397,6 +397,9 @@ namespace H.Necessaire
             return OperationResult.Win();
         }
 
+        public static TaggedValue<T> Tag<T>(this T value, string name, string id = null)
+            => new TaggedValue<T> { Value = value, Name = name, ID = id.IsEmpty() ? Guid.NewGuid().ToString() : id };
+
         public static Note NoteAs(this string value, string id)
         {
             return new Note(id, value);

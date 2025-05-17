@@ -7,5 +7,19 @@
         public string Description { get; set; }
         public Note[] Notes { get; set; }
         public TValue Value { get; set; }
+
+        public TaggedValue<TValue> Note(params Note[] notes)
+        {
+            Notes = Notes.Push(notes);
+            return this;
+        }
+        public TaggedValue<TValue> Describe(string description)
+        {
+            Description = description;
+            return this;
+        }
+
+
+        public static implicit operator TValue(TaggedValue<TValue> taggedValue) => taggedValue.Value;
     }
 }
