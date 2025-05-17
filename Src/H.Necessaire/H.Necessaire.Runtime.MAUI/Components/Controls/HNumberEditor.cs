@@ -3,7 +3,7 @@ using H.Necessaire.Runtime.MAUI.Extensions;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
-    class HNumberEditor : HMauiLabelAndDescriptionComponentBase
+    public class HNumberEditor : HMauiLabelAndDescriptionComponentBase
     {
         Entry editor;
         HStepper stepper;
@@ -17,13 +17,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             isStepperOnLeftSide = (bool)constructionArgs[0];
             isStepperHidden = (bool)constructionArgs[1];
         }
-        protected override void Construct()
-        {
-            base.Construct();
-            Content = ConstructContent();
-        }
 
-        public event EventHandler NumberChanged;
+        public event EventHandler<NumberChangedEventArgs> NumberChanged;
 
         public Entry Editor => editor;
         decimal? preValue = null;
@@ -34,18 +29,41 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             {
                 decimal? oldValue = preValue;
                 decimal? newValue = value;
+                value = ApplyMinMaxIfNecessary(value);
                 stepper.Value = value;
-                editor.Text = value?.ToString();
+                string valueAsString = value?.ToString();
+                if (editor.Text != valueAsString)
+                    editor.Text = valueAsString;
                 if (newValue != oldValue)
-                    NumberChanged?.Invoke(this, EventArgs.Empty);
+                    NumberChanged?.Invoke(this, new NumberChangedEventArgs(oldValue, newValue));
                 preValue = value;
             }
         }
+
+        private decimal? ApplyMinMaxIfNecessary(decimal? value)
+        {
+            if (value is null)
+                return value;
+
+            if (Min is null && Max is null)
+                return value;
+
+            if (Min is not null && value < Min)
+                return Min;
+
+            if (Max is not null && value > Max)
+                return Max;
+
+            return value;
+        }
+
+        public decimal? Min { get => stepper.Min; set => stepper.Min = value; }
+        public decimal? Max { get => stepper.Max; set => stepper.Max = value; }
         public string Placeholder { get => editor.Placeholder; set => editor.Placeholder = value; }
         public decimal IncrementUnit { get => stepper?.IncrementUnit ?? 0; set { if (stepper is not null) stepper.IncrementUnit = value; } }
         public Func<decimal?, CancellationToken, Task<OperationResult<decimal?>>> UserInputValidator { get; set; }
 
-        View ConstructContent()
+        protected override View ConstructLabeledContent()
         {
             double cornerRadius = Branding.SizingUnitInPixels / 4;
             double iconSize = Branding.SizingUnitInPixels * .75d;
@@ -98,7 +116,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         View ConstructEditor()
         {
             return
-                new HTextField()
+                new HTextField { IsValidationIndicatorEnabled = false }
                 .And(x =>
                 {
                     x.Editor.FontFamily = Branding.Typography.FontFamily;
@@ -117,6 +135,9 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         async Task OnTextChanged(object sender, TextChangedEventArgs e)
         {
             string newValue = e.NewTextValue;
+            if (newValue == "-")
+                return;
+
             decimal? parsedValue = newValue.ParseToDecimalOrFallbackTo(null);
             Number = parsedValue;
 
@@ -124,6 +145,19 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
             if (UserInputValidator is not null)
                 validationResult = await UserInputValidator.Invoke(Number, CancellationToken.None);
+        }
+
+
+        public class NumberChangedEventArgs : EventArgs
+        {
+            public NumberChangedEventArgs(decimal? oldValue, decimal? newValue)
+            {
+                OldValue = oldValue;
+                NewValue = newValue;
+            }
+
+            public decimal? OldValue { get; }
+            public decimal? NewValue { get; }
         }
     }
 }

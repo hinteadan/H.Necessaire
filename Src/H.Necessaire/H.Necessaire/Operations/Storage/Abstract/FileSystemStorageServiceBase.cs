@@ -190,11 +190,9 @@ namespace H.Necessaire
 
         private static DirectoryInfo GetRootFolderFromStartAssembly()
         {
-            string codeBase = Assembly.GetEntryAssembly()?.CodeBase;
-            if (codeBase.IsEmpty())
+            string path = Assembly.GetEntryAssembly()?.CodeBase;
+            if (path.IsEmpty())
                 return new DirectoryInfo(Directory.GetCurrentDirectory());
-            UriBuilder uri = new UriBuilder(codeBase);
-            string path = Uri.UnescapeDataString(uri.Path);
             string folderName = Path.GetDirectoryName(path);
             return new DirectoryInfo(Path.Combine(folderName, rootStorageFolderName));
         }

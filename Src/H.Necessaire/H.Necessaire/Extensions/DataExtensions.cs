@@ -136,6 +136,11 @@ namespace H.Necessaire
             return dateTime.ToUniversalTime();
         }
 
+        public static DateTime ToDateTime(this long ticks, DateTimeKind dateTimeKind = DateTimeKind.Utc)
+        {
+            return new DateTime(ticks, dateTimeKind);
+        }
+
         public static PartialDateTime ToPartialDateTime(this DateTime dateTime)
         {
             return
@@ -192,6 +197,30 @@ namespace H.Necessaire
 
             int parseResult;
             if (int.TryParse(rawValue, out parseResult))
+                return parseResult;
+
+            return fallbackValue;
+        }
+
+        public static sbyte? ParseToSbyteOrFallbackTo(this string rawValue, sbyte? fallbackValue = null)
+        {
+            if (string.IsNullOrWhiteSpace(rawValue))
+                return fallbackValue;
+
+            sbyte parseResult;
+            if (sbyte.TryParse(rawValue, out parseResult))
+                return parseResult;
+
+            return fallbackValue;
+        }
+
+        public static byte? ParseToByteOrFallbackTo(this string rawValue, byte? fallbackValue = null)
+        {
+            if (string.IsNullOrWhiteSpace(rawValue))
+                return fallbackValue;
+
+            byte parseResult;
+            if (byte.TryParse(rawValue, out parseResult))
                 return parseResult;
 
             return fallbackValue;
@@ -263,6 +292,12 @@ namespace H.Necessaire
                 (dateTime >= (from ?? DateTime.MinValue))
                 &&
                 (dateTime <= (to ?? DateTime.MaxValue));
+        }
+
+        public static T RefTo<T>(this T data, out T refVar)
+        {
+            refVar = data;
+            return data;
         }
 
         public static T And<T>(this T data, Action<T> doThis) { doThis(data); return data; }
@@ -447,6 +482,12 @@ namespace H.Necessaire
 
         public static OperationResult<T> ToWinResult<T>(this T payload, string reason = null, params string[] comments) => OperationResult.Win(reason, comments).WithPayload(payload);
 
+        public static async Task<OperationResult<T>> ToWinResult<T>(this Task<T> payloadTask, string reason = null, params string[] comments)
+        {
+            T payload = await payloadTask;
+            return payload.ToWinResult(reason, comments);
+        }
+
         public static DataBinMeta ToMeta(this DataBin dataBin)
         {
             if (dataBin is null)
@@ -484,7 +525,23 @@ namespace H.Necessaire
         public static ImADataBinStream ToDataBinStream(this Stream stream, params IDisposable[] otherDisposables)
         {
             return
-                new DefaultDataBinStream(stream, otherDisposables);
+                new DataBinStream(stream, otherDisposables);
+        }
+
+        public static Stream WithOtherDisposables(this Stream stream, params IDisposable[] otherDisposables)
+        {
+            return
+                new DataBinStream(stream, otherDisposables);
+        }
+
+        public static Stream AsStream(this ImADataBinStream stream)
+        {
+            return stream as Stream;
+        }
+
+        public static async Task<Stream> AsStream(this Task<ImADataBinStream> streamTask)
+        {
+            return (await streamTask) as Stream;
         }
 
         public static bool Is(this string stringValue, string comparedTo, bool isCaseSensitive = false)
@@ -496,6 +553,8 @@ namespace H.Necessaire
         {
             return isWhitespaceConsideredEmpty ? string.IsNullOrWhiteSpace(stringValue) : string.IsNullOrEmpty(stringValue);
         }
+
+        public static string IfEmpty(this string stringValue, string returnThis) => stringValue.IsEmpty() ? returnThis : stringValue;
 
         public static bool IsEmpty(this GeoAddressArea geoAddressArea)
         {

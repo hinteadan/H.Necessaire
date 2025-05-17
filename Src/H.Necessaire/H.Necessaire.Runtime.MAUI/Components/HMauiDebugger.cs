@@ -11,13 +11,23 @@ namespace H.Necessaire.Runtime.MAUI.Components
 {
     public class HMauiDebugger : HMauiComponentBase
     {
-        protected override View ConstructDefaultContent()
+        protected override View ConstructContent()
         {
             View huiDebuggingComponent = Get<HMauiHUIGenericComponent<DebuggingHUIComponent>>();
 
             return
                 new VerticalStackLayout().And(layout =>
                 {
+
+                    layout.Add(new HButton { Text = "Switch Theme" }.And(btn =>
+                    {
+                        btn.Clicked += (s, e) =>
+                        {
+
+                            Application.Current.UserAppTheme = Application.Current.UserAppTheme == AppTheme.Light ? AppTheme.Dark : AppTheme.Light;
+
+                        };
+                    }));
 
                     layout.Add(huiDebuggingComponent);
 

@@ -166,6 +166,14 @@ namespace H.Necessaire.Runtime.UI
                     presentationInfo.Number.Max = byte.MaxValue;
                 }
 
+                if (type.In(typeof(sbyte), typeof(sbyte?)))
+                {
+                    presentationInfo.Number.NumberOfDecimals = 0;
+                    presentationInfo.Number.IncrementUnit = 1;
+                    presentationInfo.Number.Min = sbyte.MinValue;
+                    presentationInfo.Number.Max = sbyte.MaxValue;
+                }
+
                 if (type.In(typeof(short), typeof(short?)))
                 {
                     presentationInfo.Number.NumberOfDecimals = 0;
@@ -233,6 +241,10 @@ namespace H.Necessaire.Runtime.UI
             else if (presentationInfo.Type == HUIPresentationType.Selection)
             {
                 presentationInfo.Selection = new HUISelectionPresentationInfo();
+            }
+            else if (presentationInfo.Type >= HUIPresentationType.Date && presentationInfo.Type <= HUIPresentationType.ApproximatePeriodOfTime)
+            {
+                presentationInfo.DateTime = new HUIDateTimePresentationInfo();
             }
             else if (presentationInfo.Type == HUIPresentationType.Collection)
             {

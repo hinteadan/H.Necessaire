@@ -10,7 +10,7 @@ namespace H.Necessaire.Runtime.MAUI
 
         public override int SizingUnitInPixels => 14;
 
-        public AppTheme Theme => Application.Current?.RequestedTheme ?? AppTheme.Unspecified;
+        public AppTheme Theme => GetCurrentTheme();
 
         public override ColorPalette Colors => HAppColorPalette.LightAzure;
 
@@ -32,5 +32,14 @@ namespace H.Necessaire.Runtime.MAUI
         public override ColorInfo LightTextColor => Theme == AppTheme.Dark ? new ColorInfo(0, 0, 0, .85f) : base.LightTextColor;
         public override ColorInfo MutedTextColor => Theme == AppTheme.Dark ? new ColorInfo(0, 0, 0, .35f) : base.MutedTextColor;
         public override ColorInfo HighlightTextColor => Theme == AppTheme.Dark ? Colors.Primary.Lighter(4) : base.HighlightTextColor;
+
+        private static AppTheme GetCurrentTheme()
+        {
+            AppTheme? theme = Application.Current?.UserAppTheme;
+            if (theme is not null && theme != AppTheme.Unspecified)
+                return theme.Value;
+
+            return Application.Current?.RequestedTheme ?? AppTheme.Unspecified;
+        }
     }
 }

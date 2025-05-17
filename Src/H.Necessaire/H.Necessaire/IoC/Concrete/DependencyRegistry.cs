@@ -25,6 +25,7 @@ namespace H.Necessaire
             return this;
         }
         public ImADependencyRegistry Register<T>(Func<object> factory) => Register(typeof(T), factory);
+        public ImADependencyRegistry Register<T>() where T : new() => Register<T>(() => new T());
 
         public ImADependencyRegistry RegisterAlwaysNew(Type type, Func<object> factory)
         {
@@ -38,6 +39,7 @@ namespace H.Necessaire
             return this;
         }
         public ImADependencyRegistry RegisterAlwaysNew<T>(Func<object> factory) => RegisterAlwaysNew(typeof(T), factory);
+        public ImADependencyRegistry RegisterAlwaysNew<T>() where T : new() => RegisterAlwaysNew<T>(() => new T());
 
         public ImADependencyRegistry Unregister(Type type)
         {

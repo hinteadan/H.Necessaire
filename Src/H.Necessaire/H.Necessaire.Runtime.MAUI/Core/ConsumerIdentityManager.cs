@@ -2,7 +2,7 @@
 
 namespace H.Necessaire.Runtime.MAUI.Core
 {
-    class ConsumerIdentityManager : ImADependency, ImADependencyGroup
+    class ConsumerIdentityManager : ImAConsumerUseCase, ImADependency, ImADependencyGroup
     {
         ConsumerIdentity consumerIdentity;
         string storageKey = "H-Necessaire-ConsumerIdentity";
@@ -25,7 +25,7 @@ namespace H.Necessaire.Runtime.MAUI.Core
             if (!existingConsumerIdentiyJson.IsEmpty())
                 consumerIdentity = existingConsumerIdentiyJson.JsonToObject<ConsumerIdentity>();
 
-            consumerIdentity = consumerIdentity ?? new ConsumerIdentity();
+            consumerIdentity ??= new ConsumerIdentity();
 
             consumerIdentity = consumerIdentity.DecorateWithDeviceRuntimeInfo();
 

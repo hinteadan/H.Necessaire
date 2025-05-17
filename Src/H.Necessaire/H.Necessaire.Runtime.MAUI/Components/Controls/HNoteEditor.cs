@@ -2,16 +2,9 @@
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
-    class HNoteEditor : HMauiLabelAndDescriptionComponentBase
+    public class HNoteEditor : HMauiLabelAndDescriptionComponentBase
     {
-        protected override void Construct()
-        {
-            base.Construct();
-
-            Content = ConstructContent();
-        }
-
-        View ConstructContent()
+        protected override View ConstructLabeledContent()
         {
             return
                 new Grid

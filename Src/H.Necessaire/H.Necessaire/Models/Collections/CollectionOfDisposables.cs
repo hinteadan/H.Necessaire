@@ -30,12 +30,12 @@ namespace H.Necessaire
 
         public IEnumerator<T> GetEnumerator()
         {
-            return disposables.GetEnumerator();
+            return disposables?.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return disposables.GetEnumerator();
+            return disposables?.GetEnumerator();
         }
     }
 }

@@ -3,7 +3,7 @@ using H.Necessaire.Runtime.MAUI.Extensions;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 {
-    class HMauiLabelAndDescriptionComponentBase : HMauiComponentBase
+    public abstract class HMauiLabelAndDescriptionComponentBase : HMauiComponentBase
     {
         ContentPresenter contentPresenter;
         VerticalStackLayout layout;
@@ -34,6 +34,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                     };
 
                     contentPresenter = new ContentPresenter();
+                    contentPresenter.Content = ConstructLabeledContent();
 
                     layout.Add(new ContentView
                     {
@@ -51,7 +52,9 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             return base.WrapReceivedContent(content);
         }
 
-        protected override View ConstructDefaultContent() => layout;
+        protected sealed override View ConstructContent() => layout;
+
+        protected virtual View ConstructLabeledContent() => null;
 
         public string Label
         {

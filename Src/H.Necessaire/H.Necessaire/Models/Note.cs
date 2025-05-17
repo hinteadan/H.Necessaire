@@ -84,5 +84,10 @@ namespace H.Necessaire
 
                 };
         }
+
+        public static implicit operator KeyValuePair<string, string>(Note note)
+        {
+            return new KeyValuePair<string, string>(note.ID, note.Value);
+        }
     }
 }

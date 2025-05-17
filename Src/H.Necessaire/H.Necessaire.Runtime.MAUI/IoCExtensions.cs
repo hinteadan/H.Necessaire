@@ -21,10 +21,12 @@ namespace H.Necessaire.Runtime.MAUI
             return dependencyRegistry;
         }
 
-        public static MauiAppBuilder WithHNecessaire<THMauiApp>(this MauiAppBuilder appBuilder, THMauiApp hMauiApp = null) where THMauiApp : HMauiApp
+        public static MauiAppBuilder WithHNecessaire<THMauiApp>(this MauiAppBuilder appBuilder, THMauiApp hMauiApp = null, Action<ImADependencyRegistry> deps = null) where THMauiApp : HMauiApp
         {
             ImADependencyRegistry registy = hMauiApp?.DependencyRegistry ?? HMauiApp.Default.DependencyRegistry;
             registy.WithMauiRuntime(hMauiApp);
+            if (deps is not null)
+                deps.Invoke(registy);
             if (hMauiApp is not null && hMauiApp.GetType() != typeof(HMauiApp))
             {
                 registy.Register<THMauiApp>(() => hMauiApp);
@@ -39,7 +41,7 @@ namespace H.Necessaire.Runtime.MAUI
 
             return appBuilder;
         }
-        public static MauiAppBuilder WithHNecessaire(this MauiAppBuilder appBuilder) => appBuilder.WithHNecessaire(HMauiApp.Default);
+        public static MauiAppBuilder WithHNecessaire(this MauiAppBuilder appBuilder, Action<ImADependencyRegistry> deps = null) => appBuilder.WithHNecessaire(HMauiApp.Default, deps);
 
         public static TApp InitializeHNecessaireApp<TApp>(this TApp app) where TApp : Application
         {

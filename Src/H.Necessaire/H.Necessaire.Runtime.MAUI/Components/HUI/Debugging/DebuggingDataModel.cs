@@ -17,5 +17,16 @@
         public int IntegerNumber { get; set; }
 
         public NumberInterval NumberInterval { get; set; }
+        public TimeSpan TimeSpan { get; set; }
+
+        public DateOnly Date { get; set; }
+
+        public TimeOnly Time { get; set; }
+
+        public DateTime DateTime { get; set; }
+
+        public PeriodOfTime PeriodOfTime { get; set; }
+
+        public PartialDateTime PartialDateTime { get; set; }
     }
 }

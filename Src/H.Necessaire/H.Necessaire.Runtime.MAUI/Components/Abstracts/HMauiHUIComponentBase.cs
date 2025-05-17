@@ -41,7 +41,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             await base.Destroy();
         }
 
-        protected override View ConstructDefaultContent()
+        protected override View ConstructContent()
         {
             return hMauiComponentBuilder.BuildComponentFor(hUIComponent);
         }

@@ -5,6 +5,7 @@
         public string ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public Note[] Notes { get; set; }
         public TValue Value { get; set; }
     }
 }

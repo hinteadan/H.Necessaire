@@ -32,5 +32,26 @@
 
             return Payload;
         }
+
+        public static implicit operator bool(OperationResult<T> operationResult) => operationResult.IsSuccessful;
+
+        public T Return() => Payload;
+        public OperationResult<T> RefResult(out OperationResult<T> result)
+        {
+            result = this;
+            return this;
+        }
+        public OperationResult<T> RefPayload(out T payload)
+        {
+            payload = Payload;
+            return this;
+        }
+
+        public OperationResult<T> Ref(out OperationResult<T> result, out T payload)
+        {
+            result = this;
+            payload = Payload;
+            return this;
+        }
     }
 }

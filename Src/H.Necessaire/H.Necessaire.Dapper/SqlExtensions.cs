@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using System;
+﻿using System;
 
 namespace H.Necessaire.Dapper
 {
@@ -7,19 +6,19 @@ namespace H.Necessaire.Dapper
     {
         public static string WithDatabase(this string connectionString, string databaseName)
         {
-            SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(connectionString.WithoutDatabase());
+            ConnectionStringBuilder connectionStringBuilder = new ConnectionStringBuilder(connectionString.WithoutDatabase());
 
-            connectionStringBuilder.Add("Database", databaseName);
+            connectionStringBuilder.Set("Database", databaseName);
 
             return connectionStringBuilder.ToString();
         }
 
         public static string WithoutDatabase(this string connectionString)
         {
-            SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+            ConnectionStringBuilder connectionStringBuilder = new ConnectionStringBuilder(connectionString);
 
-            connectionStringBuilder.Remove("Database");
-            connectionStringBuilder.Remove("InitialCatalog");
+            connectionStringBuilder.Zap("Database");
+            connectionStringBuilder.Zap("InitialCatalog");
 
             return connectionStringBuilder.ToString();
         }
@@ -27,7 +26,7 @@ namespace H.Necessaire.Dapper
         public static string GetDatabaseName(this string connectionString)
         {
             string result = null;
-            new Action(() => result = new SqlConnectionStringBuilder(connectionString).InitialCatalog).TryOrFailWithGrace(onFail: ex => result = null);
+            new Action(() => result = new ConnectionStringBuilder(connectionString).GetFirst("InitialCatalog", "Database")?.Value).TryOrFailWithGrace(onFail: ex => result = null);
             return result;
         }
     }

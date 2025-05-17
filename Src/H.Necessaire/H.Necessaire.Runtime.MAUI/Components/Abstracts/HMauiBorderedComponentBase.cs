@@ -28,6 +28,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             return base.WrapReceivedContent(content);
         }
 
-        protected override View ConstructDefaultContent() => border;
+        protected override View ConstructContent() => border;
     }
 }

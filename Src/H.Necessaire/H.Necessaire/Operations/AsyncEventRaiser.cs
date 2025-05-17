@@ -8,7 +8,7 @@ namespace H.Necessaire
     public class AsyncEventRaiser<TEventArgs> where TEventArgs : EventArgs
     {
         readonly object owner;
-        readonly object evnetHandlersCollectionLocker = new object();
+        readonly object eventHandlersCollectionLocker = new object();
         readonly List<AsyncEventHandler<TEventArgs>> eventHandlers = new List<AsyncEventHandler<TEventArgs>>();
         public AsyncEventRaiser(object owner)
         {
@@ -26,7 +26,7 @@ namespace H.Necessaire
             if (handler is null)
                 return;
 
-            lock (evnetHandlersCollectionLocker)
+            lock (eventHandlersCollectionLocker)
             {
                 eventHandlers.Add(handler);
             }
@@ -37,7 +37,7 @@ namespace H.Necessaire
             if (handler is null)
                 return;
 
-            lock (evnetHandlersCollectionLocker)
+            lock (eventHandlersCollectionLocker)
             {
                 eventHandlers.Remove(handler);
             }
@@ -48,8 +48,10 @@ namespace H.Necessaire
             if (eventHandlers.IsEmpty())
                 return;
 
+            AsyncEventHandler<TEventArgs>[] currentEventHandlers = eventHandlers.ToArray();
+
             await Task.WhenAll(
-                eventHandlers.Select(
+                currentEventHandlers.Select(
                     async handler => await new Func<Task>(async () =>
                     {
 

@@ -8,7 +8,7 @@
 
     "CLI maui-branding icon": {
       "commandName": "Project",
-      "commandLineArgs": "maui-branding icon app=H.Necessaire.Runtime.MAUIAppSample svg-icon-file=C:\\H\\H.Necessaire\\Branding\\h-necessaire-text-icon-circled-white.svg app-icon-base-size=100,100 splash-icon-base-size=128,128"
+      "commandLineArgs": "maui-branding icon app=RoVFR.Client.MAUI svg-icon-file=C:\\H\\RoVFR\\Design\\RoVFR_App_Icon_TranslucentCircle.svg app-icon-base-size=100,100 splash-icon-base-size=128,128"
     },
 
     "CLI maui-branding colors": {

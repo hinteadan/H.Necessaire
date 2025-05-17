@@ -1,16 +1,24 @@
 ﻿using Dapper;
-using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.Dapper
 {
-    internal class SqlMigrationStore : DapperSqlResourceBase, ImASqlMigrationStore
+    [ID("Sqlite")]
+    internal class SqliteMigrationStore : DapperSqliteResourceBase, ImASqlMigrationStore
     {
         #region Construct
+        ImASqlConnectionFactory sqlConnectionFactory = null;
         bool isDatabaseEnsured = false;
-        public SqlMigrationStore(string connectionString = null) : base(connectionString, tableName: "H.Necessaire.Migration", databaseName: "H.Necessaire.Core") { }
+        public SqliteMigrationStore(string connectionString = null) : base(connectionString, tableName: "H.Necessaire.Migration", databaseName: "H.Necessaire.Core") { }
+
+        public override void ReferDependencies(ImADependencyProvider dependencyProvider)
+        {
+            base.ReferDependencies(dependencyProvider);
+            sqlConnectionFactory = dependencyProvider.Get<ImASqlConnectionFactory>();
+        }
 
         protected override Task<SqlMigration[]> GetAllMigrations() => new SqlMigration[0].AsTask();
 
@@ -21,9 +29,9 @@ namespace H.Necessaire.Dapper
             if (isDatabaseEnsured)
                 return;
 
-            using (SqlConnection dbConnection = new SqlConnection(connectionString))
+            using (IDbConnection dbConnection = sqlConnectionFactory.BuildNewConnection(connectionString))
             {
-                bool migrationTableExists = await dbConnection.ExecuteScalarAsync<bool>("IF (EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  TABLE_NAME = 'H.Necessaire.Migration')) BEGIN SELECT 1 END ELSE BEGIN SELECT 0 END");
+                bool migrationTableExists = await dbConnection.ExecuteScalarAsync<bool>($"SELECT (case count(*) when 0 then 0 else 1 end) as [exists] FROM sqlite_master WHERE type='table' AND name='{tableName}'");
 
                 if (migrationTableExists)
                 {
@@ -31,7 +39,7 @@ namespace H.Necessaire.Dapper
                     return;
                 }
 
-                await dbConnection.ExecuteAsync(await ReadSqlFromEmbedResourceSql("Create_SqlMigration_Table.sql"));
+                await dbConnection.ExecuteAsync(await ReadSqlFromEmbedResourceSql("Create_SqliteMigration_Table.sql"));
             }
 
             isDatabaseEnsured = true;

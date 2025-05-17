@@ -8,7 +8,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Builders.Abstracts
     {
         public virtual View BuildComponentForProperty(HViewModelProperty viewModelProperty)
         {
-            switch(viewModelProperty.PresentationInfo.Type)
+            switch (viewModelProperty.PresentationInfo.Type)
             {
                 case HUIPresentationType.Boolean:
                     return BuildBooleanPropertyComponent(viewModelProperty).And(x => viewModelProperty.ReferenceNativeUIControl(x));
@@ -29,11 +29,23 @@ namespace H.Necessaire.Runtime.MAUI.Components.Builders.Abstracts
                     return BuildNumberIntervalPropertyComponent(viewModelProperty).And(x => viewModelProperty.ReferenceNativeUIControl(x));
 
                 case HUIPresentationType.TimeSpan:
+                    return BuildTimeSpanPropertyComponent(viewModelProperty).And(x => viewModelProperty.ReferenceNativeUIControl(x));
+
                 case HUIPresentationType.Date:
+                    return BuildDatePropertyComponent(viewModelProperty).And(x => viewModelProperty.ReferenceNativeUIControl(x));
+
                 case HUIPresentationType.Time:
+                    return BuildTimePropertyComponent(viewModelProperty).And(x => viewModelProperty.ReferenceNativeUIControl(x));
+
                 case HUIPresentationType.DateAndTime:
+                    return BuildDateTimePropertyComponent(viewModelProperty).And(x => viewModelProperty.ReferenceNativeUIControl(x));
+
                 case HUIPresentationType.PeriodOfTime:
+                    return BuildPeriodOfTimePropertyComponent(viewModelProperty).And(x => viewModelProperty.ReferenceNativeUIControl(x));
+
                 case HUIPresentationType.PartialDateTime:
+                    return BuildPartialDateTimePropertyComponent(viewModelProperty).And(x => viewModelProperty.ReferenceNativeUIControl(x));
+
                 case HUIPresentationType.PartialPeriodOfTime:
                 case HUIPresentationType.ApproximatePeriodOfTime:
                 case HUIPresentationType.Collection:
@@ -44,30 +56,82 @@ namespace H.Necessaire.Runtime.MAUI.Components.Builders.Abstracts
             }
         }
 
+        static View BuildPartialDateTimePropertyComponent(HViewModelProperty viewModelProperty)
+        {
+            return new HPartialDateTimeEditor().And(editor =>
+            {
+                editor.Label = viewModelProperty.Label;
+            });
+        }
+
+        static View BuildPeriodOfTimePropertyComponent(HViewModelProperty viewModelProperty)
+        {
+            return new HPeriodOfTimeEditor().And(editor =>
+            {
+                editor.Label = viewModelProperty.Label;
+            });
+        }
+
+        static View BuildDateTimePropertyComponent(HViewModelProperty viewModelProperty)
+        {
+            return new HDateTimePicker().And(editor =>
+            {
+                editor.Label = viewModelProperty.Label;
+            });
+        }
+
+        static View BuildTimePropertyComponent(HViewModelProperty viewModelProperty)
+        {
+            return new HTimePicker().And(editor =>
+            {
+                editor.Label = viewModelProperty.Label;
+            });
+        }
+
+        static View BuildDatePropertyComponent(HViewModelProperty viewModelProperty)
+        {
+            return new HDatePicker().And(editor =>
+            {
+                editor.Label = viewModelProperty.Label;
+            });
+        }
+
+        static View BuildTimeSpanPropertyComponent(HViewModelProperty viewModelProperty)
+        {
+            return new HTimeSpanEditor().And(editor =>
+            {
+                editor.Label = viewModelProperty.Label;
+            });
+        }
+
         static View BuildNumberIntervalPropertyComponent(HViewModelProperty viewModelProperty)
         {
-            return new HNumberIntervalEditor().And(editor => {
+            return new HNumberIntervalEditor().And(editor =>
+            {
                 editor.Label = viewModelProperty.Label;
             });
         }
 
         static View BuildNumberPropertyComponent(HViewModelProperty viewModelProperty)
         {
-            return new HNumberEditor().And(editor => {
+            return new HNumberEditor().And(editor =>
+            {
                 editor.Label = viewModelProperty.Label;
             });
         }
 
         static View BuildNotePropertyComponent(HViewModelProperty viewModelProperty)
         {
-            return new HNoteEditor().And(editor => { 
+            return new HNoteEditor().And(editor =>
+            {
                 editor.Label = viewModelProperty.Label;
             });
         }
 
         static View BuildTextPropertyComponent(HViewModelProperty viewModelProperty)
         {
-            return new HTextEditor().And(editor => {
+            return new HTextEditor().And(editor =>
+            {
                 editor.Label = viewModelProperty.Label;
                 editor.Text = viewModelProperty.ValueAs<string>();
             });
@@ -75,9 +139,10 @@ namespace H.Necessaire.Runtime.MAUI.Components.Builders.Abstracts
 
         static View BuildSelectionPropertyComponent(HViewModelProperty viewModelProperty)
         {
-            return new HPicker().And(picker => {
+            return new HPicker().And(picker =>
+            {
                 picker.Label = viewModelProperty.Label;
-                picker.ItemSource = viewModelProperty.PresentationInfo.Selection.Options;
+                picker.SetDataSource(viewModelProperty.PresentationInfo.Selection.Options);
             });
         }
 

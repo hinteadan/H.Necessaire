@@ -1,46 +1,55 @@
-﻿using Dapper;
-using H.Necessaire.Dapper.Operations.Concrete;
-using Microsoft.Data.SqlClient;
-using System;
-using System.Data.Common;
+﻿using H.Necessaire.Dapper.Operations.Concrete;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System;
+using Dapper;
 
 namespace H.Necessaire.Dapper
 {
-    public abstract class DapperSqlResourceBase : ImADependency
+    public abstract class DapperResourceBase : ImADependency
     {
         #region Construct
+        ImASqlConnectionFactory sqlConnectionFactory = null;
         ImASqlMigrationStore sqlMigrationStore = null;
 
         protected string connectionString;
         protected string connectionStringWithoutDatabase;
         protected string databaseName;
         protected string tableName;
-
-        bool isDatabaseEnsured = false;
         bool isMigrationEnsured = false;
         bool isMigrating = false;
 
-        protected DapperSqlResourceBase(string connectionString = null, string tableName = null, string databaseName = null)
+        protected DapperResourceBase(string connectionString = null, string tableName = null, string databaseName = null)
         {
             this.connectionString = connectionString;
             this.connectionStringWithoutDatabase = connectionString?.WithoutDatabase();
             this.tableName = tableName;
-            this.databaseName = databaseName ?? connectionString?.GetDatabaseName();
+            this.databaseName = databaseName;
             if (this.databaseName != this.connectionString?.GetDatabaseName()) this.connectionString = this.connectionString?.WithDatabase(this.databaseName);
+        }
+
+        protected abstract Task EnsureDatabase();
+        protected abstract ImADapperContext NewDbContext(string tableName = null);
+        protected abstract Task<SqlMigration[]> GetAllMigrations();
+
+        protected virtual string GetCoreDatabaseName(ImADependencyProvider dependencyProvider)
+        {
+            RuntimeConfig runtimeConfig = dependencyProvider?.GetRuntimeConfig();
+            string coreDatabaseNameFromConfig = runtimeConfig?.Get("SqlConnections")?.Get("DatabaseNames")?.Get("Core")?.ToString();
+            return coreDatabaseNameFromConfig ?? this.databaseName;
         }
 
         public virtual void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
+            sqlConnectionFactory = dependencyProvider.Get<ImASqlConnectionFactory>();
+            if (sqlConnectionFactory is null)
+                throw new ArgumentNullException(nameof(sqlConnectionFactory), $"A concrete implementation for {nameof(ImASqlConnectionFactory)} must be registered within the current dependecy registry");
+
             if (IsCoreDatabase())
-            {
-                RuntimeConfig runtimeConfig = dependencyProvider?.GetRuntimeConfig();
-                string coreDatabaseNameFromConfig = runtimeConfig?.Get("SqlConnections")?.Get("DatabaseNames")?.Get("Core")?.ToString();
-                this.databaseName = coreDatabaseNameFromConfig ?? this.databaseName;
-            }
+                this.databaseName = GetCoreDatabaseName(dependencyProvider);
 
             this.sqlMigrationStore = typeof(ImASqlMigrationStore).IsAssignableFrom(this.GetType()) ? this as ImASqlMigrationStore : dependencyProvider.Get<ImASqlMigrationStore>();
             ImASqlEntityConnectionProvider sqlEntityConnectionProvider = dependencyProvider.Get<ImASqlEntityConnectionProvider>();
@@ -53,11 +62,9 @@ namespace H.Necessaire.Dapper
             if (this.databaseName != this.connectionString?.GetDatabaseName())
                 this.connectionString = this.connectionString?.WithDatabase(this.databaseName);
         }
-
-        protected abstract Task<SqlMigration[]> GetAllMigrations();
         #endregion
 
-        protected virtual async Task EnsureDatabaseAndMigrations()
+        protected async Task EnsureDatabaseAndMigrations()
         {
             await EnsureDatabase();
             await EnsureMigrations();
@@ -67,7 +74,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 return await dapper.LoadEntityByID<TSqlEntity>(id, tableName, idColumnName);
             }
@@ -77,7 +84,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 return await dapper.LoadEntityByCustomCriteria<TSqlEntity>(sqlFilters, sqlParams, tableName);
             }
@@ -87,7 +94,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 return await dapper.LoadEntityByCustomSql<TSqlEntity>(sql, sqlParams);
             }
@@ -97,7 +104,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 return await dapper.LoadEntitiesByIDs<TSqlEntity>(ids, tableName, idColumnName);
             }
@@ -107,7 +114,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 return (await dapper.LoadEntitiesByCustomSql<TSqlEntity>(sql, sqlParams)).ToArray();
             }
@@ -117,7 +124,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 return await dapper.LoadEntitiesByCustomCriteria<TSqlEntity>(sqlFilters, sqlParams, sortCriterias, limitCriteria, tableName);
             }
@@ -127,7 +134,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            DapperSqlContext dapper = NewDbContext(tableName);
+            ImADapperContext dapper = NewDbContext(tableName);
 
             return new DapperStream<TResult>(dapper, (await dapper.StreamAll<TSqlEntity>(tableName)).Select(projection));
         }
@@ -136,7 +143,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            DapperSqlContext dapper = NewDbContext(tableName);
+            ImADapperContext dapper = NewDbContext(tableName);
 
             return new DapperStream<TResult>(dapper, (await dapper.StreamAllByCustomCriteria<TSqlEntity>(sqlFilters, sqlParams, sortCriterias, limitCriteria, tableName)).Select(projection));
         }
@@ -145,7 +152,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            DapperSqlContext dapper = NewDbContext(tableName);
+            ImADapperContext dapper = NewDbContext(tableName);
 
             return new DapperStream<TResult>(dapper, (await dapper.StreamAllByCustomSql<TSqlEntity>(sql)).Select(projection));
         }
@@ -154,7 +161,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 await dapper.InsertEntity(entity);
             }
@@ -164,7 +171,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 await dapper.UpsertEntityByID(entity, idColumnName: idColumnName);
             }
@@ -174,7 +181,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 await dapper.DeleteEntityByID<TSqlEntity>(id, tableName, idColumnName);
             }
@@ -184,7 +191,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 await dapper.DeleteEntitiesByIDs<TSqlEntity>(ids, tableName, idColumnName);
             }
@@ -194,7 +201,7 @@ namespace H.Necessaire.Dapper
         {
             await EnsureDatabaseAndMigrations();
 
-            using (DapperSqlContext dapper = NewDbContext(tableName))
+            using (ImADapperContext dapper = NewDbContext(tableName))
             {
                 await dapper.DeleteEntitiesByByCustomCriteria<TSqlEntity>(sqlFilters, sqlParams, tableName);
             }
@@ -202,57 +209,10 @@ namespace H.Necessaire.Dapper
 
         protected async Task<string> ReadSqlFromEmbedResourceSql(string sqlFileName, string sqlFileNamespace = "H.Necessaire.Dapper")
         {
-            using (Stream stream = Assembly.GetAssembly(typeof(DapperSqlResourceBase)).GetManifestResourceStream($"{sqlFileNamespace}.{sqlFileName}"))
+            using (Stream stream = Assembly.GetAssembly(typeof(DapperResourceBase)).GetManifestResourceStream($"{sqlFileNamespace}.{sqlFileName}"))
             {
                 return await stream.ReadAsStringAsync();
             }
-        }
-
-        protected virtual async Task EnsureDatabase()
-        {
-            if (isDatabaseEnsured)
-                return;
-
-            bool databaseExists = false;
-
-            await
-                new Func<Task>(async () => {
-
-                    using (SqlConnection dbConnection = new SqlConnection(connectionString))
-                    {
-                        databaseExists = await dbConnection.ExecuteScalarAsync<bool>($"SELECT CASE WHEN ISNULL(DB_ID('{databaseName}'), 0) = 0 THEN 0 ELSE 1 END");
-                        if (databaseExists)
-                        {
-                            isDatabaseEnsured = true;
-                            return;
-                        }
-
-                        await dbConnection.ExecuteAsync($"CREATE DATABASE [{databaseName}]");
-                    }
-
-                }).TryOrFailWithGrace(onFail: ex => databaseExists = false);
-
-            if (!databaseExists)
-            {
-                await
-                    new Func<Task>(async () => {
-
-                        using (SqlConnection dbConnection = new SqlConnection(connectionStringWithoutDatabase))
-                        {
-                            databaseExists = await dbConnection.ExecuteScalarAsync<bool>($"SELECT CASE WHEN ISNULL(DB_ID('{databaseName}'), 0) = 0 THEN 0 ELSE 1 END");
-                            if (databaseExists)
-                            {
-                                isDatabaseEnsured = true;
-                                return;
-                            }
-
-                            await dbConnection.ExecuteAsync($"CREATE DATABASE [{databaseName}]");
-                        }
-
-                    }).TryOrFailWithGrace(onFail: ex => databaseExists = false);
-            }
-
-            isDatabaseEnsured = true;
         }
 
         protected virtual async Task EnsureMigrations()
@@ -288,7 +248,7 @@ namespace H.Necessaire.Dapper
                     return;
                 }
 
-                using (SqlConnection dbConnection = new SqlConnection(connectionString))
+                using (IDbConnection dbConnection = sqlConnectionFactory.BuildNewConnection(connectionString))
                 {
                     foreach (SqlMigration migrationToRun in migrationsToRun)
                     {
@@ -301,17 +261,23 @@ namespace H.Necessaire.Dapper
             }
         }
 
-        protected virtual DapperSqlContext NewDbContext(string tableName = null)
-        {
-            return new DapperSqlContext(connectionString, tableName ?? this.tableName);
-        }
-
         protected virtual bool IsCoreDatabase()
         {
+            Assembly assembly = GetType().Assembly;
+
             return
-                this.GetType().Assembly.In(
-                    typeof(DapperSqlResourceBase).Assembly
-                );
+                assembly == typeof(DapperSqlServerResourceBase).Assembly
+                || assembly.FullName.StartsWith("H.Necessaire.")
+                ;
+        }
+
+        protected static async Task<string> ReadMigrationSqlCommand(SqlMigration sqlMigration, params Assembly[] assembliesToScan)
+        {
+            return
+                await $"{sqlMigration.ResourceIdentifier}_v{sqlMigration.VersionNumber.Major}-{sqlMigration.VersionNumber.Minor}.sql"
+                .OpenEmbeddedResource(assembliesToScan)
+                .ReadAsStringAsync(isStreamLeftOpen: false)
+                ;
         }
     }
 }

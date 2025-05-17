@@ -11,11 +11,35 @@ namespace H.Necessaire.Runtime.MAUI.Components.Chromes
         HLabel footerBrandingLabel = null;
         readonly ContentPresenter contentPresenter = new();
 
-        protected override View ConstructDefaultContent() => ConstructChromedContent();
+        protected override View ConstructContent() => ConstructChromedContent();
         protected override View WrapReceivedContent(View content)
         {
             contentPresenter.Content = content;
             return base.WrapReceivedContent(content);
+        }
+
+        private bool hasHeader = true;
+        public bool HasHeader
+        {
+            get => hasHeader;
+            set
+            {
+                hasHeader = value;
+                if (headerBrandingLabel is not null)
+                    headerBrandingLabel.IsVisible = hasHeader;
+            }
+        }
+
+        private bool hasFooter = true;
+        public bool HasFooter
+        {
+            get => hasFooter;
+            set
+            {
+                hasFooter = value;
+                if (footerBrandingLabel is not null)
+                    footerBrandingLabel.IsVisible = hasFooter;
+            }
         }
 
         View ConstructChromedContent()
@@ -64,7 +88,9 @@ namespace H.Necessaire.Runtime.MAUI.Components.Chromes
             {
                 grid.Add(new HLabel
                 {
+                    TextColor = Branding.ButtonTextColor.ToMaui(),
                     Text = "Header Branding",
+                    IsVisible = hasHeader,
                 }.And(x => headerBrandingLabel = x));
                 //grid.Add(new Image
                 //{
@@ -94,6 +120,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Chromes
                     HorizontalOptions = LayoutOptions.Center,
                     VerticalOptions = LayoutOptions.Center,
                     Margin = new Thickness(horizontalSize: 0, verticalSize: Branding.SizingUnitInPixels / 4),
+                    IsVisible = hasFooter,
                 }.And(x => footerBrandingLabel = x));
             });
         }
@@ -102,8 +129,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Chromes
         {
             base.OnSizeAllocated(width, height);
 
-            footerBrandingLabel.IsVisible = true;
-            headerBrandingLabel.IsVisible = true;
+            footerBrandingLabel.IsVisible = hasFooter;
+            headerBrandingLabel.IsVisible = hasHeader;
             headerBrandingLabel.FontSize = Branding.Typography.FontSize;
             footerBrandingLabel.Margin = new Thickness(horizontalSize: 0, verticalSize: Branding.SizingUnitInPixels / 4);
 

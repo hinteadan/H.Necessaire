@@ -7,9 +7,11 @@ namespace H.Necessaire.Runtime.MAUI.Components.Pages
 {
     public class MainPage : HMauiPageBase
     {
-        public MainPage()
+        protected override View ConstructContent()
         {
-            Content = new DefaultChrome
+            ConstructFlyoutFooter();
+
+            return new DefaultChrome
             {
                 Content = new VerticalStackLayout().And(layout =>
                 {
@@ -56,20 +58,40 @@ namespace H.Necessaire.Runtime.MAUI.Components.Pages
             };
         }
 
-        protected override async Task Initialize()
+        private void ConstructFlyoutFooter()
         {
             Shell.Current.FlyoutFooter = new Grid().And(layout =>
             {
-                layout.Add(new HLabel
-                {
-                    Text = "v0.0.0",
-                    FontSize = Branding.Typography.FontSizeSmaller,
-                    HorizontalOptions = LayoutOptions.Center,
-                    Margin = new Thickness(0, Branding.SizingUnitInPixels / 2, 0, Branding.SizingUnitInPixels / 2),
-                });
-            });
+                layout.Add(
 
-            await base.Initialize();
+                    new VerticalStackLayout().And(layout =>
+                    {
+
+                        layout.Add(new HThemeSelector
+                        {
+                            HorizontalOptions = LayoutOptions.Center,
+                            Margin = new Thickness(0, Branding.SizingUnitInPixels / 2, 0, Branding.SizingUnitInPixels / 2),
+                        });
+
+                        layout.Add(new HLabel
+                        {
+                            Text = "v0.0.0",
+                            FontSize = Branding.Typography.FontSizeSmaller,
+                            HorizontalOptions = LayoutOptions.Center,
+                            Margin = new Thickness(0, Branding.SizingUnitInPixels / 2, 0, Branding.SizingUnitInPixels / 2),
+                        });
+
+                    })
+                );
+
+            });
+        }
+
+        protected override async Task OnThemeChangeRequest(AppTheme requestedTheme)
+        {
+            await base.OnThemeChangeRequest(requestedTheme);
+
+            ConstructFlyoutFooter();
         }
     }
 }

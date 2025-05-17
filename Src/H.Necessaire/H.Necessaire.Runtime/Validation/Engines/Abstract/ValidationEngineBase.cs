@@ -8,11 +8,12 @@ namespace H.Necessaire.Runtime.Validation.Engines.Abstract
     public abstract class ValidationEngineBase<TEntity> : ImAValidationEngine<TEntity>
     {
         #region Construct
+        const string defaultGlobalReasonForMultipleFailedOperations = "There are multiple failure reasons; see comments for details.";
         protected virtual Func<TEntity, Task<OperationResult>>[] CustomRules { get; }
 
         #endregion
 
-        public async Task<OperationResult<TEntity>> ValidateEntity(TEntity entity)
+        public async Task<OperationResult<TEntity>> ValidateEntity(TEntity entity, string globalReasonIfNecesarry = null)
         {
             if (entity == null)
                 return OperationResult.Fail($"{typeof(TEntity).Name} cannot be null").WithPayload(entity);
@@ -27,7 +28,7 @@ namespace H.Necessaire.Runtime.Validation.Engines.Abstract
                         )
                         .ToArray()
                     ))
-                    .Merge();
+                    .Merge(globalReasonIfNecesarry.IsEmpty() ? defaultGlobalReasonForMultipleFailedOperations : globalReasonIfNecesarry);
 
             return result.WithPayload(entity);
         }

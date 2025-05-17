@@ -15,6 +15,7 @@ namespace H.Necessaire.Runtime.UI
         public HUITextPresentationInfo Text { get; set; }
         public HUINumberPresentationInfo Number { get; set; }
         public HUISelectionPresentationInfo Selection { get; set; }
+        public HUIDateTimePresentationInfo DateTime { get; set; }
         public HUICollectionPresentationInfo Collection { get; set; }
     }
 
@@ -32,6 +33,7 @@ namespace H.Necessaire.Runtime.UI
                 return HUIPresentationType.Boolean;
 
             if (dataType.In(
+                typeof(sbyte), typeof(sbyte?),
                 typeof(byte), typeof(byte?),
 
                 typeof(short), typeof(short?),
@@ -54,6 +56,15 @@ namespace H.Necessaire.Runtime.UI
 
             if (dataType.In(typeof(NumberInterval), typeof(NumberInterval?)))
                 return HUIPresentationType.NumberInterval;
+
+            if (dataType.In(typeof(TimeSpan), typeof(TimeSpan?)))
+                return HUIPresentationType.TimeSpan;
+
+            if (dataType.FullName == "System.DateOnly")
+                return HUIPresentationType.Date;
+
+            if (dataType.FullName == "System.TimeOnly")
+                return HUIPresentationType.Time;
 
             if (dataType.In(typeof(DateTime), typeof(DateTime?)))
                 return HUIPresentationType.DateAndTime;

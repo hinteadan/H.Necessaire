@@ -4,7 +4,7 @@ using Microsoft.Maui.Controls.Shapes;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
-    class HTextField : HMauiLabelAndDescriptionComponentBase
+    public class HTextField : HMauiLabelAndDescriptionComponentBase
     {
         Entry editor;
         Grid editorStack;
@@ -12,6 +12,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         RoundRectangle validationLedIndicator;
         HGlyphButton clearButton;
         bool isClearOptionEnabled = true;
+        bool isValidationIndicatorEnabled = true;
 
         public event EventHandler<TextChangedEventArgs> TextChanged;
 
@@ -27,19 +28,24 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 RefreshClearOptionView();
             }
         }
+        public bool IsValidationIndicatorEnabled
+        {
+            get => isValidationIndicatorEnabled;
+            set
+            {
+                isValidationIndicatorEnabled = value;
+                RefreshValidationIndicatorView();
+            }
+        }
+
         public Func<string, CancellationToken, Task<OperationResult<string>>> UserInputValidator { get; set; }
 
         protected override async Task Destroy()
         {
             await base.Destroy();
         }
-        protected override void Construct()
-        {
-            base.Construct();
-            Content = ConstructContent();
-        }
 
-        View ConstructContent()
+        protected override View ConstructLabeledContent()
         {
             double cornerRadius = Branding.SizingUnitInPixels / 4;
             double iconSize = Branding.SizingUnitInPixels * .75d;
@@ -163,6 +169,11 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 return;
 
             editorStack.Add(clearButton, column: 1);
+        }
+
+        void RefreshValidationIndicatorView()
+        {
+            validationLedIndicator.IsVisible = isValidationIndicatorEnabled;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using H.Necessaire.Runtime.MAUI.Components.Elements;
+﻿using H.Necessaire.Runtime.MAUI.Components.Controls;
+using H.Necessaire.Runtime.MAUI.Components.Elements;
 
 namespace H.Necessaire.Runtime.MAUI.Components
 {
@@ -7,6 +8,15 @@ namespace H.Necessaire.Runtime.MAUI.Components
         public static View Bordered(this View view)
         {
             return new HBorderedContent(view);
+        }
+
+        public static View Nullable(this View view, string nullText = "Any")
+        {
+            return new HNullableControl
+            {
+                Content = view,
+                NullText = nullText,
+            };
         }
     }
 }

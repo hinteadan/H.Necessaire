@@ -22,7 +22,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.HUI.Components
 
         HViewModel ViewModel => hUIComponent.ViewModel;
 
-        protected override View ConstructDefaultContent()
+        protected override View ConstructContent()
         {
             return
                 new HResponsiveFormLayout()
