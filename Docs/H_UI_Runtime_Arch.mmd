@@ -1,0 +1,33 @@
+flowchart TD
+    
+    RuntimeUI[**Runtime.UI**]
+
+    MAUI[**Runtime.MAUI**]
+
+    HUIComponentBase[*HUIComponentBase*:**ImAnHUIComponent**]
+
+    HMauiHUIComponent[*HMauiHUIComponent*:**HMauiComponent**]
+
+    HMauiGenericComponent[***HMauiGenericComponent***:**HMauiHUIComponent**]
+
+    HUILoginComponent[***HUILoginComponent***:**HUIComponentBase**]
+
+
+    RuntimeUI --> HUIComponentBase
+    HUIComponentBase --> HUILoginComponent
+
+    MAUI --> HMauiHUIComponent
+    HMauiHUIComponent --> HMauiGenericComponent
+
+
+    HMauiGenericComponent -->|deps.RegisterAlwaysNew| HMauiLoginComponent
+    HUILoginComponent -->|deps.RegisterAlwaysNew| HMauiLoginComponent
+
+    HMauiLoginComponent[*HMauiGenericComponent*&lt;**HUILoginComponent**&gt;]
+
+    HMauiLoginComponent -->|ConstructDefaultContent|ImAHMauiComponentBuilder
+
+
+    ImAHMauiComponentBuilder -->|BuildComponentFor:hUIComponent.**ViewModel**|SmartBuilder
+
+    SmartBuilder[Interpret ViewModel meta and props and build UI View]

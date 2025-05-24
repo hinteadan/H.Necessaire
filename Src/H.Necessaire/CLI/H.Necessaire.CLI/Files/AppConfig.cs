@@ -48,9 +48,7 @@ namespace H.Necessaire.CLI
 
         private static string GetCodebaseFolderPath()
         {
-            string codeBase = Assembly.GetExecutingAssembly()?.Location ?? string.Empty;
-            UriBuilder uri = new UriBuilder(codeBase);
-            string dllPath = Uri.UnescapeDataString(uri.Path);
+            string dllPath = Assembly.GetExecutingAssembly()?.Location ?? string.Empty;
             int srcFolderIndex = dllPath.ToLowerInvariant().IndexOf(srcFolderRelativePath);
             if (srcFolderIndex < 0)
                 return string.Empty;

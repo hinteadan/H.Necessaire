@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="BLL\Templates\**\*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Runtime\UI\H.Necessaire.Runtime.UI\H.Necessaire.Runtime.UI.csproj" />
+    <ProjectReference Include="..\H.Necessaire.CLI\H.Necessaire.CLI.csproj" />
+  </ItemGroup>
+
+</Project>

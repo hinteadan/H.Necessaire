@@ -278,9 +278,10 @@ namespace H.Necessaire
             return value;
         }
 
-        public static string NullIfEmpty(this string value)
+        public static string NullIfEmpty(this string value, bool isWhitespaceConsideredEmpty = true)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            bool isEmpty = isWhitespaceConsideredEmpty ? string.IsNullOrWhiteSpace(value) : string.IsNullOrEmpty(value);
+            if (isEmpty)
                 return null;
 
             return value;

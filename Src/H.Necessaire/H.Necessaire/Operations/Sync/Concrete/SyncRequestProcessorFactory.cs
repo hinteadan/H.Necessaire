@@ -13,7 +13,7 @@ namespace H.Necessaire.Operations.Sync.Concrete
             Type[] processorTypes
                 = AppDomain
                 .CurrentDomain
-                .GetAssemblies()
+                .GetNonCoreAssemblies()
                 .SelectMany(
                     assembly
                         => assembly

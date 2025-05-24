@@ -6,18 +6,17 @@
 
   <ItemGroup>
     <None Remove="Create_KeyValueStore_Table.sql" />
-    <None Remove="Create_SqlMigration_Table.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Create_KeyValueStore_Table.sql" />
-    <EmbeddedResource Include="Create_SqlMigration_Table.sql" />
+    <EmbeddedResource Include="Create_SqliteMigration_Table.sql" />
+    <EmbeddedResource Include="Create_SqlServerMigration_Table.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.5" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +25,7 @@
 
   <ItemGroup>
     <None Update="IconLogo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

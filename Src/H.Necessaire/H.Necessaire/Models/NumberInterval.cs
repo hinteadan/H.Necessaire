@@ -9,13 +9,10 @@ namespace H.Necessaire
 
         public NumberInterval(decimal? min, decimal? max, bool isMinIncluded = true, bool isMaxIncluded = true)
         {
-            if (min != null && max != null && min > max)
-                throw new InvalidOperationException("min > max");
-
-            Min = min;
-            IsMinIncluded = min == null ? false : isMinIncluded;
-            Max = max;
-            IsMaxIncluded = max == null ? false : isMaxIncluded;
+            Min = (min != null && max != null) ? Math.Min(min.Value, max.Value) : min;
+            IsMinIncluded = Min == null ? false : isMinIncluded;
+            Max = (min != null && max != null) ? Math.Max(min.Value, max.Value) : max;
+            IsMaxIncluded = Max == null ? false : isMaxIncluded;
         }
 
         public decimal? Min { get; set; }
@@ -28,6 +25,24 @@ namespace H.Necessaire
         public bool IsNegativelyInfinite => Min == null;
         public bool IsInfinite => IsPositivelyInfinite || IsNegativelyInfinite;
         public bool IsSingle => Min != null && Max != null && Min == Max;
+
+        public bool Contains(decimal value)
+        {
+            if (IsNegativelyInfinite && IsPositivelyInfinite)
+                return true;
+
+            if (IsNegativelyInfinite)
+                return IsMaxIncluded ? value <= Max : value < Max;
+
+            if (IsPositivelyInfinite)
+                return IsMinIncluded ? value >= Min : value > Min;
+
+            return
+                (IsMinIncluded ? value >= Min : value > Min)
+                &&
+                (IsMaxIncluded ? value <= Max : value < Max)
+                ;
+        }
 
         public override string ToString()
         {

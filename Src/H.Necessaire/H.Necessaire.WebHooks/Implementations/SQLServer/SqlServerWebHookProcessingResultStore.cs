@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.WebHooks.Implementations.SQLServer
 {
-    class SqlServerWebHookProcessingResultStore : DapperSqlResourceBase, IWebHookProcessingResultStorage
+    class SqlServerWebHookProcessingResultStore : DapperSqlServerResourceBase, IWebHookProcessingResultStorage
     {
         #region Construct
         public SqlServerWebHookProcessingResultStore(string connectionString)

@@ -40,5 +40,14 @@ namespace H.Necessaire
                     .Where(x => !string.IsNullOrWhiteSpace(x))
                 );
         }
+
+        public static implicit operator GeoAddress(string address)
+        {
+            return new GeoAddress
+            {
+                StreetAddress = address,
+                Notes = address.NoteAs("SourceAddress").AsArray(),
+            };
+        }
     }
 }

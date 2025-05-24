@@ -32,5 +32,8 @@ namespace H.Necessaire
         {
             return new TypographySize(Points * scale);
         }
+
+        public static implicit operator float(TypographySize size) => size.Points;
+        public static implicit operator TypographySize(float sizeInPoints) => new TypographySize(sizeInPoints);
     }
 }

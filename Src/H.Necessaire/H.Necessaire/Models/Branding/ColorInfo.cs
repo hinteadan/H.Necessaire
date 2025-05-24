@@ -28,7 +28,7 @@ namespace H.Necessaire
             Green = green;
             Blue = blue;
             Opacity = opacity;
-            Hex = BitConverter.ToString(new byte[] { red, green, blue }).Replace("-", string.Empty);
+            Hex = $"#{BitConverter.ToString(new byte[] { red, green, blue }).Replace("-", string.Empty)}";
         }
 
         public byte Red { get; } = 0;
@@ -39,5 +39,6 @@ namespace H.Necessaire
         public string ToCssRGBA() => $"rgba({Red},{Green},{Blue},{Opacity})";
 
         public ColorInfo Clone() => new ColorInfo(Red, Green, Blue, Opacity);
+        public ColorInfo WithOpacity(float opacity) => Clone().And(x => x.Opacity = opacity);
     }
 }

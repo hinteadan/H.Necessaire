@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.SqlServer.Security.Resources
 {
-    internal partial class SqlServerCachedUserAuthInfoStorageResource : DapperSqlResourceBase, ImAUserAuthInfoStorageResource
+    internal partial class SqlServerCachedUserAuthInfoStorageResource : DapperSqlServerResourceBase, ImAUserAuthInfoStorageResource
     {
         #region Construct
         static ConcurrentDictionary<Guid, UserAuthKey> cachedKeys = new ConcurrentDictionary<Guid, UserAuthKey>();

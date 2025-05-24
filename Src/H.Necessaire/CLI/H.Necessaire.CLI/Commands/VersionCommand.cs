@@ -1,16 +1,28 @@
-﻿using H.Necessaire.Runtime.CLI.Commands;
-using System;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.CLI.Commands
 {
     internal class VersionCommand : CommandBase
     {
-        public override Task<OperationResult> Run()
-        {
-            Console.WriteLine(GetCurrentVersion());
+        static readonly string[] usageSyntax = new string[] {
+            "version [out=path/to/version.txt]",
+        };
+        protected override string[] GetUsageSyntaxes() => usageSyntax;
 
-            return OperationResult.Win().AsTask();
+        public override async Task<OperationResult> Run()
+        {
+            Console.WriteLine(GetCurrentVersion().RefTo(out Version version));
+
+            string outputPath = (await GetArguments()).Get("out", ignoreCase: true);
+
+            if (!outputPath.IsEmpty())
+            {
+                return HSafe.Run(() => File.WriteAllText(outputPath, version.ToString()));
+            }
+
+            return OperationResult.Win();
         }
 
         private static Version GetCurrentVersion()
@@ -23,7 +35,8 @@ namespace H.Necessaire.CLI.Commands
                     Branch = version.Branch,
                     Commit = version.Commit,
                     Timestamp = version.Timestamp,
-                    Number = new VersionNumber {
+                    Number = new VersionNumber
+                    {
                         Build = version.Number?.Build,
                         Major = version.Number?.Major ?? 0,
                         Minor = version.Number?.Minor ?? 0,

@@ -9,11 +9,11 @@
             FontFamilyUrls = fontFamilyUrls ?? new string[0];
             FontSize = fontSize;
 
-            FontSizeLarge = new TypographySize().ScaleBy(1.2f);
-            FontSizeLarger = new TypographySize().ScaleBy(1.4f);
+            FontSizeLarge = fontSize.Points * 1.2f;
+            FontSizeLarger = fontSize.Points * 1.4f;
 
-            FontSizeSmall = new TypographySize().ScaleBy(.8f);
-            FontSizeSmaller = new TypographySize().ScaleBy(.6f);
+            FontSizeSmall = fontSize.Points * .8f;
+            FontSizeSmaller = fontSize.Points * .6f;
         }
 
         public static readonly Typography FiraSans = new Typography(

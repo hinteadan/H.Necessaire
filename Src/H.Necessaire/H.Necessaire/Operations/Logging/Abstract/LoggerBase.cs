@@ -8,7 +8,7 @@ namespace H.Necessaire
     public abstract class LoggerBase : ImALogger, ImADependency
     {
         #region Construct
-        static readonly TimeSpan delayedProcessorsInterval = TimeSpan.FromSeconds(15);
+        static readonly TimeSpan delayedProcessorsInterval = TimeSpan.FromSeconds(7);
 
         private readonly ConcurrentDictionary<Guid, LogEntry> logDictionary = new ConcurrentDictionary<Guid, LogEntry>();
 
@@ -163,7 +163,7 @@ namespace H.Necessaire
 
             using (IDisposableEnumerable<LogEntry> logEntries = await StreamAllLogEntries())
             {
-                if (!logEntries?.Any() ?? true)
+                if (logEntries is null)
                     return;
 
                 foreach (LogEntry logEntry in logEntries)

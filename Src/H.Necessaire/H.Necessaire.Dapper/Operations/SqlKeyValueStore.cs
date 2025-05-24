@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Dapper
 {
-    public class SqlKeyValueStore : DapperSqlResourceBase, IKeyValueStorage
+    public class SqlKeyValueStore : DapperSqlServerResourceBase, IKeyValueStorage
     {
         #region Construct
         readonly string storeName = "Default";

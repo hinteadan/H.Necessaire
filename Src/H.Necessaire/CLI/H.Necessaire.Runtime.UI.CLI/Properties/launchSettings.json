@@ -1,0 +1,28 @@
+{
+  "profiles": {
+
+    "CLI debug": {
+      "commandName": "Project",
+      "commandLineArgs": "debug"
+    },
+
+    "CLI maui-branding icon": {
+      "commandName": "Project",
+      "commandLineArgs": "maui-branding icon app=RoVFR.Client.MAUI svg-icon-file=C:\\H\\RoVFR\\Design\\RoVFR_App_Icon_TranslucentCircle.svg app-icon-base-size=100,100 splash-icon-base-size=128,128"
+    },
+
+    "CLI maui-branding colors": {
+      "commandName": "Project",
+      "commandLineArgs": "maui-branding colors app=H.Necessaire.Runtime.MAUIAppSample color-palette-class=HAppColorPalette color-palette-member=LightAzure"
+    },
+
+    "CLI fluent-ui index-icons": {
+      "commandName": "Project",
+      "commandLineArgs": "fluent-ui index-icons"
+    },
+
+    "CLI": {
+      "commandName": "Project"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+namespace (>Namespace<)
+{
+    public static class (>ClassName<)
+    {
+        #region Static Data
+        public static readonly IReadOnlyDictionary<string, string> GlyphsUnicodeDictionary = new Dictionary<string, string>() {
+(>GlyphsUnicodeDictionaryEntries<)
+        }.AsReadOnly();
+        #endregion
+    }
+}

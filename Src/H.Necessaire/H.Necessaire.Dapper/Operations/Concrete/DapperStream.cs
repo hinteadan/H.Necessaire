@@ -5,17 +5,17 @@ namespace H.Necessaire.Dapper.Operations.Concrete
 {
     class DapperStream<T> : IDisposableEnumerable<T>
     {
-        readonly DapperSqlContext dapperSqlContext;
+        readonly ImADapperContext dapperContext;
         readonly IEnumerable<T> dataStream;
-        public DapperStream(DapperSqlContext dapperSqlContext, IEnumerable<T> dataStream)
+        public DapperStream(ImADapperContext dapperContext, IEnumerable<T> dataStream)
         {
-            this.dapperSqlContext = dapperSqlContext;
+            this.dapperContext = dapperContext;
             this.dataStream = dataStream;
         }
 
         public void Dispose()
         {
-            dapperSqlContext.Dispose();
+            dapperContext.Dispose();
         }
 
         public IEnumerator<T> GetEnumerator()

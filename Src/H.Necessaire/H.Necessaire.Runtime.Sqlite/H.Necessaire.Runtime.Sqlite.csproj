@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\..\LICENSE" Link="LICENSE">
+			<PackagePath></PackagePath>
+			<Pack>True</Pack>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="**\Migrations\**\*.sql" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\H.Necessaire.Dapper\H.Necessaire.Dapper.csproj" />
+		<ProjectReference Include="..\H.Necessaire.Runtime\H.Necessaire.Runtime.csproj" />
+		<ProjectReference Include="..\H.Necessaire.Serialization\H.Necessaire.Serialization.csproj" />
+		<ProjectReference Include="..\H.Necessaire\H.Necessaire.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="IconLogo.png">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+</Project>

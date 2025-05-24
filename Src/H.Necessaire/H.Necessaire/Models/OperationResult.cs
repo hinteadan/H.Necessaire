@@ -77,12 +77,28 @@ namespace H.Necessaire
 
         public string[] FlattenReasons()
         {
+            if (Reason.IsEmpty() && (Comments.IsEmpty() || Comments.All(c => c.IsEmpty())))
+                return Array.Empty<string>();
+
             return
                 Reason
                 .AsArray()
                 .Concat(Comments ?? new string[0])
-                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Where(x => !x.IsEmpty())
                 .ToArray();
+        }
+
+        public override string ToString()
+        {
+            string reasons = string.Join("; ", FlattenReasons()).EllipsizeIfNecessary(maxLength: 150);
+            return $"{(IsSuccessful ? "SUCCESS" : "FAIL")}{(reasons.IsEmpty() ? null : $" because {reasons}")}";
+        }
+
+        public static implicit operator bool(OperationResult operationResult) => operationResult.IsSuccessful;
+        public OperationResult Ref(out OperationResult result)
+        {
+            result = this;
+            return this;
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.SqlServer.Security.Resources
 {
-    internal partial class SqlServerUserIdentityStorageResource : DapperSqlResourceBase, ImAUserInfoStorageResource
+    internal partial class SqlServerUserIdentityStorageResource : DapperSqlServerResourceBase, ImAUserInfoStorageResource
     {
         #region Construct
         public SqlServerUserIdentityStorageResource()

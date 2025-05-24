@@ -7,8 +7,12 @@ namespace H.Necessaire
 {
     public static class TypeExtensions
     {
+        static readonly string[] coreAssemblyPrefixes = new string[] { "Microsoft.", "System.", "WinRT." };
         public static string TypeName(this object instance)
         {
+            if (instance is null)
+                return null;
+
             if (instance is Type)
                 return (instance as Type).FullName;
 
@@ -27,7 +31,7 @@ namespace H.Necessaire
             assembliesToScan
                 = assembliesToScan?.Any() == true
                 ? assembliesToScan
-                : AppDomain.CurrentDomain.GetAssemblies()
+                : AppDomain.CurrentDomain.GetNonCoreAssemblies()
                 ;
 
             return
@@ -110,6 +114,22 @@ namespace H.Necessaire
                 ;
         }
 
+        public static string GetDisplayLabel(this PropertyInfo propertyInfo)
+        {
+            return
+                (propertyInfo?.GetCustomAttributes(typeof(DisplayLabelAttribute), false)?.SingleOrDefault() as DisplayLabelAttribute)?.DisplayLabel
+                ?? propertyInfo?.Name.ToDisplayLabel()
+                ;
+        }
+
+        public static string GetDisplayLabel(this Type type)
+        {
+            return
+                (type?.GetCustomAttributes(typeof(DisplayLabelAttribute), false)?.SingleOrDefault() as DisplayLabelAttribute)?.DisplayLabel
+                ?? type?.Name.ToDisplayLabel()
+                ;
+        }
+
         public static string[] GetAliases(this Type type)
         {
             return
@@ -136,6 +156,19 @@ namespace H.Necessaire
                 ;
         }
 
+        public static string[] GetCategories(this PropertyInfo propertyInfo)
+        {
+            return
+                propertyInfo
+                ?.GetCustomAttributes(typeof(CategoryAttribute), inherit: true)
+                ?.SelectMany(
+                    noteAttr => (noteAttr as CategoryAttribute)?.Categories
+                )
+                ?.Distinct()
+                ?.ToArray()
+                ;
+        }
+
         public static int GetPriority(this Type type)
         {
             return
@@ -145,6 +178,14 @@ namespace H.Necessaire
                     ?.SingleOrDefault() as PriorityAttribute
                 )
                 ?.Priority
+                ?? 0
+                ;
+        }
+
+        public static int GetPriority(this PropertyInfo propertyInfo)
+        {
+            return
+                (propertyInfo?.GetCustomAttributes(typeof(PriorityAttribute), false)?.SingleOrDefault() as PriorityAttribute)?.Priority
                 ?? 0
                 ;
         }
@@ -233,6 +274,24 @@ namespace H.Necessaire
                 type
                 .GetAllImplementations(assembliesToScan)
                 .Where(x => x.IsMatch(identifier))
+                ;
+        }
+
+        public static bool IsCoreAssembly(this Assembly assembly)
+        {
+            if (assembly?.FullName is null)
+                return false;
+
+            return assembly.FullName.In(coreAssemblyPrefixes, (name, prefix) => name.StartsWith(prefix, StringComparison.InvariantCulture));
+        }
+
+        public static Assembly[] GetNonCoreAssemblies(this AppDomain appDomain)
+        {
+            return
+                appDomain
+                .GetAssemblies()
+                .Where(a => !a.IsCoreAssembly())
+                .ToArray()
                 ;
         }
     }
