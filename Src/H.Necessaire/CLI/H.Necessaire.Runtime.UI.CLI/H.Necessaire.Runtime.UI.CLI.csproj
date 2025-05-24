@@ -15,4 +15,10 @@
     <ProjectReference Include="..\H.Necessaire.CLI\H.Necessaire.CLI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="nuget.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

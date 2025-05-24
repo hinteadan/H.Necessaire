@@ -6,6 +6,11 @@
       "commandLineArgs": "debug"
     },
 
+    "CLI MauiRuntimeNuGetPack": {
+      "commandName": "Project",
+      "commandLineArgs": "MauiRuntimeNuGetPack"
+    },
+
     "CLI maui-branding icon": {
       "commandName": "Project",
       "commandLineArgs": "maui-branding icon app=RoVFR.Client.MAUI svg-icon-file=C:\\H\\RoVFR\\Design\\RoVFR_App_Icon_TranslucentCircle.svg app-icon-base-size=100,100 splash-icon-base-size=128,128"
