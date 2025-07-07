@@ -7,9 +7,19 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
 {
     public class HFontIcon : HMauiComponentBase
     {
+        string glyphName = null;
         FontImageSource fontImageSource;
         Image fontImage;
         protected override View ConstructContent() => ConstructFontIcon();
+
+#if ANDROID
+        protected override void EnsureDependencies(params object[] constructionArgs)
+        {
+            base.EnsureDependencies(constructionArgs);
+
+            Loaded += HFontIcon_Loaded;
+        }
+#endif
 
         View ConstructFontIcon()
         {
@@ -29,7 +39,17 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
 
             return fontImage;
         }
+#if ANDROID
+        ~HFontIcon() => HSafe.Run(Dispose);
+        public override void Dispose() { Loaded -= HFontIcon_Loaded; base.Dispose(); }
 
+        void HFontIcon_Loaded(object sender, EventArgs e)
+        {
+            string glyph = Glyph;
+            fontImageSource.Glyph = null;
+            Glyph = glyph;
+        }
+#endif
         public double Size
         {
             get => fontImageSource.Size;
@@ -55,11 +75,13 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
         }
         public string Glyph
         {
-            get => fontImageSource.Glyph;
+            get => glyphName;
             set => SetGlyph(value);
         }
         public HFontIcon SetGlyph(string glyphName, string variant = null)
         {
+            this.glyphName = glyphName;
+
             if (variant is not null)
                 Variant = variant;
 

@@ -389,7 +389,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core.Resources
 
             reporter.SetSourceInterval(interval);
         }
-        private async Task ReportProgress(string action, decimal progressValue)
+        private async Task ReportProgress(string action, double progressValue)
         {
             ProgressReporter reporter = ProgressReporter.Get(WellKnownCosmosCallContextKey.CosmosDataBinProgressionScopeID);
             if (reporter == null)
@@ -555,7 +555,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core.Resources
 
                 reporter.SetSourceInterval(interval);
             }
-            private void ReportProgress(string action, decimal progressValue)
+            private void ReportProgress(string action, double progressValue)
             {
                 ProgressReporter reporter = ProgressReporter.Get(WellKnownCosmosCallContextKey.CosmosDataBinProgressionScopeID);
                 if (reporter == null)

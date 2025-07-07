@@ -1,19 +1,22 @@
 ﻿using System;
+using System.Collections.Concurrent;
 
 namespace H.Necessaire
 {
     class InstanceFactory
     {
-        static object locker = new object();
+        static readonly object locker = new object();
 
+        private readonly DependencyRegistry dependencyRegistry;
         private readonly ImADependencyProvider dependencyProvider;
         private readonly Func<object> factory;
-        private Lazy<object> lazyInstance = null;
+        private object instance = null;
 
         public bool IsAlwaysNew { get; } = false;
 
         public InstanceFactory(ImADependencyProvider dependencyProvider, Func<object> factory, bool isAlwaysNew = false)
         {
+            this.dependencyRegistry = dependencyProvider as DependencyRegistry;
             this.dependencyProvider = dependencyProvider;
             this.factory = factory;
             this.IsAlwaysNew = isAlwaysNew;
@@ -24,20 +27,29 @@ namespace H.Necessaire
         public object GetInstance()
         {
             EnsureInstance();
-            return lazyInstance.Value;
+            return instance;
         }
 
         private void EnsureInstance()
         {
             lock (locker)
             {
-                if (lazyInstance != null && !IsAlwaysNew)
+                if (instance != null && !IsAlwaysNew)
                     return;
 
-                lazyInstance = new Lazy<object>(factory);
-                if (lazyInstance.Value is ImADependency)
+                instance = factory?.Invoke();
+                if (instance is ImADependency dependency)
                 {
-                    (lazyInstance.Value as ImADependency).ReferDependencies(dependencyProvider);
+                    Type type = dependency.GetType();
+
+                    bool isReferAlreadyCalled = false;
+                    if (!IsAlwaysNew) isReferAlreadyCalled = dependencyRegistry?.IsReferDepsAlreadyCalledFor(type) ?? false;
+
+                    if (!isReferAlreadyCalled)
+                        dependency.ReferDependencies(dependencyProvider);
+
+                    if(!IsAlwaysNew)
+                        dependencyRegistry?.PinReferDepsCallFor(type);
                 }
             }
         }

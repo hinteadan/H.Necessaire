@@ -29,17 +29,17 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         Min = 0,
                         Max = 9999,
                         IncrementUnit = 1,
-                    }.And(x =>
+                    }
+                    .And(x =>
                     {
-
-                        x.NumberChanged += (s, a) =>
+                        x.NumberChanged += (s, a) => IfNotBinding(_ =>
                         {
                             if (a.OldValue != null)
                                 return;
 
                             if (a.NewValue.In(0, 9999))
                                 x.Number = DateTime.UtcNow.Year;
-                        };
+                        });
 
                     }), column: 0, row: 0);
 

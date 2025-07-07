@@ -1,8 +1,9 @@
 ﻿using H.Necessaire.Models.Branding;
+using H.Necessaire.Runtime.MAUI.Components.Abstracts;
 
 namespace H.Necessaire.Runtime.MAUI.Components
 {
-    internal class HUiToolkit
+    public class HUiToolkit
     {
         static readonly Lazy<HUiToolkit> current = new Lazy<HUiToolkit>(() => new HUiToolkit());
         public static HUiToolkit Current => current.Value;
@@ -20,10 +21,12 @@ namespace H.Necessaire.Runtime.MAUI.Components
         public IDisposable DisabledScopeFor(VisualElement visualElement)
         {
             return new ScopedRunner(
-                onStart: () => visualElement.IsEnabled = false,
-                onStop: () => visualElement.IsEnabled = true
+                onStart: () => { visualElement.IsEnabled = false; visualElement.Opacity = .67; },
+                onStop: () => { visualElement.IsEnabled = true; visualElement.Opacity = 1; }
             );
         }
-
+        public Page CurrentPage => Application.Current?.Windows?.FirstOrDefault()?.Page;
+        public HMauiPageBase HMauiPage => ((CurrentPage as Shell)?.CurrentPage as HMauiPageBase) ?? (CurrentPage as HMauiPageBase);
+        public bool IsPageBinding => HMauiPage?.IsBinding ?? false;
     }
 }

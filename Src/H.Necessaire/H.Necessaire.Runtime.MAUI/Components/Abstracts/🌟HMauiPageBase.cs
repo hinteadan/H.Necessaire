@@ -1,14 +1,21 @@
 ﻿using H.Necessaire.Runtime.MAUI.Components.Chromes;
 using H.Necessaire.Runtime.MAUI.Components.Controls;
 using H.Necessaire.Runtime.MAUI.Extensions;
+using H.Necessaire.Runtime.UI;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 {
-    public abstract class HMauiPageBase : ContentPage
+    public abstract class HMauiPageBase : ContentPage, IDisposable
     {
+        readonly List<Action> clearUIActions = new List<Action>();
+        readonly List<Action> refreshUIActions = new List<Action>();
+        internal IList<Action> ClearUIActions => clearUIActions;
+        internal IList<Action> RefreshUIActions => refreshUIActions;
         AppTheme currentPageTheme = AppTheme.Unspecified;
         readonly bool isHeavyInitializer = false;
         const int animationDurationInMs = 350;
+        readonly List<HResponsiveDeclaration> responsiveDeclarations = new List<HResponsiveDeclaration>();
+        internal IList<HResponsiveDeclaration> ResponsiveDeclarations => responsiveDeclarations;
         protected HMauiPageBase(bool isHeavyInitializer)
         {
             EnsureDependencies();
@@ -21,7 +28,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
             SetShellBrandingColors();
 
-            Unloaded += HMauiPageBase_Unloaded;
             Loaded += HMauiPageBase_Loaded;
 
             Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
@@ -32,11 +38,25 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         protected HMauiPageBase() : this(isHeavyInitializer: false) { }
         ~HMauiPageBase()
         {
-            HSafe.Run(() => Unloaded -= HMauiPageBase_Unloaded);
-            HSafe.Run(() => Loaded -= HMauiPageBase_Loaded);
-            HSafe.Run(() => Appearing -= HMauiPageBase_Appearing);
-            HSafe.Run(() => Disappearing -= HMauiPageBase_Disappearing);
-            HSafe.Run(() => Application.Current.RequestedThemeChanged -= Current_RequestedThemeChanged);
+            HSafe.Run(Dispose);
+        }
+
+        object viewData;
+        private Grid busyIndicator;
+        private HLabel busyIndicatorLabel;
+
+        public virtual object ViewData
+        {
+            get => viewData;
+            set
+            {
+                if (value == viewData)
+                    return;
+
+                viewData = value;
+
+                RefreshUI();
+            }
         }
 
         protected HMauiApp App => HUiToolkit.Current.App;
@@ -61,7 +81,10 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
             SetShellBrandingColors();
 
-            Content = ConstructContent();
+            if (Content is null || Content.ClassId == "PageInitializingView")
+            {
+                Content = ConstructContent();
+            }
         }
         protected virtual Task Destroy()
         {
@@ -86,6 +109,9 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         {
             return new DefaultChrome
             {
+                ClassId = "PageInitializingView",
+                HasHeader = false,
+                HasFooter = false,
                 Content = new Grid
                 {
                     RowDefinitions = [
@@ -128,6 +154,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         {
             if (isContentReconstructionEnabled)
             {
+                ClearUiBindings();
+                ClearResponsiveDeclarations();
                 currentPageTheme = Application.Current.UserAppTheme;
                 SetShellBrandingColors();
                 Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
@@ -140,28 +168,22 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
         async void HMauiPageBase_Loaded(object sender, EventArgs e)
         {
-            Appearing += HMauiPageBase_Appearing;
-            Disappearing += HMauiPageBase_Disappearing;
+            HSafe.Run(() => Loaded -= HMauiPageBase_Loaded);
+
             Application.Current.RequestedThemeChanged += Current_RequestedThemeChanged;
 
             await HSafe.Run(Initialize);
         }
 
-        async void HMauiPageBase_Unloaded(object sender, EventArgs e)
+        protected override async void OnAppearing()
         {
-            Appearing -= HMauiPageBase_Appearing;
-            Disappearing -= HMauiPageBase_Disappearing;
-            Application.Current.RequestedThemeChanged -= Current_RequestedThemeChanged;
-            await new Func<Task>(Destroy).TryOrFailWithGrace(onFail: null);
-        }
-
-        async void HMauiPageBase_Appearing(object sender, EventArgs e)
-        {
+            Shell.Current.Navigating += Shell_Navigating;
             await OnShowingUp();
         }
 
-        async void HMauiPageBase_Disappearing(object sender, EventArgs e)
+        protected override async void OnDisappearing()
         {
+            Shell.Current.Navigating -= Shell_Navigating;
             await OnLeaving();
         }
 
@@ -192,19 +214,22 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             };
         }
 
+        View busyIndicatorView = null;
         protected IDisposable BusyIndicator(Color color = null, string label = null)
         {
+            if (Content?.ClassId == "BusyIndicator")
+                return ScopedRunner.Null;
+
             View originalContent = null;
-            View busyIndicatorView = null;
             return new ScopedRunner(
                 onStart: () =>
                 {
                     originalContent = Content;
-                    Content = ConstructBusyIndicator(color, label).RefTo(out busyIndicatorView);
+                    Content = busyIndicatorView ?? ConstructBusyIndicator(color, label).RefTo(out busyIndicatorView);
                 },
                 onStop: () =>
                 {
-                    if (Content != busyIndicatorView)
+                    if (Content != null && Content != busyIndicatorView)
                         return;
 
                     Content = originalContent;
@@ -214,10 +239,12 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
         protected virtual View ConstructBusyIndicator(Color color = null, string label = null)
         {
-            return new Grid
+            return (busyIndicator ?? new Grid
             {
                 Padding = SizingUnit,
+                ClassId = "BusyIndicator",
             }
+            .RefTo(out busyIndicator)
             .And(layout =>
             {
 
@@ -243,13 +270,99 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                         Text = label.IsEmpty() ? "Loading, please wait..." : label,
                         TextColor = Branding.InformationColor.ToMaui(),
                         HorizontalTextAlignment = TextAlignment.Center,
-                    });
+                    }.RefTo(out busyIndicatorLabel));
 
                 }));
 
 
 
-            });
+            }))
+            .AndIf(!label.IsEmpty(), x => busyIndicatorLabel.Text = label)
+            ;
+        }
+
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+
+            if (responsiveDeclarations.Count == 0)
+                return;
+
+            responsiveDeclarations.SelectMany(x => x.ClearActions ?? Enumerable.Empty<Action>()).Invoke();
+            height.OnHeightCategory(responsiveDeclarations.SelectMany(x => x.HeightCategoryActions ?? Enumerable.Empty<HHeightCategoryAction>()).ToNoNullsArray(nullIfEmpty: false));
+            width.OnWidthCategory(responsiveDeclarations.SelectMany(x => x.WidthCategoryActions ?? Enumerable.Empty<HWidthCategoryAction>()).ToNoNullsArray(nullIfEmpty: false));
+        }
+
+        protected void ClearResponsiveDeclarations() => responsiveDeclarations.Clear();
+
+        public bool IsBinding { get; protected set; }
+        protected virtual void RefreshUI(bool isViewDataIgnored = false)
+        {
+            using (new ScopedRunner(_ => IsBinding = true, _ => IsBinding = false))
+            {
+                ClearUI();
+                if (!isViewDataIgnored && viewData is null)
+                    return;
+
+                foreach (Action refreshAction in refreshUIActions)
+                    refreshAction();
+            }
+        }
+        protected void IfNotBinding(Action<bool> doThis)
+        {
+            if (IsBinding || doThis is null)
+                return;
+
+            doThis(true);
+        }
+
+        protected async Task IfNotBinding(Func<bool, Task> doThis)
+        {
+            if (IsBinding || doThis is null)
+                return;
+
+            await doThis(true);
+        }
+
+        protected virtual void ClearUI()
+        {
+            foreach (Action clearAction in clearUIActions)
+                clearAction();
+        }
+
+        protected void ClearUiBindings()
+        {
+            refreshUIActions.Clear();
+            clearUIActions.Clear();
+        }
+
+        async void Shell_Navigating(object sender, ShellNavigatingEventArgs e)
+        {
+            bool isNavigatingBack = e.Target.Location.OriginalString == "..";
+
+            if (isNavigatingBack && IsBackNavigtionCustomProcessed())
+            {
+                e.Cancel();
+
+                if (await CanGoBack())
+                {
+                    await Navi.GoBack();
+                    return;
+                }
+            }
+        }
+
+        protected virtual bool IsBackNavigtionCustomProcessed() => false;
+
+        protected virtual Task<bool> CanGoBack() => true.AsTask();
+
+        public virtual async void Dispose()
+        {
+            HSafe.Run(ClearUiBindings);
+            HSafe.Run(ClearResponsiveDeclarations);
+            HSafe.Run(() => Loaded -= HMauiPageBase_Loaded);
+            HSafe.Run(() => Application.Current.RequestedThemeChanged -= Current_RequestedThemeChanged);
+            await HSafe.Run(Destroy);
         }
     }
 }

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>H.Necessaire.Serialization</id>
-    <version>2.44.4</version>
+    <version>2.45.0</version>
     <title>H's Serialization Necessaire</title>
     <projectUrl>https://h.necessaire.dev</projectUrl>
     <repository type="git" url="https://github.com/hinteadan/H.Necessaire.git" branch="master" />
@@ -17,7 +17,7 @@
     <copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</copyright>
     <tags>hintea dan alexandru serialization data json dal data access layer stream .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections task array</tags>
     <dependencies>
-      <dependency id="H.Necessaire" version="2.44.4" />
+      <dependency id="H.Necessaire" version="2.45.0" />
       <dependency id="Newtonsoft.Json" version="13.0.3" />
     </dependencies>
   </metadata>

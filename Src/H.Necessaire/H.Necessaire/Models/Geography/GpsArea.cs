@@ -31,9 +31,49 @@ namespace H.Necessaire
         public GpsPoint[] EastMost() => Pins.Where(x => x.LngInDegrees == EastBoundary()).ToArray();
         public GpsPoint[] WestMost() => Pins.Where(x => x.LngInDegrees == WestBoundary()).ToArray();
 
+        /**
+         As of https://wrfranklin.org/Research/Short_Notes/pnpoly.html
+
+         int pnpoly(int nvert, float *vertx, float *verty, float testx, float testy)
+            {
+              int i, j, c = 0;
+              for (i = 0, j = nvert-1; i < nvert; j = i++) {
+                if ( ((verty[i]>testy) != (verty[j]>testy)) &&
+	             (testx < (vertx[j]-vertx[i]) * (testy-verty[i]) / (verty[j]-verty[i]) + vertx[i]) )
+                   c = !c;
+              }
+              return c;
+            }
+Argument	Meaning
+nvert 	Number of vertices in the polygon. Whether to repeat the first vertex at the end is discussed below.
+vertx, verty 	Arrays containing the x- and y-coordinates of the polygon's vertices.
+testx, testy	X- and y-coordinate of the test point. 
+         */
+        public bool Contains(GpsPoint location)
+        {
+            if (Pins.IsEmpty())
+                return false;
+
+            bool result = false;
+
+            for (int i = 0, j = Pins.Length - 1; i < Pins.Length; j = i++)
+            {
+                if (
+                    ((Pins[i].LatInDegrees > location.LatInDegrees) != (Pins[j].LatInDegrees > location.LatInDegrees))
+                    &&
+                    (location.LngInDegrees < (Pins[j].LngInDegrees - Pins[i].LngInDegrees) * (location.LatInDegrees - Pins[i].LatInDegrees) / (Pins[j].LatInDegrees - Pins[i].LatInDegrees) + Pins[i].LngInDegrees)
+                )
+                    result = !result;
+            }
+
+            return result;
+        }
+
         public override string ToString()
         {
             return $"{Pins?.Length ?? 0} point(s)";
         }
+
+        public static implicit operator GpsArea(GpsPoint[] gpsPoints) => new GpsArea(gpsPoints);
     }
 }

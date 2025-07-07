@@ -22,6 +22,9 @@ namespace H.Necessaire.Runtime.Logging
 
         public override async Task<OperationResult<LogEntry>> Process(LogEntry logEntry)
         {
+            if (storageService is null)
+                return logEntry;
+
             return (await storageService.Save(logEntry)).WithPayload(logEntry);
         }
     }

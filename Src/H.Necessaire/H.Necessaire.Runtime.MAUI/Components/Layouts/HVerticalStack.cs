@@ -20,6 +20,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Layouts
             set
             {
                 layout.Clear();
+
                 if (value.IsEmpty())
                 {
                     return;
@@ -27,6 +28,9 @@ namespace H.Necessaire.Runtime.MAUI.Components.Layouts
 
                 foreach (IView view in value)
                 {
+                    if (view is null)
+                        continue;
+
                     layout.Add(view);
                 }
             }

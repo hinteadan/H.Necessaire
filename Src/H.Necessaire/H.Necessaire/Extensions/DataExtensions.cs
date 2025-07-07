@@ -141,6 +141,25 @@ namespace H.Necessaire
             return new DateTime(ticks, dateTimeKind);
         }
 
+        public static DateTime AsUtcDate(this DateTime dateTime)
+        {
+            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0, DateTimeKind.Utc);
+        }
+
+        public static DateTime RoundToMinute(this DateTime dateTime)
+        {
+            if (dateTime == DateTime.MinValue || dateTime == DateTime.MaxValue)
+                return dateTime;
+
+            var secondsToAdd = dateTime.Second >= 30 ? 60 - dateTime.Second : -dateTime.Second;
+            var remainderAfterSeconds = dateTime - new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second, dateTime.Kind);
+            return
+                HSafe.Run(() => dateTime.AddSeconds(secondsToAdd) - remainderAfterSeconds).RefPayload(out var result)
+                ? result
+                : dateTime
+                ;
+        }
+
         public static PartialDateTime ToPartialDateTime(this DateTime dateTime)
         {
             return
@@ -166,6 +185,19 @@ namespace H.Necessaire
 
         public static PartialDateTime ToTimeOnlyPartialDateTime(this DateTime dateTime)
             => dateTime.ToPartialDateTime(x => { x.Year = null; x.Month = null; x.DayOfMonth = null; });
+
+        public static DateTime ToTimezone(this DateTime dateTime, TimeZoneInfo to)
+        {
+            if (to is null)
+                return dateTime;
+
+            if (dateTime.Kind == DateTimeKind.Utc && to == TimeZoneInfo.Utc)
+                return dateTime;
+
+            DateTime utc = dateTime.EnsureUtc();
+            DateTime dest = TimeZoneInfo.ConvertTime(utc, TimeZoneInfo.Utc, to);
+            return dest;
+        }
 
         public static float TrimToPercent(this float value)
         {
@@ -300,23 +332,79 @@ namespace H.Necessaire
             return data;
         }
 
-        public static T And<T>(this T data, Action<T> doThis) { doThis(data); return data; }
+        public static Action Act<T>(this T data, Action<T> action)
+        {
+            return () => action?.Invoke(data);
+        }
+
+        public static void RegisterTo(this Action action, IList<Action> registry)
+        {
+            if (action is null)
+                return;
+
+            if (registry is null)
+                return;
+
+            registry.Add(action);
+        }
+
+        public static void Invoke(this IEnumerable<Action> actions)
+        {
+            if (actions is null)
+                return;
+
+            foreach (Action action in actions)
+            {
+                if (action is null)
+                    continue;
+
+                action.Invoke();
+            }
+        }
+
+        public static TOut Morph<TIn, TOut>(this TIn @in, Func<TIn, TOut> projector, TOut defaultTo = default)
+            => projector is null ? defaultTo : projector(@in);
+
+        public static TOut MorphIf<TIn, TOut>(this TIn @in, bool condition, Func<TIn, TOut> projector, TOut defaultTo = default)
+            => !condition ? defaultTo : @in.Morph(projector, defaultTo);
+
+        public static TOut MorphIf<TIn, TOut>(this TIn @in, Func<TIn, bool> condition, Func<TIn, TOut> projector, TOut defaultTo = default)
+            => condition is null ? defaultTo : @in.MorphIf(condition(@in), projector, defaultTo);
+
+        public static TOut MorphIfNotNull<TIn, TOut>(this TIn @in, Func<TIn, TOut> projector, TOut defaultTo = default) where TIn : class
+            => @in.MorphIf(@in != null, projector, defaultTo);
+
+        public static TOut MorphIfNotEmpty<TOut>(this string @in, Func<string, TOut> projector, TOut defaultTo = default, bool isWhitespaceConsideredEmpty = true)
+            => @in.MorphIf(!@in.IsEmpty(isWhitespaceConsideredEmpty), projector, defaultTo);
+
+        public static T And<T>(this T data, Action<T> doThis) { doThis?.Invoke(data); return data; }
         public static T AndIf<T>(this T data, bool condition, Action<T> doThis)
         {
             if (!condition)
                 return data;
 
-            doThis(data);
+            doThis?.Invoke(data);
             return data;
         }
         public static T AndIf<T>(this T data, Func<T, bool> condition, Action<T> doThis)
         {
-            if (!condition(data))
+            if (condition?.Invoke(data) != true)
                 return data;
 
-            doThis(data);
+            doThis?.Invoke(data);
             return data;
         }
+        public static T IfNotNull<T>(this T data, Action<T> doThis) where T : class
+            => data.AndIf(data != null, doThis);
+
+        public static OperationResult Chk<T>(this T data, bool condition, string failReason, string winReason = null)
+            => condition ? OperationResult.Win(winReason.NullIfEmpty()).Display(winReason.NullIfEmpty()) : OperationResult.Fail(failReason.NullIfEmpty()).Display(failReason.NullIfEmpty());
+        public static OperationResult Chk<T>(this T data, Func<T, bool> condition, string failReason, string winReason = null)
+            => data.Chk(condition?.Invoke(data) ?? false, failReason, winReason);
+        public static OperationResult Chk<T>(this T data, bool condition, string failDisplay, string winDisplay, string failReason = null, string winReason = null)
+            => condition ? OperationResult.Win(winReason.NullIfEmpty() ?? winDisplay.NullIfEmpty()).Display(winDisplay.NullIfEmpty()) : OperationResult.Fail(failReason.NullIfEmpty() ?? failDisplay.NullIfEmpty()).Display(failDisplay.NullIfEmpty());
+        public static OperationResult Chk<T>(this T data, Func<T, bool> condition, string failDisplay, string winDisplay, string failReason = null, string winReason = null)
+            => data.Chk(condition?.Invoke(data) ?? false, failDisplay, winDisplay, failReason, winReason);
 
         public static Tuple<T1, T2> TupleWith<T1, T2>(this T1 item1, T2 item2) => Tuple.Create<T1, T2>(item1, item2);
 
@@ -369,21 +457,31 @@ namespace H.Necessaire
 
         public static OperationResult Merge(this IEnumerable<OperationResult> operationResults, string globalReasonIfNecesarry = defaultGlobalReasonForMultipleFailedOperations)
         {
-            if (!operationResults?.Any() ?? true)
+            if (operationResults.IsEmpty())
                 return OperationResult.Win();
 
             if (operationResults.All(x => x.IsSuccessful))
-                return OperationResult.Win();
+                return OperationResult.Win()
+                    .Display(operationResults.SelectMany(x => x.ReasonsToDisplay ?? Array.Empty<string>()).ToNonEmptyArray())
+                    .Warn(operationResults.SelectMany(x => x.Warnings ?? Array.Empty<string>()).ToNonEmptyArray())
+                    ;
 
             OperationResult[] failedRules = operationResults.Where(x => !x.IsSuccessful).ToArray();
 
             if (failedRules.Length == 1)
-                return OperationResult.Fail(failedRules.Single().Reason, failedRules.Single().Comments);
+                return OperationResult
+                    .Fail(failedRules[0].Reason, failedRules[0].Comments)
+                    .Display(failedRules[0].ReasonsToDisplay)
+                    .Warn(failedRules[0].Warnings)
+                    ;
 
             return OperationResult.Fail(
                 reason: string.IsNullOrWhiteSpace(globalReasonIfNecesarry) ? defaultGlobalReasonForMultipleFailedOperations : globalReasonIfNecesarry,
-                comments: failedRules.SelectMany(x => x.FlattenReasons()).ToArray()
-                );
+                comments: failedRules.SelectMany(x => x.FlattenReasons() ?? Array.Empty<string>()).ToNonEmptyArray()
+                )
+                .Display(failedRules.SelectMany(x => x.ReasonsToDisplay ?? Array.Empty<string>()).ToNonEmptyArray())
+                .Warn(failedRules.SelectMany(x => x.Warnings ?? Array.Empty<string>()).ToNonEmptyArray())
+                ;
         }
 
         public static OperationResult ValidateSortFilters(this ISortFilter sortFilter, params string[] validateSortFilters)
@@ -397,7 +495,10 @@ namespace H.Necessaire
             return OperationResult.Win();
         }
 
-        public static TaggedValue<T> Tag<T>(this T value, string name, string id = null)
+        public static TaggedValue<OperationResult> Tag<T>(this OperationResult<T> value, string name, string id = null)
+            => new TaggedOperationResult<T> { Value = value, Name = name, ID = id.IsEmpty() ? Guid.NewGuid().ToString() : id };
+
+        public static TaggedValue<T> Tag<T>(this T value, string name = null, string id = null)
             => new TaggedValue<T> { Value = value, Name = name, ID = id.IsEmpty() ? Guid.NewGuid().ToString() : id };
 
         public static Note NoteAs(this string value, string id)
@@ -484,11 +585,18 @@ namespace H.Necessaire
             => data.ToAuditMeta(data.ID?.ToString() ?? Guid.Empty.ToString(), auditActionType, doneBy);
 
         public static OperationResult<T> ToWinResult<T>(this T payload, string reason = null, params string[] comments) => OperationResult.Win(reason, comments).WithPayload(payload);
+        public static OperationResult<T> ToFailResult<T>(this T payload, string reason = null, params string[] comments) => OperationResult.Fail(reason, comments).WithPayload(payload);
 
         public static async Task<OperationResult<T>> ToWinResult<T>(this Task<T> payloadTask, string reason = null, params string[] comments)
         {
             T payload = await payloadTask;
             return payload.ToWinResult(reason, comments);
+        }
+
+        public static async Task<OperationResult<T>> ToFailResult<T>(this Task<T> payloadTask, string reason = null, params string[] comments)
+        {
+            T payload = await payloadTask;
+            return payload.ToFailResult(reason, comments);
         }
 
         public static DataBinMeta ToMeta(this DataBin dataBin)
@@ -694,7 +802,7 @@ namespace H.Necessaire
         }
         public static TimeSpan? NoLessThanZero(this TimeSpan? timeSpan) => timeSpan.NoLessThan(TimeSpan.Zero);
 
-        public static bool In(this decimal value, NumberInterval numberInterval)
+        public static bool In(this double value, NumberInterval numberInterval)
         {
             return numberInterval.Contains(value);
         }

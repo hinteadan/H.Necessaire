@@ -8,7 +8,7 @@
   <ItemGroup>
     <PackageReference Include="DeviceDetector.NET" Version="6.4.2" />
     <PackageReference Include="H.Versioning" Version="2.0.6" />
-    <PackageReference Include="System.Runtime.Caching" Version="9.0.5" />
+    <PackageReference Include="System.Runtime.Caching" Version="9.0.6" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace H.Necessaire.Runtime.MAUI.Extensions
+﻿namespace H.Necessaire.Runtime.MAUI.Extensions
 {
     public static class ColorExtensions
     {
@@ -20,7 +14,7 @@ namespace H.Necessaire.Runtime.MAUI.Extensions
             if (colorInfo.Opacity >= 1)
                 return Color.FromRgb(colorInfo.Red, colorInfo.Green, colorInfo.Blue);
 
-            byte opacityAsByte = (byte)Math.Round(opacityNormalizer.Do((decimal)colorInfo.Opacity));
+            byte opacityAsByte = (byte)Math.Round(opacityNormalizer.Do(colorInfo.Opacity));
 
             return Color.FromRgba(colorInfo.Red, colorInfo.Green, colorInfo.Blue, opacityAsByte);
         }

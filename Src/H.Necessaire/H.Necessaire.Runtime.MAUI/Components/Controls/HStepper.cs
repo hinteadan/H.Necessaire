@@ -4,7 +4,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
     public class HStepper : HMauiComponentBase
     {
-        decimal incrementUnit = .5m;
+        double incrementUnit = .5;
         HGlyphButton incrementButton;
         HGlyphButton decrementButton;
         protected override View ConstructContent()
@@ -49,26 +49,25 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         }
 
         public event EventHandler OnValueChanged;
-        public decimal IncrementUnit { get => incrementUnit; set => incrementUnit = Math.Abs(value); }
+        public double IncrementUnit { get => incrementUnit; set => incrementUnit = Math.Abs(value); }
 
-        decimal? value = null;
-        public decimal? Value
+        double? value = null;
+        public double? Value
         {
             get => value;
             set
             {
-                decimal? preValue = this.value;
-                decimal? newValue = value;
+                if (value == this.value)
+                    return;
 
-                this.value = newValue;
+                this.value  = value;
 
-                if (newValue != preValue)
-                    OnValueChanged?.Invoke(this, EventArgs.Empty);
+                IfNotBinding(_ => OnValueChanged?.Invoke(this, EventArgs.Empty));
             }
         }
 
-        decimal? min;
-        public decimal? Min
+        double? min;
+        public double? Min
         {
             get => min;
             set
@@ -78,8 +77,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             }
         }
 
-        decimal? max;
-        public decimal? Max
+        double? max;
+        public double? Max
         {
             get => max;
             set
@@ -106,7 +105,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         {
             if (Value is null)
             {
-                Value = Min ?? default(decimal);
+                Value = Min ?? default(double);
                 return;
             }
 
@@ -129,7 +128,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         {
             if (Value is null)
             {
-                Value = Max ?? default(decimal);
+                Value = Max ?? default(double);
                 return;
             }
 

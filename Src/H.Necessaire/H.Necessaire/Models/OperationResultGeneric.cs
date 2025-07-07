@@ -9,8 +9,10 @@
         public OperationResult(OperationResult operationResult)
         {
             IsSuccessful = operationResult.IsSuccessful;
-            Reason = operationResult.Reason;
-            Comments = operationResult.Comments ?? new string[0];
+            Reason = operationResult.Reason.NullIfEmpty();
+            Comments = operationResult.Comments.ToNonEmptyArray();
+            ReasonsToDisplay = operationResult.ReasonsToDisplay.ToNonEmptyArray();
+            Warnings = operationResult.Warnings.ToNonEmptyArray();
         }
 
         public OperationResult(OperationResult operationResult, T payload) : this(operationResult)
@@ -33,7 +35,9 @@
             return Payload;
         }
 
-        public static implicit operator bool(OperationResult<T> operationResult) => operationResult.IsSuccessful;
+        public static implicit operator bool(OperationResult<T> operationResult) => operationResult?.IsSuccessful == true;
+        public static implicit operator OperationResult<T>(T payload) => payload.ToWinResult();
+        public static implicit operator OperationResult<T>(string failReason) => Fail(failReason).WithoutPayload<T>();
 
         public T Return() => Payload;
         public OperationResult<T> RefResult(out OperationResult<T> result)

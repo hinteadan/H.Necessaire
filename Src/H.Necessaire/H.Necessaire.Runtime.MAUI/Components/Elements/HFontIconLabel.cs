@@ -45,6 +45,11 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
         public HLabel Label => label;
         public HFontIcon Icon => icon;
 
+        public Color IconColor { get => icon.Color; set => icon.Color = value; }
+        public Color TextColor { get => label.TextColor; set => label.TextColor = value; }
+        public Color Color { get => TextColor; set => TextColor = value.And(x => IconColor = x); }
+        public double FontSize { get => label.FontSize; set => label.FontSize = value; }
+
         public LineBreakMode LineBreakMode { get => label.LineBreakMode; set => label.LineBreakMode = value; }
         public string Text { get => label.Text; set => label.Text = value; }
         public string Glyph { get => icon.Glyph; set => icon.Glyph = value; }

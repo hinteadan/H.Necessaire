@@ -17,7 +17,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
         public event EventHandler Changed;
 
-        public decimal IncrementUnit
+        public double IncrementUnit
         {
             get => minEditor?.IncrementUnit ?? 0;
             set
@@ -68,7 +68,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                     .And(x =>
                     {
                         minEditor = x;
-                        minEditor.NumberChanged += (s, a) => { OnIntervalChanged(s); };
+                        minEditor.NumberChanged += (s, a) => IfNotBinding(_ => { OnIntervalChanged(s); });
                     })
                     , column: 0, row: 0
                 );
@@ -80,7 +80,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                     .And(x =>
                     {
                         maxEditor = x;
-                        maxEditor.NumberChanged += (s, a) => { OnIntervalChanged(s); };
+                        maxEditor.NumberChanged += (s, a) => IfNotBinding(_ => { OnIntervalChanged(s); });
                     })
                     , column: 1, row: 0
                 );
@@ -98,7 +98,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         .And(check =>
                         {
                             minIncludeCheck = check;
-                            check.CheckedChanged += (s, a) => { OnIntervalChanged(s); };
+                            check.CheckedChanged += (s, a) => IfNotBinding(_ => { OnIntervalChanged(s); });
                         }));
 
                         layout.Add(new HLabel
@@ -128,7 +128,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         .And(check =>
                         {
                             maxIncludeCheck = check;
-                            check.CheckedChanged += (s, a) => { OnIntervalChanged(s); };
+                            check.CheckedChanged += (s, a) => IfNotBinding(_ => { OnIntervalChanged(s); });
                         }));
 
 
@@ -148,7 +148,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 return;
             }
 
-            Changed?.Invoke(this, EventArgs.Empty);
+            IfNotBinding(_ => Changed?.Invoke(this, EventArgs.Empty));
         }
 
         bool NormalizeUI(object sender)

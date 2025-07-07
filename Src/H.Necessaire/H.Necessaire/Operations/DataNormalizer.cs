@@ -12,7 +12,7 @@ namespace H.Necessaire
             this.To = toInterval;
         }
 
-        public decimal Do(decimal value)
+        public double Do(double value)
         {
             if (From.IsInfinite)
                 throw new InvalidOperationException("From interval is infinite");
@@ -26,17 +26,19 @@ namespace H.Necessaire
             if (To.IsSingle)
                 return To.Min.Value;
 
-            decimal locationPercent =
+            double locationPercent =
                 value <= From.Min.Value
                 ? 0
                 : value >= From.Max.Value
                 ? 1
                 : (value - From.Min.Value) / (From.Max.Value - From.Min.Value);
 
-            decimal targetValue = (locationPercent * (To.Max.Value - To.Min.Value)) + To.Min.Value;
+            double targetValue = (locationPercent * (To.Max.Value - To.Min.Value)) + To.Min.Value;
 
             return targetValue;
         }
+
+        public DataNormalizer Reverse() => new DataNormalizer(To, From);
 
         public static DataNormalizer Percent(NumberInterval fromInterval) => new DataNormalizer(fromInterval, NumberInterval.Percent);
     }

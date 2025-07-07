@@ -8,8 +8,19 @@ namespace H.Necessaire
     class DependencyRegistry : ImADependencyRegistry
     {
         #region Construct
+        readonly ConcurrentDictionary<Type, bool> referDepsTrackingDictionary = new ConcurrentDictionary<Type, bool>();
         readonly ConcurrentDictionary<Type, InstanceFactory> dependencyDictionary = new ConcurrentDictionary<Type, InstanceFactory>();
         #endregion
+
+        public bool HasTypeRegistered(Type type)
+        {
+            return dependencyDictionary.ContainsKey(type);
+        }
+
+        public bool HasTypeRegistered<T>()
+        {
+            return dependencyDictionary.ContainsKey(typeof(T));
+        }
 
         public ImADependencyRegistry Register(Type type, Func<object> factory)
         {
@@ -51,10 +62,10 @@ namespace H.Necessaire
 
         public object Get(Type type)
         {
-            if (!dependencyDictionary.ContainsKey(type))
+            if (!dependencyDictionary.TryGetValue(type, out var x))
                 return null;
 
-            return dependencyDictionary[type].GetInstance();
+            return x.GetInstance();
         }
         public T Get<T>() => (T)Get(typeof(T));
 
@@ -72,6 +83,18 @@ namespace H.Necessaire
                 dependencyDictionary
                 .Where(x => x.Value.IsAlwaysNew)
                 .Select(x => new KeyValuePair<Type, Func<object>>(x.Key, x.Value.GetInstance));
+        }
+
+        internal bool IsReferDepsAlreadyCalledFor(Type type)
+        {
+            if(referDepsTrackingDictionary.TryGetValue(type, out var isReferAlreadyCalled))
+                return isReferAlreadyCalled;
+            return false;
+        }
+
+        internal void PinReferDepsCallFor(Type type)
+        {
+            referDepsTrackingDictionary.AddOrUpdate(type, true, (_, __) => true);
         }
     }
 }

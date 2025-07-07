@@ -17,7 +17,7 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core
             browser = dependencyProvider.Get<ImAStorageBrowserService<DataBin, DataBinFilter>>();
         }
 
-        public async Task Debug()
+        public Task Debug()
         {
             using (new ProgressiveScope(WellKnownCosmosCallContextKey.CosmosDataBinProgressionScopeID, ReportProgress))
             {
@@ -51,6 +51,8 @@ namespace H.Necessaire.Runtime.Azure.CosmosDB.Core
                 //    await dataStream.CopyToAsync(outputStream);
                 //}
             }
+
+            return Task.CompletedTask;
         }
 
         private Task ReportProgress(object sender, ProgressEventArgs args)

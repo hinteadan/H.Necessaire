@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace H.Necessaire
 {
@@ -57,6 +58,12 @@ namespace H.Necessaire
         }
 
         public static string Print(this decimal number, int numberOfDecimals = 2)
+        {
+            numberOfDecimals = numberOfDecimals < 0 ? 0 : numberOfDecimals > int.MaxValue / 100 ? int.MaxValue / 100 : numberOfDecimals;
+            return number.ToString($"0.{new string('0', numberOfDecimals)}");
+        }
+
+        public static string Print(this double number, int numberOfDecimals = 2)
         {
             numberOfDecimals = numberOfDecimals < 0 ? 0 : numberOfDecimals > int.MaxValue / 100 ? int.MaxValue / 100 : numberOfDecimals;
             return number.ToString($"0.{new string('0', numberOfDecimals)}");
@@ -156,5 +163,9 @@ namespace H.Necessaire
             return localTime.ToString(format);
         }
         public static string PrintTimeStamp(this DateTime? dateTime) => dateTime is null ? "Never" : dateTime.Value.PrintTimeStamp();
+
+        public static string ToInvarString(this float value) => value.ToString(CultureInfo.InvariantCulture);
+        public static string ToInvarString(this double value) => value.ToString(CultureInfo.InvariantCulture);
+        public static string ToInvarString(this decimal value) => value.ToString(CultureInfo.InvariantCulture);
     }
 }

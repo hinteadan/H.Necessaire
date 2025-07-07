@@ -2,7 +2,7 @@
 {
     public static class Navi
     {
-        public static async Task Go(string route, IDictionary<string, object> queryParams = null)
+        public static async Task Go(string route, params Note[] queryParams)
         {
             if (queryParams.IsEmpty())
             {
@@ -10,10 +10,10 @@
                 return;
             }
 
-            await Shell.Current.GoToAsync(route, queryParams);
+            await Shell.Current.GoToAsync(route, queryParams.ToDictionary(x => x.ID, x => x.Value as object));
         }
 
-        public static async Task Go(Uri route, IDictionary<string, object> queryParams = null)
+        public static async Task Go(Uri route, params Note[] queryParams)
         {
             if (queryParams.IsEmpty())
             {
@@ -21,10 +21,10 @@
                 return;
             }
 
-            await Shell.Current.GoToAsync(route, queryParams);
+            await Shell.Current.GoToAsync(route, queryParams.ToDictionary(x => x.ID, x => x.Value as object));
         }
 
-        public static async Task GoBack(IDictionary<string, object> queryParams = null)
+        public static async Task GoBack(params Note[] queryParams)
         {
             await Go("..", queryParams);
         }

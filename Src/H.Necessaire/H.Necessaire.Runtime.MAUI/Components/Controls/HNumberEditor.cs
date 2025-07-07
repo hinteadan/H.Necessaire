@@ -21,26 +21,32 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         public event EventHandler<NumberChangedEventArgs> NumberChanged;
 
         public Entry Editor => editor;
-        decimal? preValue = null;
-        public decimal? Number
+
+        double? number;
+        public double? Number
         {
-            get => stepper.Value;
+            get => number;
             set
             {
-                decimal? oldValue = preValue;
-                decimal? newValue = value;
                 value = ApplyMinMaxIfNecessary(value);
+
+                if (value == number)
+                    return;
+
+                double? preValue = number;
+                number = value;
                 stepper.Value = value;
                 string valueAsString = value?.ToString();
                 if (editor.Text != valueAsString)
                     editor.Text = valueAsString;
-                if (newValue != oldValue)
-                    NumberChanged?.Invoke(this, new NumberChangedEventArgs(oldValue, newValue));
+                
+                IfNotBinding(_ => NumberChanged?.Invoke(this, new NumberChangedEventArgs(preValue, value)));
+
                 preValue = value;
             }
         }
 
-        private decimal? ApplyMinMaxIfNecessary(decimal? value)
+        private double? ApplyMinMaxIfNecessary(double? value)
         {
             if (value is null)
                 return value;
@@ -57,11 +63,11 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             return value;
         }
 
-        public decimal? Min { get => stepper.Min; set => stepper.Min = value; }
-        public decimal? Max { get => stepper.Max; set => stepper.Max = value; }
+        public double? Min { get => stepper.Min; set => stepper.Min = value; }
+        public double? Max { get => stepper.Max; set => stepper.Max = value; }
         public string Placeholder { get => editor.Placeholder; set => editor.Placeholder = value; }
-        public decimal IncrementUnit { get => stepper?.IncrementUnit ?? 0; set { if (stepper is not null) stepper.IncrementUnit = value; } }
-        public Func<decimal?, CancellationToken, Task<OperationResult<decimal?>>> UserInputValidator { get; set; }
+        public double IncrementUnit { get => stepper?.IncrementUnit ?? 0; set { if (stepper is not null) stepper.IncrementUnit = value; } }
+        public Func<double?, CancellationToken, Task<OperationResult<double?>>> UserInputValidator { get; set; }
 
         protected override View ConstructLabeledContent()
         {
@@ -104,10 +110,10 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 .And(stepper =>
                 {
 
-                    stepper.OnValueChanged += (sender, args) =>
+                    stepper.OnValueChanged += (sender, args) => IfNotBinding(_ =>
                     {
                         Number = stepper.Value;
-                    };
+                    });
 
                 })
                 .And(x => stepper = x);
@@ -127,7 +133,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                     x.Editor.VerticalTextAlignment = TextAlignment.Center;
                     x.Editor.Keyboard = Keyboard.Numeric;
                 })
-                .And(x => x.TextChanged += async (sender, args) => { await OnTextChanged(sender, args); })
+                .And(x => x.TextChanged += async (sender, args) => await IfNotBinding(async _ => { await OnTextChanged(sender, args); }))
                 .And(x => editor = x.Editor)
                 ;
         }
@@ -138,10 +144,10 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             if (newValue == "-")
                 return;
 
-            decimal? parsedValue = newValue.ParseToDecimalOrFallbackTo(null);
+            double? parsedValue = newValue.ParseToDoubleOrFallbackTo(null);
             Number = parsedValue;
 
-            OperationResult<decimal?> validationResult = parsedValue.ToWinResult();
+            OperationResult<double?> validationResult = parsedValue.ToWinResult();
 
             if (UserInputValidator is not null)
                 validationResult = await UserInputValidator.Invoke(Number, CancellationToken.None);
@@ -150,14 +156,14 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
         public class NumberChangedEventArgs : EventArgs
         {
-            public NumberChangedEventArgs(decimal? oldValue, decimal? newValue)
+            public NumberChangedEventArgs(double? oldValue, double? newValue)
             {
                 OldValue = oldValue;
                 NewValue = newValue;
             }
 
-            public decimal? OldValue { get; }
-            public decimal? NewValue { get; }
+            public double? OldValue { get; }
+            public double? NewValue { get; }
         }
     }
 }

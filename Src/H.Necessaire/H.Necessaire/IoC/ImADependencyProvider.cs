@@ -6,5 +6,8 @@ namespace H.Necessaire
     {
         T Get<T>();
         object Get(Type type);
+
+        bool HasTypeRegistered(Type type);
+        bool HasTypeRegistered<T>();
     }
 }

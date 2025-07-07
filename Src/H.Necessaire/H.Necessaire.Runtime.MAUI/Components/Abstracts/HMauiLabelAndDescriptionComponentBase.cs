@@ -5,10 +5,10 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 {
     public abstract class HMauiLabelAndDescriptionComponentBase : HMauiComponentBase
     {
-        ContentPresenter contentPresenter;
+        ContentView contentView;
         VerticalStackLayout layout;
-        HLabel label;
-        HLabel description;
+        protected HLabel label;
+        protected HLabel description;
 
         public HMauiLabelAndDescriptionComponentBase(params object[] constructionArgs) : base(constructionArgs) { }
 
@@ -33,13 +33,10 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                         TextColor = Branding.SecondaryColor.ToMaui(),
                     };
 
-                    contentPresenter = new ContentPresenter();
-                    contentPresenter.Content = ConstructLabeledContent();
-
                     layout.Add(new ContentView
                     {
-                        Content = contentPresenter
-                    });
+                        Content = ConstructLabeledContent()
+                    }.RefTo(out contentView));
 
                 });
 
@@ -48,7 +45,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
         protected override View WrapReceivedContent(View content)
         {
-            contentPresenter.Content = content;
+            contentView.Content = content;
             return base.WrapReceivedContent(content);
         }
 
@@ -64,7 +61,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                 label.Text = value;
                 if (value.IsEmpty())
                     layout.Remove(label);
-                else
+                else if(!layout.Contains(label))
                     layout.Insert(0, label);
             }
         }
@@ -77,7 +74,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                 description.Text = value;
                 if (value.IsEmpty())
                     layout.Remove(description);
-                else
+                else if (!layout.Contains(description))
                     layout.Add(description);
             }
         }

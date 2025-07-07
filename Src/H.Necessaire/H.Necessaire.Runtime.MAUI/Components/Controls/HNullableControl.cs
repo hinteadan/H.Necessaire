@@ -5,17 +5,38 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
     public class HNullableControl : HMauiComponentBase
     {
-        ContentPresenter contentPresenter;
+        ContentView contentView;
         Grid layout;
         Switch nullSwitch;
         View nullableContent;
-        View nullIndicator;
+        HLabel nullIndicator;
 
         public event EventHandler<ToggledEventArgs> NullToggled;
 
-        public bool IsNull => nullSwitch?.IsToggled == false;
+        public bool IsNull
+        {
+            get => nullSwitch?.IsToggled == false;
+            set
+            {
+                if (nullSwitch is null)
+                    return;
+                nullSwitch.IsToggled = !value;
+            }
+        }
 
-        public virtual string NullText { get; set; } = "Any";
+        string nullText = "Any";
+        public virtual string NullText
+        {
+            get => nullText;
+            set
+            {
+                nullText = value;
+                if (nullIndicator is null)
+                    return;
+
+                nullIndicator.Text = value;
+            }
+        }
 
         protected override View ConstructContent()
         {
@@ -30,8 +51,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 this.layout = layout;
 
                 nullIndicator = ConstructNullIndicator();
-                contentPresenter = new ContentPresenter();
-                contentPresenter.Content = nullableContent;
+                contentView = new ContentView();
+                contentView.Content = nullableContent;
 
                 layout.Add(
                     new Switch
@@ -41,20 +62,18 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         VerticalOptions = LayoutOptions.Center,
                         Margin = new Thickness(Branding.SizingUnitInPixels / 4, 0),
                         IsToggled = true,
-                    }.And(x =>
+                    }
+                    .RefTo(out nullSwitch)
+                    .And(x => x.Toggled += (s, e) => IfNotBinding(_ =>
                     {
-                        nullSwitch = x;
+                        ToggleNull();
 
-                        nullSwitch.Toggled += (s, e) =>
-                        {
-                            ToggleNull();
-
+                        if (!IsBinding && !IsPageBinding)
                             NullToggled?.Invoke(s, e);
-                        };
-                    })
+                    }))
                 );
 
-                layout.Add(contentPresenter, column: 1);
+                layout.Add(contentView, column: 1);
 
             });
         }
@@ -62,7 +81,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         protected override View WrapReceivedContent(View content)
         {
             nullableContent = content;
-            contentPresenter.Content = nullableContent;
+            contentView.Content = nullableContent;
             return base.WrapReceivedContent(content);
         }
 
@@ -71,14 +90,14 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             if (IsNull)
             {
                 nullIndicator.HeightRequest = nullableContent.Height;
-                contentPresenter.Content = nullIndicator;
+                contentView.Content = nullIndicator;
                 return;
             }
 
-            contentPresenter.Content = nullableContent;
+            contentView.Content = nullableContent;
         }
 
-        protected virtual View ConstructNullIndicator()
+        protected virtual HLabel ConstructNullIndicator()
         {
             return new HLabel
             {

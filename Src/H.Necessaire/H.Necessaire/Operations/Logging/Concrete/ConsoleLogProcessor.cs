@@ -61,8 +61,11 @@ namespace H.Necessaire
 
     class ColorScope : IDisposable
     {
+        static readonly Lazy<bool> isColorSupported = new Lazy<bool>(() => HSafe.Run(() => { Console.ForegroundColor = Console.ForegroundColor; }));
+        static bool IsColorSupported => isColorSupported.Value;
+
         readonly ScopedRunner scopedRunner;
-        public ColorScope(ConsoleColor color) => scopedRunner = new ScopedRunner(() => Console.ForegroundColor = color.And(x => { if (x == ConsoleColor.Black) Console.BackgroundColor = ConsoleColor.DarkGray; }), () => Console.ResetColor());
+        public ColorScope(ConsoleColor color) => scopedRunner = !IsColorSupported ? ScopedRunner.Null : new ScopedRunner(() => Console.ForegroundColor = color.And(x => { if (x == ConsoleColor.Black) Console.BackgroundColor = ConsoleColor.DarkGray; }), () => Console.ResetColor());
         public void Dispose() => scopedRunner.Dispose();
     }
 

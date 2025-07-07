@@ -7,7 +7,7 @@ namespace H.Necessaire
     public class ProgressReporter : IStringIdentity
     {
         DataNormalizer percentNormalizer;
-        decimal progressSourceValue = 0;
+        double progressSourceValue = 0;
         string currentActionName;
         readonly AsyncEventRaiser<ProgressEventArgs> progressRaiser;
 
@@ -29,7 +29,7 @@ namespace H.Necessaire
 
         public event AsyncEventHandler<ProgressEventArgs> OnProgress { add => progressRaiser.OnEvent += value; remove => progressRaiser.OnEvent -= value; }
 
-        public async Task RaiseOnProgress(string currentActionName, decimal progressSourceValue, params string[] additionalInfo)
+        public async Task RaiseOnProgress(string currentActionName, double progressSourceValue, params string[] additionalInfo)
         {
             this.progressSourceValue = progressSourceValue;
             this.currentActionName = currentActionName;
@@ -57,7 +57,7 @@ namespace H.Necessaire
 
     public class ProgressEventArgs : EventArgs
     {
-        public ProgressEventArgs(string currentActionName, NumberInterval sourceInterval, decimal progressSourceValue, decimal percentValue, params string[] additionalInfo)
+        public ProgressEventArgs(string currentActionName, NumberInterval sourceInterval, double progressSourceValue, double percentValue, params string[] additionalInfo)
         {
             CurrentActionName = currentActionName;
             SourceInterval = sourceInterval;
@@ -67,8 +67,8 @@ namespace H.Necessaire
         }
         public string CurrentActionName { get; }
         public NumberInterval SourceInterval { get; }
-        public decimal ProgressSourceValue { get; }
-        public decimal PercentValue { get; }
+        public double ProgressSourceValue { get; }
+        public double PercentValue { get; }
         public string[] AdditionalInfo { get; }
     }
 }

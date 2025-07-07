@@ -11,6 +11,14 @@ namespace H.Necessaire
             return new Func<Task>(() => { action?.Invoke(); return true.AsTask(); });
         }
 
+        public static async void DontWait(this Task task)
+        {
+            if (task is null)
+                return;
+
+            await task;
+        }
+
         public static async Task ThrowOnFail(this Task<OperationResult> operationResultTask)
             => (await operationResultTask).ThrowOnFail();
         public static async Task<T> ThrowOnFailOrReturn<T>(this Task<OperationResult<T>> operationResultTask)

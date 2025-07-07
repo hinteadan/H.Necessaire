@@ -47,7 +47,7 @@ namespace H.Necessaire.CLI
             ;
         }
 
-        private static string? ReadConnectionStringFromFile(string filePath)
+        private static string ReadConnectionStringFromFile(string filePath)
         {
             FileInfo fileInfo = new FileInfo(filePath);
 

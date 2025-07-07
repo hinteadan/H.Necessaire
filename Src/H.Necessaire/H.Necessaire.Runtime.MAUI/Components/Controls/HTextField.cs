@@ -18,7 +18,9 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
         public Entry Editor => editor;
         public string Text { get => editor.Text.NullIfEmpty(isWhitespaceConsideredEmpty: false); set => editor.Text = value; }
+        public TextAlignment HorizontalTextAlignment { get => editor.HorizontalTextAlignment; set => editor.HorizontalTextAlignment = value; }
         public string Placeholder { get => editor.Placeholder; set => editor.Placeholder = value; }
+        public int MaxLength { get => editor.MaxLength; set => editor.MaxLength = value; }
         public bool IsClearOptionEnabled
         {
             get => isClearOptionEnabled;
@@ -39,11 +41,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         }
 
         public Func<string, CancellationToken, Task<OperationResult<string>>> UserInputValidator { get; set; }
-
-        protected override async Task Destroy()
-        {
-            await base.Destroy();
-        }
+        public Func<CancellationToken, Task> OnClear { get; set; }
 
         protected override View ConstructLabeledContent()
         {
@@ -110,7 +108,16 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center,
             }
-            .And(x => x.Clicked += (sender, args) => { Text = null; RefreshClearOptionView(); editor.Focus(); })
+            .And(x => x.Clicked += async (sender, args) =>
+            {
+                using (Disable(sender as View))
+                {
+                    Text = null; RefreshClearOptionView();
+                    editor.Focus();
+                    if (OnClear is not null)
+                        await OnClear.Invoke(CancellationToken.None);
+                }
+            })
             .And(x => clearButton = x)
             ;
         }
@@ -148,7 +155,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             editorGrid.Remove(validationLedIndicator);
             editorGrid.Add(validationLedIndicator);
 
-            TextChanged?.Invoke(this, new TextChangedEventArgs(null, Text));
+            IfNotBinding(_ => TextChanged?.Invoke(this, new TextChangedEventArgs(null, Text)));
         }
 
         void RefreshClearOptionView()

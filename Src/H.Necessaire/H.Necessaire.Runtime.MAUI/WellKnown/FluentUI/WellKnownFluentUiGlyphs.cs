@@ -21,6 +21,9 @@ namespace H.Necessaire.Runtime.MAUI.WellKnown.FluentUI
         /// <returns>unicode glyph for FontImageSource</returns>
         public static string Glyph(string glyphName, string variant = null)
         {
+            if (glyphName.IsEmpty())
+                return glyphName;
+
             IReadOnlyDictionary<string, string> glyphs = variant.IsEmpty() ? defaultVariant : wellKnownVariants.GetValueOrDefault(variant, defaultVariant);
 
             return glyphs.GetValueOrDefault(glyphName, null);

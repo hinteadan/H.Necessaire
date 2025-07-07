@@ -104,13 +104,13 @@ namespace H.Necessaire.CLI.Host
 
         class UiSubCommand : SubCommandBase
         {
-            public override async Task<OperationResult> Run(params Note[] args)
+            public override Task<OperationResult> Run(params Note[] args)
             {
                 DateTime.Now.CliUiPrintCalendar(events: [new DateTime(2024, 12, 25)]);
 
                 Log("ALL Done");
 
-                return OperationResult.Win();
+                return OperationResult.Win().AsTask();
             }
         }
     }

@@ -5,7 +5,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Layouts
 {
     class HResponsiveFormLayout : HMauiComponentBase
     {
-        View parent;
         VerticalStackLayout rootLayout;
         protected override View ConstructContent()
         {

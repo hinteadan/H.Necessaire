@@ -13,7 +13,14 @@ namespace H.Necessaire.Runtime.MAUI.Core
 
         public async Task Set(string key, string value)
         {
-            await secureStorage.SetAsync(key, BuildValue(value, expirationDate: null));
+            string actualValue = BuildValue(value, expirationDate: null);
+            if (actualValue is null)
+            {
+                secureStorage.Remove(key);
+                return;
+            }
+
+            await secureStorage.SetAsync(key, actualValue);
         }
 
         public async Task<string> Get(string key)

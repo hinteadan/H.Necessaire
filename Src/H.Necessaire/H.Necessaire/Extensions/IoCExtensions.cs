@@ -35,7 +35,8 @@ namespace H.Necessaire
 
             Type concreteType
                 = matchedTypes
-                .OrderBy(x =>
+                .OrderBy(x => dependencyProvider.HasTypeRegistered(x) ? 0 : 1)
+                .ThenBy(x =>
                     x.IsTypeIDMatch(identifier)
                     ? 0
                     : x.IsTypeAliasMatch(identifier)

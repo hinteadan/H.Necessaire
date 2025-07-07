@@ -1,4 +1,6 @@
-﻿namespace H.Necessaire
+﻿using System;
+
+namespace H.Necessaire
 {
     public class TaggedValue<TValue> : IStringIdentity
     {
@@ -29,5 +31,12 @@
 
 
         public static implicit operator TValue(TaggedValue<TValue> taggedValue) => taggedValue.Value;
+        public static implicit operator TaggedValue<TValue>(TValue value) => new TaggedValue<TValue> { ID = $"{Guid.NewGuid()}", Value = value };
+    }
+
+    internal class TaggedOperationResult<T> : TaggedValue<OperationResult>
+    {
+        public static implicit operator OperationResult(TaggedOperationResult<T> taggedValue) => taggedValue.Value;
+        public static implicit operator TaggedOperationResult<T>(OperationResult<T> operationResult) => new TaggedOperationResult<T> { ID = $"{Guid.NewGuid()}", Value = operationResult };
     }
 }

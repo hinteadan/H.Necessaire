@@ -94,7 +94,7 @@ namespace H.Necessaire.Runtime.MAUI.Components
                         new HTextEditor
                         {
                             Placeholder = "Simple",
-                            UserInputValidator = async (v, t) => { if (v.Is("error")) return OperationResult.Fail().WithPayload(v); return v.ToWinResult(); },
+                            UserInputValidator = (v, t) => { if (v.Is("error")) return OperationResult.Fail().WithPayload(v).AsTask(); return v.ToWinResult().AsTask(); },
                         }
                     );
 

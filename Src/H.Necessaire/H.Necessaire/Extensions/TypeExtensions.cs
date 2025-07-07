@@ -114,6 +114,17 @@ namespace H.Necessaire
                 ;
         }
 
+        public static string GetID(this PropertyInfo propertyInfo)
+        {
+            return
+                (propertyInfo?.GetCustomAttributes(typeof(IDAttribute), false)?.SingleOrDefault() as IDAttribute)?.ID
+                ?? propertyInfo?.Name
+                ;
+        }
+
+        public static string GetID(this Type type, string propertyName)
+            => type?.GetProperty(propertyName)?.GetID() ?? propertyName;
+
         public static string GetDisplayLabel(this PropertyInfo propertyInfo)
         {
             return

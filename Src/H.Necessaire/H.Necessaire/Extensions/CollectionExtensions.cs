@@ -11,13 +11,13 @@ namespace H.Necessaire
     {
         public static bool In<T>(this T item, params T[] collection)
         {
-            return item.In(collection.AsEnumerable());
+            return item.In(collection?.AsEnumerable());
         }
         public static bool NotIn<T>(this T item, params T[] collection) => !In(item, collection);
 
         public static bool In<T>(this T item, IEnumerable<T> collection)
         {
-            return item.In(collection, (x, y) => x?.Equals(y) ?? x == null);
+            return item.In(collection, (x, y) => x?.Equals(y) ?? y?.Equals(x) ?? true);
         }
         public static bool NotIn<T>(this T item, IEnumerable<T> collection) => !In(item, collection);
 
@@ -26,6 +26,27 @@ namespace H.Necessaire
             return collection?.Any(x => comparer.Invoke(item, x)) ?? false;
         }
         public static bool NotIn<T>(this T item, IEnumerable<T> collection, Func<T, T, bool> comparer) => !In(item, collection, comparer);
+
+
+
+        public static bool AllIn<T>(this T item, params T[] collection)
+        {
+            return item.AllIn(collection?.AsEnumerable());
+        }
+        public static bool NotAllIn<T>(this T item, params T[] collection) => !AllIn(item, collection);
+
+        public static bool AllIn<T>(this T item, IEnumerable<T> collection)
+        {
+            return item.AllIn(collection, (x, y) => x?.Equals(y) ?? y?.Equals(x) ?? true);
+        }
+        public static bool NotAllIn<T>(this T item, IEnumerable<T> collection) => !AllIn(item, collection);
+
+        public static bool AllIn<T>(this T item, IEnumerable<T> collection, Func<T, T, bool> comparer)
+        {
+            return collection?.All(x => comparer.Invoke(item, x)) ?? false;
+        }
+        public static bool NotAllIn<T>(this T item, IEnumerable<T> collection, Func<T, T, bool> comparer) => !AllIn(item, collection, comparer);
+
 
         public static IEnumerable<IEnumerable<T>> Batch<T>(this IEnumerable<T> collection, int batchSize)
         {
@@ -163,7 +184,7 @@ namespace H.Necessaire
 
         public static T[] Push<T>(this T[] array, IEnumerable<T> items, bool checkDistinct = true)
         {
-            if (items?.Any() != true)
+            if (items.IsEmpty())
                 return array;
 
             if (array == null)
@@ -270,9 +291,14 @@ namespace H.Necessaire
             return (collection?.Length ?? 0) == 0;
         }
 
+        public static bool IsEmpty<T>(this IList<T> collection)
+        {
+            return (collection?.Count ?? 0) == 0;
+        }
+
         public static T[] NullIfEmpty<T>(this T[] value)
         {
-            if (value?.Any() != true)
+            if (value.IsEmpty())
                 return null;
 
             return value;
@@ -289,7 +315,7 @@ namespace H.Necessaire
 
         public static T[] ToArrayNullIfEmpty<T>(this IEnumerable<T> value)
         {
-            if (value?.Any() != true)
+            if (value.IsEmpty())
                 return null;
 
             return value.ToArray();
@@ -302,6 +328,102 @@ namespace H.Necessaire
                 ? values?.Where(x => x != null).ToArrayNullIfEmpty()
                 : values?.Where(x => x != null).ToArray()
                 ;
+        }
+
+        public static string[] ToNonEmptyArray(this IEnumerable<string> values, bool nullIfEmpty = true, bool isWhitespaceConsideredEmpty = true)
+        {
+            return
+                nullIfEmpty
+                ? values?.Where(x => !x.IsEmpty(isWhitespaceConsideredEmpty)).ToArrayNullIfEmpty()
+                : values?.Where(x => !x.IsEmpty(isWhitespaceConsideredEmpty)).ToArray()
+                ;
+        }
+
+        public static bool IsSameAs<T>(this IEnumerable<T> @this, IEnumerable<T> that, Func<T, T, bool> comparer = null, bool isOrderIgnored = false)
+        {
+            if (@this is null && that is null)
+                return true;
+
+            int thisCount;
+            bool thisIsEmpty;
+            if (@this is T[] thisAsArray)
+            {
+                thisCount = thisAsArray?.Length ?? 0;
+                thisIsEmpty = thisAsArray.IsEmpty();
+            }
+            else if (@this is IList<T> thisAsList)
+            {
+                thisCount = thisAsList?.Count ?? 0;
+                thisIsEmpty = thisAsList.IsEmpty();
+            }
+            else
+            {
+                thisIsEmpty = @this.IsEmpty();
+                thisCount = thisIsEmpty ? 0 : @this.Count();
+            }
+
+            int thatCount;
+            bool thatIsEmpty;
+            if (that is T[] thatAsArray)
+            {
+                thatCount = thatAsArray?.Length ?? 0;
+                thatIsEmpty = thatAsArray.IsEmpty();
+            }
+            else if (that is IList<T> thatAsList)
+            {
+                thatCount = thatAsList?.Count ?? 0;
+                thatIsEmpty = thatAsList.IsEmpty();
+            }
+            else
+            {
+                thatIsEmpty = that.IsEmpty();
+                thatCount = thatIsEmpty ? 0 : that.Count();
+            }
+
+            if (thisIsEmpty && thatIsEmpty)
+                return true;
+
+            if (thisCount != thatCount)
+                return false;
+
+            @this = @this ?? Enumerable.Empty<T>();
+            that = @that ?? Enumerable.Empty<T>();
+
+            comparer = comparer ?? new Func<T, T, bool>((a, b) => a?.Equals(b) ?? b?.Equals(a) ?? true);
+
+            if (!isOrderIgnored)
+            {
+                using (var thisEnum = @this.GetEnumerator())
+                using (var thatEnum = that.GetEnumerator())
+                {
+                    while (thisEnum.MoveNext() && thatEnum.MoveNext())
+                    {
+                        bool areSame = comparer(thisEnum.Current, thatEnum.Current);
+                        if (!areSame)
+                            return false;
+                    }
+                }
+
+                return true;
+            }
+
+            return @this.All(x => x.In(that, comparer));
+        }
+
+        public static T[] Each<T>(this T[] @this, Action<T> process)
+        {
+            if (process is null)
+                return @this;
+
+            if (@this.IsEmpty())
+                return @this;
+
+            foreach (T value in @this)
+            {
+                process(value);
+            }
+
+            return @this;
         }
 
         sealed class ProjectedDisposableEnumerable<TProjection, T> : IDisposableEnumerable<TProjection>

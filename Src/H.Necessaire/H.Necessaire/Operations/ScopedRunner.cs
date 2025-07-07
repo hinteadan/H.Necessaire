@@ -4,6 +4,8 @@ namespace H.Necessaire
 {
     public class ScopedRunner : IDisposable
     {
+        public static ScopedRunner Null { get; } = new ScopedRunner(null as Action, null);
+
         readonly Action onStart;
         readonly Action onStop;
 
@@ -11,6 +13,14 @@ namespace H.Necessaire
         {
             this.onStart = onStart;
             this.onStop = onStop;
+
+            DoStart();
+        }
+
+        public ScopedRunner(Action<bool> onStart, Action<bool> onStop)
+        {
+            this.onStart = () => onStart?.Invoke(true);
+            this.onStop = () => onStop?.Invoke(false);
 
             DoStart();
         }

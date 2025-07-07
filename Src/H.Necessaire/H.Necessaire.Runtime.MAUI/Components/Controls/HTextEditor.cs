@@ -9,10 +9,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         Editor editor;
         Grid editorGrid;
         RoundRectangle validationLedIndicator;
-        protected override async Task Destroy()
-        {
-            await base.Destroy();
-        }
         protected override View ConstructLabeledContent()
         {
             double cornerRadius = Branding.SizingUnitInPixels / 4;
@@ -39,6 +35,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         public Editor Editor => editor;
         public string Text { get => editor.Text; set => editor.Text = value; }
         public string Placeholder { get => editor.Placeholder; set => editor.Placeholder = value; }
+        public int MaxLength { get => editor.MaxLength; set => editor.MaxLength = value; }
         public Func<string, CancellationToken, Task<OperationResult<string>>> UserInputValidator { get; set; }
 
         View ConstructEditor()
@@ -89,7 +86,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             editorGrid.Remove(validationLedIndicator);
             editorGrid.Add(validationLedIndicator);
 
-            TextChanged?.Invoke(this, new TextChangedEventArgs(null, Text));
+            IfNotBinding(_ => TextChanged?.Invoke(this, new TextChangedEventArgs(null, Text)));
         }
     }
 }

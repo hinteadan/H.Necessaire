@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace H.Necessaire
 {
-    public struct Note
+    public struct Note : IEquatable<Note>
     {
         public const string IDSeparator = "=::=";
         public static readonly Note Empty = new Note();
@@ -20,6 +20,13 @@ namespace H.Necessaire
 
         public bool IsEmpty() => ID.IsEmpty() && Value.IsEmpty();
 
+        public bool IsSameAs(Note other)
+        {
+            return
+                ID == other.ID
+                && Value == other.Value
+                ;
+        }
         public override string ToString()
         {
             return $"{ID} {IDSeparator} {Value}";
@@ -42,6 +49,8 @@ namespace H.Necessaire
 
             return note.ToString();
         }
+        public static bool operator ==(Note a, Note b) => a.IsSameAs(b);
+        public static bool operator !=(Note a, Note b) => !a.IsSameAs(b);
 
         public static Note[] FromDictionary(IDictionary<string, string> keyValuePairs)
         {
@@ -85,9 +94,36 @@ namespace H.Necessaire
                 };
         }
 
+        public override bool Equals(object obj)
+        {
+            return obj is Note note && Equals(note);
+        }
+
+        public bool Equals(Note other)
+        {
+            return ID == other.ID &&
+                   Value == other.Value;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 429689802;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ID);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Value);
+            return hashCode;
+        }
+
         public static implicit operator KeyValuePair<string, string>(Note note)
         {
             return new KeyValuePair<string, string>(note.ID, note.Value);
+        }
+        public static implicit operator Note(KeyValuePair<string, string> kvp)
+        {
+            return new Note(kvp.Key, kvp.Value);
+        }
+        public static implicit operator Note((string id, string value) parts)
+        {
+            return new Note(parts.id, parts.value);
         }
     }
 }

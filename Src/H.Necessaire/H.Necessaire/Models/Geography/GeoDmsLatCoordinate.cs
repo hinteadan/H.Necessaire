@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace H.Necessaire
 {
@@ -11,7 +12,7 @@ namespace H.Necessaire
             if (min < 0) throw new ArgumentException("Minutes cannot be less than 0", nameof(min));
             if (min > 59) throw new ArgumentException("Minutes cannot be more than 59", nameof(min));
             if (sec < 0) throw new ArgumentException("Minutes cannot be less than 0", nameof(sec));
-            if (sec > 59) throw new ArgumentException("Minutes cannot be more than 59", nameof(sec));
+            if (sec > 59.999999999999999999999999999999999999999999999999999999999999999999999999) throw new ArgumentException("Minutes cannot be more than 59.(9)", nameof(sec));
             if ((deg == 90) && (min > 0 || sec > 0)) throw new ArgumentException("Degrees+min+sec cannot be more than 90");
 
             Degrees = deg;
@@ -52,6 +53,9 @@ namespace H.Necessaire
             double result = Degrees.ToDegrees(Minutes, Seconds);
             return IsPositive() ? result : -result;
         }
+
+        public override string ToString()
+            => $"{Degrees}°{Minutes}'{Seconds.ToString(CultureInfo.InvariantCulture)}\"{(IsNorth() ? "N" : "S")}";
 
         public static implicit operator GeoDmsLatCoordinate((int deg, int min, double sec, GeoDmsLatDirection dir) parts)
             => new GeoDmsLatCoordinate(parts.deg, parts.min, parts.sec, parts.dir);

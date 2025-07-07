@@ -43,13 +43,10 @@ namespace H.Necessaire.Runtime.UI
         public static HHeightCategoryAction WithAction(this HHeightCategory category, Action<HHeightCategory[]> action)
             => new HHeightCategoryAction(category.AsArray(), action);
 
-        public static HHeightCategory GetHeightCategory(this decimal value)
+        public static HHeightCategory GetHeightCategory(this double value)
             => HHeightCategory.All.Single(x => value.In(x.Interval));
 
-        public static HHeightCategory GetHeightCategory(this double value)
-            => ((decimal)value).GetHeightCategory();
-
-        public static void OnHeightCategory(this decimal value, Action defaultAction = null, params HHeightCategoryAction[] actions)
+        public static void OnHeightCategory(this double value, Action defaultAction = null, params HHeightCategoryAction[] actions)
         {
             if (actions.IsEmpty())
             {
@@ -77,13 +74,7 @@ namespace H.Necessaire.Runtime.UI
                 defaultAction.Invoke();
         }
 
-        public static void OnHeightCategory(this decimal value, params HHeightCategoryAction[] actions)
-            => value.OnHeightCategory(defaultAction: null, actions);
-
-        public static void OnHeightCategory(this double value, Action defaultAction = null, params HHeightCategoryAction[] actions)
-            => ((decimal)value).OnHeightCategory(defaultAction, actions);
-
         public static void OnHeightCategory(this double value, params HHeightCategoryAction[] actions)
-            => ((decimal)value).OnHeightCategory(actions);
+            => value.OnHeightCategory(defaultAction: null, actions);
     }
 }

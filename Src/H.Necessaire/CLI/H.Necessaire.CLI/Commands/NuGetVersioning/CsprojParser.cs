@@ -24,26 +24,26 @@ namespace H.Necessaire.CLI.Commands.NuGetVersioning
         }
         #endregion
 
-        public async Task<OperationResult<CsprojInfo[]>> GetAllCsProjs()
+        public Task<OperationResult<CsprojInfo[]>> GetAllCsProjs()
         {
             CsprojInfo[] csprojs = csprojCache.Get(cacheKeyCsprojs) as CsprojInfo[];
             if (csprojs != null)
-                return OperationResult.Win().WithPayload(csprojs);
+                return OperationResult.Win().WithPayload(csprojs).AsTask();
 
             if (!rootFolderToScan.Exists)
-                return OperationResult.Fail($"Folder {rootFolderToScan.FullName} doesn't exist").WithoutPayload<CsprojInfo[]>();
+                return OperationResult.Fail($"Folder {rootFolderToScan.FullName} doesn't exist").WithoutPayload<CsprojInfo[]>().AsTask();
 
             FileInfo[] csprojFiles = rootFolderToScan.GetFiles("*.csproj", SearchOption.AllDirectories) ?? new FileInfo[0];
 
             if (!csprojFiles.Any())
-                return OperationResult.Fail($"Folder {rootFolderToScan.FullName} and any subfolders don't contain any *.csproj files").WithoutPayload<CsprojInfo[]>();
+                return OperationResult.Fail($"Folder {rootFolderToScan.FullName} and any subfolders don't contain any *.csproj files").WithoutPayload<CsprojInfo[]>().AsTask();
 
             csprojs = csprojFiles.Select(x => ParseCsProjFile(x)).ToArray() ?? new CsprojInfo[0];
             //csprojs = (await Task.WhenAll(csprojFiles.Select(x => Task.Run(() => ParseCsProjFile(x))))).ToArray() ?? new CsprojInfo[0];
 
             csprojCache.Add(cacheKeyCsprojs, csprojs, DateTimeOffset.Now.AddMinutes(1));
 
-            return OperationResult.Win().WithPayload(csprojs);
+            return OperationResult.Win().WithPayload(csprojs).AsTask();
         }
 
         private CsprojInfo ParseCsProjFile(FileInfo fileInfo)

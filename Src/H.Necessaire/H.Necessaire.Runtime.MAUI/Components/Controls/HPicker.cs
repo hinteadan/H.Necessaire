@@ -119,15 +119,9 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             editor.SelectedIndexChanged += OnPickerSelectedIndexChanged;
         }
 
-        protected override async Task Destroy()
-        {
-            editor.SelectedIndexChanged -= OnPickerSelectedIndexChanged;
-            await base.Destroy();
-        }
-
         void OnPickerSelectedIndexChanged(object sender, EventArgs e)
         {
-            SelectedIndexChanged?.Invoke(sender, e);
+            IfNotBinding(_ => SelectedIndexChanged?.Invoke(sender, e));
         }
 
         void RefreshEditorItems()

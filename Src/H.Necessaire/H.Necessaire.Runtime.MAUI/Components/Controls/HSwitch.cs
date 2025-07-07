@@ -24,10 +24,10 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         @switch.OnColor = Branding.Colors.Primary.Lighter().ToMaui();
                         @switch.HorizontalOptions = LayoutOptions.Start;
                         @switch.VerticalOptions = LayoutOptions.Center;
-                        @switch.Toggled += (sender, args) => {
+                        @switch.Toggled += (sender, args) => IfNotBinding(_ => {
                             bool isOn = args.Value;
                             bool isOff = !isOn;
-                        };
+                        });
                     })
                 );
 

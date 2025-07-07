@@ -43,13 +43,10 @@ namespace H.Necessaire.Runtime.UI
         public static HWidthCategoryAction WithAction(this HWidthCategory category, Action<HWidthCategory[]> action)
             => new HWidthCategoryAction(category.AsArray(), action);
 
-        public static HWidthCategory GetWidthCategory(this decimal value)
+        public static HWidthCategory GetWidthCategory(this double value)
             => HWidthCategory.All.Single(x => value.In(x.Interval));
 
-        public static HWidthCategory GetWidthCategory(this double value)
-            => ((decimal)value).GetWidthCategory();
-
-        public static void OnWidthCategory(this decimal value, Action defaultAction = null, params HWidthCategoryAction[] actions)
+        public static void OnWidthCategory(this double value, Action defaultAction = null, params HWidthCategoryAction[] actions)
         {
             if (actions.IsEmpty())
             {
@@ -77,13 +74,7 @@ namespace H.Necessaire.Runtime.UI
                 defaultAction.Invoke();
         }
 
-        public static void OnWidthCategory(this decimal value, params HWidthCategoryAction[] actions)
-            => value.OnWidthCategory(defaultAction: null, actions);
-
-        public static void OnWidthCategory(this double value, Action defaultAction = null, params HWidthCategoryAction[] actions)
-            => ((decimal)value).OnWidthCategory(defaultAction, actions);
-
         public static void OnWidthCategory(this double value, params HWidthCategoryAction[] actions)
-            => ((decimal) value).OnWidthCategory(actions);
+            => value.OnWidthCategory(defaultAction: null, actions);
     }
 }

@@ -43,13 +43,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             themePicker.SelectedIndexChanged += ThemePicker_SelectedIndexChanged;
         }
 
-        protected override async Task Destroy()
-        {
-            HSafe.Run(() => themePicker.SelectedIndexChanged -= ThemePicker_SelectedIndexChanged);
-
-            await base.Destroy();
-        }
-
         void ThemePicker_SelectedIndexChanged(object sender, EventArgs e)
         {
             AppTheme selectedTheme = ((KeyValuePair<AppTheme, string>)themePicker.SelectedItem).Key;
