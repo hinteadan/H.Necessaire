@@ -215,20 +215,25 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         }
 
         View busyIndicatorView = null;
+        const string defaultBusyText = "Loading, please wait...";
         protected IDisposable BusyIndicator(Color color = null, string label = null)
         {
             if (Content?.ClassId == "BusyIndicator")
                 return ScopedRunner.Null;
 
             View originalContent = null;
+            
             return new ScopedRunner(
                 onStart: () =>
                 {
                     originalContent = Content;
-                    Content = busyIndicatorView ?? ConstructBusyIndicator(color, label).RefTo(out busyIndicatorView);
+                    Content = (busyIndicatorView ?? ConstructBusyIndicator(color, label).RefTo(out busyIndicatorView));
+                    busyIndicatorLabel.Text = label.IsEmpty() ? defaultBusyText : label;
                 },
                 onStop: () =>
                 {
+                    busyIndicatorLabel.Text = defaultBusyText;
+
                     if (Content != null && Content != busyIndicatorView)
                         return;
 
