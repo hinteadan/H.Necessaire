@@ -13,7 +13,7 @@ namespace H.Necessaire.Runtime.MAUI.Core
 
     internal class ConnectivityManager : ImAConnectivityManager
     {
-        static readonly TimeSpan connectivityCheckTimeout = TimeSpan.FromSeconds(10);
+        static readonly TimeSpan connectivityCheckTimeout = TimeSpan.FromSeconds(3);
         static readonly TimeSpan httpClientTimeout = TimeSpan.FromMinutes(5);
         static EphemeralType<HttpClient> ephemeralHttpClient = null;
         static EphemeralType<OperationResult> defaultConnectivityCheckResult = null;
