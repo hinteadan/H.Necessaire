@@ -53,9 +53,9 @@ namespace H.Necessaire
                 : Fail("There are several issues with the current operation. Check the comments for details.", errors.ToArray());
         }
 
-        public OperationResult WithComment(string comment)
+        public OperationResult WithComment(params string[] comments)
         {
-            Comments = (Comments ?? new string[0]).Concat(comment.AsArray()).ToArray();
+            Comments = (Comments ?? Array.Empty<string>()).Concat(comments?.ToNonEmptyArray() ?? Array.Empty<string>()).ToNonEmptyArray();
             return this;
         }
 

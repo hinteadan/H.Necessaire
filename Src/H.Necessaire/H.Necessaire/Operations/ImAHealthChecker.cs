@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace H.Necessaire
@@ -21,6 +22,9 @@ namespace H.Necessaire
         static readonly TimeSpan healthCheckTimeout = TimeSpan.FromSeconds(3);
         static readonly TimeSpan httpClientTimeout = TimeSpan.FromMinutes(5);
         static readonly TimeSpan httpRequestTimeout = TimeSpan.FromSeconds(10);
+        static readonly TimeSpan httpRequestSlowTime = TimeSpan.FromSeconds(1.5);
+        static readonly TimeSpan httpRequestVerySlowTime = TimeSpan.FromSeconds(3);
+        static readonly TimeSpan httpRequestSuperSlowTime = TimeSpan.FromSeconds(6);
         static EphemeralType<HttpClient> ephemeralHttpClient = null;
         const string defaultUrlToCheckInternet = "http://www.msftncsi.com/ncsi.txt";
 
@@ -103,7 +107,11 @@ namespace H.Necessaire
             {
                 var http = EnsureHttpClient();
 
-                using (var httpResponse = await http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
+                TimeSpan requestDuration = TimeSpan.Zero;
+                string slowWarning = null;
+                using (var cancellationTokenSource = new CancellationTokenSource(httpRequestTimeout))
+                using (new PreciseTimeMeasurement(t => t.RefTo(out requestDuration).And(x => CreateSlowHttpWarningIfNecessary(x).RefTo(out slowWarning))))
+                using (var httpResponse = await http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationTokenSource.Token))
                 {
                     if (!httpResponse.IsSuccessStatusCode)
                     {
@@ -111,7 +119,11 @@ namespace H.Necessaire
                     }
                 }
 
-                return true;
+                return
+                    OperationResult.Win()
+                    .WithComment($"{requestDuration}", $"{requestDuration.Ticks}")
+                    .AndIf(!slowWarning.IsEmpty(), x => x.Warn(slowWarning))
+                    ;
             });
 
             var checkResult = new EphemeralType<OperationResult>
@@ -149,6 +161,20 @@ namespace H.Necessaire
             };
 
             return ephemeralHttpClient.Payload;
+        }
+
+        static string CreateSlowHttpWarningIfNecessary(TimeSpan httpResponseTime)
+        {
+            if (httpResponseTime >= httpRequestSuperSlowTime)
+                return "SuperSlow";
+
+            if (httpResponseTime >= httpRequestVerySlowTime)
+                return "VerySlow";
+
+            if (httpResponseTime >= httpRequestSlowTime)
+                return "Slow";
+
+            return null;
         }
     }
 }
