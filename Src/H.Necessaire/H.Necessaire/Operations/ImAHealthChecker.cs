@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire
 {
-    public interface ImAConnectivityManager
+    public interface ImAHealthChecker
     {
         bool IsInternetConnectionCheckDisabled { get; set; }
-        ImAConnectivityManager SetConnectivityCheck(string name, Func<Task<OperationResult>> check);
-        ImAConnectivityManager ZapConnectivityCheck(string name);
-        Task<OperationResult<TaggedValue<OperationResult>[]>> CheckConnectivity();
+        ImAHealthChecker SetHealthCheck(string name, Func<Task<OperationResult>> check);
+        ImAHealthChecker ZapHealthCheck(string name);
+        Task<OperationResult<TaggedValue<OperationResult>[]>> CheckHealth();
         Task<bool> HasSurelyNoInternet();
     }
 
-    public class ConnectivityManager : ImAConnectivityManager
+    public class ConnectivityManager : ImAHealthChecker
     {
         static readonly TimeSpan connectivityCheckTimeout = TimeSpan.FromSeconds(3);
         static readonly TimeSpan httpClientTimeout = TimeSpan.FromMinutes(5);
@@ -29,21 +29,21 @@ namespace H.Necessaire
         public bool IsInternetConnectionCheckDisabled { get; set; } = false;
         bool IsInternetConnectionCheckEnabled => !IsInternetConnectionCheckDisabled;
 
-        public ImAConnectivityManager SetConnectivityCheck(string name, Func<Task<OperationResult>> check)
+        public ImAHealthChecker SetHealthCheck(string name, Func<Task<OperationResult>> check)
         {
             connectivityChecks.AddOrUpdate(name, check, (key, existing) => check);
             connectivityCheckResults.AddOrUpdate(name, null as EphemeralType<OperationResult>, (key, existing) => null as EphemeralType<OperationResult>);
             return this;
         }
 
-        public ImAConnectivityManager ZapConnectivityCheck(string name)
+        public ImAHealthChecker ZapHealthCheck(string name)
         {
             connectivityChecks.TryRemove(name, out var _);
             connectivityCheckResults.TryRemove(name, out var _);
             return this;
         }
 
-        public async Task<OperationResult<TaggedValue<OperationResult>[]>> CheckConnectivity()
+        public async Task<OperationResult<TaggedValue<OperationResult>[]>> CheckHealth()
         {
             if (connectivityChecks.Count == 0)
             {
@@ -58,7 +58,7 @@ namespace H.Necessaire
             return globalResult.WithPayload(checkResults);
         }
 
-        Task<bool> ImAConnectivityManager.HasSurelyNoInternet() => HasSurelyNoInternet();
+        Task<bool> ImAHealthChecker.HasSurelyNoInternet() => HasSurelyNoInternet();
 
         protected virtual Task<bool> HasSurelyNoInternet() => false.AsTask();
 
