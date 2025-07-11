@@ -4,9 +4,11 @@ namespace H.Necessaire.Runtime.MAUI.Core
 {
     public interface ImAConnectivityManager
     {
+        bool IsInternetConnectionCheckDisabled { get; set; }
         ImAConnectivityManager SetConnectivityCheck(string name, Func<Task<OperationResult>> check);
         ImAConnectivityManager ZapConnectivityCheck(string name);
         Task<OperationResult<TaggedValue<OperationResult>[]>> CheckConnectivity();
+        bool HasSurelyNoInternet();
     }
 
     internal class ConnectivityManager : ImAConnectivityManager
@@ -19,6 +21,9 @@ namespace H.Necessaire.Runtime.MAUI.Core
 
         readonly ConcurrentDictionary<string, Func<Task<OperationResult>>> connectivityChecks = new ConcurrentDictionary<string, Func<Task<OperationResult>>>();
         readonly ConcurrentDictionary<string, EphemeralType<OperationResult>> connectivityCheckResults = new ConcurrentDictionary<string, EphemeralType<OperationResult>>();
+
+        public bool IsInternetConnectionCheckDisabled { get; set; } = false;
+        bool IsInternetConnectionCheckEnabled => !IsInternetConnectionCheckDisabled;
 
         public ImAConnectivityManager SetConnectivityCheck(string name, Func<Task<OperationResult>> check)
         {
@@ -49,8 +54,16 @@ namespace H.Necessaire.Runtime.MAUI.Core
             return globalResult.WithPayload(checkResults);
         }
 
+        bool ImAConnectivityManager.HasSurelyNoInternet() => HasSurelyNoInternet();
+
+        static bool HasSurelyNoInternet()
+            => Connectivity.Current.NetworkAccess.In(NetworkAccess.None, NetworkAccess.Local, NetworkAccess.ConstrainedInternet);
+
         async Task<TaggedValue<OperationResult>> RunConnectivityCheck(string name, Func<Task<OperationResult>> connectivityCheck)
         {
+            if (IsInternetConnectionCheckEnabled && HasSurelyNoInternet())
+                return OperationResult.Fail("No Internet Connection").Tag(name);
+
             if (connectivityCheck is null)
                 return OperationResult.Win().Tag(name);
 
@@ -70,18 +83,11 @@ namespace H.Necessaire.Runtime.MAUI.Core
             return checkResult.Payload.Tag(name);
         }
 
-        void Debug()
-        {
-            NetworkAccess currentAccess = Connectivity.Current.NetworkAccess;
-
-            bool hasSurelyNoInternet = currentAccess.In(NetworkAccess.None, NetworkAccess.Local, NetworkAccess.ConstrainedInternet);
-            bool hasPotentialInternet = !hasSurelyNoInternet;
-
-
-        }
-
         static async Task<OperationResult> CheckDefaultConnectivity()
         {
+            if (HasSurelyNoInternet())
+                return "No Internet Connection";
+
             if (defaultConnectivityCheckResult?.IsActive() == true)
                 return defaultConnectivityCheckResult.Payload;
 
