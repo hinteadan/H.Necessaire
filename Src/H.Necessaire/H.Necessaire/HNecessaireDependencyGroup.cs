@@ -8,6 +8,7 @@ namespace H.Necessaire
         {
             dependencyRegistry
                 .RegisterAlwaysNew<ImAPeriodicAction>(() => ConcreteFactory.BuildNewPeriodicAction())
+                .RegisterAlwaysNew<ImAHealthChecker>(() => new HealthChecker())
                 ;
 
             dependencyRegistry
@@ -16,7 +17,6 @@ namespace H.Necessaire
                 .Register<LoggingDependencyGroup>(() => new LoggingDependencyGroup())
                 .Register<VersioningDependencyGroup>(() => new VersioningDependencyGroup())
                 .Register<Operations.QdAction.DependenctGroup>(() => new Operations.QdAction.DependenctGroup())
-                .RegisterAlwaysNew<ImAHealthChecker>(() => new HealthChecker())
                 ;
         }
     }
