@@ -71,7 +71,56 @@ namespace H.Necessaire
 
         protected virtual Task<bool> HasSurelyNoInternet() => false.AsTask();
 
-        async Task<TaggedValue<OperationResult>> RunHealthCheck(string name, Func<Task<OperationResult>> connectivityCheck)
+        protected virtual async Task<OperationResult> RunHttpRequestHealthCheck(string url)
+        {
+            if (await HasSurelyNoInternet())
+                return "No Internet Connection";
+
+            if (httpConnectivityCheckResults.TryGetValue(url, out var check) && check?.IsActive() == true)
+                return check.Payload;
+
+            var result = await HSafe.Run(async () =>
+            {
+                var http = EnsureHttpClient();
+
+                TimeSpan requestDuration = TimeSpan.Zero;
+                string slowWarning = null;
+                using (var cancellationTokenSource = new CancellationTokenSource(httpRequestTimeout))
+                using (new PreciseTimeMeasurement(t => t.RefTo(out requestDuration).And(x => CreateSlowHttpWarningIfNecessary(x).RefTo(out slowWarning))))
+                using (var httpResponse = await http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationTokenSource.Token))
+                {
+                    if (!httpResponse.IsSuccessStatusCode)
+                    {
+                        return
+                            OperationResult
+                            .Fail($"Error occurred while trying to ping {url}. HTTP Response Code: {(int)httpResponse.StatusCode} - {httpResponse.StatusCode}")
+                            .WithComment(
+                                $"{(int)httpResponse.StatusCode}",
+                                $"{httpResponse.StatusCode}"
+                            )
+                            ;
+                    }
+                }
+
+                return
+                    OperationResult.Win()
+                    .WithComment($"{requestDuration}", $"{requestDuration.Ticks}")
+                    .AndIf(!slowWarning.IsEmpty(), x => x.Warn(slowWarning))
+                    ;
+            });
+
+            var checkResult = new EphemeralType<OperationResult>
+            {
+                Payload = !result ? result as OperationResult : result.Payload,
+                ValidFor = healthCheckTimeout,
+            };
+
+            httpConnectivityCheckResults.AddOrUpdate(url, checkResult, (key, existing) => checkResult);
+
+            return checkResult.Payload;
+        }
+
+        protected virtual async Task<TaggedValue<OperationResult>> RunHealthCheck(string name, Func<Task<OperationResult>> connectivityCheck)
         {
             if (IsInternetConnectionCheckEnabled && await HasSurelyNoInternet())
                 return OperationResult.Fail("No Internet Connection").Tag(name);
@@ -95,49 +144,7 @@ namespace H.Necessaire
             return checkResult.Payload.Tag(name);
         }
 
-        async Task<OperationResult> RunHttpRequestHealthCheck(string url)
-        {
-            if (await HasSurelyNoInternet())
-                return "No Internet Connection";
-
-            if (httpConnectivityCheckResults.TryGetValue(url, out var check) && check?.IsActive() == true)
-                return check.Payload;
-
-            var result = await HSafe.Run<OperationResult>(async () =>
-            {
-                var http = EnsureHttpClient();
-
-                TimeSpan requestDuration = TimeSpan.Zero;
-                string slowWarning = null;
-                using (var cancellationTokenSource = new CancellationTokenSource(httpRequestTimeout))
-                using (new PreciseTimeMeasurement(t => t.RefTo(out requestDuration).And(x => CreateSlowHttpWarningIfNecessary(x).RefTo(out slowWarning))))
-                using (var httpResponse = await http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationTokenSource.Token))
-                {
-                    if (!httpResponse.IsSuccessStatusCode)
-                    {
-                        return $"Error occurred while trying to ping {url}. HTTP Response Code: {(int)httpResponse.StatusCode} - {httpResponse.StatusCode}";
-                    }
-                }
-
-                return
-                    OperationResult.Win()
-                    .WithComment($"{requestDuration}", $"{requestDuration.Ticks}")
-                    .AndIf(!slowWarning.IsEmpty(), x => x.Warn(slowWarning))
-                    ;
-            });
-
-            var checkResult = new EphemeralType<OperationResult>
-            {
-                Payload = !result ? result as OperationResult : result.Payload,
-                ValidFor = healthCheckTimeout,
-            };
-
-            httpConnectivityCheckResults.AddOrUpdate(url, checkResult, (key, existing) => checkResult);
-
-            return checkResult.Payload;
-        }
-
-        async Task<OperationResult> CheckDefaultConnectivity()
+        protected virtual async Task<OperationResult> CheckDefaultConnectivity()
         {
             return await RunHttpRequestHealthCheck(defaultUrlToCheckInternet);
         }

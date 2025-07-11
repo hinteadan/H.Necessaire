@@ -55,7 +55,10 @@ namespace H.Necessaire
 
         public OperationResult WithComment(params string[] comments)
         {
-            Comments = (Comments ?? Array.Empty<string>()).Concat(comments?.ToNonEmptyArray() ?? Array.Empty<string>()).ToNonEmptyArray();
+            if (comments.IsEmpty())
+                return this;
+
+            Comments = (Comments ?? Array.Empty<string>()).Concat(comments.ToNonEmptyArray(nullIfEmpty: false)).ToNonEmptyArray();
             return this;
         }
 
