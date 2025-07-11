@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace H.Necessaire
 {
@@ -11,6 +10,7 @@ namespace H.Necessaire
     {
         bool IsInternetConnectionCheckDisabled { get; set; }
         ImAHealthChecker SetHealthCheck(string name, Func<Task<OperationResult>> check);
+        ImAHealthChecker SetHttpHealthCheck(string url);
         ImAHealthChecker ZapHealthCheck(string name);
         Task<OperationResult<TaggedValue<OperationResult>[]>> CheckHealth();
         Task<bool> HasSurelyNoInternet();
@@ -36,10 +36,14 @@ namespace H.Necessaire
             return this;
         }
 
-        public ImAHealthChecker ZapHealthCheck(string name)
+        public ImAHealthChecker SetHttpHealthCheck(string url)
+            => SetHealthCheck(url, () => RunHttpRequestHealthCheck(url));
+
+        public ImAHealthChecker ZapHealthCheck(string nameOrUrl)
         {
-            connectivityChecks.TryRemove(name, out var _);
-            connectivityCheckResults.TryRemove(name, out var _);
+            connectivityChecks.TryRemove(nameOrUrl, out var _);
+            connectivityCheckResults.TryRemove(nameOrUrl, out var _);
+            httpConnectivityCheckResults.TryRemove(nameOrUrl, out var _);
             return this;
         }
 
