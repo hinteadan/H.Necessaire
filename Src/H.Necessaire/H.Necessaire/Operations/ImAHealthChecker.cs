@@ -20,6 +20,7 @@ namespace H.Necessaire
     {
         static readonly TimeSpan healthCheckTimeout = TimeSpan.FromSeconds(3);
         static readonly TimeSpan httpClientTimeout = TimeSpan.FromMinutes(5);
+        static readonly TimeSpan httpRequestTimeout = TimeSpan.FromSeconds(10);
         static EphemeralType<HttpClient> ephemeralHttpClient = null;
         const string defaultUrlToCheckInternet = "http://www.msftncsi.com/ncsi.txt";
 
