@@ -1,6 +1,10 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
-namespace H.Necessaire.Runtime.MAUI.Core
+namespace H.Necessaire
 {
     public interface ImAConnectivityManager
     {
@@ -8,10 +12,10 @@ namespace H.Necessaire.Runtime.MAUI.Core
         ImAConnectivityManager SetConnectivityCheck(string name, Func<Task<OperationResult>> check);
         ImAConnectivityManager ZapConnectivityCheck(string name);
         Task<OperationResult<TaggedValue<OperationResult>[]>> CheckConnectivity();
-        bool HasSurelyNoInternet();
+        Task<bool> HasSurelyNoInternet();
     }
 
-    internal class ConnectivityManager : ImAConnectivityManager
+    public class ConnectivityManager : ImAConnectivityManager
     {
         static readonly TimeSpan connectivityCheckTimeout = TimeSpan.FromSeconds(3);
         static readonly TimeSpan httpClientTimeout = TimeSpan.FromMinutes(5);
@@ -27,8 +31,8 @@ namespace H.Necessaire.Runtime.MAUI.Core
 
         public ImAConnectivityManager SetConnectivityCheck(string name, Func<Task<OperationResult>> check)
         {
-            connectivityChecks.AddOrUpdate(name, check, (name, existing) => check);
-            connectivityCheckResults.AddOrUpdate(name, null as EphemeralType<OperationResult>, (name, existing) => null as EphemeralType<OperationResult>);
+            connectivityChecks.AddOrUpdate(name, check, (key, existing) => check);
+            connectivityCheckResults.AddOrUpdate(name, null as EphemeralType<OperationResult>, (key, existing) => null as EphemeralType<OperationResult>);
             return this;
         }
 
@@ -54,14 +58,13 @@ namespace H.Necessaire.Runtime.MAUI.Core
             return globalResult.WithPayload(checkResults);
         }
 
-        bool ImAConnectivityManager.HasSurelyNoInternet() => HasSurelyNoInternet();
+        Task<bool> ImAConnectivityManager.HasSurelyNoInternet() => HasSurelyNoInternet();
 
-        static bool HasSurelyNoInternet()
-            => Connectivity.Current.NetworkAccess.In(NetworkAccess.None, NetworkAccess.Local, NetworkAccess.ConstrainedInternet);
+        protected virtual Task<bool> HasSurelyNoInternet() => false.AsTask();
 
         async Task<TaggedValue<OperationResult>> RunConnectivityCheck(string name, Func<Task<OperationResult>> connectivityCheck)
         {
-            if (IsInternetConnectionCheckEnabled && HasSurelyNoInternet())
+            if (IsInternetConnectionCheckEnabled && await HasSurelyNoInternet())
                 return OperationResult.Fail("No Internet Connection").Tag(name);
 
             if (connectivityCheck is null)
@@ -74,18 +77,18 @@ namespace H.Necessaire.Runtime.MAUI.Core
 
             var checkResult = new EphemeralType<OperationResult>
             {
-                Payload = !result ? result : result.Payload,
+                Payload = !result ? result as OperationResult : result.Payload,
                 ValidFor = connectivityCheckTimeout,
             };
 
-            connectivityCheckResults.AddOrUpdate(name, checkResult, (name, existing) => checkResult);
+            connectivityCheckResults.AddOrUpdate(name, checkResult, (key, existing) => checkResult);
 
             return checkResult.Payload.Tag(name);
         }
 
-        static async Task<OperationResult> CheckDefaultConnectivity()
+        async Task<OperationResult> CheckDefaultConnectivity()
         {
-            if (HasSurelyNoInternet())
+            if (await HasSurelyNoInternet())
                 return "No Internet Connection";
 
             if (defaultConnectivityCheckResult?.IsActive() == true)
@@ -108,7 +111,7 @@ namespace H.Necessaire.Runtime.MAUI.Core
 
             defaultConnectivityCheckResult = new EphemeralType<OperationResult>
             {
-                Payload = !result ? result : result.Payload,
+                Payload = !result ? result as OperationResult : result.Payload,
                 ValidFor = connectivityCheckTimeout,
             };
 
