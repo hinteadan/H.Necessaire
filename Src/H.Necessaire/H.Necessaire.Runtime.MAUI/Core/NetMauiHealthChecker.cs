@@ -8,7 +8,7 @@
         protected override async Task<OperationResult> RunHttpRequestHealthCheck(string url)
         {
             return (await base.RunHttpRequestHealthCheck(url)).And(x => {
-                x.WithComment(Connectivity.Current.ConnectionProfiles.Select(x => $"{x}").Distinct().ToArray());
+                x.WithComment(Connectivity.Current.ConnectionProfiles.Select(x => $"ConnectionProfile::{x}").Distinct().ToArray());
             });
         }
     }
