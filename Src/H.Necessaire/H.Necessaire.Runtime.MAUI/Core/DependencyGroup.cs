@@ -8,7 +8,7 @@
                 .Register<SecureStorageKeyValueStore>(() => new SecureStorageKeyValueStore())
                 .Register<ConsumerIdentityManager>(() => new ConsumerIdentityManager())
                 .Register<ImAConsumerUseCase>(() => dependencyRegistry.Get<ConsumerIdentityManager>())
-                .RegisterAlwaysNew<ImAHealthChecker>(() => new NetMauiConnectivityManager())
+                .RegisterAlwaysNew<ImAHealthChecker>(() => new NetMauiHealthChecker())
                 .RegisterAlwaysNew<ImAUseCaseContextProvider>(() => new MauiAppUseCaseContextProvider())
                 ;
         }
