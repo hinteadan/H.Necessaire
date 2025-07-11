@@ -8,6 +8,7 @@
                 .Register<SecureStorageKeyValueStore>(() => new SecureStorageKeyValueStore())
                 .Register<ConsumerIdentityManager>(() => new ConsumerIdentityManager())
                 .Register<ImAConsumerUseCase>(() => dependencyRegistry.Get<ConsumerIdentityManager>())
+                .Register<ImAConnectivityManager>(() => new ConnectivityManager())
                 .RegisterAlwaysNew<ImAUseCaseContextProvider>(() => new MauiAppUseCaseContextProvider())
                 ;
         }
