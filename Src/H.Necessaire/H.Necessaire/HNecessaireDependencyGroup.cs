@@ -16,7 +16,7 @@ namespace H.Necessaire
                 .Register<LoggingDependencyGroup>(() => new LoggingDependencyGroup())
                 .Register<VersioningDependencyGroup>(() => new VersioningDependencyGroup())
                 .Register<Operations.QdAction.DependenctGroup>(() => new Operations.QdAction.DependenctGroup())
-                .Register<ImAConnectivityManager>(() => new ConnectivityManager())
+                .RegisterAlwaysNew<ImAConnectivityManager>(() => new ConnectivityManager())
                 ;
         }
     }
