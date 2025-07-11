@@ -16,15 +16,15 @@ namespace H.Necessaire
         Task<bool> HasSurelyNoInternet();
     }
 
-    public class ConnectivityManager : ImAHealthChecker
+    public class HealthChecker : ImAHealthChecker
     {
-        static readonly TimeSpan connectivityCheckTimeout = TimeSpan.FromSeconds(3);
+        static readonly TimeSpan healthCheckTimeout = TimeSpan.FromSeconds(3);
         static readonly TimeSpan httpClientTimeout = TimeSpan.FromMinutes(5);
         static EphemeralType<HttpClient> ephemeralHttpClient = null;
         const string defaultUrlToCheckInternet = "http://www.msftncsi.com/ncsi.txt";
 
-        readonly ConcurrentDictionary<string, Func<Task<OperationResult>>> connectivityChecks = new ConcurrentDictionary<string, Func<Task<OperationResult>>>();
-        readonly ConcurrentDictionary<string, EphemeralType<OperationResult>> connectivityCheckResults = new ConcurrentDictionary<string, EphemeralType<OperationResult>>();
+        readonly ConcurrentDictionary<string, Func<Task<OperationResult>>> healthChecks = new ConcurrentDictionary<string, Func<Task<OperationResult>>>();
+        readonly ConcurrentDictionary<string, EphemeralType<OperationResult>> healthCheckResults = new ConcurrentDictionary<string, EphemeralType<OperationResult>>();
         readonly ConcurrentDictionary<string, EphemeralType<OperationResult>> httpConnectivityCheckResults = new ConcurrentDictionary<string, EphemeralType<OperationResult>>();
 
         public bool IsInternetConnectionCheckDisabled { get; set; } = false;
@@ -32,7 +32,7 @@ namespace H.Necessaire
 
         public ImAHealthChecker SetHealthCheck(string name, Func<Task<OperationResult>> check)
         {
-            connectivityChecks.AddOrUpdate(name, check, (key, existing) => check);
+            healthChecks.AddOrUpdate(name, check, (key, existing) => check);
             return this;
         }
 
@@ -41,21 +41,21 @@ namespace H.Necessaire
 
         public ImAHealthChecker ZapHealthCheck(string nameOrUrl)
         {
-            connectivityChecks.TryRemove(nameOrUrl, out var _);
-            connectivityCheckResults.TryRemove(nameOrUrl, out var _);
+            healthChecks.TryRemove(nameOrUrl, out var _);
+            healthCheckResults.TryRemove(nameOrUrl, out var _);
             httpConnectivityCheckResults.TryRemove(nameOrUrl, out var _);
             return this;
         }
 
         public async Task<OperationResult<TaggedValue<OperationResult>[]>> CheckHealth()
         {
-            if (connectivityChecks.Count == 0)
+            if (healthChecks.Count == 0)
             {
                 OperationResult defaultCheck = await CheckDefaultConnectivity();
                 return defaultCheck.WithPayload(defaultCheck.Tag("DefaultCheck").Describe($"HTTP request to {defaultUrlToCheckInternet}").AsArray());
             }
 
-            TaggedValue<OperationResult>[] checkResults = await Task.WhenAll(connectivityChecks.Select(kvp => RunHealthCheck(kvp.Key, kvp.Value)));
+            TaggedValue<OperationResult>[] checkResults = await Task.WhenAll(healthChecks.Select(kvp => RunHealthCheck(kvp.Key, kvp.Value)));
 
             OperationResult globalResult = checkResults.Select(x => x.Value).Merge("Connectivity is unavailable for some of the checks. See comments for details");
 
@@ -74,7 +74,7 @@ namespace H.Necessaire
             if (connectivityCheck is null)
                 return OperationResult.Win().Tag(name);
 
-            if (connectivityCheckResults.TryGetValue(name, out var check) && check?.IsActive() == true)
+            if (healthCheckResults.TryGetValue(name, out var check) && check?.IsActive() == true)
                 return check.Payload.Tag(name);
 
             var result = await HSafe.Run<OperationResult>(connectivityCheck);
@@ -82,10 +82,10 @@ namespace H.Necessaire
             var checkResult = new EphemeralType<OperationResult>
             {
                 Payload = !result ? result as OperationResult : result.Payload,
-                ValidFor = connectivityCheckTimeout,
+                ValidFor = healthCheckTimeout,
             };
 
-            connectivityCheckResults.AddOrUpdate(name, checkResult, (key, existing) => checkResult);
+            healthCheckResults.AddOrUpdate(name, checkResult, (key, existing) => checkResult);
 
             return checkResult.Payload.Tag(name);
         }
@@ -116,7 +116,7 @@ namespace H.Necessaire
             var checkResult = new EphemeralType<OperationResult>
             {
                 Payload = !result ? result as OperationResult : result.Payload,
-                ValidFor = connectivityCheckTimeout,
+                ValidFor = healthCheckTimeout,
             };
 
             httpConnectivityCheckResults.AddOrUpdate(url, checkResult, (key, existing) => checkResult);
