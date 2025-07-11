@@ -33,7 +33,6 @@ namespace H.Necessaire
         public ImAHealthChecker SetHealthCheck(string name, Func<Task<OperationResult>> check)
         {
             connectivityChecks.AddOrUpdate(name, check, (key, existing) => check);
-            connectivityCheckResults.AddOrUpdate(name, null as EphemeralType<OperationResult>, (key, existing) => null as EphemeralType<OperationResult>);
             return this;
         }
 
