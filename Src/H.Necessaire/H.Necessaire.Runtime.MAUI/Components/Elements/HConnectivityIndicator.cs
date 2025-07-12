@@ -19,21 +19,21 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
         const string glyphEthIcon = "ic_fluent_plug_connected_16_filled";
         const string glyphBtIcon = "ic_fluent_bluetooth_16_filled";
 
+        Color unknownColor;
         Color okColor;
         Color nokColor;
+        Color slowColor;
+        Color verySlowColor;
+        Color superSlowColor;
 
         ConnectivityInfo connectivityInfo;
         ConnectivityInfo ConnectivityInfo { set => ViewData = value.RefTo(out connectivityInfo); }
-
         ImAConnectivityInfoProvider connectivityInfoProvider;
-        private Color slowColor;
-        private Color verySlowColor;
-        private Color superSlowColor;
-
         protected override void EnsureDependencies(params object[] constructionArgs)
         {
             base.EnsureDependencies(constructionArgs);
 
+            Branding.InformationColor.WithOpacity(.23f).ToMaui().RefTo(out unknownColor);
             Branding.SuccessColor.ToMaui().RefTo(out okColor);
             Branding.DangerColor.ToMaui().RefTo(out nokColor);
             new ColorInfo(224, 245, 91).ToMaui().RefTo(out slowColor);
@@ -64,7 +64,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
             }
             .And(lay =>
             {
-                lay.Add(new HLabel { Text = "HConnectivityIndicator" });
+                lay.Add(new HLabel { });
             });
         }
     }
