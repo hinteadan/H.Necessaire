@@ -22,9 +22,9 @@ namespace H.Necessaire
         static readonly TimeSpan healthCheckTimeout = TimeSpan.FromSeconds(3);
         static readonly TimeSpan httpClientTimeout = TimeSpan.FromMinutes(5);
         static readonly TimeSpan httpRequestTimeout = TimeSpan.FromSeconds(10);
-        static readonly TimeSpan httpRequestSlowTime = TimeSpan.FromSeconds(1.5);
-        static readonly TimeSpan httpRequestVerySlowTime = TimeSpan.FromSeconds(3);
-        static readonly TimeSpan httpRequestSuperSlowTime = TimeSpan.FromSeconds(6);
+        static readonly TimeSpan httpRequestSlowTime = TimeSpan.FromSeconds(2.5);
+        static readonly TimeSpan httpRequestVerySlowTime = TimeSpan.FromSeconds(5);
+        static readonly TimeSpan httpRequestSuperSlowTime = TimeSpan.FromSeconds(7.5);
         static EphemeralType<HttpClient> ephemeralHttpClient = null;
         const string defaultUrlToCheckInternet = "https://www.google.com";
 
