@@ -32,7 +32,7 @@ namespace H.Necessaire.Operations
         public ConnectivityProfile[] AvailableProfiles { get; set; }
         public string[] Reasons { get; set; }
 
-        public bool IsSameAs(ConnectivityInfo other)
+        public bool IsSameAs(ConnectivityInfo other, bool isReasonsCheckIncluded = false)
         {
             if (other is null)
                 return false;
@@ -41,7 +41,7 @@ namespace H.Necessaire.Operations
                 other.HasConnectivity == HasConnectivity
                 && other.LinkSpeedLevel == LinkSpeedLevel
                 && other.AvailableProfiles.IsSameAs(AvailableProfiles)
-                && other.Reasons.IsSameAs(Reasons)
+                && (!isReasonsCheckIncluded ? true : other.Reasons.IsSameAs(Reasons)) 
                 ;
         }
 
