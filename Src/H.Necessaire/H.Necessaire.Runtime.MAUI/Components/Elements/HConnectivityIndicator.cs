@@ -1,6 +1,7 @@
 ﻿using H.Necessaire.Operations;
 using H.Necessaire.Runtime.MAUI.Components.Abstracts;
 using H.Necessaire.Runtime.MAUI.Components.Controls;
+using H.Necessaire.Runtime.MAUI.Extensions;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Elements
 {
@@ -18,13 +19,26 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
         const string glyphEthIcon = "ic_fluent_plug_connected_16_filled";
         const string glyphBtIcon = "ic_fluent_bluetooth_16_filled";
 
+        Color okColor;
+        Color nokColor;
+
         ConnectivityInfo connectivityInfo;
         ConnectivityInfo ConnectivityInfo { set => ViewData = value.RefTo(out connectivityInfo); }
 
         ImAConnectivityInfoProvider connectivityInfoProvider;
+        private Color slowColor;
+        private Color verySlowColor;
+        private Color superSlowColor;
+
         protected override void EnsureDependencies(params object[] constructionArgs)
         {
             base.EnsureDependencies(constructionArgs);
+
+            Branding.SuccessColor.ToMaui().RefTo(out okColor);
+            Branding.DangerColor.ToMaui().RefTo(out nokColor);
+            new ColorInfo(200, 247, 45).ToMaui().RefTo(out slowColor);
+            new ColorInfo(247, 193, 45).ToMaui().RefTo(out verySlowColor);
+            new ColorInfo(247, 133, 45).ToMaui().RefTo(out superSlowColor);
 
             connectivityInfoProvider = Get<ImAConnectivityInfoProvider>();
 
