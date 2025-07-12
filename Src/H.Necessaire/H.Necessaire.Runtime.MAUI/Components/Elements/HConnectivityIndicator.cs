@@ -1,6 +1,5 @@
 ﻿using H.Necessaire.Operations;
 using H.Necessaire.Runtime.MAUI.Components.Abstracts;
-using H.Necessaire.Runtime.MAUI.Components.Controls;
 using H.Necessaire.Runtime.MAUI.Extensions;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Elements
@@ -19,6 +18,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
         const string glyphEthIcon = "ic_fluent_plug_connected_16_filled";
         const string glyphBtIcon = "ic_fluent_bluetooth_16_filled";
 
+        const string glyphUnknownProfileIcon = "ic_fluent_catch_up_24_filled";
+
         Color unknownColor;
         Color okColor;
         Color nokColor;
@@ -33,9 +34,9 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
         {
             base.EnsureDependencies(constructionArgs);
 
-            Branding.InformationColor.WithOpacity(.23f).ToMaui().RefTo(out unknownColor);
             Branding.SuccessColor.ToMaui().RefTo(out okColor);
             Branding.DangerColor.ToMaui().RefTo(out nokColor);
+            new ColorInfo(179, 179, 179, .23f).ToMaui().RefTo(out unknownColor);
             new ColorInfo(224, 245, 91).ToMaui().RefTo(out slowColor);
             new ColorInfo(247, 193, 45).ToMaui().RefTo(out verySlowColor);
             new ColorInfo(247, 133, 45).ToMaui().RefTo(out superSlowColor);
@@ -60,11 +61,35 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
         {
             return new Grid
             {
-
+                Padding = SizingUnit / 4,
+                HeightRequest = SizingUnit * 3,
+                WidthRequest = SizingUnit * 3,
+                RowDefinitions = [
+                    new RowDefinition(new GridLength(2.3, GridUnitType.Star)),
+                    new RowDefinition(new GridLength(1, GridUnitType.Star)),
+                ],
             }
             .And(lay =>
             {
-                lay.Add(new HLabel { });
+                lay.Add(
+                    new HFontIcon
+                    {
+                        Color = unknownColor,
+                        Glyph = glyphGlobeWait,
+                    },
+                    row: 0
+                );
+
+                lay.Add(
+                    new HFontIcon
+                    {
+                        Color = unknownColor,
+                        Glyph = glyphUnknownProfileIcon,
+                        HorizontalOptions = LayoutOptions.Center,
+                        Margin = new Thickness(0, 1, 0, 0),
+                    },
+                    row: 1
+                );
             });
         }
     }
