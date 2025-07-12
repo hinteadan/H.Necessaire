@@ -101,6 +101,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                     {
                         Color = unknownColor,
                         Glyph = glyphGlobeSync,
+                        Margin = new Thickness(0, -6.13, 0, 0)
                     }
                     .Bind(this, null, x =>
                     {
