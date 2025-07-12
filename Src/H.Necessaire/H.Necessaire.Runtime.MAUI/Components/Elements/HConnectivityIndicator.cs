@@ -33,7 +33,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
         Color superSlowColor;
 
         ConnectivityInfo connectivityInfo;
-        ConnectivityInfo ConnectivityInfo { set => ViewData = value.RefTo(out connectivityInfo); }
+        ConnectivityInfo ConnectivityInfo { get => connectivityInfo; set => ViewData = value.RefTo(out connectivityInfo); }
         ImAConnectivityInfoProvider connectivityInfoProvider;
         protected override void EnsureDependencies(params object[] constructionArgs)
         {
@@ -82,7 +82,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                         Color = unknownColor,
                         Glyph = glyphGlobeSync,
                     }
-                    .Bind(this, null, x => {
+                    .Bind(this, null, x =>
+                    {
                         x.Glyph = GetConnectionStatusGlyph();
                         x.Color = GetConnectionStatusColor();
                     })
@@ -98,13 +99,22 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                         HorizontalOptions = LayoutOptions.End,
                         Margin = new Thickness(0, 1, 0, 0),
                     }
-                    .Bind(this, null, x => {
+                    .Bind(this, null, x =>
+                    {
                         x.Glyph = GetConnectionProfileGlyph();
                         x.Color = GetConnectionStatusColor();
                     })
                     ,
                     row: 0
                 );
+
+                lay.GestureRecognizers.Add(new TapGestureRecognizer().And(tap => tap.Tapped += async (s, e) =>
+                {
+                    using (Disable(s as View))
+                    {
+                        ConnectivityInfo = await connectivityInfoProvider.GetConnectivityInfo();
+                    }
+                }));
             });
         }
 
