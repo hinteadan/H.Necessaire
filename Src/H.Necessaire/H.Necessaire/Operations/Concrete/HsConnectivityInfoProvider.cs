@@ -9,7 +9,7 @@ namespace H.Necessaire.Runtime.MAUI.Core
 {
     public class HsConnectivityInfoProvider : ImAConnectivityInfoProvider, ImADependency
     {
-        public event AsyncEventHandler<ConnectivityInfoChangedEventArgs> OnConnectivityInfoChanged { add => onConnectivityInfoChangedEventRaiser.OnEvent += value; remove => onConnectivityInfoChangedEventRaiser.OnEvent -= value; };
+        public event AsyncEventHandler<ConnectivityInfoChangedEventArgs> OnConnectivityInfoChanged { add => onConnectivityInfoChangedEventRaiser.OnEvent += value; remove => onConnectivityInfoChangedEventRaiser.OnEvent -= value; }
 
         static readonly TimeSpan refreshInterval = TimeSpan.FromMinutes(2);
         static readonly TimeSpan connectivityInfoTimeout = TimeSpan.FromSeconds(5);
