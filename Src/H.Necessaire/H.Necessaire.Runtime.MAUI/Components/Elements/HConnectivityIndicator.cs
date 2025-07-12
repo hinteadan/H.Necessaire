@@ -36,7 +36,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
 
             Branding.SuccessColor.ToMaui().RefTo(out okColor);
             Branding.DangerColor.ToMaui().RefTo(out nokColor);
-            new ColorInfo(200, 247, 45).ToMaui().RefTo(out slowColor);
+            new ColorInfo(224, 245, 91).ToMaui().RefTo(out slowColor);
             new ColorInfo(247, 193, 45).ToMaui().RefTo(out verySlowColor);
             new ColorInfo(247, 133, 45).ToMaui().RefTo(out superSlowColor);
 
