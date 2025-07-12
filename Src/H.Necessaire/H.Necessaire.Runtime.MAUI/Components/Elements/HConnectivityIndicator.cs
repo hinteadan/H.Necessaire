@@ -1,5 +1,6 @@
 ﻿using H.Necessaire.Operations;
 using H.Necessaire.Runtime.MAUI.Components.Abstracts;
+using H.Necessaire.Runtime.MAUI.Components.Controls;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Elements
 {
@@ -49,7 +50,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
             }
             .And(lay =>
             {
-
+                lay.Add(new HLabel { Text = "HConnectivityIndicator" });
             });
         }
     }
