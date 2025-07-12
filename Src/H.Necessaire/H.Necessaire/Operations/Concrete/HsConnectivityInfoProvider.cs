@@ -9,12 +9,21 @@ namespace H.Necessaire.Runtime.MAUI.Core
 {
     public class HsConnectivityInfoProvider : ImAConnectivityInfoProvider, ImADependency
     {
+        public event AsyncEventHandler<ConnectivityInfoChangedEventArgs> OnConnectivityInfoChanged { add => onConnectivityInfoChangedEventRaiser.OnEvent += value; remove => onConnectivityInfoChangedEventRaiser.OnEvent -= value; };
+
         static readonly TimeSpan refreshInterval = TimeSpan.FromMinutes(2);
         static readonly TimeSpan connectivityInfoTimeout = TimeSpan.FromSeconds(5);
         ImAHealthChecker connectivityChecker;
         ImAPeriodicAction refreshAction;
         EphemeralType<ConnectivityInfo> connectivityInfo = null;
         readonly SemaphoreSlim refreshConnectivityInfoSemaphore = new SemaphoreSlim(1, 1);
+        readonly AsyncEventRaiser<ConnectivityInfoChangedEventArgs> onConnectivityInfoChangedEventRaiser;
+        public HsConnectivityInfoProvider()
+        {
+            onConnectivityInfoChangedEventRaiser = new AsyncEventRaiser<ConnectivityInfoChangedEventArgs>(this);
+        }
+
+
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             connectivityChecker = dependencyProvider.Get<ImAHealthChecker>();
@@ -45,8 +54,11 @@ namespace H.Necessaire.Runtime.MAUI.Core
             try
             {
                 if (connectivityInfo?.IsActive() == true)
+                {
+                    await onConnectivityInfoChangedEventRaiser.Raise(connectivityInfo.Payload);
                     return;
-
+                }
+                    
                 OperationResult<TaggedValue<OperationResult>[]> checkResult = await connectivityChecker.CheckHealth();
 
                 OperationResult defaultHttpOpRes = checkResult.Payload.SingleOrDefault(x => x.Name == "DefaultCheck")?.Value;
@@ -62,6 +74,8 @@ namespace H.Necessaire.Runtime.MAUI.Core
                     },
                     ValidFor = connectivityInfoTimeout,
                 };
+
+                await onConnectivityInfoChangedEventRaiser.Raise(connectivityInfo.Payload);
             }
             finally
             {

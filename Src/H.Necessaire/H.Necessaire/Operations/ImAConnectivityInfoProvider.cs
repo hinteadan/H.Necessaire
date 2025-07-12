@@ -1,12 +1,27 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace H.Necessaire.Operations
 {
     public interface ImAConnectivityInfoProvider
     {
+        event AsyncEventHandler<ConnectivityInfoChangedEventArgs> OnConnectivityInfoChanged;
+
         Task<ConnectivityInfo> GetConnectivityInfo();
 
         Task ForceRefresh();
+    }
+
+    public class ConnectivityInfoChangedEventArgs : EventArgs
+    {
+        public ConnectivityInfoChangedEventArgs(ConnectivityInfo connectivityInfo)
+        {
+            ConnectivityInfo = connectivityInfo;
+        }
+
+        public ConnectivityInfo ConnectivityInfo { get; }
+
+        public static implicit operator ConnectivityInfoChangedEventArgs(ConnectivityInfo connectivityInfo) => new ConnectivityInfoChangedEventArgs(connectivityInfo);
     }
 
     public class ConnectivityInfo
