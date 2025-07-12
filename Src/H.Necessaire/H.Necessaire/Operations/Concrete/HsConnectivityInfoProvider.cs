@@ -15,6 +15,7 @@ namespace H.Necessaire.Runtime.MAUI.Core
         static readonly TimeSpan connectivityInfoTimeout = TimeSpan.FromSeconds(5);
         ImAHealthChecker connectivityChecker;
         ImAPeriodicAction refreshAction;
+        ConnectivityInfo latestRaisedConnectivityInfo = null;
         EphemeralType<ConnectivityInfo> connectivityInfo = null;
         readonly SemaphoreSlim refreshConnectivityInfoSemaphore = new SemaphoreSlim(1, 1);
         readonly AsyncEventRaiser<ConnectivityInfoChangedEventArgs> onConnectivityInfoChangedEventRaiser;
@@ -55,7 +56,8 @@ namespace H.Necessaire.Runtime.MAUI.Core
             {
                 if (connectivityInfo?.IsActive() == true)
                 {
-                    await onConnectivityInfoChangedEventRaiser.Raise(connectivityInfo.Payload);
+                    if (latestRaisedConnectivityInfo != connectivityInfo.Payload)
+                        await onConnectivityInfoChangedEventRaiser.Raise(connectivityInfo.Payload.RefTo(out latestRaisedConnectivityInfo));
                     return;
                 }
                     
@@ -75,7 +77,8 @@ namespace H.Necessaire.Runtime.MAUI.Core
                     ValidFor = connectivityInfoTimeout,
                 };
 
-                await onConnectivityInfoChangedEventRaiser.Raise(connectivityInfo.Payload);
+                if (latestRaisedConnectivityInfo != connectivityInfo.Payload)
+                    await onConnectivityInfoChangedEventRaiser.Raise(connectivityInfo.Payload.RefTo(out latestRaisedConnectivityInfo));
             }
             finally
             {

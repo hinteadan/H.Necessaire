@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.Operations
@@ -24,12 +25,45 @@ namespace H.Necessaire.Operations
         public static implicit operator ConnectivityInfoChangedEventArgs(ConnectivityInfo connectivityInfo) => new ConnectivityInfoChangedEventArgs(connectivityInfo);
     }
 
-    public class ConnectivityInfo
+    public class ConnectivityInfo : IEquatable<ConnectivityInfo>
     {
         public bool HasConnectivity { get; set; }
         public ConnectivityLinkSpeedLevel LinkSpeedLevel { get; set; }
         public ConnectivityProfile[] AvailableProfiles { get; set; }
         public string[] Reasons { get; set; }
+
+        public bool IsSameAs(ConnectivityInfo other)
+        {
+            if (other is null)
+                return false;
+
+            return
+                other.HasConnectivity == HasConnectivity
+                && other.LinkSpeedLevel == LinkSpeedLevel
+                && other.AvailableProfiles.IsSameAs(AvailableProfiles)
+                && other.Reasons.IsSameAs(Reasons)
+                ;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as ConnectivityInfo);
+        }
+
+        public bool Equals(ConnectivityInfo other) => IsSameAs(other);
+
+        public override int GetHashCode()
+        {
+            int hashCode = -1092751998;
+            hashCode = hashCode * -1521134295 + HasConnectivity.GetHashCode();
+            hashCode = hashCode * -1521134295 + LinkSpeedLevel.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<ConnectivityProfile[]>.Default.GetHashCode(AvailableProfiles);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string[]>.Default.GetHashCode(Reasons);
+            return hashCode;
+        }
+
+        public static bool operator ==(ConnectivityInfo a, ConnectivityInfo b) => a is null ? b is null : a?.IsSameAs(b) == true;
+        public static bool operator !=(ConnectivityInfo a, ConnectivityInfo b) => a is null ? b != null : a?.IsSameAs(b) != true;
     }
 
     public enum ConnectivityLinkSpeedLevel : sbyte
