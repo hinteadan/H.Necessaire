@@ -12,7 +12,7 @@ namespace H.Necessaire.Runtime.MAUI.Core
                 .Register<ImAConsumerUseCase>(() => dependencyRegistry.Get<ConsumerIdentityManager>())
                 .RegisterAlwaysNew<ImAHealthChecker>(() => new NetMauiHealthChecker())
                 .RegisterAlwaysNew<ImAUseCaseContextProvider>(() => new MauiAppUseCaseContextProvider())
-                .Register<ImAConnectivityInfoProvider>(() => new HsConnectivityInfoProvider())
+                .Register<ImAConnectivityInfoProvider>(() => new NetMauiConnectivityInfoProvider())
                 ;
         }
     }

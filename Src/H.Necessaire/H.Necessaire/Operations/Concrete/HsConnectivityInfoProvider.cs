@@ -1,8 +1,13 @@
 ﻿using H.Necessaire.Operations;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.MAUI.Core
 {
-    internal class HsConnectivityInfoProvider : ImAConnectivityInfoProvider, ImADependency
+    public class HsConnectivityInfoProvider : ImAConnectivityInfoProvider, ImADependency
     {
         static readonly TimeSpan refreshInterval = TimeSpan.FromMinutes(2);
         static readonly TimeSpan connectivityInfoTimeout = TimeSpan.FromSeconds(5);
@@ -27,7 +32,7 @@ namespace H.Necessaire.Runtime.MAUI.Core
 
         public async Task ForceRefresh()
         {
-            if (connectivityInfo is not null)
+            if (connectivityInfo != null)
                 connectivityInfo.ExpireAt(DateTime.UtcNow.AddSeconds(-1));
 
             await RefreshConnectivityInfo();
