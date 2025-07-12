@@ -158,6 +158,26 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
         {
             if (connectivityInfo is null)
                 return unknownColor;
+
+            if (!connectivityInfo.HasConnectivity)
+                return nokColor;
+
+            if (connectivityInfo.LinkSpeedLevel == ConnectivityLinkSpeedLevel.NoConnectivity)
+                return nokColor;
+
+            if (connectivityInfo.LinkSpeedLevel == ConnectivityLinkSpeedLevel.OK)
+                return okColor;
+
+            if (connectivityInfo.LinkSpeedLevel == ConnectivityLinkSpeedLevel.Slow)
+                return slowColor;
+
+            if (connectivityInfo.LinkSpeedLevel == ConnectivityLinkSpeedLevel.VerySlow)
+                return verySlowColor;
+
+            if (connectivityInfo.LinkSpeedLevel == ConnectivityLinkSpeedLevel.SuperSlow)
+                return superSlowColor;
+
+            return unknownColor;
         }
 
         protected override async Task Initialize()
