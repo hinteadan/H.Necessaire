@@ -10,6 +10,7 @@
                 .Register<ImAConsumerUseCase>(() => dependencyRegistry.Get<ConsumerIdentityManager>())
                 .RegisterAlwaysNew<ImAHealthChecker>(() => new NetMauiHealthChecker())
                 .RegisterAlwaysNew<ImAUseCaseContextProvider>(() => new MauiAppUseCaseContextProvider())
+                .Register<ImAConnectivityInfoProvider>(() => new HsConnectivityInfoProvider())
                 ;
         }
     }
