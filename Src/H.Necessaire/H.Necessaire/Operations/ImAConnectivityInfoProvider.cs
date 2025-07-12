@@ -11,10 +11,10 @@ namespace H.Necessaire.Operations
 
     public class ConnectivityInfo
     {
-        public bool HasConnectivity { get; internal set; }
-        public ConnectivityLinkSpeedLevel LinkSpeedLevel { get; internal set; }
-        public ConnectivityProfile[] AvailableProfiles { get; internal set; }
-        public string[] Reasons { get; internal set; }
+        public bool HasConnectivity { get; set; }
+        public ConnectivityLinkSpeedLevel LinkSpeedLevel { get; set; }
+        public ConnectivityProfile[] AvailableProfiles { get; set; }
+        public string[] Reasons { get; set; }
     }
 
     public enum ConnectivityLinkSpeedLevel : sbyte
