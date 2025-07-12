@@ -20,7 +20,7 @@ namespace H.Necessaire.Runtime.MAUI
         public override ColorInfo BackgroundColorTranslucent => Theme == AppTheme.Dark ? Colors.Complementary.Darker(10).WithOpacity(.83f) : base.BackgroundColorTranslucent;
 
         public override ColorInfo PrimaryColor => Theme == AppTheme.Dark ? Colors.Primary.Darker(1) : base.PrimaryColor;
-        public override ColorInfo PrimaryColorTranslucent => Theme == AppTheme.Dark ? Colors.Primary.Darker(1).WithOpacity(.83f) : base.PrimaryColorTranslucent;
+        public override ColorInfo PrimaryColorTranslucent => Theme == AppTheme.Dark ? Colors.Primary.Darker(2).WithOpacity(.83f) : Colors.Primary.Darker(1).WithOpacity(.83f);
         public override ColorInfo PrimaryColorFaded => Theme == AppTheme.Dark ? Colors.Primary.Color.WithOpacity(.83f) : base.PrimaryColorFaded;
 
         public override ColorInfo SecondaryColor => Theme == AppTheme.Dark ? Colors.PrimaryIsh().Darker(1) : base.SecondaryColor;
