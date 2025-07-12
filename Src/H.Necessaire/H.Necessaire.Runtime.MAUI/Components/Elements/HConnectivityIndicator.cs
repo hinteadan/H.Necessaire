@@ -7,10 +7,10 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
     public class HConnectivityIndicator : HMauiComponentBase
     {
         const string glyphGlobeOK = "ic_fluent_globe_16_filled";//OK - Green
-        const string glyphGlobeWait = "ic_fluent_globe_clock_16_filled";//Slow
-        const string glyphGlobeNote = "ic_fluent_globe_error_16_filled";//Very Slow
-        const string glyphGlobeWarn = "ic_fluent_globe_warning_16_filled";//Super Slow
-        const string glyphGlobeOff = "ic_fluent_globe_off_12_filled";//No Connection - Red
+        const string glyphGlobeSlow = "ic_fluent_globe_clock_16_filled";//Slow
+        const string glyphGlobeVerySlow = "ic_fluent_globe_error_16_filled";//Very Slow
+        const string glyphGlobeSuperSlow = "ic_fluent_globe_warning_16_filled";//Super Slow
+        const string glyphGlobeNoConnection = "ic_fluent_globe_off_12_filled";//No Connection - Red
 
         const string glyphGlobeSync = "ic_fluent_globe_sync_16_filled";//Refreshing
 
@@ -134,22 +134,22 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                 return glyphGlobeSync;
 
             if (!connectivityInfo.HasConnectivity)
-                return glyphGlobeOff;
+                return glyphGlobeNoConnection;
 
             if (connectivityInfo.LinkSpeedLevel == ConnectivityLinkSpeedLevel.NoConnectivity)
-                return glyphGlobeOff;
+                return glyphGlobeNoConnection;
 
             if (connectivityInfo.LinkSpeedLevel == ConnectivityLinkSpeedLevel.OK)
                 return glyphGlobeOK;
 
             if (connectivityInfo.LinkSpeedLevel == ConnectivityLinkSpeedLevel.Slow)
-                return glyphGlobeWait;
+                return glyphGlobeSlow;
 
             if (connectivityInfo.LinkSpeedLevel == ConnectivityLinkSpeedLevel.VerySlow)
-                return glyphGlobeNote;
+                return glyphGlobeVerySlow;
 
             if (connectivityInfo.LinkSpeedLevel == ConnectivityLinkSpeedLevel.SuperSlow)
-                return glyphGlobeWarn;
+                return glyphGlobeSuperSlow;
 
             return glyphGlobeSync;
         }
