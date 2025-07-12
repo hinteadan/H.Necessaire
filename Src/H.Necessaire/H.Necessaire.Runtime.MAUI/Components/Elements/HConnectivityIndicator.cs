@@ -76,7 +76,12 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                     {
                         Color = unknownColor,
                         Glyph = glyphGlobeWait,
-                    },
+                    }
+                    .Bind(this, null, x => {
+                        x.Glyph = GetConnectionStatusGlyph();
+                        x.Color = GetConnectionStatusColor();
+                    })
+                    ,
                     row: 0
                 );
 
@@ -87,10 +92,37 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                         Glyph = glyphUnknownProfileIcon,
                         HorizontalOptions = LayoutOptions.Center,
                         Margin = new Thickness(0, 1, 0, 0),
-                    },
+                    }
+                    .Bind(this, null, x => {
+                        x.Glyph = GetConnectionProfileGlyph();
+                        x.Color = GetConnectionStatusColor();
+                    })
+                    ,
                     row: 1
                 );
             });
+        }
+
+        string GetConnectionProfileGlyph()
+        {
+            throw new NotImplementedException();
+        }
+
+        string GetConnectionStatusGlyph()
+        {
+            throw new NotImplementedException();
+        }
+
+        Color GetConnectionStatusColor()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override async Task Initialize()
+        {
+            await base.Initialize();
+
+            ConnectivityInfo = await connectivityInfoProvider.GetConnectivityInfo();
         }
     }
 }
