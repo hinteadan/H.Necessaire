@@ -121,11 +121,11 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                         HorizontalOptions = LayoutOptions.Center,
                         Text = null,
                     }
-                    .Bind(this, null, x => x.AndIf(connectivityInfo?.LatestResponseDuration != null, x =>
+                    .Bind(this, null, x =>
                     {
                         x.TextColor = GetConnectionStatusColor();
-                        x.Text = $"{Math.Round(connectivityInfo.LatestResponseDuration.Value.TotalSeconds, 2).ToInvarString()} s";
-                    }))
+                        x.Text = connectivityInfo?.LatestResponseDuration != null ? $"{Math.Round(connectivityInfo.LatestResponseDuration.Value.TotalSeconds, 2).ToInvarString()} s" : null;
+                    })
                     ,
                     row: 2
                 );
