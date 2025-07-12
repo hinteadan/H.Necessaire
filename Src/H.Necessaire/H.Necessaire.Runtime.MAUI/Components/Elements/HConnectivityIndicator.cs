@@ -80,7 +80,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                     new HFontIcon
                     {
                         Color = unknownColor,
-                        Glyph = glyphGlobeWait,
+                        Glyph = glyphGlobeSync,
                     }
                     .Bind(this, null, x => {
                         x.Glyph = GetConnectionStatusGlyph();
@@ -131,7 +131,27 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
         string GetConnectionStatusGlyph()
         {
             if (connectivityInfo is null)
+                return glyphGlobeSync;
+
+            if (!connectivityInfo.HasConnectivity)
+                return glyphGlobeOff;
+
+            if (connectivityInfo.LinkSpeedLevel == ConnectivityLinkSpeedLevel.NoConnectivity)
+                return glyphGlobeOff;
+
+            if (connectivityInfo.LinkSpeedLevel == ConnectivityLinkSpeedLevel.OK)
+                return glyphGlobeOK;
+
+            if (connectivityInfo.LinkSpeedLevel == ConnectivityLinkSpeedLevel.Slow)
                 return glyphGlobeWait;
+
+            if (connectivityInfo.LinkSpeedLevel == ConnectivityLinkSpeedLevel.VerySlow)
+                return glyphGlobeNote;
+
+            if (connectivityInfo.LinkSpeedLevel == ConnectivityLinkSpeedLevel.SuperSlow)
+                return glyphGlobeWarn;
+
+            return glyphGlobeSync;
         }
 
         Color GetConnectionStatusColor()
