@@ -79,7 +79,7 @@ namespace H.Necessaire
             if (httpConnectivityCheckResults.TryGetValue(url, out var check) && check?.IsActive() == true)
                 return check.Payload;
 
-            var result = await HSafe.Run(async () =>
+            var result = await HSafe.Run(async () => await Task.Run(async () =>
             {
                 var http = EnsureHttpClient();
 
@@ -119,7 +119,7 @@ namespace H.Necessaire
                     .WithComment($"HttpRequestDuration::{requestDuration}", $"HttpRequestDurationTicks::{requestDuration.Ticks}")
                     .AndIf(!slowWarning.IsEmpty(), x => x.Warn(slowWarning))
                     ;
-            });
+            }));
 
             var checkResult = new EphemeralType<OperationResult>
             {
