@@ -15,8 +15,13 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
         const string glyphGlobeSync = "ic_fluent_globe_sync_16_filled";//Refreshing
 
         const string glyphWiFiIcon = "ic_fluent_wifi_1_24_filled";
+        const string glyphNoWiFiIcon = "ic_fluent_wifi_off_24_filled";
         const string glyphEthIcon = "ic_fluent_plug_connected_16_filled";
-        const string glyphBtIcon = "ic_fluent_bluetooth_16_filled";
+        const string glyphNoEthIcon = "ic_fluent_plug_disconnected_16_filled";
+        const string glyphCellIcon = "ic_fluent_cellular_5g_24_filled";
+        const string glyphNoCellIcon = "ic_fluent_cellular_off_24_filled";
+        const string glyphBtIcon = "ic_fluent_bluetooth_connected_24_filled";
+        const string glyphNoBtIcon = "ic_fluent_bluetooth_disabled_24_filled";
 
         const string glyphUnknownProfileIcon = "ic_fluent_catch_up_24_filled";
 
@@ -105,17 +110,34 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
 
         string GetConnectionProfileGlyph()
         {
-            throw new NotImplementedException();
+            if ((connectivityInfo?.AvailableProfiles).IsEmpty())
+                return glyphUnknownProfileIcon;
+
+            if (ConnectivityProfile.WiFi.In(connectivityInfo.AvailableProfiles))
+                return connectivityInfo.HasConnectivity ? glyphWiFiIcon : glyphNoWiFiIcon;
+
+            if (ConnectivityProfile.Ethernet.In(connectivityInfo.AvailableProfiles))
+                return connectivityInfo.HasConnectivity ? glyphEthIcon : glyphNoEthIcon;
+
+            if (ConnectivityProfile.Cellular.In(connectivityInfo.AvailableProfiles))
+                return connectivityInfo.HasConnectivity ? glyphCellIcon : glyphNoCellIcon;
+
+            if (ConnectivityProfile.Bluetooth.In(connectivityInfo.AvailableProfiles))
+                return connectivityInfo.HasConnectivity ? glyphBtIcon : glyphNoBtIcon;
+
+            return glyphUnknownProfileIcon;
         }
 
         string GetConnectionStatusGlyph()
         {
-            throw new NotImplementedException();
+            if (connectivityInfo is null)
+                return glyphGlobeWait;
         }
 
         Color GetConnectionStatusColor()
         {
-            throw new NotImplementedException();
+            if (connectivityInfo is null)
+                return unknownColor;
         }
 
         protected override async Task Initialize()
