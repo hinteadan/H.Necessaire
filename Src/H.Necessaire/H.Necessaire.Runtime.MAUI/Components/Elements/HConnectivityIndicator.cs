@@ -16,8 +16,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
 
         const string glyphWiFiIcon = "ic_fluent_wifi_1_24_filled";
         const string glyphNoWiFiIcon = "ic_fluent_wifi_off_24_filled";
-        const string glyphEthIcon = "ic_fluent_plug_connected_16_filled";
-        const string glyphNoEthIcon = "ic_fluent_plug_disconnected_16_filled";
+        const string glyphEthIcon = "ic_fluent_tv_usb_16_filled";
+        const string glyphNoEthIcon = "ic_fluent_usb_plug_20_filled";
         const string glyphCellIcon = "ic_fluent_cellular_5g_24_filled";
         const string glyphNoCellIcon = "ic_fluent_cellular_off_24_filled";
         const string glyphBtIcon = "ic_fluent_bluetooth_connected_24_filled";
@@ -70,8 +70,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                 HeightRequest = SizingUnit * 3,
                 WidthRequest = SizingUnit * 3,
                 RowDefinitions = [
-                    new RowDefinition(new GridLength(2.3, GridUnitType.Star)),
                     new RowDefinition(new GridLength(1, GridUnitType.Star)),
+                    new RowDefinition(new GridLength(2.3, GridUnitType.Star)),
                 ],
             }
             .And(lay =>
@@ -87,7 +87,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                         x.Color = GetConnectionStatusColor();
                     })
                     ,
-                    row: 0
+                    row: 1
                 );
 
                 lay.Add(
@@ -95,7 +95,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                     {
                         Color = unknownColor,
                         Glyph = glyphUnknownProfileIcon,
-                        HorizontalOptions = LayoutOptions.Center,
+                        HorizontalOptions = LayoutOptions.End,
                         Margin = new Thickness(0, 1, 0, 0),
                     }
                     .Bind(this, null, x => {
@@ -103,7 +103,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                         x.Color = GetConnectionStatusColor();
                     })
                     ,
-                    row: 1
+                    row: 0
                 );
             });
         }
