@@ -87,17 +87,29 @@ namespace H.Necessaire
                 string slowWarning = null;
                 using (var cancellationTokenSource = new CancellationTokenSource(httpRequestTimeout))
                 using (new PreciseTimeMeasurement(t => t.RefTo(out requestDuration).And(x => CreateSlowHttpWarningIfNecessary(x).RefTo(out slowWarning))))
-                using (var httpResponse = await http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationTokenSource.Token))
                 {
-                    if (!httpResponse.IsSuccessStatusCode)
+                    try
+                    {
+                        using (var httpResponse = await http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationTokenSource.Token))
+                        {
+                            if (!httpResponse.IsSuccessStatusCode)
+                            {
+                                return
+                                    OperationResult
+                                    .Fail($"Error occurred while trying to ping {url}. HTTP Response Code: {(int)httpResponse.StatusCode} - {httpResponse.StatusCode}")
+                                    .WithComment(
+                                        $"{(int)httpResponse.StatusCode}",
+                                        $"{httpResponse.StatusCode}"
+                                    )
+                                    ;
+                            }
+                        }
+                    }
+                    catch (TaskCanceledException)
                     {
                         return
                             OperationResult
-                            .Fail($"Error occurred while trying to ping {url}. HTTP Response Code: {(int)httpResponse.StatusCode} - {httpResponse.StatusCode}")
-                            .WithComment(
-                                $"{(int)httpResponse.StatusCode}",
-                                $"{httpResponse.StatusCode}"
-                            )
+                            .Fail($"Error occurred while trying to ping {url}. HTTP Request Timed out after {httpRequestTimeout}.")
                             ;
                     }
                 }
@@ -163,7 +175,7 @@ namespace H.Necessaire
 
             ephemeralHttpClient = new EphemeralType<HttpClient>
             {
-                Payload = new HttpClient(),
+                Payload = new HttpClient { Timeout = httpRequestTimeout },
                 ValidFor = httpClientTimeout,
             };
 
