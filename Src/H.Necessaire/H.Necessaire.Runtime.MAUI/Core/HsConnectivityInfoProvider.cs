@@ -1,4 +1,6 @@
-﻿namespace H.Necessaire.Runtime.MAUI.Core
+﻿using H.Necessaire.Operations;
+
+namespace H.Necessaire.Runtime.MAUI.Core
 {
     internal class HsConnectivityInfoProvider : ImAConnectivityInfoProvider, ImADependency
     {

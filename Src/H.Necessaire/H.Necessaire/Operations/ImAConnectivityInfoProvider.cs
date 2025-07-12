@@ -1,4 +1,6 @@
-﻿namespace H.Necessaire.Runtime.MAUI.Core
+﻿using System.Threading.Tasks;
+
+namespace H.Necessaire.Operations
 {
     public interface ImAConnectivityInfoProvider
     {
