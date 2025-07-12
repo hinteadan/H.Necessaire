@@ -31,6 +31,7 @@ namespace H.Necessaire.Operations
         public ConnectivityLinkSpeedLevel LinkSpeedLevel { get; set; }
         public ConnectivityProfile[] AvailableProfiles { get; set; }
         public string[] Reasons { get; set; }
+        public TimeSpan? LatestResponseDuration { get; set; }
 
         public bool IsSameAs(ConnectivityInfo other, bool isReasonsCheckIncluded = false)
         {
@@ -41,7 +42,8 @@ namespace H.Necessaire.Operations
                 other.HasConnectivity == HasConnectivity
                 && other.LinkSpeedLevel == LinkSpeedLevel
                 && other.AvailableProfiles.IsSameAs(AvailableProfiles)
-                && (!isReasonsCheckIncluded ? true : other.Reasons.IsSameAs(Reasons)) 
+                && (!isReasonsCheckIncluded ? true : other.Reasons.IsSameAs(Reasons))
+                && (!isReasonsCheckIncluded ? true : other.LatestResponseDuration == LatestResponseDuration)
                 ;
         }
 
