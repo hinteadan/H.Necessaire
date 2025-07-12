@@ -1,5 +1,6 @@
 ﻿using H.Necessaire.Operations;
 using H.Necessaire.Runtime.MAUI.Components.Abstracts;
+using H.Necessaire.Runtime.MAUI.Components.Controls;
 using H.Necessaire.Runtime.MAUI.Extensions;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Elements
@@ -67,29 +68,16 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
             return new Grid
             {
                 Padding = SizingUnit / 4,
-                HeightRequest = SizingUnit * 3,
-                WidthRequest = SizingUnit * 3,
+                HeightRequest = SizingUnit * 3.5,
+                WidthRequest = SizingUnit * 3.5,
                 RowDefinitions = [
                     new RowDefinition(new GridLength(1, GridUnitType.Star)),
                     new RowDefinition(new GridLength(2.3, GridUnitType.Star)),
+                    new RowDefinition(new GridLength(1, GridUnitType.Auto)),
                 ],
             }
             .And(lay =>
             {
-                lay.Add(
-                    new HFontIcon
-                    {
-                        Color = unknownColor,
-                        Glyph = glyphGlobeSync,
-                    }
-                    .Bind(this, null, x =>
-                    {
-                        x.Glyph = GetConnectionStatusGlyph();
-                        x.Color = GetConnectionStatusColor();
-                    })
-                    ,
-                    row: 1
-                );
 
                 lay.Add(
                     new HFontIcon
@@ -106,6 +94,39 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                     })
                     ,
                     row: 0
+                );
+
+                lay.Add(
+                    new HFontIcon
+                    {
+                        Color = unknownColor,
+                        Glyph = glyphGlobeSync,
+                    }
+                    .Bind(this, null, x =>
+                    {
+                        x.Glyph = GetConnectionStatusGlyph();
+                        x.Color = GetConnectionStatusColor();
+                    })
+                    ,
+                    row: 1
+                );
+
+                lay.Add(
+                    new HLabel
+                    {
+                        TextColor = unknownColor,
+                        FontSize = Branding.Typography.FontSizeSmaller,
+                        HorizontalTextAlignment = TextAlignment.Center,
+                        HorizontalOptions = LayoutOptions.Center,
+                        Text = null,
+                    }
+                    .Bind(this, null, x => x.AndIf(connectivityInfo?.LatestResponseDuration != null, x =>
+                    {
+                        x.TextColor = GetConnectionStatusColor();
+                        x.Text = $"{Math.Round(connectivityInfo.LatestResponseDuration.Value.TotalSeconds, 2).ToInvarString()} s";
+                    }))
+                    ,
+                    row: 2
                 );
 
                 lay.GestureRecognizers.Add(new TapGestureRecognizer().And(tap => tap.Tapped += async (s, e) =>
