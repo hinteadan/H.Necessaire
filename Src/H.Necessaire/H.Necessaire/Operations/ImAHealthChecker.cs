@@ -98,8 +98,8 @@ namespace H.Necessaire
                                     OperationResult
                                     .Fail($"Error occurred while trying to ping {url}. HTTP Response Code: {(int)httpResponse.StatusCode} - {httpResponse.StatusCode}")
                                     .WithComment(
-                                        $"{(int)httpResponse.StatusCode}",
-                                        $"{httpResponse.StatusCode}"
+                                        $"HttpStatusCode::{(int)httpResponse.StatusCode}",
+                                        $"HttpStatusCodeLabel::{httpResponse.StatusCode}"
                                     )
                                     ;
                             }
@@ -116,7 +116,7 @@ namespace H.Necessaire
 
                 return
                     OperationResult.Win()
-                    .WithComment($"{requestDuration}", $"{requestDuration.Ticks}")
+                    .WithComment($"HttpRequestDuration::{requestDuration}", $"HttpRequestDurationTicks::{requestDuration.Ticks}")
                     .AndIf(!slowWarning.IsEmpty(), x => x.Warn(slowWarning))
                     ;
             });
