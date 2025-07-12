@@ -26,7 +26,7 @@ namespace H.Necessaire
         static readonly TimeSpan httpRequestVerySlowTime = TimeSpan.FromSeconds(5);
         static readonly TimeSpan httpRequestSuperSlowTime = TimeSpan.FromSeconds(7.5);
         static EphemeralType<HttpClient> ephemeralHttpClient = null;
-        const string defaultUrlToCheckInternet = "https://www.google.com";
+        const string defaultUrlToCheckInternet = "https://www.apple.com/";
 
         readonly ConcurrentDictionary<string, Func<Task<OperationResult>>> healthChecks = new ConcurrentDictionary<string, Func<Task<OperationResult>>>();
         readonly ConcurrentDictionary<string, EphemeralType<OperationResult>> healthCheckResults = new ConcurrentDictionary<string, EphemeralType<OperationResult>>();
@@ -86,7 +86,7 @@ namespace H.Necessaire
                 TimeSpan requestDuration = TimeSpan.Zero;
                 string slowWarning = null;
                 using (var cancellationTokenSource = new CancellationTokenSource(httpRequestTimeout))
-                using (new PreciseTimeMeasurement(t => t.RefTo(out requestDuration).And(x => CreateSlowHttpWarningIfNecessary(x).RefTo(out slowWarning))))
+                using (new TimeMeasurement(t => t.RefTo(out requestDuration).And(x => CreateSlowHttpWarningIfNecessary(x).RefTo(out slowWarning))))
                 {
                     try
                     {
