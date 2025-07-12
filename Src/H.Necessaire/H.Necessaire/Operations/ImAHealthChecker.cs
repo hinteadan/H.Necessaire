@@ -26,7 +26,7 @@ namespace H.Necessaire
         static readonly TimeSpan httpRequestVerySlowTime = TimeSpan.FromSeconds(3);
         static readonly TimeSpan httpRequestSuperSlowTime = TimeSpan.FromSeconds(6);
         static EphemeralType<HttpClient> ephemeralHttpClient = null;
-        const string defaultUrlToCheckInternet = "http://www.msftncsi.com/ncsi.txt";
+        const string defaultUrlToCheckInternet = "https://www.google.com";
 
         readonly ConcurrentDictionary<string, Func<Task<OperationResult>>> healthChecks = new ConcurrentDictionary<string, Func<Task<OperationResult>>>();
         readonly ConcurrentDictionary<string, EphemeralType<OperationResult>> healthCheckResults = new ConcurrentDictionary<string, EphemeralType<OperationResult>>();
