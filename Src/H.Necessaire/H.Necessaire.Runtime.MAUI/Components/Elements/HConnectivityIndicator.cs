@@ -68,8 +68,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
             return new Grid
             {
                 Padding = SizingUnit / 4,
-                HeightRequest = SizingUnit * 3.5,
-                WidthRequest = SizingUnit * 3.5,
+                HeightRequest = SizingUnit * 3.4,
+                WidthRequest = SizingUnit * 3.4,
                 BackgroundColor = Colors.Transparent,
                 RowDefinitions = [
                     new RowDefinition(new GridLength(1, GridUnitType.Star)),
