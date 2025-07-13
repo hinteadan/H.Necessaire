@@ -20,12 +20,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             set
             {
                 if (value?.EnsureUtc() == dateTime?.EnsureUtc())
-                {
-                    if (nullabelControl != null)
-                        nullabelControl.IsNull = dateTime is null;
                     return;
-                }
-                    
 
                 dateTime = value?.EnsureUtc();
 

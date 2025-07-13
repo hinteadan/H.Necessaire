@@ -28,6 +28,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
             SetShellBrandingColors();
 
+            Shell.SetTitleView(this, ConstructTitleView());
+
             Loaded += HMauiPageBase_Loaded;
 
             Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
@@ -194,8 +196,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
         void SetShellBrandingColors()
         {
-            Shell.SetTitleView(this, ConstructTitleView());
-
             Shell.SetForegroundColor(this, Branding.ButtonTextColor.ToMaui());
             Shell.SetTitleColor(this, Branding.ButtonTextColor.ToMaui());
             Shell.SetBackgroundColor(this, Branding.PrimaryColorTranslucent.ToMaui());
@@ -211,24 +211,30 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                 VerticalOptions = LayoutOptions.Center,
                 VerticalTextAlignment = TextAlignment.Center,
                 Margin = new Thickness(Branding.SizingUnitInPixels, 0, 0, 0),
-            };
+            }
+            ;
         }
 
         View busyIndicatorView = null;
+        const string defaultBusyText = "Loading, please wait...";
         protected IDisposable BusyIndicator(Color color = null, string label = null)
         {
             if (Content?.ClassId == "BusyIndicator")
                 return ScopedRunner.Null;
 
             View originalContent = null;
+            
             return new ScopedRunner(
                 onStart: () =>
                 {
                     originalContent = Content;
-                    Content = busyIndicatorView ?? ConstructBusyIndicator(color, label).RefTo(out busyIndicatorView);
+                    Content = (busyIndicatorView ?? ConstructBusyIndicator(color, label).RefTo(out busyIndicatorView));
+                    busyIndicatorLabel.Text = label.IsEmpty() ? defaultBusyText : label;
                 },
                 onStop: () =>
                 {
+                    busyIndicatorLabel.Text = defaultBusyText;
+
                     if (Content != null && Content != busyIndicatorView)
                         return;
 

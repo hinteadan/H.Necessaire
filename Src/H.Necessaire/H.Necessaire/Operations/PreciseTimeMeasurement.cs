@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
-namespace H.Necessaire.Runtime.MAUI.Core
+namespace H.Necessaire
 {
     public class PreciseTimeMeasurement : IDisposable
     {
@@ -14,7 +15,7 @@ namespace H.Necessaire.Runtime.MAUI.Core
             scopedRunner
                 = new ScopedRunner(
                     () => startTime = Stopwatch.GetTimestamp(),
-                    () => { TimeSpan duration = Stopwatch.GetElapsedTime(startTime); this.onDone?.Invoke(duration); }
+                    () => { TimeSpan duration = TimeSpan.FromTicks(Stopwatch.GetTimestamp() - startTime); this.onDone?.Invoke(duration); }
                 );
         }
 
