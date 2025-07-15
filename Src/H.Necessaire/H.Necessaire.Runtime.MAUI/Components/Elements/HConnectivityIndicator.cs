@@ -153,6 +153,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                     using (RefreshingConnectivityInfo())
                     {
                         ConnectivityInfo = await connectivityInfoProvider.GetConnectivityInfo();
+                        RefreshUI(isViewDataIgnored: true);
                     }
                 }));
             });
