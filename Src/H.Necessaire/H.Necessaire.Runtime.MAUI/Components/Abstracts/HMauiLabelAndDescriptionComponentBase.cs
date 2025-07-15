@@ -1,6 +1,5 @@
 ﻿using H.Necessaire.Runtime.MAUI.Components.Controls;
 using H.Necessaire.Runtime.MAUI.Extensions;
-using static Android.Content.Res.Resources;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 {
