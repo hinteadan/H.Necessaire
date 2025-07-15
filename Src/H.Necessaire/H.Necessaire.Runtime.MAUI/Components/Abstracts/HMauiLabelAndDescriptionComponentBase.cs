@@ -1,5 +1,6 @@
 ﻿using H.Necessaire.Runtime.MAUI.Components.Controls;
 using H.Necessaire.Runtime.MAUI.Extensions;
+using static Android.Content.Res.Resources;
 
 namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 {
@@ -24,13 +25,13 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                     label = new HLabel
                     {
                         FontSize = Branding.Typography.FontSizeSmall,
-                        TextColor = Branding.PrimaryColor.ToMaui(),
+                        TextColor = Branding.Theme == AppTheme.Dark ? Branding.Colors.Primary.Lighter(2).ToMaui() : Branding.PrimaryColor.ToMaui(),
                     };
 
                     description = new HLabel
                     {
                         FontSize = Branding.Typography.FontSizeSmaller,
-                        TextColor = Branding.SecondaryColor.ToMaui(),
+                        TextColor = Branding.Theme == AppTheme.Dark ? Branding.Colors.PrimaryIsh().Lighter(2).ToMaui() : Branding.SecondaryColor.ToMaui(),
                     };
 
                     layout.Add(new ContentView

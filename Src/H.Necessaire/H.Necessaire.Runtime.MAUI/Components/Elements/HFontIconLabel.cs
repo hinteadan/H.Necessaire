@@ -27,7 +27,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                     Margin = new Thickness(0, 0, SizingUnit, 0),
                     HeightRequest = SizingUnit,
                     WidthRequest = SizingUnit,
-                    Color = Branding.Colors.Primary.Color.ToMaui(),
+                    Color = Branding.Theme == AppTheme.Dark ? Branding.Colors.Primary.Lighter(2).ToMaui() : Branding.PrimaryColor.ToMaui(),
                 }.RefTo(out icon), column: 0);
 
                 layout.Add(new HLabel
