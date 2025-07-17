@@ -1,4 +1,6 @@
-﻿namespace H.Necessaire.Runtime.MAUI.Extensions
+﻿using H.Necessaire.Runtime.MAUI.Components;
+
+namespace H.Necessaire.Runtime.MAUI.Extensions
 {
     public static class TextFormattingExtensions
     {
@@ -12,6 +14,7 @@
 
             formattedString.Spans.Add(new Span
             {
+                FontFamily = HUiToolkit.Current.Branding.Typography.FontFamily,
                 Text = value,
             }.AndIf(formatter is not null, formatter));
 
