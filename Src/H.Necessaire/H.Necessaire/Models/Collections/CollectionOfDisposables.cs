@@ -38,4 +38,6 @@ namespace H.Necessaire
             return disposables?.GetEnumerator();
         }
     }
+
+    public class CollectionOfDisposables : CollectionOfDisposables<IDisposable> { }
 }
