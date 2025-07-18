@@ -39,5 +39,14 @@ namespace H.Necessaire
         }
     }
 
-    public class CollectionOfDisposables : CollectionOfDisposables<IDisposable> { }
+    public class CollectionOfDisposables : CollectionOfDisposables<IDisposable>
+    {
+        public CollectionOfDisposables(params IDisposable[] disposables) : base(disposables)
+        {
+        }
+
+        public CollectionOfDisposables(IEnumerable<IDisposable> disposables) : base(disposables)
+        {
+        }
+    }
 }
