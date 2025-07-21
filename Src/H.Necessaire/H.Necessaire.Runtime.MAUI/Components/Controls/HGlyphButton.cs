@@ -19,7 +19,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 Glyph = null,
                 Size = HUiToolkit.Current.Branding.Typography.FontSizeLarger,
                 FontAutoScalingEnabled = true,
-                Color = HUiToolkit.Current.Branding.BackgroundColor.ToMaui(),
+                Color = HUiToolkit.Current.Branding.ButtonTextColor.ToMaui(),
             };
             BackgroundColor = HUiToolkit.Current.Branding.PrimaryColor.ToMaui();
             Source = fontImageSource;

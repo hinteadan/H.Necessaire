@@ -36,6 +36,10 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
         static ConnectivityInfo connectivityInfo;
         ConnectivityInfo ConnectivityInfo { get => connectivityInfo; set => ViewData = value.RefTo(out connectivityInfo); }
         ImAConnectivityInfoProvider connectivityInfoProvider;
+        private HFontIcon connectionProfileIcon;
+        private HFontIcon connectionStatusIcon;
+        private HLabel connectionPingTime;
+
         protected override void EnsureDependencies(params object[] constructionArgs)
         {
             base.EnsureDependencies(constructionArgs);
@@ -63,13 +67,22 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
             return Task.CompletedTask;
         }
 
+        protected override async Task Initialize()
+        {
+            await base.Initialize();
+
+            connectivityInfo ??= await connectivityInfoProvider.GetConnectivityInfo();
+
+            ConnectivityInfo = connectivityInfo;
+        }
+
         protected override View ConstructContent()
         {
             return new Grid
             {
                 Padding = SizingUnit / 4,
-                HeightRequest = SizingUnit * 3.5,
-                WidthRequest = SizingUnit * 3.5,
+                HeightRequest = SizingUnit * 3.4,
+                WidthRequest = SizingUnit * 3.4,
                 BackgroundColor = Colors.Transparent,
                 RowDefinitions = [
                     new RowDefinition(new GridLength(1, GridUnitType.Star)),
@@ -88,6 +101,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                         HorizontalOptions = LayoutOptions.End,
                         Margin = new Thickness(0, 1, 0, 0),
                     }
+                    .RefTo(out connectionProfileIcon)
                     .Bind(this, null, x =>
                     {
                         x.Glyph = GetConnectionProfileGlyph();
@@ -104,6 +118,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                         Glyph = glyphGlobeSync,
                         Margin = new Thickness(0, -6.13, 0, 0)
                     }
+                    .RefTo(out connectionStatusIcon)
                     .Bind(this, null, x =>
                     {
                         x.Glyph = GetConnectionStatusGlyph();
@@ -122,6 +137,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                         HorizontalOptions = LayoutOptions.Center,
                         Text = null,
                     }
+                    .RefTo(out connectionPingTime)
                     .Bind(this, null, x =>
                     {
                         x.TextColor = GetConnectionStatusColor();
@@ -134,11 +150,29 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
                 lay.GestureRecognizers.Add(new TapGestureRecognizer().And(tap => tap.Tapped += async (s, e) =>
                 {
                     using (Disable(s as View))
+                    using (RefreshingConnectivityInfo())
                     {
                         ConnectivityInfo = await connectivityInfoProvider.GetConnectivityInfo();
+                        RefreshUI(isViewDataIgnored: true);
                     }
                 }));
             });
+        }
+
+        IDisposable RefreshingConnectivityInfo()
+        {
+            return new ScopedRunner(
+                _ =>
+                {
+                    connectionPingTime.Text = null;
+                    connectionPingTime.TextColor = unknownColor;
+                    connectionStatusIcon.Glyph = glyphGlobeSync;
+                    connectionStatusIcon.Color = unknownColor;
+                    connectionProfileIcon.Glyph = glyphUnknownProfileIcon;
+                    connectionProfileIcon.Color = unknownColor;
+                },
+                null
+            );
         }
 
         string GetConnectionProfileGlyph()
@@ -213,13 +247,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Elements
             return unknownColor;
         }
 
-        protected override async Task Initialize()
-        {
-            await base.Initialize();
-
-            connectivityInfo ??= await connectivityInfoProvider.GetConnectivityInfo();
-
-            ConnectivityInfo = connectivityInfo;
-        }
+        
     }
 }

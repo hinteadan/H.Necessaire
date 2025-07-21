@@ -38,4 +38,15 @@ namespace H.Necessaire
             return disposables?.GetEnumerator();
         }
     }
+
+    public class CollectionOfDisposables : CollectionOfDisposables<IDisposable>
+    {
+        public CollectionOfDisposables(params IDisposable[] disposables) : base(disposables)
+        {
+        }
+
+        public CollectionOfDisposables(IEnumerable<IDisposable> disposables) : base(disposables)
+        {
+        }
+    }
 }

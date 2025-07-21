@@ -31,7 +31,7 @@
         public virtual ColorInfo ButtonTextColor => Colors.Complementary.Lighter(10);
         public virtual ColorInfo LightTextColor { get; } = new ColorInfo(255, 255, 255, .85f);
         public virtual ColorInfo MutedTextColor { get; } = new ColorInfo(0, 0, 0, .35f);
-        public virtual ColorInfo HighlightTextColor => Colors.Primary.Darker(10);
+        public virtual ColorInfo HighlightTextColor => Colors.Primary.Darker(1);
 
         public virtual ColorInfo SuccessColor { get; } = new ColorInfo("#11A74C");
         public virtual ColorInfo WarningColor { get; } = new ColorInfo("#EA850B");

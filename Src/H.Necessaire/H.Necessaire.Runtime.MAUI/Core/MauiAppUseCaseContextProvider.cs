@@ -2,10 +2,10 @@
 {
     public class MauiAppUseCaseContextProvider : ImAUseCaseContextProvider, ImADependency
     {
-        ConsumerIdentity consumerIdentity;
+        Func<ConsumerIdentity> consumerIdentityProvider;
         public virtual void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
-            consumerIdentity = dependencyProvider.Get<ConsumerIdentity>();
+            consumerIdentityProvider = () => dependencyProvider.Get<ConsumerIdentity>();
         }
 
         public virtual Task<UseCaseContext> GetCurrentContext()
@@ -30,7 +30,7 @@
                     x.OperationContext = new OperationContext
                     {
                         User = x.SecurityContext.User,
-                        Consumer = consumerIdentity,
+                        Consumer = consumerIdentityProvider(),
                     };
                 })
                 .AsTask()

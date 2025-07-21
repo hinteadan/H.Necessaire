@@ -29,7 +29,7 @@ namespace H.Necessaire.Runtime.MAUI.Core
         {
             connectivityChecker = dependencyProvider.Get<ImAHealthChecker>();
             refreshAction = dependencyProvider.Get<ImAPeriodicAction>();
-            refreshAction.Start(refreshInterval, RefreshConnectivityInfo);
+            refreshAction.StartDelayed(refreshInterval, refreshInterval, RefreshConnectivityInfo);
         }
 
         public async Task<ConnectivityInfo> GetConnectivityInfo()
