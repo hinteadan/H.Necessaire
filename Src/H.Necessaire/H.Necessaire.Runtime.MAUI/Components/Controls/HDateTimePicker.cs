@@ -42,6 +42,12 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             set => datePicker.MaximumDate = value;
         }
 
+        public bool IsNullable
+        {
+            get => nullabelControl.IsNullable;
+            set => nullabelControl.IsNullable = value;
+        }
+
         protected override View ConstructLabeledContent()
         {
             return new Grid().And(layout =>

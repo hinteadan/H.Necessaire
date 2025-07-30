@@ -99,9 +99,9 @@ namespace H.Necessaire
         public static async Task<OperationResult> LogError(this OperationResult currentResult, ImALogger logger, string actionName = null)
             => await currentResult.AsTask().Log(logger, actionName, isJustWarning: false);
         public static OperationResult<T> LogErrorSync<T>(this OperationResult<T> currentResult, ImALogger logger, string actionName = null)
-            => currentResult.AsTask().Log(logger, actionName, isJustWarning: false).ConfigureAwait(false).GetAwaiter().GetResult();
+            => currentResult.And(res => res.LogError(logger, actionName).DontWait());
         public static OperationResult LogErrorSync(this OperationResult currentResult, ImALogger logger, string actionName = null)
-            => currentResult.AsTask().Log(logger, actionName, isJustWarning: false).ConfigureAwait(false).GetAwaiter().GetResult();
+            => currentResult.And(res => res.LogError(logger, actionName).DontWait());
 
 
         public static async Task<OperationResult<T>> LogWarning<T>(this Task<OperationResult<T>> currentResultTask, ImALogger logger, string actionName = null)
@@ -114,9 +114,9 @@ namespace H.Necessaire
         public static async Task<OperationResult> LogWarning(this OperationResult currentResult, ImALogger logger, string actionName = null)
             => await currentResult.AsTask().Log(logger, actionName, isJustWarning: true);
         public static OperationResult<T> LogWarningSync<T>(this OperationResult<T> currentResult, ImALogger logger, string actionName = null)
-            => currentResult.AsTask().Log(logger, actionName, isJustWarning: true).ConfigureAwait(true).GetAwaiter().GetResult();
+            => currentResult.And(res => res.LogWarning(logger, actionName).DontWait());
         public static OperationResult LogWarningSync(this OperationResult currentResult, ImALogger logger, string actionName = null)
-            => currentResult.AsTask().Log(logger, actionName, isJustWarning: true).ConfigureAwait(true).GetAwaiter().GetResult();
+            => currentResult.And(res => res.LogWarning(logger, actionName).DontWait());
 
         static async Task<OperationResult<T>> Log<T>(this Task<OperationResult<T>> currentResultTask, ImALogger logger, string actionName = null, bool isJustWarning = false)
         {
@@ -125,9 +125,16 @@ namespace H.Necessaire
             if (currentResult.IsSuccessful)
                 return currentResult;
 
+            if ("DoNotLog".In(currentResult.Comments))
+                return currentResult;
+
             string message = actionName.IsEmpty() ? $"Error occured because {currentResult.Reason}" : $"Error occured while trying to {actionName}. Reason: {currentResult.Reason}";
 
-            await logger.LogError(message, currentResult.Payload, currentResult.Comments?.ToNotes("ErrorDetail"));
+
+            if (isJustWarning)
+                await logger.LogWarn(message, currentResult.Payload, currentResult.Comments?.ToNotes("WarningDetail"));
+            else
+                await logger.LogError(message, currentResult.Payload, currentResult.Comments?.ToNotes("ErrorDetail"));
 
             return currentResult;
         }
@@ -139,9 +146,15 @@ namespace H.Necessaire
             if (currentResult.IsSuccessful)
                 return currentResult;
 
+            if ("DoNotLog".In(currentResult.Comments))
+                return currentResult;
+
             string message = actionName.IsEmpty() ? $"Error occured because {currentResult.Reason}" : $"Error occured while trying to {actionName}. Reason: {currentResult.Reason}";
 
-            await logger.LogError(message, payload: null, currentResult.Comments?.ToNotes("ErrorDetail"));
+            if (isJustWarning)
+                await logger.LogWarn(message, payload: null, currentResult.Comments?.ToNotes("WarningDetail"));
+            else
+                await logger.LogError(message, payload: null, currentResult.Comments?.ToNotes("ErrorDetail"));
 
             return currentResult;
         }

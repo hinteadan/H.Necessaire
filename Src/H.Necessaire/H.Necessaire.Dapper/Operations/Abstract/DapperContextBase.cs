@@ -178,7 +178,7 @@ namespace H.Necessaire.Dapper
             await dbConnection.ExecuteAsync(sql, new { ids });
         }
 
-        public async Task DeleteEntitiesByByCustomCriteria<TSqlEntity>(ISqlFilterCriteria[] sqlFilters, object sqlParams, string tableName)
+        public async Task DeleteEntitiesByByCustomCriteria(ISqlFilterCriteria[] sqlFilters, object sqlParams, string tableName = null)
         {
             string filterSql = string.Join(" AND ", sqlFilters.Select(x => x.ToString()));
             string sql = $"DELETE FROM [{tableName ?? defaultTableName}] WHERE {filterSql}";

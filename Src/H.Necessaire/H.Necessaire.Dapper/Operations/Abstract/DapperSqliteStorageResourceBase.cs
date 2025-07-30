@@ -40,7 +40,7 @@ namespace H.Necessaire.Dapper
             {
                 await EnsureDatabaseAndMigrations();
 
-                await base.DeleteEntitiesByCustomCriteria<TSqlEntity>(new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(id), "=").AsArray(), new { id });
+                await base.DeleteEntitiesByCustomCriteria(new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(id), "=").AsArray(), new { id });
             }, $"delete entity by ID ({id})");
         }
 
@@ -50,7 +50,7 @@ namespace H.Necessaire.Dapper
             {
                 await EnsureDatabaseAndMigrations();
 
-                await base.DeleteEntitiesByCustomCriteria<TSqlEntity>(new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(ids), "IN").AsArray(), new { ids });
+                await base.DeleteEntitiesByCustomCriteria(new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(ids), "IN").AsArray(), new { ids });
             }, $"delete entities by {ids?.Length ?? 0} IDs");
 
             return

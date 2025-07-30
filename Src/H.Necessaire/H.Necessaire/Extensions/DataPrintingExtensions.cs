@@ -79,15 +79,15 @@ namespace H.Necessaire
             if (timeSpan.TotalSeconds < 5)
                 return "a heartbeat";
             if (timeSpan.TotalMinutes < 1)
-                return $"{timeSpan.Seconds} seconds";
+                return $"{timeSpan.Seconds} sec";
             if (timeSpan.TotalMinutes < 2)
-                return $"{timeSpan.Minutes} minute & {timeSpan.Seconds}s";
+                return $"{timeSpan.Minutes} min & {timeSpan.Seconds}s";
             if (timeSpan.TotalHours < 1)
-                return $"{timeSpan.Minutes} minutes & {timeSpan.Seconds}s";
+                return $"{timeSpan.Minutes} mins & {timeSpan.Seconds}s";
             if (timeSpan.TotalHours < 2)
-                return $"{timeSpan.Hours} hour & {timeSpan.Minutes}m";
+                return $"{timeSpan.Hours} hr & {timeSpan.Minutes}m";
             if (timeSpan.TotalDays < 1)
-                return $"{timeSpan.Hours} hours & {timeSpan.Minutes}m";
+                return $"{timeSpan.Hours} hrs & {timeSpan.Minutes}m";
             if (timeSpan.TotalDays < 2)
                 return $"{timeSpan.Days} day & {timeSpan.Hours}h{timeSpan.Minutes}m";
 

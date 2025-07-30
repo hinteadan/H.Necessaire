@@ -24,6 +24,12 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             }
         }
 
+        public bool IsNullable
+        {
+            get => nullSwitch.IsVisible;
+            set => nullSwitch.IsVisible = value;
+        }
+
         string nullText = "Any";
         public virtual string NullText
         {

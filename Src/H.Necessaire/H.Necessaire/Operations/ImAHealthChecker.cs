@@ -74,7 +74,7 @@ namespace H.Necessaire
         protected virtual async Task<OperationResult> RunHttpRequestHealthCheck(string url)
         {
             if (await HasSurelyNoInternet())
-                return "No Internet Connection";
+                return OperationResult.Fail("No Internet Connection").WithComment("DoNotLog");
 
             if (httpConnectivityCheckResults.TryGetValue(url, out var check) && check?.IsActive() == true)
                 return check.Payload;
@@ -135,7 +135,7 @@ namespace H.Necessaire
         protected virtual async Task<TaggedValue<OperationResult>> RunHealthCheck(string name, Func<Task<OperationResult>> connectivityCheck)
         {
             if (IsInternetConnectionCheckEnabled && await HasSurelyNoInternet())
-                return OperationResult.Fail("No Internet Connection").Tag(name);
+                return OperationResult.Fail("No Internet Connection").WithComment("DoNotLog").Tag(name);
 
             if (connectivityCheck is null)
                 return OperationResult.Win().Tag(name);

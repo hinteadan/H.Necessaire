@@ -2,53 +2,58 @@
 
 namespace H.Necessaire.Runtime.MAUI.Core
 {
-    [ID("SecureStorage")]
-    internal class SecureStorageKeyValueStore : IKeyValueStorage
+    [ID("Preferences")]
+    [Alias("Default")]
+    internal class PreferencesKeyValueStore : IKeyValueStorage
     {
         const string expirationInfoMarker = ":|ExpiresAtUtcTicks|:";
-        static readonly ISecureStorage secureStorage = SecureStorage.Default;
+        static readonly IPreferences preferencesStore = Preferences.Default;
 
-        const string storeName = "SecureStorageKeyValueStore";
+        const string storeName = "PreferencesKeyValueStore";
         public string StoreName => storeName;
 
-        public async Task Set(string key, string value)
+        public Task Set(string key, string value)
         {
             string actualValue = BuildValue(value, expirationDate: null);
             if (actualValue is null)
             {
-                secureStorage.Remove(key);
-                return;
+                preferencesStore.Remove(key, storeName);
+                return Task.CompletedTask;
             }
 
-            await secureStorage.SetAsync(key, actualValue);
+            preferencesStore.Set(key, actualValue, storeName);
+
+            return Task.CompletedTask;
         }
 
-        public async Task<string> Get(string key)
+        public Task<string> Get(string key)
         {
-            string rawValue = await secureStorage.GetAsync(key);
+            string rawValue = preferencesStore.Get<string>(key, null, storeName);
             if (!ParseValue(rawValue, out string value, out DateTime? expirationDate))
             {
-                secureStorage.Remove(key);
-                return null;
+                preferencesStore.Remove(key, storeName);
+                return (null as string).AsTask();
             }
 
-            return value;
+            return value.AsTask();
         }
 
         public Task Remove(string key)
         {
-            secureStorage.Remove(key);
+            preferencesStore.Remove(key, storeName);
             return Task.CompletedTask;
         }
 
-        public async Task SetFor(string key, string value, TimeSpan validFor)
+        public Task SetFor(string key, string value, TimeSpan validFor)
         {
-            await secureStorage.SetAsync(key, BuildValue(value, expirationDate: DateTime.UtcNow + validFor));
+            preferencesStore.Set(key, BuildValue(value, expirationDate: DateTime.UtcNow + validFor), storeName);
+            return Task.CompletedTask;
         }
 
-        public async Task SetUntil(string key, string value, DateTime validUntil)
+        public Task SetUntil(string key, string value, DateTime validUntil)
         {
-            await secureStorage.SetAsync(key, BuildValue(value, expirationDate: validUntil));
+            preferencesStore.Set(key, BuildValue(value, expirationDate: validUntil), storeName);
+            return Task.CompletedTask;
         }
 
         public Task Zap(string key) => Remove(key);

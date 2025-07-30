@@ -29,6 +29,10 @@ namespace H.Necessaire.Runtime.Sqlite.Core.Resources
                     ResourceIdentifier = nameof(LogEntry),
                     VersionNumber = new VersionNumber(1, 0),
                 }.AndAsync(async x => x.SqlCommand = await ReadMigrationSqlCommand(x, typeof(SqliteDependencyGroup).Assembly)),
+                await new SqlMigration{
+                    ResourceIdentifier = nameof(LogEntry),
+                    VersionNumber = new VersionNumber(1, 1),
+                }.AndAsync(async x => x.SqlCommand = await ReadMigrationSqlCommand(x, typeof(SqliteDependencyGroup).Assembly)),
             };
 
             return sqlMigrations;

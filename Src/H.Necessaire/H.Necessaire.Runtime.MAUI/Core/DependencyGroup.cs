@@ -8,6 +8,7 @@ namespace H.Necessaire.Runtime.MAUI.Core
         {
             dependencyRegistry
                 .Register<SecureStorageKeyValueStore>(() => new SecureStorageKeyValueStore())
+                .Register<PreferencesKeyValueStore>(() => new PreferencesKeyValueStore())
                 .Register<ConsumerIdentityManager>(() => new ConsumerIdentityManager())
                 .Register<ImAConsumerUseCase>(() => dependencyRegistry.Get<ConsumerIdentityManager>())
                 .RegisterAlwaysNew<ImAHealthChecker>(() => new NetMauiHealthChecker())

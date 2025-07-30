@@ -56,7 +56,7 @@ namespace H.Necessaire.Runtime.SqlServer
                     {
                         await EnsureDatabaseAndMigrations();
 
-                        await base.DeleteEntitiesByCustomCriteria<TSqlEntity>(new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(id), "=").AsArray(), new { id });
+                        await base.DeleteEntitiesByCustomCriteria(new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(id), "=").AsArray(), new { id });
 
                         result = OperationResult.Win();
                     }
@@ -78,7 +78,7 @@ namespace H.Necessaire.Runtime.SqlServer
                     {
                         await EnsureDatabaseAndMigrations();
 
-                        await base.DeleteEntitiesByCustomCriteria<TSqlEntity>(new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(ids), "IN").AsArray(), new { ids });
+                        await base.DeleteEntitiesByCustomCriteria(new SqlFilterCriteria(nameof(IDentityType<TId>.ID), nameof(ids), "IN").AsArray(), new { ids });
 
                         result = ids.Select(x => OperationResult.Win().WithPayload(x)).ToArray();
                     }

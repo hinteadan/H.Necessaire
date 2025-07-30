@@ -9,10 +9,12 @@ namespace H.Necessaire
     {
         readonly object owner;
         readonly object eventHandlersCollectionLocker = new object();
+        readonly bool isRaiseDoneInParallel = false;
         readonly List<AsyncEventHandler<TEventArgs>> eventHandlers = new List<AsyncEventHandler<TEventArgs>>();
-        public AsyncEventRaiser(object owner)
+        public AsyncEventRaiser(object owner, bool isRaiseDoneInParallel = false)
         {
             this.owner = owner;
+            this.isRaiseDoneInParallel = isRaiseDoneInParallel;
         }
 
         public event AsyncEventHandler<TEventArgs> OnEvent
@@ -50,22 +52,31 @@ namespace H.Necessaire
 
             AsyncEventHandler<TEventArgs>[] currentEventHandlers = eventHandlers.ToArray();
 
+            if (isRaiseDoneInParallel)
+            {
+                await RaiseEventsInParallel(args, currentEventHandlers);
+            }
+            else
+            {
+                await RaiseEventsInSyncedOrder(args, currentEventHandlers);
+            }
+        }
+
+        private async Task RaiseEventsInSyncedOrder(TEventArgs args, AsyncEventHandler<TEventArgs>[] currentEventHandlers)
+        {
+            foreach (AsyncEventHandler<TEventArgs> handler in currentEventHandlers)
+            {
+                await HSafe.Run(async () => await handler.Invoke(owner, args));
+            }
+        }
+
+        private async Task RaiseEventsInParallel(TEventArgs args, AsyncEventHandler<TEventArgs>[] currentEventHandlers)
+        {
             await Task.WhenAll(
                 currentEventHandlers.Select(
-                    async handler => await new Func<Task>(async () =>
-                    {
-
-                        await handler.Invoke(
-                            owner,
-                            args
-                        );
-
-                    })
-                    .TryOrFailWithGrace(onFail: ex => { })
+                    async handler => await HSafe.Run(async () => await handler.Invoke(owner, args))
                 )
             );
-
-
         }
     }
 }

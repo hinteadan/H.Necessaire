@@ -187,6 +187,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         {
             Shell.Current.Navigating -= Shell_Navigating;
             await OnLeaving();
+            ClearQueryParams();
         }
 
         async void Current_RequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
@@ -223,7 +224,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                 return ScopedRunner.Null;
 
             View originalContent = null;
-            
+
             return new ScopedRunner(
                 onStart: () =>
                 {
@@ -352,15 +353,19 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
                 if (await CanGoBack())
                 {
-                    await Navi.GoBack();
+                    await Navi.GoBack(GetBackNavigtionQueryParamsOnCustomProcessed());
                     return;
                 }
             }
         }
 
+        protected virtual Note[] GetBackNavigtionQueryParamsOnCustomProcessed() => null;
+
         protected virtual bool IsBackNavigtionCustomProcessed() => false;
 
         protected virtual Task<bool> CanGoBack() => true.AsTask();
+
+        protected virtual void ClearQueryParams() { }
 
         public virtual async void Dispose()
         {

@@ -1,0 +1,1 @@
+﻿DELETE FROM [H.Necessaire.Log] WHERE [Message] LIKE 'Error occured while trying to %. Reason: No Internet'

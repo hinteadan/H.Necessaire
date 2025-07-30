@@ -1,15 +1,15 @@
-﻿using H.Necessaire.Dapper.Operations.Concrete;
+﻿using Dapper;
+using H.Necessaire.Dapper.Operations.Concrete;
+using System;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System;
-using Dapper;
 
 namespace H.Necessaire.Dapper
 {
-    public abstract class DapperResourceBase : ImADependency
+    public abstract class DapperResourceBase : ImADependency, ImADapperContextProvider
     {
         #region Construct
         ImASqlConnectionFactory sqlConnectionFactory = null;
@@ -63,6 +63,8 @@ namespace H.Necessaire.Dapper
                 this.connectionString = this.connectionString?.WithDatabase(this.databaseName);
         }
         #endregion
+
+        public ImADapperContext GetNewDapperContext(string tableName = null) => NewDbContext(tableName);
 
         protected async Task EnsureDatabaseAndMigrations()
         {
@@ -197,13 +199,13 @@ namespace H.Necessaire.Dapper
             }
         }
 
-        protected virtual async Task DeleteEntitiesByCustomCriteria<TSqlEntity>(ISqlFilterCriteria[] sqlFilters, object sqlParams, string tableName = null)
+        protected virtual async Task DeleteEntitiesByCustomCriteria(ISqlFilterCriteria[] sqlFilters, object sqlParams, string tableName = null)
         {
             await EnsureDatabaseAndMigrations();
 
             using (ImADapperContext dapper = NewDbContext(tableName))
             {
-                await dapper.DeleteEntitiesByByCustomCriteria<TSqlEntity>(sqlFilters, sqlParams, tableName);
+                await dapper.DeleteEntitiesByByCustomCriteria(sqlFilters, sqlParams, tableName);
             }
         }
 
