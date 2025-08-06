@@ -1,4 +1,5 @@
 ﻿using H.Necessaire.Operations;
+using H.Necessaire.UI;
 
 namespace H.Necessaire.Runtime.MAUI.Core
 {
@@ -14,6 +15,7 @@ namespace H.Necessaire.Runtime.MAUI.Core
                 .RegisterAlwaysNew<ImAHealthChecker>(() => new NetMauiHealthChecker())
                 .RegisterAlwaysNew<ImAUseCaseContextProvider>(() => new MauiAppUseCaseContextProvider())
                 .Register<ImAConnectivityInfoProvider>(() => new NetMauiConnectivityInfoProvider())
+                .RegisterAlwaysNew<ImAModalController>(() => new HMauiModalController())
                 ;
         }
     }
