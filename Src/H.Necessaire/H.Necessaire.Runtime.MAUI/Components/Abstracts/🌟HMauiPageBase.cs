@@ -16,9 +16,9 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         const int animationDurationInMs = 350;
         readonly List<HResponsiveDeclaration> responsiveDeclarations = new List<HResponsiveDeclaration>();
         internal IList<HResponsiveDeclaration> ResponsiveDeclarations => responsiveDeclarations;
-        protected HMauiPageBase(bool isHeavyInitializer)
+        protected HMauiPageBase(bool isHeavyInitializer, params object[] constructionArgs)
         {
-            EnsureDependencies();
+            EnsureDependencies(constructionArgs);
 
             this.isHeavyInitializer = isHeavyInitializer;
 
@@ -35,7 +35,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             Content = isHeavyInitializer ? ConstructPageInitializingView() : ConstructContent();
         }
 
-        protected virtual void EnsureDependencies() { }
+        protected virtual void EnsureDependencies(params object[] constructionArgs) { }
 
         protected HMauiPageBase() : this(isHeavyInitializer: false) { }
         ~HMauiPageBase()
