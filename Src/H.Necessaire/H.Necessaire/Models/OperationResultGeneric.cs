@@ -36,7 +36,6 @@
         }
 
         public static implicit operator bool(OperationResult<T> operationResult) => operationResult?.IsSuccessful == true;
-        public static implicit operator T(OperationResult<T> operationResult) => operationResult is null ? default : operationResult.Payload;
         public static implicit operator OperationResult<T>(T payload) => payload.ToWinResult();
         public static implicit operator OperationResult<T>(string failReason) => Fail(failReason).WithoutPayload<T>();
 
