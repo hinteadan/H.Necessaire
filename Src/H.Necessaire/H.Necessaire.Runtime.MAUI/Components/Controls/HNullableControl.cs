@@ -49,10 +49,11 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             return new Grid
             {
                 ColumnDefinitions = [
+                    new ColumnDefinition(new GridLength(1, GridUnitType.Auto)),
                     new ColumnDefinition(new GridLength(1, GridUnitType.Star)),
-                    new ColumnDefinition(new GridLength(3, GridUnitType.Star)),
                 ],
-            }.And(layout =>
+            }
+            .And(layout =>
             {
                 this.layout = layout;
 

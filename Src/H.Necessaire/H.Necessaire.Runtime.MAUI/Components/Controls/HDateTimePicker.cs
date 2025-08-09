@@ -53,7 +53,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             return new Grid().And(layout =>
             {
 
-                layout.Add(new HorizontalStackLayout { HorizontalOptions = LayoutOptions.End }.And(layout =>
+                layout.Add(new HorizontalStackLayout { }.And(layout =>
                 {
 
                     layout.Add(
@@ -63,7 +63,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                             FontSize = HUiToolkit.Current.Branding.Typography.FontSize,
                             TextColor = HUiToolkit.Current.Branding.TextColor.ToMaui(),
                             Format = HUiToolkit.Current.Branding.DateFormat,
-                            HorizontalOptions = LayoutOptions.End,
                             VerticalOptions = LayoutOptions.Center,
                         }
                         .RefTo(out datePicker)
@@ -78,7 +77,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                     layout.Add(
                         new PatchedTimePicker
                         {
-                            HorizontalOptions = LayoutOptions.End,
                             VerticalOptions = LayoutOptions.Center,
                         }
                         .RefTo(out timePicker)
