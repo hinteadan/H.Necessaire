@@ -68,8 +68,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
                         new HButton
                         {
-                            Text = "OK",
-                            BackgroundColor = GetColor(),
+                            Text = "OK, got it",
+                            BackgroundColor = Branding.MuteColor.ToMaui(),
                             Padding = SizingUnit / 2,
                         }.And(btn => btn.Clicked += async (s, e) => {
                             using (Disable(btn))
