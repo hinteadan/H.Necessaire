@@ -19,6 +19,16 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         public string SuccessWithWarningMessage { get; set; }
         public string FailureMessage { get; set; }
 
+        public async Task FadeOut()
+        {
+            if (!IsVisible)
+                return;
+
+            await this.FadeTo(0);
+            IsVisible = false;
+            Data = null;
+        }
+
         protected override View ConstructContent()
         {
             double cornerRadius = Branding.SizingUnitInPixels / 4;
@@ -40,16 +50,35 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
         View BuildDataView()
         {
-            return new VerticalStackLayout().And(lay =>
-            {
+            return
+                new HVerticalStack
+                {
+                    Views = [
 
-                lay.Add(BuildHeader());
+                        new VerticalStackLayout().And(lay =>
+                        {
 
-                lay.Add(BuildDetailsIfNecessary());
+                            lay.Add(BuildHeader());
 
-                lay.Bind(this, x => x.AndIf(x.Children.Count > 1, x => x.RemoveAt(1)), x => x.Add(BuildDetailsIfNecessary()));
+                            lay.Add(BuildDetailsIfNecessary());
 
-            });
+                            lay.Bind(this, x => x.AndIf(x.Children.Count > 1, x => x.RemoveAt(1)), x => x.Add(BuildDetailsIfNecessary()));
+
+                        }),
+
+                        new HButton
+                        {
+                            Text = "OK",
+                            BackgroundColor = GetColor(),
+                            Padding = SizingUnit / 2,
+                        }.And(btn => btn.Clicked += async (s, e) => {
+                            using (Disable(btn))
+                            {
+                                await FadeOut();
+                            }
+                        }),
+                    ],
+                };
         }
 
         View BuildHeader()
@@ -91,7 +120,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
             return new VerticalStackLayout
             {
-                
+
             }
             .AndIf(!additionalReasons.IsEmpty(), lay =>
             {
