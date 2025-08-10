@@ -8,6 +8,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
     public class HOperationResultView : HMauiComponentBase
     {
+        HButton dismissButton;
+
         public TaggedValue<OperationResult> Data
         {
             get => ViewData as TaggedValue<OperationResult>;
@@ -18,6 +20,11 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         public string SuccessMessage { get; set; }
         public string SuccessWithWarningMessage { get; set; }
         public string FailureMessage { get; set; }
+        public bool IsDismissButtonVisible
+        {
+            get => dismissButton.IsVisible;
+            set => dismissButton.IsVisible = value;
+        }
 
         public async Task FadeOut()
         {
@@ -71,7 +78,9 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                             Text = "OK, got it",
                             BackgroundColor = Branding.MuteColor.ToMaui(),
                             Padding = SizingUnit / 2,
-                        }.And(btn => btn.Clicked += async (s, e) => {
+                        }
+                        .RefTo(out dismissButton)
+                        .And(btn => btn.Clicked += async (s, e) => {
                             using (Disable(btn))
                             {
                                 await FadeOut();
