@@ -229,7 +229,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                 onStart: () =>
                 {
                     originalContent = Content;
-                    Content = (busyIndicatorView ?? ConstructBusyIndicator(color, label).RefTo(out busyIndicatorView));
+                    Content = (busyIndicatorView ?? ConstructNewBusyIndicator(color, label).RefTo(out busyIndicatorView));
                     busyIndicatorLabel.Text = label.IsEmpty() ? defaultBusyText : label;
                 },
                 onStop: () =>
@@ -244,9 +244,9 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             );
         }
 
-        protected virtual View ConstructBusyIndicator(Color color = null, string label = null)
+        protected virtual View ConstructNewBusyIndicator(Color color = null, string label = null)
         {
-            return (busyIndicator ?? new Grid
+            return (new Grid
             {
                 Padding = SizingUnit,
                 ClassId = "BusyIndicator",
