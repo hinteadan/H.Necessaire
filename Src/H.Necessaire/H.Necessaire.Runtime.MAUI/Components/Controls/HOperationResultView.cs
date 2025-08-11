@@ -104,7 +104,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 {
                     HorizontalOptions = LayoutOptions.Start,
                     Glyph = GetIconGlyph(),
-                    Color = Branding.Colors.Primary.Darker(3).ToMaui(),
+                    Color = Branding.TextColor.ToMaui(),
                     Text = GetMainMessage(),
                 }
                 .Bind(this,
