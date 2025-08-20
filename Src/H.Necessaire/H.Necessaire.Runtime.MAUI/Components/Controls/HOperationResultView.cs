@@ -8,6 +8,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 {
     public class HOperationResultView : HMauiComponentBase
     {
+        HButton dismissButton;
+
         public TaggedValue<OperationResult> Data
         {
             get => ViewData as TaggedValue<OperationResult>;
@@ -18,6 +20,21 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         public string SuccessMessage { get; set; }
         public string SuccessWithWarningMessage { get; set; }
         public string FailureMessage { get; set; }
+        public bool IsDismissButtonVisible
+        {
+            get => dismissButton.IsVisible;
+            set => dismissButton.IsVisible = value;
+        }
+
+        public async Task FadeOut()
+        {
+            if (!IsVisible)
+                return;
+
+            await this.FadeTo(0);
+            IsVisible = false;
+            Data = null;
+        }
 
         protected override View ConstructContent()
         {
@@ -40,16 +57,37 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
         View BuildDataView()
         {
-            return new VerticalStackLayout().And(lay =>
-            {
+            return
+                new HVerticalStack
+                {
+                    Views = [
 
-                lay.Add(BuildHeader());
+                        new VerticalStackLayout().And(lay =>
+                        {
 
-                lay.Add(BuildDetailsIfNecessary());
+                            lay.Add(BuildHeader());
 
-                lay.Bind(this, x => x.AndIf(x.Children.Count > 1, x => x.RemoveAt(1)), x => x.Add(BuildDetailsIfNecessary()));
+                            lay.Add(BuildDetailsIfNecessary());
 
-            });
+                            lay.Bind(this, x => x.AndIf(x.Children.Count > 1, x => x.RemoveAt(1)), x => x.Add(BuildDetailsIfNecessary()));
+
+                        }),
+
+                        new HButton
+                        {
+                            Text = "OK, got it",
+                            BackgroundColor = Branding.MuteColor.ToMaui(),
+                            Padding = SizingUnit / 2,
+                        }
+                        .RefTo(out dismissButton)
+                        .And(btn => btn.Clicked += async (s, e) => {
+                            using (Disable(btn))
+                            {
+                                await FadeOut();
+                            }
+                        }),
+                    ],
+                };
         }
 
         View BuildHeader()
@@ -66,7 +104,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 {
                     HorizontalOptions = LayoutOptions.Start,
                     Glyph = GetIconGlyph(),
-                    Color = Branding.Colors.Primary.Darker(3).ToMaui(),
+                    Color = Branding.TextColor.ToMaui(),
                     Text = GetMainMessage(),
                 }
                 .Bind(this,
@@ -91,7 +129,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
             return new VerticalStackLayout
             {
-                
+
             }
             .AndIf(!additionalReasons.IsEmpty(), lay =>
             {

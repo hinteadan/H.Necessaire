@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.Notification
@@ -66,9 +67,9 @@ namespace H.Necessaire.Notification
                 .And(x => Array.ForEach(cc, a => x.CC.Add(Map(a.Address))))
                 .And(x => Array.ForEach(bcc, a => x.Bcc.Add(Map(a.Address))))
                 .And(x => x.Subject = message.Subject)
-                .And(x => x.SubjectEncoding = message.Encoding)
+                .And(x => x.SubjectEncoding = HSafe.Run(() => Encoding.GetEncoding(message.Encoding)).RefPayload(out var encoding) == true ? encoding : Encoding.UTF8)
                 .And(x => x.Body = message.Content)
-                .And(x => x.BodyEncoding = message.Encoding)
+                .And(x => x.BodyEncoding = HSafe.Run(() => Encoding.GetEncoding(message.Encoding)).RefPayload(out var encoding) == true ? encoding : Encoding.UTF8)
                 .And(x => x.IsBodyHtml = message.ContentType.In(NotificationMessageContentType.Html));
         }
 

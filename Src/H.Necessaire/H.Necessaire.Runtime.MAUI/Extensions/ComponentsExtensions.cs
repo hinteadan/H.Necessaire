@@ -1,10 +1,14 @@
 ﻿using H.Necessaire.Runtime.MAUI.Components.Abstracts;
 using H.Necessaire.Runtime.UI;
+using H.Necessaire.UI;
 
 namespace H.Necessaire.Runtime.MAUI.Extensions
 {
     public static class ComponentsExtensions
     {
+        static Page CurrentPage => Application.Current?.Windows?.FirstOrDefault()?.Page;
+        static INavigation Navigation => CurrentPage?.Navigation;
+
         public static void RegisterTo(this HResponsiveDeclaration responsiveDeclaration, HMauiPageBase page)
         {
             if (page is null)
@@ -41,6 +45,21 @@ namespace H.Necessaire.Runtime.MAUI.Extensions
             if (bind is not null)
                 ctrl.Act(bind).RegisterTo(page.RefreshUIActions);
             return ctrl;
+        }
+
+        public static async Task<OperationResult<UserOption[]>> ShowModal<TPage>(this TPage modalPage) where TPage : Page, ImAModal
+        {
+            if (modalPage is null)
+                return "Modal page is NULL";
+
+            INavigation navigation = Navigation;
+            if (navigation is null)
+                return "Application.Current?.Windows?.FirstOrDefault()?.Page?.Navigation is NULL";
+
+            await navigation.PushModalAsync(modalPage.RefTo(out var modal));
+            OperationResult<UserOption[]> modalResult = await modal.GetModalResult();
+
+            return modalResult;
         }
     }
 }

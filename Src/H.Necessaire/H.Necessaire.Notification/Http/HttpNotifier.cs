@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.Notification
@@ -33,7 +34,7 @@ namespace H.Necessaire.Notification
             await
                 new Func<Task>(async () =>
                 {
-                    using (StringContent httpBody = new StringContent(message.Content, message.Encoding, MapMimeType(message.ContentType)))
+                    using (StringContent httpBody = new StringContent(message.Content, HSafe.Run(() => Encoding.GetEncoding(message.Encoding)).RefPayload(out var encoding) == true ? encoding : Encoding.UTF8, MapMimeType(message.ContentType)))
                     {
                         result = await DoHttpPost(httpBody, to);
                     }
