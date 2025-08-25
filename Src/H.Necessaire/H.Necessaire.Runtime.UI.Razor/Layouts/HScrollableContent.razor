@@ -1,0 +1,14 @@
+﻿@inherits Abstracts.HRazorComponentBase
+
+<div class="h-necessaire @nameof(HScrollableContent)" style="
+flex: 1;
+display: flex;
+min-height: 0px;
+overflow: auto;
+">
+    @Content
+</div>
+
+@code {
+    [Parameter] public RenderFragment Content { get; set; }
+}
