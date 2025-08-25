@@ -8,9 +8,9 @@ namespace H.Necessaire.Runtime.UI.Razor
         {
             dependencyRegistry
                 .WithHNecessaireRuntimeUI()
-                //.Register<Core.DependencyGroup>(() => new Core.DependencyGroup())
-                //.Register<Components.DependencyGroup>(() => new Components.DependencyGroup())
                 .Register<HRazorApp>(() => hRazorApp ?? HRazorApp.Default)
+                .Register<DependencyGroup>(() => new DependencyGroup())
+                //.Register<Components.DependencyGroup>(() => new Components.DependencyGroup())
                 ;
 
             return dependencyRegistry;
