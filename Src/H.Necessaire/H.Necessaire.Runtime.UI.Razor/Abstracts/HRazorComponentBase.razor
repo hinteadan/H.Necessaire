@@ -2,8 +2,8 @@
 @inject HUiToolkit huiToolkit
 @code {
     protected HRazorApp App => huiToolkit?.App ?? HRazorApp.Default;
-    protected BrandingStyle Branding => App?.Branding ?? HRazorAppBranding.Default;
-    protected int SizingUnit => App?.Branding?.SizingUnitInPixels ?? HRazorAppBranding.Default.SizingUnitInPixels;
-    protected T Get<T>() => App.DependencyRegistry.Get<T>();
-    protected T Build<T>(string id) where T : class => App.DependencyRegistry.Build<T>(id);
+    protected BrandingStyle Branding => huiToolkit?.Branding ?? HRazorAppBranding.Default;
+    protected int SizingUnit => huiToolkit?.SizingUnit ?? HRazorAppBranding.Default.SizingUnitInPixels;
+    protected T Get<T>() => huiToolkit.Get<T>();
+    protected T Build<T>(string id) where T : class => huiToolkit.Build<T>(id);
 }
