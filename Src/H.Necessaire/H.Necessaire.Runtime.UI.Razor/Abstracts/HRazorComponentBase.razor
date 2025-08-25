@@ -1,7 +1,7 @@
 ﻿@using H.Necessaire.Models.Branding
-@inject HRazorApp hRazorApp
+@inject HUiToolkit huiToolkit
 @code {
-    protected HRazorApp App => hRazorApp ?? HRazorApp.Default;
+    protected HRazorApp App => huiToolkit?.App ?? HRazorApp.Default;
     protected BrandingStyle Branding => App?.Branding ?? HRazorAppBranding.Default;
     protected int SizingUnit => App?.Branding?.SizingUnitInPixels ?? HRazorAppBranding.Default.SizingUnitInPixels;
     protected T Get<T>() => App.DependencyRegistry.Get<T>();
