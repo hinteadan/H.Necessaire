@@ -6,7 +6,7 @@ namespace H.Necessaire.Runtime.UI.Razor
     {
         public static readonly new HRazorAppBranding Default = new HRazorAppBranding();
 
-        public override int SizingUnitInPixels => 16;
+        //public override int SizingUnitInPixels => 10;
 
         public override ColorPalette Colors => HAppColorPalette.LightAzure;
 
