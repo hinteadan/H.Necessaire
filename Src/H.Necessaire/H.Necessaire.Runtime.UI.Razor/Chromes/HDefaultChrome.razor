@@ -17,13 +17,13 @@
 
     <HMainLayout>
         <HScrollableContent>
-            @Content
+            @ChildContent
         </HScrollableContent>
     </HMainLayout>
 
 </div>
 
 @code {
-    [Parameter] public RenderFragment Content { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
     [Parameter] public RenderFragment Header { get; set; }
 }

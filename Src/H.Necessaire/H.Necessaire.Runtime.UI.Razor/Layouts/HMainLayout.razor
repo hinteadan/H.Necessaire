@@ -12,7 +12,7 @@ flex-direction: column;
     flex: 1;
     display: flex;
     ">
-        @Content
+        @ChildContent
     </div>
 
     <HBrandingFooter />
@@ -20,5 +20,5 @@ flex-direction: column;
 </div>
 
 @code {
-    [Parameter] public RenderFragment Content { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
 }

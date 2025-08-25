@@ -8,7 +8,7 @@ background-color: @Branding.PrimaryColorTranslucent.ToCssRGBA();
 box-shadow: 0 3.2px 7.2px 0 rgba(0,0,0,.132),0 .6px 1.8px 0 rgba(0,0,0,.108);
 color: @Branding.LightTextColor.ToCssRGBA();
 ">
-    <div class="h-necessaire @nameof(Content)" style="
+    <div class="h-necessaire @nameof(ChildContent)" style="
     height: @(SizingUnit * 5)px;
     padding-right: @(SizingUnit)px;
     cursor: default;
@@ -18,7 +18,7 @@ color: @Branding.LightTextColor.ToCssRGBA();
     min-height: 0px;
     flex-direction: column;
     ">
-        @Content
+        @ChildContent
     </div>
 
     <div class="h-necessaire @nameof(UserCard)" style="
@@ -37,6 +37,6 @@ color: @Branding.LightTextColor.ToCssRGBA();
 </div>
 
 @code {
-    [Parameter] public RenderFragment Content { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
     [Parameter] public RenderFragment UserCard { get; set; }
 }
