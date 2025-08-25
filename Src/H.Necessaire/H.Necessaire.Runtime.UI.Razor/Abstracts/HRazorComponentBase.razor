@@ -1,5 +1,6 @@
 ﻿@using H.Necessaire.Models.Branding
 @inject HRazorApp App
 @code {
-    protected BrandingStyle Branding => App.Branding ?? HRazorAppBranding.Default;
+    protected BrandingStyle Branding => App?.Branding ?? HRazorAppBranding.Default;
+    protected int SizingUnit => App?.Branding?.SizingUnitInPixels ?? HRazorAppBranding.Default.SizingUnitInPixels;
 }
