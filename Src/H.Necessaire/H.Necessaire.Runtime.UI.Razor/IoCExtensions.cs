@@ -16,7 +16,7 @@ namespace H.Necessaire.Runtime.UI.Razor
             return dependencyRegistry;
         }
 
-        public static IServiceCollection WithRazorRuntime<THRazorApp>(this IServiceCollection services, THRazorApp hRazorApp = null, Action<ImADependencyRegistry> deps = null) where THRazorApp : HRazorApp
+        public static IServiceCollection WithHRazorRuntime<THRazorApp>(this IServiceCollection services, THRazorApp hRazorApp = null, Action<ImADependencyRegistry> deps = null) where THRazorApp : HRazorApp
         {
             if (services is null)
                 return services;
