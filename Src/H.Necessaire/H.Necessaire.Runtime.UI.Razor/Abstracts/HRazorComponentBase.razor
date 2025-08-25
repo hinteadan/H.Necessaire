@@ -6,4 +6,6 @@
     protected int SizingUnit => huiToolkit?.SizingUnit ?? HRazorAppBranding.Default.SizingUnitInPixels;
     protected T Get<T>() => huiToolkit.Get<T>();
     protected T Build<T>(string id) where T : class => huiToolkit.Build<T>(id);
+    protected RuntimeConfig Config => huiToolkit?.Config ?? RuntimeConfig.Empty;
+    protected async Task<H.Necessaire.Version> GetAppVersion() => await huiToolkit.GetAppVersion();
 }

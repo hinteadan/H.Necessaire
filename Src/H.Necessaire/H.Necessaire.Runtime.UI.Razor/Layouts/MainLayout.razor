@@ -1,0 +1,24 @@
+﻿@using H.Necessaire.Runtime.UI.Razor.Elements
+@inherits Abstracts.HRazorComponentBase
+
+<div class="h-necessaire @nameof(MainLayout)" style="
+width: 100%;
+height: 100%;
+flex: 1;
+display: flex;
+flex-direction: column;
+">
+    <div class="h-necessaire" style="
+    flex: 1;
+    display: flex;
+    ">
+        @Content
+    </div>
+
+    <HBrandingFooter />
+
+</div>
+
+@code {
+    [Parameter] public RenderFragment Content { get; set; }
+}
