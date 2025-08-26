@@ -1,0 +1,144 @@
+﻿@inherits Abstracts.HRazorComponentBase
+
+@code {
+    const string animationDuration = "0.4s";
+    const string blurAmount = "2px";
+}
+
+@if (!Branding.Typography.FontFamilyUrls.IsEmpty())
+{
+    @foreach (var url in Branding.Typography.FontFamilyUrls)
+    {
+        <link href="@url" rel="stylesheet" />
+    }
+}
+
+<style>
+    html, body {
+        background-color: @(Branding.BackgroundColorTranslucent.ToCssRGBA());
+        font-family: @(Branding.Typography.FontFamily);
+
+    }
+
+    a:link, a:visited, a:hover, a:active, a:focus {
+        color: inherit;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    a:focus, a:hover {
+        opacity: 0.8;
+    }
+
+    input, select, textarea, button {
+        font-family: @(Branding.Typography.FontFamily);
+        padding: @(Branding.SizingUnitInPixels / 2)px;
+        font-size: @(Branding.Typography.FontSize.PointsCss);
+        border-radius: @(Branding.SizingUnitInPixels / 5)px;
+        border: solid 1px rgba(0, 0, 0, 0.45);
+        background-color: rgba(255, 255, 255, 0.83);
+        margin: @(Branding.SizingUnitInPixels / 2)px;
+    }
+
+    button {
+        cursor: pointer;
+    }
+
+    .mouse-highlight:hover {
+        background-color: @(Branding.SecondaryColorTranslucent.ToCssRGBA())!important;
+    }
+
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    table th, table td {
+        padding: @(Branding.SizingUnitInPixels / 2)px;
+    }
+
+    table thead th {
+        background-color: @(Branding.PrimaryColor.ToCssRGBA());
+    }
+
+    table tbody tr:nth-child(even) td {
+        background-color: @(Branding.PrimaryColorFaded.ToCssRGBA());
+    }
+
+    table tbody tr:hover td {
+        background-color: @(Branding.PrimaryColorTranslucent.ToCssRGBA());
+    }
+
+    .underline {
+        text-decoration: underline;
+        text-underline-offset: 10px;
+        text-decoration-style: dotted;
+        text-decoration-thickness: 1px;
+    }
+
+    .underline-on-hover {
+        transition: @(animationDuration);
+        text-decoration: underline;
+        text-decoration-color: rgba(0, 0, 0, 0);
+        text-underline-offset: 10px;
+        text-decoration-style: dotted;
+        text-decoration-thickness: 1px;
+    }
+
+    .underline-on-hover:hover {
+        text-decoration-color: inherit;
+    }
+
+    .opaque-on-hover {
+        opacity: 0.63;
+        transition: @(animationDuration);
+    }
+
+    .opaque-on-hover:hover { 
+        opacity: 1;
+    }
+
+    .noselect {
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* Non-prefixed version, currently
+                                      supported by Chrome, Edge, Opera and Firefox */
+    }
+
+    h1, h2, h3, h4, h5, h6
+    {
+        color: @(Branding.Colors.Primary.Darker(3).ToCssRGBA());
+    }
+
+    p {
+        margin-top: @(Branding.SizingUnitInPixels)px;
+        margin-bottom: @(Branding.SizingUnitInPixels)px;
+    }
+
+    .markdown-view pre {
+        overflow-x: auto;
+    }
+
+    .markdown-view pre code 
+    {
+        width: 0;
+        display: inline-block;
+    }
+
+    .markdown-view pre {
+        background-color: @(Branding.Colors.Complementary.Lighter(1).WithOpacity(.83f).ToCssRGBA());
+        padding: @(Branding.SizingUnitInPixels / 2)px;
+        color: @(Branding.TextColor.ToCssRGBA());
+    }
+
+    .markdown-view code {
+        font-family: 'Fira Code', monospace;
+    }
+
+    .markdown-view strong {
+        color: @(Branding.Colors.Primary.Color.ToCssRGBA());
+    }
+</style>
