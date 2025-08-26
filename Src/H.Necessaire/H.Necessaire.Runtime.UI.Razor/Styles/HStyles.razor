@@ -16,7 +16,7 @@
 <style>
     html, body {
         background-color: @(Branding.BackgroundColorTranslucent.ToCssRGBA());
-        font-family: @(Branding.Typography.FontFamily);
+        font-family: @((MarkupString)Branding.Typography.FontFamily);
 
     }
 
@@ -31,7 +31,7 @@
     }
 
     input, select, textarea, button {
-        font-family: @(Branding.Typography.FontFamily);
+        font-family: @((MarkupString)Branding.Typography.FontFamily);
         padding: @(Branding.SizingUnitInPixels / 2)px;
         font-size: @(Branding.Typography.FontSize.PointsCss);
         border-radius: @(Branding.SizingUnitInPixels / 5)px;
@@ -142,15 +142,15 @@
         color: @(Branding.Colors.Primary.Color.ToCssRGBA());
     }
 
-    @keyframes morph-in {
+    @@keyframes morph-in {
         from {
             scale: 1.05; 
             opacity: .1;
             -webkit-filter: blur(@blurAmount);
-            -moz-filter: blur((@blurAmount);
-            -o-filter: blur((@blurAmount);
-            -ms-filter: blur((@blurAmount);
-            filter: blur((@blurAmount);
+            -moz-filter: blur(@blurAmount);
+            -o-filter: blur(@blurAmount);
+            -ms-filter: blur(@blurAmount);
+            filter: blur(@blurAmount);
         }
     }
 
