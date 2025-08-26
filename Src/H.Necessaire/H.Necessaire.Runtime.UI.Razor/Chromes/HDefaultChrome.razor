@@ -11,7 +11,12 @@
     else
     {
         <HBrandingHeader>
-            @Header
+            <ChildContent>
+                @Header
+            </ChildContent>
+            <UserContent>
+                @HeaderUserContent
+            </UserContent>
         </HBrandingHeader>
     }
 
@@ -26,5 +31,6 @@
 @code {
     [Parameter] public RenderFragment ChildContent { get; set; }
     [Parameter] public RenderFragment Header { get; set; }
+    [Parameter] public RenderFragment HeaderUserContent { get; set; }
     [Parameter] public bool IsHeaderFullReplacement { get; set; } = false;
 }

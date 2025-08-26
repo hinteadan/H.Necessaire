@@ -1,6 +1,22 @@
-﻿@using H.Necessaire.UI
+﻿@using H.Necessaire.Runtime.UI.Razor.Layouts
+@using H.Necessaire.UI
+@inherits Abstracts.HRazorComponentBase
 
-<div class="h-necessaire @nameof(HNaviMenu) flex-node-h">
+<HeadContent>
+    <style>
+        .HNaviMenu .h-navi-pop-menu {
+            background-color: @(Branding.PrimaryColorTranslucent.ToCssRGBA());
+            padding: @(SizingUnit)px;
+        }
+    </style>
+</HeadContent>
+
+@code {
+    readonly string naviBurgerID = $"h-navi-burger-{Guid.NewGuid()}";
+    readonly string naviPopMenuID = $"h-navi-pop-menu-{Guid.NewGuid()}";
+}
+
+<div class="h-necessaire @nameof(HNaviMenu) flex-node-h unflex">
 
     @if (NaviItems.IsEmpty())
     {
@@ -8,6 +24,22 @@
     }
     else
     {
+        @* <div class="h-necessaire h-navi-burger small-width-only flex-node unflex" id="@naviBurgerID"> *@
+        <div class="h-necessaire navi item h-navi-burger flex-node unflex h-pad" id="@naviBurgerID">
+            <HCenteredContent>
+                <i class="fa-solid fa-bars"></i>
+            </HCenteredContent>
+        </div>
+
+        <div class="h-necessaire h-navi-pop-menu flex-node" id="@naviPopMenuID">
+            @foreach (UserOption userOption in NaviItems)
+            {
+                <div class="h-necessaire navi item flex-node-h unflex h-pad">
+                    @NaviItemTemplate(userOption)
+                </div>
+            }
+        </div>
+
         @foreach(UserOption userOption in NaviItems)
         {
             @NaviItemTemplate(userOption)

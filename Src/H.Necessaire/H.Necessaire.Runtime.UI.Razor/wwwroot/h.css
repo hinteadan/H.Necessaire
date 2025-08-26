@@ -31,3 +31,20 @@
     .flex-node.unflex, .flex-node-h.unflex {
         flex: none;
     }
+
+.small-width-only {
+    display: none;
+}
+
+.big-width-only {
+    display: unset;
+}
+
+@media screen and (max-width: 600px){
+    .small-width-only {
+        display: unset;
+    }
+    .big-width-only {
+        display: none;
+    }
+}
