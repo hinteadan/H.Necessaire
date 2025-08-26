@@ -6,17 +6,37 @@ namespace H.Necessaire.Runtime.UI.Razor
     {
         readonly IJSRuntime js;
         readonly Lazy<Task<IJSObjectReference>> hJsModuleTask;
-        public HJs(IJSRuntime js)
+        readonly HUiToolkit uiToolikit;
+        public HJs(IJSRuntime js, HUiToolkit uiToolikit)
         {
             this.js = js;
+            this.uiToolikit = uiToolikit;
             hJsModuleTask = new(async () => await js.InvokeAsync<IJSObjectReference>("import", "./_content/H.Necessaire.Runtime.UI.Razor/h.js"));
         }
 
         public async Task Debug()
         {
+            await ApplyBranding();
+
             IJSObjectReference hjs = await hJsModuleTask.Value;
 
-            await hjs.InvokeVoidAsync("Debug", "string from C#");
+            await hjs.InvokeVoidAsync("Debug");
+        }
+
+        public async Task ApplyBranding()
+        {
+            IJSObjectReference hjs = await hJsModuleTask.Value;
+
+            await hjs.InvokeVoidAsync("ApplyBranding", new { 
+                BackgroundColor = uiToolikit.Branding.BackgroundColorTranslucent.ToCssRGBA(),
+                HighlightColor = uiToolikit.Branding.SecondaryColorTranslucent.ToCssRGBA(),
+                PrimaryColor = uiToolikit.Branding.PrimaryColor.ToCssRGBA(),
+                PrimaryColorFaded = uiToolikit.Branding.PrimaryColorFaded.ToCssRGBA(),
+                PrimaryColorTranslucent = uiToolikit.Branding.PrimaryColorTranslucent.ToCssRGBA(),
+                FontFamily = uiToolikit.Branding.Typography.FontFamily,
+                FontSize = uiToolikit.Branding.Typography.FontSize.PointsCss,
+                SizingUnit = uiToolikit.SizingUnit,
+            });
         }
 
         public async ValueTask DisposeAsync()

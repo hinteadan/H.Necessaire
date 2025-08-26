@@ -4,16 +4,27 @@
 class H {
     static Instance = new H();
     constructor() {
-
+        this.html = document.getElementsByTagName("html")[0];
+        this.body = document.getElementsByTagName("body")[0];
     }
 
     Debug(test) {
         console.log('Log from h.js');
         console.log(test);
     }
+
+    ApplyBranding(branding) {
+        const { html, body } = this;
+
+        console.log(branding);
+    }
 }
 
 
 export function Debug(test) {
     H.Instance.Debug(test);
+}
+
+export function ApplyBranding(branding) {
+    H.Instance.ApplyBranding(branding);
 }
