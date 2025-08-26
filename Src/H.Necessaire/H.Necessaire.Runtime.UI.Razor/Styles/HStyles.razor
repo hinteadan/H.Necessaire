@@ -54,6 +54,22 @@
         cursor: pointer;
     }
 
+    .navi.item {
+        color: inherit;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+        .navi.item:hover, .navi.item:focus {
+            text-decoration: underline;
+            opacity: 0.8;
+        }
+
+        .navi.item.active {
+            color: @(Branding.Colors.Primary.Darker(3).ToCssRGBA());
+            font-weight: bold;
+        }
+
     .mouse-highlight:hover {
         background-color: @(Branding.SecondaryColorTranslucent.ToCssRGBA())!important;
     }
