@@ -20,8 +20,8 @@ namespace H.Necessaire.Runtime.UI.Razor
             if (services is null)
                 return services;
 
-            services.AddTransient<ExampleJsInterop>();
-            services.AddTransient<HJs>();
+            services.AddScoped<ExampleJsInterop>();
+            services.AddScoped<HJs>();
 
             ImADependencyRegistry registy = hRazorApp?.DependencyRegistry ?? HRazorApp.Default.DependencyRegistry;
             registy.WithRazorRuntime(hRazorApp);
