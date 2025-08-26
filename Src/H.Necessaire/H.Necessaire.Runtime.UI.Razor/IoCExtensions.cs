@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
 
 namespace H.Necessaire.Runtime.UI.Razor
 {
@@ -10,7 +11,6 @@ namespace H.Necessaire.Runtime.UI.Razor
                 .WithHNecessaireRuntimeUI()
                 .Register<HRazorApp>(() => hRazorApp ?? HRazorApp.Default)
                 .Register<DependencyGroup>(() => new DependencyGroup())
-                //.Register<Components.DependencyGroup>(() => new Components.DependencyGroup())
                 ;
 
             return dependencyRegistry;
@@ -21,7 +21,8 @@ namespace H.Necessaire.Runtime.UI.Razor
             if (services is null)
                 return services;
 
-            services.AddScoped<ExampleJsInterop>();
+            services.AddTransient<ExampleJsInterop>();
+            services.AddTransient<HJs>();
 
             ImADependencyRegistry registy = hRazorApp?.DependencyRegistry ?? HRazorApp.Default.DependencyRegistry;
             registy.WithRazorRuntime(hRazorApp);
@@ -40,15 +41,16 @@ namespace H.Necessaire.Runtime.UI.Razor
 
         public static IServiceCollection AddDotNetDependenciesToHNecessaire(this IServiceCollection services, ImADependencyRegistry dependencyRegistry)
         {
-            //if (services == null)
-            //    return services;
+            if (services == null)
+                return services;
 
-            //dependencyRegistry.RegisterAlwaysNew<ImAUseCaseContextProvider>(() =>
+            //IServiceProvider netCoreServiceProvider = null;
+            //dependencyRegistry.Register<IJSRuntime>(() =>
             //{
-            //    //IServiceProvider netCoreServiceProvider = services.BuildServiceProvider();
-            //    return
-            //        new MauiAppToUseCaseContextProvider();
+            //    netCoreServiceProvider ??= services.BuildServiceProvider();
+            //    return netCoreServiceProvider.GetService<IJSRuntime>();
             //});
+
 
             return services;
         }
