@@ -1,12 +1,6 @@
 ﻿@inherits Abstracts.HRazorComponentBase
 
-<div class="h-necessaire @nameof(HScrollableContent)" style="
-flex: 1;
-display: flex;
-flex-direction: column;
-min-height: 0px;
-overflow: auto;
-">
+<div class="h-necessaire @nameof(HScrollableContent) flex-node" style="overflow: auto;">
     @ChildContent
 </div>
 
