@@ -17,6 +17,10 @@ class H {
         const { html, body } = this;
 
         console.log(branding);
+
+        html.style.backgroundColor = branding.backgroundColor;
+        body.style.backgroundColor = branding.backgroundColor;
+        body.style.fontFamily = branding.fontFamily;
     }
 }
 
