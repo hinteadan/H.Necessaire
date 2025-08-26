@@ -4,8 +4,8 @@
 @(!IsTinted ? $"background-image: url('{Url}');" : null)
 @(IsTinted ? $"mask-image: url('{Url}');" : null)
 @(IsTinted ? $"-webkit-mask-image: url('{Url}');" : null)
-@Width.MorphIfNotEmpty(x => $"width: {x}")
-@Height.MorphIfNotEmpty(x => $"height: {x}")
+@Width.MorphIfNotEmpty(x => $"width: {x};")
+@Height.MorphIfNotEmpty(x => $"height: {x};")
 @Styles
 ">
 
