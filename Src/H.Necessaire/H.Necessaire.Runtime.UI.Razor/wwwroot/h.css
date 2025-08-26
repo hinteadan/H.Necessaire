@@ -5,7 +5,7 @@
     padding: 0px;
 }
 
-*:focus-visible{
+*:focus-visible {
     outline: 0;
 }
 
@@ -37,14 +37,34 @@
 }
 
 .big-width-only {
-    
 }
 
-@media screen and (max-width: 600px){
+@media screen and (max-width: 600px) {
     .small-width-only {
         display: inherit;
     }
+
     .big-width-only {
         display: none;
     }
 }
+
+.h-img {
+    /*background-image: url('url/to/image');*/
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+}
+
+    .h-img.tinted {
+        /*mask-image: url('url/to/image');*/
+        /*-webkit-mask-image: url('url/to/image');*/
+        background-image: none;
+        background-blend-mode: overlay;
+        mask-repeat: no-repeat;
+        -webkit-mask-repeat: no-repeat;
+        mask-size: contain;
+        -webkit-mask-size: contain;
+        mask-position: center center;
+        -webkit-mask-position: center center;
+    }
