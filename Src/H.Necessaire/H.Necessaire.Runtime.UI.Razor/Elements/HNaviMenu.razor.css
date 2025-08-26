@@ -13,4 +13,5 @@
     .HNaviMenu .h-navi-pop-menu {
         position: fixed;
         z-index: 17;
+        right: 0;
     }

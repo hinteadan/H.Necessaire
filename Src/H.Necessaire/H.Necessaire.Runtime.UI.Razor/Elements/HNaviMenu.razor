@@ -19,8 +19,7 @@
     }
     else
     {
-        @* <div class="h-necessaire h-navi-burger small-width-only flex-node unflex" id="@naviBurgerID"> *@
-        <div class="h-necessaire navi item h-navi-burger flex-node unflex h-pad" id="@naviBurgerID">
+        <div class="h-necessaire navi item h-navi-burger flex-node unflex h-pad small-width-only" id="@naviBurgerID">
             <HCenteredContent>
                 <i class="fa-solid fa-bars"></i>
             </HCenteredContent>
@@ -35,9 +34,11 @@
             }
         </div>
 
-        @foreach(UserOption userOption in NaviItems)
+        @foreach (UserOption userOption in NaviItems)
         {
-            @NaviItemTemplate(userOption)
+            <div class="h-necessaire navi item h-pad flex-node big-width-only" style="justify-content: center;">
+                @NaviItemTemplate(userOption)
+            </div>
         }
     }
 
@@ -53,6 +54,10 @@
             const isVisible = !naviPopMenu.style.display;
             naviPopMenu.style.top = `${naviBurger.clientHeight}px`;
             naviPopMenu.style.display = isVisible ? 'none' : null;
+        });
+
+        window.addEventListener('resize', e => {
+            naviPopMenu.style.display = 'none';
         });
 
     })();

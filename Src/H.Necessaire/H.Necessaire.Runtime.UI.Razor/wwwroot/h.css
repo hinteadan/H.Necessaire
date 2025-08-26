@@ -37,12 +37,12 @@
 }
 
 .big-width-only {
-    display: unset;
+    
 }
 
 @media screen and (max-width: 600px){
     .small-width-only {
-        display: unset;
+        display: inherit;
     }
     .big-width-only {
         display: none;
