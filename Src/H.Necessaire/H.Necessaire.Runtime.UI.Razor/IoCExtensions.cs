@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.JSInterop;
 
 namespace H.Necessaire.Runtime.UI.Razor
 {
@@ -57,7 +56,11 @@ namespace H.Necessaire.Runtime.UI.Razor
 
         public static IServiceCollection AddHNecessaireDependenciesToDotNet(this IServiceCollection services, ImADependencyRegistry dependencyRegistry)
         {
-            services.AddSingleton<ImADependencyProvider>(dependencyRegistry);
+            services.AddSingleton<ImADependencyProvider>(sp =>
+            {
+                dependencyRegistry.Register<IServiceProvider>(() => sp);
+                return dependencyRegistry;
+            });
 
             //dependencyRegistry.Register<ImAConfigProvider>(() =>
             //{
