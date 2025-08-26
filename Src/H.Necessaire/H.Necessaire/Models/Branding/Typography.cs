@@ -23,7 +23,7 @@
             );
 
         public static readonly Typography Default = new Typography(
-            "'Roboto', 'Roboto Condensed', Calibri, Helvetica, Arial, Sans-Serif",
+            "'Roboto Condensed', 'Roboto', Calibri, Helvetica, Arial, Sans-Serif",
             new TypographySize(12),
             "https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap",
             "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap&subset=latin-ext"
