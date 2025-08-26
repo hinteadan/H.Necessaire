@@ -11,11 +11,6 @@
     </style>
 </HeadContent>
 
-@code {
-    readonly string naviBurgerID = $"h-navi-burger-{Guid.NewGuid()}";
-    readonly string naviPopMenuID = $"h-navi-pop-menu-{Guid.NewGuid()}";
-}
-
 <div class="h-necessaire @nameof(HNaviMenu) flex-node-h unflex">
 
     @if (NaviItems.IsEmpty())
@@ -31,7 +26,7 @@
             </HCenteredContent>
         </div>
 
-        <div class="h-necessaire h-navi-pop-menu flex-node" id="@naviPopMenuID">
+        <div class="h-necessaire h-navi-pop-menu flex-node" id="@naviPopMenuID" style="display: none;">
             @foreach (UserOption userOption in NaviItems)
             {
                 <div class="h-necessaire navi item flex-node-h unflex h-pad">
@@ -48,9 +43,28 @@
 
 </div>
 
+<script>
+    (function(){
+
+        const naviBurger = document.getElementById('@(naviBurgerID)');
+        const naviPopMenu = document.getElementById('@(naviPopMenuID)');
+
+        naviBurger.addEventListener('click', e => {
+            const isVisible = !naviPopMenu.style.display;
+            naviPopMenu.style.top = `${naviBurger.clientHeight}px`;
+            naviPopMenu.style.display = isVisible ? 'none' : null;
+        });
+
+    })();
+</script>
+
 
 
 @code {
     [Parameter, EditorRequired] public RenderFragment<UserOption> NaviItemTemplate { get; set; }
     [Parameter, EditorRequired] public UserOption[] NaviItems { get; set; }
+
+    readonly string naviBurgerID = $"h-navi-burger-{Guid.NewGuid()}";
+    readonly string naviPopMenuID = $"h-navi-pop-menu-{Guid.NewGuid()}";
 }
+
