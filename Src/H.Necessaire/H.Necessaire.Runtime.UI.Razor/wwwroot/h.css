@@ -49,6 +49,27 @@
     }
 }
 
+.h-lay {
+    
+}
+@media screen and (max-width: 1000px) {
+    .h-lay {
+        margin: 0 0;
+    }
+}
+
+@media screen and (min-width: 1001px) and (max-width: 1900px) {
+    .h-lay {
+        margin: 0 5%;
+    }
+}
+
+@media screen and (min-width: 1901px) {
+    .h-lay {
+        margin: 0 10%;
+    }
+}
+
 .h-img {
     /*background-image: url('url/to/image');*/
     background-repeat: no-repeat;
@@ -56,16 +77,16 @@
     background-size: contain;
 }
 
-    .h-img.tinted {
-        /*mask-image: url('url/to/image');*/
-        /*-webkit-mask-image: url('url/to/image');*/
-        /*background-color: #ffffff;*/
-        background-image: none;
-        background-blend-mode: overlay;
-        mask-repeat: no-repeat;
-        -webkit-mask-repeat: no-repeat;
-        mask-size: contain;
-        -webkit-mask-size: contain;
-        mask-position: center center;
-        -webkit-mask-position: center center;
-    }
+        .h-img.tinted {
+            /*mask-image: url('url/to/image');*/
+            /*-webkit-mask-image: url('url/to/image');*/
+            /*background-color: #ffffff;*/
+            background-image: none;
+            background-blend-mode: overlay;
+            mask-repeat: no-repeat;
+            -webkit-mask-repeat: no-repeat;
+            mask-size: contain;
+            -webkit-mask-size: contain;
+            mask-position: center center;
+            -webkit-mask-position: center center;
+        }
