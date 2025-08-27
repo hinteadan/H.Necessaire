@@ -5,7 +5,18 @@
     protected BrandingStyle Branding => huiToolkit?.Branding ?? HRazorAppBranding.Default;
     protected int SizingUnit => huiToolkit?.SizingUnit ?? HRazorAppBranding.Default.SizingUnitInPixels;
     protected T Get<T>() => huiToolkit.Get<T>();
+    protected ImALogger GetLogger<T>() => huiToolkit.GetLogger<T>();
     protected T Build<T>(string id) where T : class => huiToolkit.Build<T>(id);
     protected RuntimeConfig Config => huiToolkit?.Config ?? RuntimeConfig.Empty;
     protected async Task<H.Necessaire.Version> GetAppVersion() => await huiToolkit.GetAppVersion();
+
+    public bool IsBusy { get; private set; }
+    protected IDisposable BusyScope() => new ScopedRunner(_ => IsBusy = true, _ => IsBusy = false);
+
+    protected ImALogger log;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        log = App.DependencyRegistry.GetLogger(this.GetType(), application: "RoVFR Support Tools");
+    }
 }

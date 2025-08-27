@@ -67,6 +67,40 @@
         cursor: pointer;
     }
 
+    .h-btn {
+        background-color: @(Branding.PrimaryColor.ToCssRGBA());
+        color: @(Branding.BackgroundColor.ToCssRGBA());
+    }
+
+    .h-btn.dngr {
+        background-color: @(Branding.DangerColor.ToCssRGBA());
+    }
+
+    .h-btn.sces {
+        background-color: @(Branding.SuccessColor.ToCssRGBA());
+    }
+
+    .h-btn.wrng {
+        background-color: @(Branding.WarningColor.ToCssRGBA());
+    }
+
+    .h-btn.info {
+        background-color: @(Branding.InformationColor.ToCssRGBA());
+    }
+
+    .h-btn.mute {
+        background-color: @(Branding.MuteColor.ToCssRGBA());
+    }
+
+
+    .h-btn:hover {
+        opacity: .9;
+    }
+
+    .h-btn:active {
+        opacity: .8;
+    }
+
     .navi.item {
         color: inherit;
         cursor: pointer;

@@ -1,0 +1,25 @@
+﻿@using H.Necessaire.Runtime.UI.Razor.Abstracts
+@using Microsoft.JSInterop
+@inherits HRazorComponentBase
+@rendermode InteractiveAuto
+
+<button class="h-necessaire @nameof(HButton) h-btn" data-action-tag="@ActionTag" @onclick=TriggerClick>
+    @ChildContent
+</button>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public string ActionTag { get; set; }
+    [Parameter] public Func<Task> OnClick { get; set; }
+
+    async void TriggerClick()
+    {
+        using (BusyScope())
+        {
+            if (OnClick is not null)
+            {
+                await HSafe.Run(OnClick).LogError(log, ActionTag.IfEmpty($"{nameof(HButton)}.TriggerClick()"));
+            }
+        }
+    }
+}

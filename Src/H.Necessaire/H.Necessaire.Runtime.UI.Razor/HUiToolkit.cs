@@ -19,6 +19,7 @@ namespace H.Necessaire.Runtime.UI.Razor
         public BrandingStyle Branding => App?.Branding ?? HRazorAppBranding.Default;
         public int SizingUnit => App?.Branding?.SizingUnitInPixels ?? HRazorAppBranding.Default.SizingUnitInPixels;
         public T Get<T>() => App.DependencyRegistry.Get<T>();
+        public ImALogger GetLogger<T>() => App.DependencyRegistry.GetLogger<T>(application: "RoVFR Support Tools");
         public T Build<T>(string id) where T : class => App.DependencyRegistry.Build<T>(id);
         public RuntimeConfig Config => runtimeConfig;
 
