@@ -45,6 +45,25 @@
         flex: none;
     }
 
+.cnt-c {
+    justify-content: center;
+}
+.cnt-l {
+    justify-content: start;
+}
+.cnt-r {
+    justify-content: end;
+}
+.itm-c {
+    align-items: center;
+}
+.itm-l {
+    align-items: start;
+}
+.itm-r {
+    align-items: end;
+}
+
 .small-width-only {
     display: none;
 }
