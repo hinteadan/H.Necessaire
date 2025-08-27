@@ -3,7 +3,7 @@
 @inherits HRazorComponentBase
 @rendermode InteractiveAuto
 
-<button class="h-necessaire @nameof(HButton) h-btn" data-action-tag="@ActionTag" @onclick=TriggerClick>
+<button class="h-necessaire @nameof(HButton) h-btn @GetCssClassForRole()" data-action-tag="@ActionTag" @onclick=TriggerClick>
     @ChildContent
 </button>
 
@@ -11,6 +11,7 @@
     [Parameter] public RenderFragment ChildContent { get; set; }
     [Parameter] public string ActionTag { get; set; }
     [Parameter] public Func<Task> OnClick { get; set; }
+    [Parameter] public UIRole Role { get; set; } = UIRole.Unspecified;
 
     async void TriggerClick()
     {
@@ -21,5 +22,21 @@
                 await HSafe.Run(OnClick).LogError(log, ActionTag.IfEmpty($"{nameof(HButton)}.TriggerClick()"));
             }
         }
+    }
+
+    string GetCssClassForRole()
+    {
+        return
+            Role switch
+            {
+                UIRole.Danger => "dngr",
+                UIRole.Success => "sces",
+                UIRole.Warning => "wrng",
+                UIRole.Info => "info",
+                UIRole.Mute => "mute",
+                UIRole.Unspecified => null,
+                _ => null,
+            }
+            ;
     }
 }
