@@ -59,6 +59,7 @@
     .h-img.tinted {
         /*mask-image: url('url/to/image');*/
         /*-webkit-mask-image: url('url/to/image');*/
+        /*background-color: #ffffff;*/
         background-image: none;
         background-blend-mode: overlay;
         mask-repeat: no-repeat;
