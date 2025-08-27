@@ -24,6 +24,19 @@
     min-width: 0px;
 }
 
+.flex-item {
+    display: flex;
+    flex-direction: column;
+    min-height: 0px;
+}
+
+.flex-item-h {
+    display: flex;
+    flex-direction: row;
+    min-height: 0px;
+    min-width: 0px;
+}
+
     .flex-node.center, .flex-node-h.center {
         justify-content: center;
     }
@@ -54,7 +67,7 @@
 }
 @media screen and (max-width: 1000px) {
     .h-lay {
-        margin: 0 0;
+        
     }
 }
 
