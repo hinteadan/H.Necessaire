@@ -1,6 +1,6 @@
 ﻿namespace H.Necessaire
 {
-    public class HHttpFullResponse : HHttpResponse
+    public class HsHttpFullResponse : HsHttpResponse
     {
         public string Content { get; set; }
     }
