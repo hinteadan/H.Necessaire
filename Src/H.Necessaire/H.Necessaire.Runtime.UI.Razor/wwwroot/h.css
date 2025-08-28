@@ -63,6 +63,9 @@
 .itm-r {
     align-items: end;
 }
+.wrp {
+    flex-wrap: wrap;
+}
 
 .small-width-only {
     display: none;
