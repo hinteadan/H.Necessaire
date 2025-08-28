@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace H.Necessaire
 {
@@ -10,16 +9,16 @@ namespace H.Necessaire
         readonly IEnumerable<T> disposables = null;
         public CollectionOfDisposables(params T[] disposables)
         {
-            this.disposables = disposables;
+            this.disposables = disposables?.ToNoNullsArray();
         }
         public CollectionOfDisposables(IEnumerable<T> disposables)
         {
-            this.disposables = disposables;
+            this.disposables = disposables?.ToNoNullsArray();
         }
 
         public void Dispose()
         {
-            if (disposables?.Any() != true)
+            if (disposables.IsEmpty())
                 return;
 
             foreach (IDisposable disposable in disposables)

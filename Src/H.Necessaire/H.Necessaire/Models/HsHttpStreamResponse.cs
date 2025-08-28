@@ -4,10 +4,10 @@ namespace H.Necessaire
 {
     public class HsHttpStreamResponse : HsHttpResponse, IDisposable
     {
-        readonly CollectionOfDisposables<IDisposable> otherDisposables;
+        readonly CollectionOfDisposables otherDisposables;
         public HsHttpStreamResponse(params IDisposable[] otherDisposables)
         {
-            this.otherDisposables = new CollectionOfDisposables<IDisposable>(otherDisposables);
+            this.otherDisposables = new CollectionOfDisposables(otherDisposables);
         }
         ~HsHttpStreamResponse() => HSafe.Run(Dispose);
         public void Dispose() => HSafe.Run(() => otherDisposables.Dispose());
