@@ -26,6 +26,8 @@ namespace H.Necessaire
         public GpsPoint SouthEastBoundary() => new GpsPoint { LatInDegrees = SouthBoundary(), LngInDegrees = EastBoundary() };
         public GpsPoint SouthWestBoundary() => new GpsPoint { LatInDegrees = SouthBoundary(), LngInDegrees = WestBoundary() };
 
+        public GpsPoint Center() => Pins.IsEmpty() ? (0, 0) : (((NorthBoundary() - SouthBoundary()) / 2) + SouthBoundary(), ((WestBoundary() - EastBoundary()) / 2) + EastBoundary());
+
         public GpsPoint[] NorthMost() => Pins.Where(x => x.LatInDegrees == NorthBoundary()).ToArray();
         public GpsPoint[] SouthMost() => Pins.Where(x => x.LatInDegrees == SouthBoundary()).ToArray();
         public GpsPoint[] EastMost() => Pins.Where(x => x.LngInDegrees == EastBoundary()).ToArray();
@@ -75,5 +77,6 @@ testx, testy	X- and y-coordinate of the test point.
         }
 
         public static implicit operator GpsArea(GpsPoint[] gpsPoints) => new GpsArea(gpsPoints);
+        public static implicit operator GpsArea(TaggedValue<GpsPoint>[] gpsPoints) => new GpsArea(gpsPoints?.Select(x => x.Value).ToArray());
     }
 }

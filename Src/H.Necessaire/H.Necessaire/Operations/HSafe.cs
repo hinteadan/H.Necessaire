@@ -133,5 +133,33 @@ namespace H.Necessaire
             => Run(() => action(x1, x2, x3, x4, x5), tag);
         public static Task<OperationResult<TResult>> Run<T1, T2, T3, T4, T5, T6, TResult>(Func<T1, T2, T3, T4, T5, T6, Task<TResult>> action, T1 x1, T2 x2, T3 x3, T4 x4, T5 x5, T6 x6, string tag = null)
             => Run(() => action(x1, x2, x3, x4, x5, x6), tag);
+
+        public static async Task RunWithRetry(Func<Task> action, Func<bool> successCondition = null, int maxRetries = 3, double timeoutScaleInMs = .27)
+        {
+            int retryCount = 0;
+
+            while (retryCount <= maxRetries)
+            {
+                var runResult = await Run(action);
+
+                if (!runResult || !(successCondition?.Invoke() ?? true))
+                {
+                    retryCount++;
+                    await Task.Delay(TimeSpan.FromSeconds(timeoutScaleInMs + retryCount * timeoutScaleInMs));
+                    continue;
+                }
+
+                return;
+            }
+        }
+
+        public static async Task<T> RunWithRetry<T>(Func<Task<T>> action, Func<T, bool> successCondition = null, int maxRetries = 3, double timeoutScaleInMs = .27)
+        {
+            T result = default(T);
+
+            await RunWithRetry(async () => result = await action.Invoke(), () => successCondition?.Invoke(result) ?? true, maxRetries, timeoutScaleInMs);
+
+            return result;
+        }
     }
 }

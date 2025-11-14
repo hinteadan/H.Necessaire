@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -534,6 +535,46 @@ namespace H.Necessaire
                 };
         }
 
+        public static ConfigNode ConfigWithSecretFromEmbeddedResources(this string id, string secretName, params Assembly[] assembliesToScan)
+        {
+            return
+                new ConfigNode
+                {
+                    ID = id,
+                    Value = secretName.ReadSecretFromEmbeddedResources(assembliesToScan),
+                };
+        }
+
+        public static ConfigNode ConfigWithSecretFromEmbeddedResources(this string id, string secretName, string defaultTo, params Assembly[] assembliesToScan)
+        {
+            return
+                new ConfigNode
+                {
+                    ID = id,
+                    Value = secretName.ReadSecretFromEmbeddedResources(defaultTo, assembliesToScan),
+                };
+        }
+
+        public static ConfigNode ConfigWithSecretFromEmbeddedResources(this string id, string secretName, Encoding encoding, params Assembly[] assembliesToScan)
+        {
+            return
+                new ConfigNode
+                {
+                    ID = id,
+                    Value = secretName.ReadSecretFromEmbeddedResources(encoding, assembliesToScan),
+                };
+        }
+
+        public static ConfigNode ConfigWithSecretFromEmbeddedResources(this string id, string secretName, string defaultTo, Encoding encoding, params Assembly[] assembliesToScan)
+        {
+            return
+                new ConfigNode
+                {
+                    ID = id,
+                    Value = secretName.ReadSecretFromEmbeddedResources(defaultTo, encoding, assembliesToScan),
+                };
+        }
+
         public static ConfigNode ConfigWith(this string id, params ConfigNode[] children)
         {
             return
@@ -805,6 +846,62 @@ namespace H.Necessaire
         public static bool In(this double value, NumberInterval numberInterval)
         {
             return numberInterval.Contains(value);
+        }
+
+        public static TEphemeralType CloneValidityFrom<TEphemeralType>(this TEphemeralType ephemeralType, IEphemeralType ephemeralInfo) where TEphemeralType : IEphemeralType
+        {
+            if (ephemeralType == null)
+                return ephemeralType;
+
+            if (ephemeralInfo == null)
+                return ephemeralType;
+
+            ephemeralType.ActiveAsOf(ephemeralInfo.ValidFrom);
+            if (ephemeralInfo.ExpiresAt == null)
+                ephemeralType.DoNotExpire();
+            else
+                ephemeralType.ExpireAt(ephemeralInfo.ExpiresAt.Value);
+
+            return ephemeralType;
+        }
+
+        public static TEphemeralType CloneEntireEphmeralTypeInfoFrom<TEphemeralType>(this TEphemeralType ephemeralType, IEphemeralType ephemeralInfo) where TEphemeralType : EphemeralTypeBase
+        {
+            if (ephemeralType == null)
+                return ephemeralType;
+
+            if (ephemeralInfo == null)
+                return ephemeralType;
+
+            ephemeralType.CreatedAt = ephemeralInfo.CreatedAt;
+            ephemeralType.AsOf = ephemeralInfo.AsOf;
+            ephemeralType.ValidFrom = ephemeralInfo.ValidFrom;
+            ephemeralType.ExpiresAt = ephemeralInfo.ExpiresAt;
+
+            return ephemeralType;
+        }
+
+        public static IEnumerable<DateTime> BuildDailyTimestamps(this DateTime from, DateTime to)
+        {
+            from = from.Date;
+            to = to.Date;
+
+            if (from > to)
+                yield break;
+
+            while (from <= to)
+            {
+                yield return from;
+                from = from.AddDays(1);
+            }
+        }
+
+        public static IEnumerable<DateTime> BuildDailyTimestamps(this PeriodOfTime periodOfTime)
+        {
+            if (periodOfTime.IsInfinite)
+                throw new ArgumentException("The specified period must be well defined, it cannot be infinite", nameof(periodOfTime));
+
+            return periodOfTime.From.Value.BuildDailyTimestamps(periodOfTime.To.Value);
         }
     }
 }

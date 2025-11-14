@@ -49,6 +49,26 @@ namespace H.Necessaire
                 .ToArray();
         }
 
+        public static Type[] GetAllInterfaces(this Type interfaceType, params Assembly[] assembliesToScan)
+        {
+            assembliesToScan
+                = assembliesToScan?.Any() == true
+                ? assembliesToScan
+                : AppDomain.CurrentDomain.GetNonCoreAssemblies()
+                ;
+
+            return
+                assembliesToScan
+                .SelectMany(
+                    assembly => assembly
+                    .GetTypes()
+                    .Where(
+                        p => (p == interfaceType) || (p.GetInterfaces()?.Any(i => i == interfaceType) == true) || IsAssignableFrom(interfaceType, p)
+                    )
+                )
+                .ToArray();
+        }
+
         private static bool IsAssignableFrom(Type baseType, Type typeToCheck)
         {
             if (baseType.IsGenericTypeDefinition)
@@ -111,6 +131,13 @@ namespace H.Necessaire
         {
             return
                 (type?.GetCustomAttributes(typeof(IDAttribute), false)?.SingleOrDefault() as IDAttribute)?.ID
+                ;
+        }
+
+        public static string GetIDOrTypeName(this Type type, string fallbackTo = null)
+        {
+            return
+                (type?.GetID()).IfEmpty(type?.Name).IfEmpty(fallbackTo)
                 ;
         }
 

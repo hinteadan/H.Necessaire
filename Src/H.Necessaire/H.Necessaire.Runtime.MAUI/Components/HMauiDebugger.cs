@@ -209,9 +209,9 @@ namespace H.Necessaire.Runtime.MAUI.Components
                 () => triggerButton.IsEnabled = true.And(_ => triggerButton.Text = buttonLabel)
             ))
             {
-                var _ = objectToAnimate.RelRotateTo(180, length: 2000, easing: Easing.Default);
-                await objectToAnimate.FadeTo(.13, length: 1000, easing: Easing.Default);
-                await objectToAnimate.FadeTo(1, length: 1000, easing: Easing.Default);
+                var _ = objectToAnimate.RelRotateToAsync(180, length: 2000, easing: Easing.Default);
+                await objectToAnimate.FadeToAsync(.13, length: 1000, easing: Easing.Default);
+                await objectToAnimate.FadeToAsync(1, length: 1000, easing: Easing.Default);
             }
         }
 
@@ -231,7 +231,7 @@ namespace H.Necessaire.Runtime.MAUI.Components
 
         private async void Button_Clicked(object sender, EventArgs e)
         {
-            await Shell.Current.CurrentPage.DisplayAlert("Button Click", "Clicked!", "OK");
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Button Click", "Clicked!", "OK");
         }
     }
 }

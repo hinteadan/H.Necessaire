@@ -1,0 +1,36 @@
+﻿@inherits Abstracts.HRazorComponentBase
+
+<div class="h-necessaire @nameof(HBrandingHeader)" style="
+height: @(SizingUnit * 5)px;
+overflow: hidden;
+display: flex;
+background-color: @Branding.PrimaryColorTranslucent.ToCssRGBA();
+box-shadow: 0 3.2px 7.2px 0 rgba(0,0,0,.132),0 .6px 1.8px 0 rgba(0,0,0,.108);
+color: @Branding.LightTextColor.ToCssRGBA();
+">
+    <div class="h-necessaire flex-node" style="
+    height: @(SizingUnit * 5)px;
+    padding-right: @(SizingUnit)px;
+    cursor: default;
+    justify-content: center;
+    ">
+        @ChildContent
+    </div>
+
+    <div class="h-necessaire flex-node" style="
+    height: @(SizingUnit * 5)px;
+    padding-right: @(SizingUnit)px;
+    cursor: default;
+    justify-content: center;
+    ">
+        <div class="h-necessaire flex-node-h" style="justify-content: end;">
+            @UserContent
+        </div>
+    </div>
+
+</div>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment UserContent { get; set; }
+}

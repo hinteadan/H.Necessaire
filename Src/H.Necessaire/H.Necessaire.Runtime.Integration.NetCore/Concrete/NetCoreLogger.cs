@@ -40,7 +40,7 @@ namespace H.Necessaire.Runtime.Integration.NetCore.Concrete
                 },
             };
 
-            logger.Log(logEntry).GetAwaiter().GetResult();
+            logger.Log(logEntry).DontWait();
         }
 
         class LogStateHolder<TState> : IDisposable

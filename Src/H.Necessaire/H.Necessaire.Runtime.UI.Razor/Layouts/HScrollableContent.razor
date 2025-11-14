@@ -1,0 +1,26 @@
+﻿@using H.Necessaire.Serialization
+@inherits Abstracts.HRazorComponentBase
+@inject HJs hjs
+
+<div id="@id" class="h-necessaire @nameof(HScrollableContent) flex-node @CssClassAddOns" style="overflow: auto; @CssStyleAddOns" @onscroll="OnScroll">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public Func<HScrollInfo, Task> OnContentScrolled { get; set; }
+    [Parameter] public string CssClassAddOns { get; set; } = null;
+    [Parameter] public string CssStyleAddOns { get; set; } = null;
+
+    string id = $"{nameof(HScrollableContent)}-{Guid.NewGuid()}";
+
+    async Task OnScroll()
+    {
+        if (OnContentScrolled is null)
+            return;
+
+        HScrollInfo scrollInfo = await hjs.GetScrollPosition(id);
+
+        await OnContentScrolled(scrollInfo);
+    }
+}

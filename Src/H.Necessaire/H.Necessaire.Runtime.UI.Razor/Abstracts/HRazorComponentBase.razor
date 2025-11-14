@@ -1,0 +1,24 @@
+﻿@using H.Necessaire.Models.Branding
+@using System.Reflection
+@inject HUiToolkit huiToolkit
+@code {
+	protected HRazorApp App => huiToolkit?.App ?? HRazorApp.Default;
+	protected BrandingStyle Branding => huiToolkit?.Branding ?? HRazorAppBranding.Default;
+	protected int SizingUnit => huiToolkit?.SizingUnit ?? HRazorAppBranding.Default.SizingUnitInPixels;
+	protected T Get<T>() => huiToolkit.Get<T>();
+	protected ImALogger GetLogger<T>() => huiToolkit.GetLogger<T>();
+	protected T Build<T>(string id, T defaultTo = default, params Assembly[] assembliesToScan) where T : class => huiToolkit.Build<T>(id, defaultTo, assembliesToScan);
+	protected T Build<T>(string id, params Assembly[] assembliesToScan) where T : class => huiToolkit.Build<T>(id, assembliesToScan);
+	protected RuntimeConfig Config => huiToolkit?.Config ?? RuntimeConfig.Empty;
+	protected async Task<H.Necessaire.Version> GetAppVersion() => await huiToolkit.GetAppVersion();
+
+	public bool IsBusy { get; private set; }
+	protected IDisposable BusyScope() => new ScopedRunner(_ => IsBusy = true, _ => IsBusy = false);
+
+	protected ImALogger log;
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		log = App.DependencyRegistry.GetLogger(this.GetType(), application: "RoVFR Support Tools");
+	}
+}

@@ -78,7 +78,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             using (Disable(triggerButton))
             {
                 actualOptions.IsVisible = true;
-                await actualOptions.FadeTo(1);
+                await actualOptions.FadeToAsync(1);
                 actualOptions.IsEnabled = true;
                 triggerButton.Glyph = "ic_fluent_dismiss_square_24_filled";
                 TriggerAutoClose();
@@ -101,7 +101,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             using (Disable(triggerButton))
             {
                 actualOptions.IsEnabled = false;
-                await actualOptions.FadeTo(0);
+                await actualOptions.FadeToAsync(0);
                 actualOptions.IsVisible = false;
                 triggerButton.Glyph = "ic_fluent_more_circle_16_filled";
             }

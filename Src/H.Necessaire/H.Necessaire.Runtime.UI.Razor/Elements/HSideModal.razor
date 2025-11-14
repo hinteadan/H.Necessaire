@@ -1,0 +1,71 @@
+﻿@using H.Necessaire.Runtime.UI.Razor.Abstracts
+@using H.Necessaire.Runtime.UI.Razor.Layouts
+@inherits HRazorComponentBase
+@implements IDisposable
+
+<div @onclick="async ev => { if (IsBusy) return; using (BusyScope()) { await TriggerClose(); } }" class="h-necessaire @nameof(HSideModal) h-side-modal-backdrop h-anmt-side-modal-backdrop-fade-in @(!isClosing ? "" : "h-anmt-side-modal-backdrop-fade-out")"></div>
+
+<div class="h-necessaire @nameof(HSideModal) h-side-modal h-anmt-side-modal-slide-in @(!isClosing ? "" : "h-anmt-side-modal-slide-out")">
+	<div class="flex-node-h unflex h-lvt-4" style="background-color: @Branding.PrimaryColor.WithOpacity(.1f).ToCssRGBA();">
+		<div class="flex-node-h unflex cnt-c itm-c">
+			<HFontIcon IconName="fa-chevron-right" CssClassAddOns="h-pad" OnClick="TriggerClose" />
+		</div>
+		<div class="flex-node-h cnt-c itm-c">
+			@if (TitleContent is not null)
+			{
+				@TitleContent
+			}
+			else if (!Title.IsEmpty())
+			{
+				<h4 class="h-mrg">@Title</h4>
+			}
+			else
+			{
+				<span>&nbsp;</span>
+			}
+		</div>
+		<div class="flex-node-h unflex cnt-c itm-c">
+			<HFontIcon IconName="fa-xmark" CssClassAddOns="h-pad" OnClick="TriggerClose" />
+		</div>
+	</div>
+	<div class="flex-node @(IsContentPadded ? "h-pad" : "")">
+		<HScrollableContent>
+			@ChildContent
+		</HScrollableContent>
+	</div>
+</div>
+
+@code {
+	#region Construct
+	public HSideModal()
+	{
+		HJsGlobals.OnEscapeKeyPressed += OnEscapePressed;
+	}
+	~HSideModal() => HSafe.Run(Dispose);
+	public void Dispose()
+	{
+		HJsGlobals.OnEscapeKeyPressed -= OnEscapePressed;
+	}
+	#endregion
+
+	[Parameter] public RenderFragment ChildContent { get; set; }
+	[Parameter] public string Title { get; set; }
+	[Parameter] public RenderFragment TitleContent { get; set; }
+	[Parameter] public bool IsContentPadded { get; set; } = true;
+	[Parameter] public Func<Task> OnClose { get; set; }
+
+	bool isClosing = false;
+	async Task TriggerClose()
+	{
+		using (new ScopedRunner(_ => isClosing = true.And(x => StateHasChanged()), _ => isClosing = false.And(x => StateHasChanged())))
+		{
+			await Task.Delay(TimeSpan.FromSeconds(.17));
+
+			if (OnClose is not null)
+			{
+				await OnClose.Invoke();
+			}
+		}
+	}
+	async Task OnEscapePressed(object sender, EventArgs args) => await TriggerClose();
+}

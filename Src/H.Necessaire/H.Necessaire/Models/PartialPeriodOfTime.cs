@@ -403,6 +403,7 @@ namespace H.Necessaire
         public static implicit operator PartialPeriodOfTime(PartialDateTime partialDateTime) => new PartialPeriodOfTime { From = partialDateTime?.Duplicate(), To = partialDateTime?.Duplicate(), };
         public static implicit operator PartialPeriodOfTime((PartialDateTime, PartialDateTime) tuple) => new PartialPeriodOfTime { From = tuple.Item1?.Duplicate(), To = tuple.Item2?.Duplicate(), };
         public static implicit operator PeriodOfTime(PartialPeriodOfTime partialPeriodOfTime) => new PeriodOfTime { From = partialPeriodOfTime.From, To = partialPeriodOfTime.To, };
+        public static implicit operator PartialPeriodOfTime(PeriodOfTime periodOfTime) => new PartialPeriodOfTime { From = periodOfTime.From == null ? null : periodOfTime.From, To = periodOfTime.To == null ? null : periodOfTime.To, };
 
         public static bool operator ==(PartialPeriodOfTime left, PartialPeriodOfTime right) => left is null ? right is null : left.IsSameAs(right);
         public static bool operator !=(PartialPeriodOfTime left, PartialPeriodOfTime right) => left is null ? !(right is null) : !left.IsSameAs(right);

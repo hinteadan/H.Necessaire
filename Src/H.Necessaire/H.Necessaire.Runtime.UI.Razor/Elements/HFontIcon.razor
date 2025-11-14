@@ -1,0 +1,34 @@
+﻿@inherits Abstracts.HRazorComponentBase
+
+<i @onclick=TriggerClick data-action-tag="@ActionTag" class="h-necessaire @nameof(HFontIcon) @FontAwesomeVariant @FontAwesomeStyle @IconName @CssClassAddOns @(OnClick != null ? "h-crs-point" : "") @(IsBusy ? "dsbl" : null)" style="@(Color is null ? null : $"color: {Color.ToCssRGBA()};") @Style" />
+
+@code {
+	[Parameter] public string IconName { get; set; } = null;
+	[Parameter] public ColorInfo Color { get; set; } = null;
+	[Parameter] public string CssClassAddOns { get; set; } = null;
+	[Parameter] public string Style { get; set; } = null;
+	[Parameter] public string FontAwesomeVariant { get; set; } = HFontAwesomeVariant.Solid;
+	[Parameter] public string FontAwesomeStyle { get; set; } = HFontAwesomeStyle.Default;
+	[Parameter] public Func<Task> OnClick { get; set; }
+	[Parameter] public string ActionTag { get; set; }
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		Color ??= Branding.TextColor;
+	}
+
+	async Task TriggerClick()
+	{
+		if (IsBusy)
+			return;
+
+		using (BusyScope())
+		{
+			if (OnClick is not null)
+			{
+				await HSafe.Run(OnClick).LogError(log, ActionTag.IfEmpty($"{nameof(HFontIcon)}({IconName.IfEmpty("::Untitled::")}).TriggerClick()"));
+			}
+		}
+	}
+}

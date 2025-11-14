@@ -1,0 +1,45 @@
+﻿@inherits Abstracts.HRazorComponentBase
+
+<footer class="h-necessaire @nameof(HBrandingFooter)" style="
+height: @(SizingUnit * 3)px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+text-align: center;
+color: @(Branding.MuteColor.ToCssRGBA());
+font-size: @(Branding.Typography.FontSizeSmaller.EmsCss);
+background-color: @(Branding.SecondaryColorTranslucent.ToCssRGBA());
+box-shadow: 0 -3.2px 7.2px 0 rgba(0,0,0,.132),0 .6px 1.8px 0 rgba(0,0,0,.108);
+">
+    <div class="h-necessaire">
+        <span>@RenderCopyrightLabel()</span>
+    </div>
+</footer>
+
+@code {
+    H.Necessaire.Version appVersion = null;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        appVersion = await GetAppVersion() ?? H.Necessaire.Version.Unknown;
+    }
+    
+    string RenderCopyrightLabel()
+    {
+        return
+            Config?.Get("App")?.Get("Copyright")?.ToString()?.Replace("{year}", DateTime.Today.Year.ToString())?.Replace("{version}", PrintAppVersion())
+            ??
+            $"Copyright © {DateTime.Today.Year}. H.Necessaire by Hintea Dan Alexandru. All rights reserved. {PrintAppVersion()}"
+            ;
+    }
+
+    string PrintAppVersion()
+    {
+        return
+            appVersion?.Number?.Semantic != null
+            ? $"v{appVersion.Number.Semantic}"
+            : string.Empty
+            ;
+    }
+}

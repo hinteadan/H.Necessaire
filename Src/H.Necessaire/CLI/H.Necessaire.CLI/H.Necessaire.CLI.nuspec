@@ -22,7 +22,7 @@
       <dependency id="H.Necessaire.Serialization" version="2.45.5" />
       <dependency id="H.Necessaire.Runtime.CLI" version="2.45.5" />
       <dependency id="H.Versioning" version="2.0.6" />
-      <dependency id="System.Runtime.Caching" version="9.0.11" />
+      <dependency id="System.Runtime.Caching" version="10.0.0" />
     </dependencies>
   </metadata>
   <files>

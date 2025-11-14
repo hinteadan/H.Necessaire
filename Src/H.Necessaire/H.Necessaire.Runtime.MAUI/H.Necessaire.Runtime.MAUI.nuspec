@@ -17,9 +17,9 @@
     <copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</copyright>
     <tags>hintea dan alexandru .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections batch task array rad rapid application development framework MAUI</tags>
     <dependencies>
-      <dependency id="CommunityToolkit.Maui" version="12.3.0" />
+      <dependency id="CommunityToolkit.Maui" version="13.0.0" />
       <dependency id="H.Necessaire.Runtime" version="2.45.5" />
-      <dependency id="Microsoft.Maui.Controls" version="9.0.120" />
+      <dependency id="Microsoft.Maui.Controls" version="10.0.10" />
     </dependencies>
   </metadata>
   <files>

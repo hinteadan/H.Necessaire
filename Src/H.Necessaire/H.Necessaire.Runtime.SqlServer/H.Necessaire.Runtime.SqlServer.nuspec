@@ -22,6 +22,7 @@
       <dependency id="H.Necessaire.Dapper" version="2.45.5" />
       <dependency id="H.Necessaire.Serialization" version="2.45.5" />
       <dependency id="Microsoft.Data.SqlClient" version="5.2.3" />
+      <dependency id="System.Runtime.Caching" version="10.0.0" />
     </dependencies>
   </metadata>
   <files>

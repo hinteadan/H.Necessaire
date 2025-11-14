@@ -21,6 +21,7 @@
       <dependency id="H.Necessaire.Runtime" version="2.45.5" />
       <dependency id="Spectre.Console" version="0.54.0" />
       <dependency id="Spectre.Console.Json" version="0.54.0" />
+      <dependency id="System.Text.Json" version="10.0.0" />
     </dependencies>
   </metadata>
   <files>

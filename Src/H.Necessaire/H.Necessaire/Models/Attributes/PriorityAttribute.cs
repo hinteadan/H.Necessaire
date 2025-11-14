@@ -2,7 +2,7 @@
 
 namespace H.Necessaire
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
     public class PriorityAttribute : Attribute
     {
         public PriorityAttribute(int priority)

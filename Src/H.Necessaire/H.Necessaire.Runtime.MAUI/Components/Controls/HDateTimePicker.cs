@@ -30,13 +30,13 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             }
         }
 
-        public DateTime MinimumDate
+        public DateTime? MinimumDate
         {
             get => datePicker.MinimumDate;
             set => datePicker.MinimumDate = value;
         }
 
-        public DateTime MaximumDate
+        public DateTime? MaximumDate
         {
             get => datePicker.MaximumDate;
             set => datePicker.MaximumDate = value;
@@ -112,9 +112,12 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             if (nullabelControl.IsNull)
                 return null;
 
+            if (datePicker.Date is null)
+                return null;
+
             DateTime result
-                = new DateTime(datePicker.Date.Year, datePicker.Date.Month, datePicker.Date.Day, 0, 0, 0, DateTimeKind.Local)
-                .Add(timePicker.Time)
+                = new DateTime(datePicker.Date.Value.Year, datePicker.Date.Value.Month, datePicker.Date.Value.Day, 0, 0, 0, DateTimeKind.Local)
+                .Add(timePicker.Time ?? TimeSpan.Zero)
                 .EnsureUtc()
                 ;
 

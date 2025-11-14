@@ -1,0 +1,35 @@
+﻿@using H.Necessaire
+@using H.Necessaire.Runtime.UI.Razor.Abstracts
+@using H.Necessaire.Runtime.UI.Razor.Elements
+@inherits HRazorComponentBase
+
+<div class="h-necessaire @nameof(HEphemeralTypeChrome) flex-node @CssClassAddOns">
+
+	<div class="@nameof(HEphemeralTypeChrome)-Content flex-node">
+		@ChildContent
+	</div>
+
+	@if (Ephemerality is not null)
+	{
+		<div class="@nameof(HEphemeralTypeChrome)-Ephemerality flex-item-h h-info-section h-pad itm-c cnt-r" style="font-size: @Branding.Typography.FontSizeSmaller.EmsCss; white-space: wrap;">
+			<em style="margin-right: @(SizingUnit / 2)px;">as of</em>
+			<strong>~ @Ephemerality.AsOf.PrintDateTimeAsOfNow()</strong>
+			@if (Ephemerality.ExpiresAt != null)
+			{
+				<em style="margin: 0 @(SizingUnit / 2)px;">valid till</em>
+				<strong>
+					@(Ephemerality.ExpiresAt.Value.Date == DateTime.Today ? Ephemerality.ExpiresAt.Value.PrintTime() : Ephemerality.ExpiresAt.Value.PrintDateAndTime())
+					<em>(in ~ @((Ephemerality.ExpiresAt.Value - DateTime.UtcNow).PrintTimeSpan()))</em>
+				</strong>
+
+			}
+		</div>
+	}
+
+</div>
+
+@code {
+	[Parameter] public RenderFragment ChildContent { get; set; }
+	[Parameter] public IEphemeralType Ephemerality { get; set; }
+	[Parameter] public string CssClassAddOns { get; set; } = null;
+}

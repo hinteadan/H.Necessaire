@@ -298,6 +298,11 @@ namespace H.Necessaire
             return (collection?.Count ?? 0) == 0;
         }
 
+        public static bool IsEmpty<T>(this ICollection<T> collection)
+        {
+            return (collection?.Count ?? 0) == 0;
+        }
+
         public static T[] NullIfEmpty<T>(this T[] value)
         {
             if (value.IsEmpty())

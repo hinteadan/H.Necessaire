@@ -116,6 +116,7 @@ namespace H.Necessaire.Testicles.Unit
         {
             string label = versionNumber is null ? nullVersionNumberLabel : versionNumber.ToString();
 
+#pragma warning disable CS1718 // Comparison made to same variable
             (versionNumber == versionNumber).Should().BeTrue(because: $"{label} == {label}");
             (versionNumber != versionNumber).Should().BeFalse(because: $"{label} == {label}");
             if (versionNumber is null)
@@ -127,6 +128,7 @@ namespace H.Necessaire.Testicles.Unit
             (versionNumber < versionNumber).Should().BeFalse(because: $"{label} is not < {label}");
             (versionNumber >= versionNumber).Should().BeTrue(because: $"{label} is >= (equal to) {label}");
             (versionNumber <= versionNumber).Should().BeTrue(because: $"{label} is <= (equal to) {label}");
+#pragma warning restore CS1718 // Comparison made to same variable
 
             if (versionNumber is null)
                 new Action(() => versionNumber.CompareTo(versionNumber)).Should().Throw<NullReferenceException>(because: $"{label} is null, can't call CompareTo() on null");

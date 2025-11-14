@@ -6,10 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
 
 namespace H.Necessaire.Runtime.Integration.NetCore
 {
+    [Obsolete]
     public class DefaultStartup
     {
 

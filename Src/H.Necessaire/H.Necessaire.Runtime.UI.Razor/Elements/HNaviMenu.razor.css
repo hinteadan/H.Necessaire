@@ -1,0 +1,17 @@
+﻿.HNaviMenu {
+    
+}
+
+    .HNaviMenu .navi.item {
+        text-decoration: none;
+    }
+
+    .HNaviMenu .h-navi-burger {
+        text-decoration: none;
+    }
+
+    .HNaviMenu .h-navi-pop-menu {
+        position: fixed;
+        z-index: 17;
+        right: 0;
+    }

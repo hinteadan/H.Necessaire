@@ -19,12 +19,13 @@
     <dependencies>
       <dependency id="H.Necessaire" version="2.45.5" />
       <dependency id="H.Necessaire.Serialization" version="2.45.5" />
-      <dependency id="Microsoft.Bcl.AsyncInterfaces" version="9.0.11" />
+      <dependency id="Microsoft.Bcl.AsyncInterfaces" version="10.0.0" />
       <dependency id="Newtonsoft.Json" version="13.0.4" />
       <dependency id="StandardSocketsHttpHandler" version="2.2.0.8" />
       <dependency id="UrlBase64" version="2.0.0" />
       <dependency id="DeviceDetector.NET" version="6.4.7" />
       <dependency id="BouncyCastle.Cryptography" version="2.6.2" />
+      <dependency id="System.Text.Json" version="10.0.0" />
     </dependencies>
   </metadata>
   <files>

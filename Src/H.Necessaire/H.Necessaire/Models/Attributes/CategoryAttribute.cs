@@ -2,7 +2,7 @@
 
 namespace H.Necessaire
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
     public class CategoryAttribute : Attribute
     {
         public CategoryAttribute(params string[] categories)

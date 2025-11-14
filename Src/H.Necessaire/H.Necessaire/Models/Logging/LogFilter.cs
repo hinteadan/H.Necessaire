@@ -4,6 +4,8 @@ namespace H.Necessaire
 {
     public class LogFilter : SortFilterBase, IPageFilter
     {
+        public string[] SearchStrings { get; set; }
+
         public Guid[] IDs { get; set; }
         public LogEntryLevel[] Levels { get; set; }
         public Guid[] ScopeIDs { get; set; }

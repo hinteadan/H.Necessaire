@@ -25,10 +25,10 @@
       <dependency id="Microsoft.AspNetCore.Routing" version="2.3.0" />
       <dependency id="Microsoft.AspNetCore.Routing.Abstractions" version="2.3.0" />
       <dependency id="Microsoft.AspNetCore.StaticFiles" version="2.3.0" />
-      <dependency id="Microsoft.Extensions.FileProviders.Physical" version="9.0.11" />
-      <dependency id="Microsoft.Extensions.Hosting.Abstractions" version="9.0.11" />
-      <dependency id="Microsoft.Extensions.Logging" version="9.0.11" />
-      <dependency id="Microsoft.Extensions.Logging.Configuration" version="9.0.11" />
+      <dependency id="Microsoft.Extensions.FileProviders.Physical" version="10.0.0" />
+      <dependency id="Microsoft.Extensions.Hosting.Abstractions" version="10.0.0" />
+      <dependency id="Microsoft.Extensions.Logging" version="10.0.0" />
+      <dependency id="Microsoft.Extensions.Logging.Configuration" version="10.0.0" />
     </dependencies>
   </metadata>
   <files>

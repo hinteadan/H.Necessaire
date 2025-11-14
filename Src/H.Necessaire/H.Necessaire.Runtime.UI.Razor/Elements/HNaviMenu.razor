@@ -1,0 +1,75 @@
+﻿@using H.Necessaire.Runtime.UI.Razor.Layouts
+@using H.Necessaire.UI
+@inherits Abstracts.HRazorComponentBase
+
+<HeadContent>
+    <style>
+        .HNaviMenu .h-navi-pop-menu {
+            background-color: @(Branding.PrimaryColorTranslucent.ToCssRGBA());
+            padding: @(SizingUnit)px;
+        }
+    </style>
+</HeadContent>
+
+<div class="h-necessaire @nameof(HNaviMenu) flex-node-h unflex">
+
+    @if (NaviItems.IsEmpty())
+    {
+        <div><em>No Navi Items specified</em></div>
+    }
+    else
+    {
+        <div class="h-necessaire navi item h-navi-burger flex-node unflex h-pad small-width-only" id="@naviBurgerID">
+            <HCenteredContent>
+                <i class="fa-solid fa-bars"></i>
+            </HCenteredContent>
+        </div>
+
+        <div class="h-necessaire h-navi-pop-menu flex-node" id="@naviPopMenuID" style="display: none;">
+            @foreach (UserOption userOption in NaviItems)
+            {
+                <div class="h-necessaire navi item flex-node-h unflex h-pad">
+                    @NaviItemTemplate(userOption)
+                </div>
+            }
+        </div>
+
+        @foreach (UserOption userOption in NaviItems)
+        {
+            <div class="h-necessaire navi item h-pad flex-node big-width-only" style="justify-content: center;">
+                @NaviItemTemplate(userOption)
+            </div>
+        }
+    }
+
+</div>
+
+<script>
+    (function(){
+
+        const naviBurger = document.getElementById('@(naviBurgerID)');
+        const naviPopMenu = document.getElementById('@(naviPopMenuID)');
+
+        naviBurger.addEventListener('click', e => {
+            const isVisible = !naviPopMenu.style.display;
+            naviPopMenu.style.top = `${naviBurger.clientHeight}px`;
+            naviPopMenu.style.display = isVisible ? 'none' : null;
+        });
+
+        window.addEventListener('resize', e => {
+            naviPopMenu.style.display = 'none';
+        });
+
+    })();
+</script>
+
+
+
+@code {
+    [Parameter, EditorRequired] public RenderFragment<UserOption> NaviItemTemplate { get; set; }
+    [Parameter, EditorRequired] public UserOption[] NaviItems { get; set; }
+
+    readonly string naviBurgerID = $"h-navi-burger-{Guid.NewGuid()}";
+    readonly string naviPopMenuID = $"h-navi-pop-menu-{Guid.NewGuid()}";
+}
+

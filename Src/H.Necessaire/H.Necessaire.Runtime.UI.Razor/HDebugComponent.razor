@@ -1,0 +1,13 @@
+﻿<div class="h-necessaire h-debug">
+    <h3>HDebugComponent</h3>
+
+    <div>
+        <i class="fa-solid fa-circle-user"></i>
+    </div>
+
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+}

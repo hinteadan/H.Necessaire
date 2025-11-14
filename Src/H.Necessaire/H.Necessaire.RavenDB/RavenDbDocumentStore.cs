@@ -3,6 +3,7 @@ using Raven.Client.Json.Serialization.NewtonsoftJson;
 using System;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using static Raven.Client.Constants;
 
 namespace H.Necessaire.RavenDB
 {
@@ -47,7 +48,7 @@ namespace H.Necessaire.RavenDB
                 // Set conventions as necessary (optional)
                 Conventions =
                 {
-                    MaxNumberOfRequestsPerSession = 10,
+                    MaxNumberOfRequestsPerSession = 100,
                     UseOptimisticConcurrency = true,
                     Serialization = new NewtonsoftJsonSerializationConventions {
                         CustomizeJsonDeserializer = x => {
@@ -83,7 +84,7 @@ namespace H.Necessaire.RavenDB
             {
                 byte[] bytes = new byte[stream.Length];
                 stream.Read(bytes, 0, bytes.Length);
-                X509Certificate2 cert = new X509Certificate2(bytes, clientCertificatePassword, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable);
+                X509Certificate2 cert = new X509Certificate2(bytes, clientCertificatePassword/*, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable*/);
                 return cert;
             }
         }

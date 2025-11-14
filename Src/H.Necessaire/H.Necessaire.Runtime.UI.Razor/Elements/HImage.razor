@@ -1,0 +1,23 @@
+﻿@inherits Abstracts.HRazorComponentBase
+
+<div class="h-necessaire @nameof(HImage) h-img@(!IsTinted ? null : " tinted") @Classes" style="
+@(!IsTinted ? $"background-image: url('{Url}');" : null)
+@(IsTinted ? $"mask-image: url('{Url}');" : null)
+@(IsTinted ? $"-webkit-mask-image: url('{Url}');" : null)
+@(IsTinted ? $"background-color: {Tint.ToCssRGBA()};" : null)
+@Width.MorphIfNotEmpty(x => $"width: {x};")
+@Height.MorphIfNotEmpty(x => $"height: {x};")
+@Styles
+">
+
+</div>
+
+@code {
+    [Parameter] public string Url { get; set; }
+    [Parameter] public ColorInfo Tint { get; set; }
+    [Parameter] public string Width { get; set; }
+    [Parameter] public string Height { get; set; }
+    [Parameter] public string Classes { get; set; }
+    [Parameter] public string Styles { get; set; }
+    bool IsTinted => Tint is not null;
+}

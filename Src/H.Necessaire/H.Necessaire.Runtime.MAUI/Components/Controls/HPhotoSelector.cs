@@ -71,14 +71,15 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                         {
                             using (Disable(btn))
                             {
-                                FileResult selection = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions
+                                List<FileResult> selection = await MediaPicker.Default.PickPhotosAsync(new MediaPickerOptions
                                 {
                                     Title = "Select Photo",
+                                    SelectionLimit = 1,
                                 });
 
                                 CurrentState = state.And(x =>
                                 {
-                                    x.SelectedPhoto = selection;
+                                    x.SelectedPhoto = selection?.SingleOrDefault();
                                 });
 
                                 await selectionChangedRaiser.Raise(state.SelectedPhoto);

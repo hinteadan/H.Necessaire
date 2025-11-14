@@ -1,4 +1,6 @@
-﻿namespace H.Necessaire
+﻿using System.IO;
+
+namespace H.Necessaire
 {
     public static class FileSystemExtensions
     {
@@ -18,6 +20,47 @@
                 return escapedValue;
 
             return escapedValue.Substring(0, maxLength.Value);
+        }
+
+        /// <summary>
+        /// Copies an entire folder and its contents, deep/recursively; overwrites any existing folders/files
+        /// Destination folder is created if it doesn't exist
+        /// </summary>
+        /// <param name="source">Folder to copy</param>
+        /// <param name="target">Destination folder to copy to</param>
+        public static void CopyTo(this DirectoryInfo source, DirectoryInfo target)
+        {
+            if (source?.Exists != true)
+            {
+                return;
+            }
+
+            if (target is null)
+            {
+                return;
+            }
+
+            if (source.FullName.Is(target.FullName))
+            {
+                return;
+            }
+
+            // Check if the target directory exists, if not, create it.
+            target.Create();
+
+            // Copy each file into it's new directory.
+            foreach (FileInfo fi in source.GetFiles())
+            {
+                fi.CopyTo(Path.Combine(target.ToString(), fi.Name), true);
+            }
+
+            // Copy each subdirectory using recursion.
+            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
+            {
+                DirectoryInfo nextTargetSubDir =
+                    target.CreateSubdirectory(diSourceSubDir.Name);
+                diSourceSubDir.CopyTo(nextTargetSubDir);
+            }
         }
     }
 }

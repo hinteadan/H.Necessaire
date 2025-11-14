@@ -1,0 +1,353 @@
+﻿@inherits Abstracts.HRazorComponentBase
+
+@code {
+    [Parameter] public bool RenderAppIcon { get; set; } = true;
+}
+
+<link rel="stylesheet" href="@Assets["_content/H.Necessaire.Runtime.UI.Razor/fontawesome-free-7.0.1-web/css/all.css"]" />
+<link rel="stylesheet" href="@Assets["_content/H.Necessaire.Runtime.UI.Razor/h.css"]" />
+<link rel="stylesheet" href="@Assets["_content/H.Necessaire.Runtime.UI.Razor/h-animation.css"]" />
+<link rel="stylesheet" href="@Assets["_content/H.Necessaire.Runtime.UI.Razor/Fira_Code_v6.2/fira_code.css"]" />
+
+@if (RenderAppIcon)
+{
+<link rel="apple-touch-icon" href="@Assets["_content/H.Necessaire.Runtime.UI.Razor/AppIcon/apple-touch-icon.png"]" sizes="180x180" />
+<link rel="icon" type="image/png" href="@Assets["_content/H.Necessaire.Runtime.UI.Razor/AppIcon/favicon-32x32.png"]" sizes="32x32" />
+<link rel="icon" type="image/png" href="@Assets["_content/H.Necessaire.Runtime.UI.Razor/AppIcon/favicon-16x16.png"]" sizes="16x16" />
+<link rel="manifest" href="@Assets["_content/H.Necessaire.Runtime.UI.Razor/AppIcon/site.webmanifest"]" />
+}
+
+@code {
+    const string animationDuration = "0.4s";
+    const string blurAmount = "2px";
+}
+
+@if (!Branding.Typography.FontFamilyUrls.IsEmpty())
+{
+    @foreach (var url in Branding.Typography.FontFamilyUrls)
+    {
+        <link href="@url" rel="stylesheet" />
+    }
+}
+
+<style>
+    html, body {
+        background-color: @(Branding.BackgroundColorTranslucent.ToCssRGBA());
+        font-family: @((MarkupString)Branding.Typography.FontFamily);
+
+    }
+
+    .h-side-modal {
+        background-color: @(Branding.BackgroundColor.ToCssRGBA());
+    }
+
+    .h-pad {
+        padding: @(SizingUnit / 2)px;
+    }
+    .h-pad-up {
+        padding-top: @(SizingUnit)px;
+    }
+    .h-pad-dn {
+        padding-bottom: @(SizingUnit)px;
+    }
+    .h-pad-l {
+        padding-left: @(SizingUnit)px;
+    }
+    .h-pad-r {
+        padding-right @(SizingUnit)px;
+    }
+    .h-pad-v {
+        padding: @(SizingUnit / 2)px 0;
+    }
+    .h-pad-h {
+        padding: 0 @(SizingUnit / 2)px;
+    }
+
+    .h-mrg {
+        margin: @(SizingUnit / 2)px;
+    }
+    .h-mrg-up {
+        margin-top: @(SizingUnit)px;
+    }
+    .h-mrg-dn {
+        margin-bottom: @(SizingUnit)px;
+    }
+    .h-mrg-l {
+        margin-left: @(SizingUnit)px;
+    }
+    .h-mrg-r {
+        margin-right @(SizingUnit)px;
+    }
+    .h-mrg-v {
+        margin: @(SizingUnit / 2)px 0;
+    }
+    .h-mrg-h {
+        margin: 0 @(SizingUnit / 2)px;
+    }
+
+    .h-brd-dn {
+        border-bottom: solid 1px @Branding.PrimaryColorFaded.ToCssRGBA();
+    }
+
+    .h-info-section {
+        background-color: @Branding.Colors.Complementary.Color.WithOpacity(.17f).ToCssRGBA();
+    }
+
+    a:link, a:visited, a:hover, a:active, a:focus {
+        color: inherit;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    a:focus, a:hover {
+        opacity: 0.8;
+    }
+
+    input, select, textarea, button {
+        font-family: @((MarkupString)Branding.Typography.FontFamily);
+        padding: @(Branding.SizingUnitInPixels / 2)px;
+        font-size: @(Branding.Typography.FontSize.PointsCss);
+        border-radius: @(Branding.SizingUnitInPixels / 5)px;
+        border: solid 1px rgba(0, 0, 0, 0.45);
+        background-color: rgba(255, 255, 255, 0.83);
+        margin: @(Branding.SizingUnitInPixels / 2)px;
+    }
+
+    .h-necessaire .e-float-input,
+    .h-necessaire .e-control,
+    .h-necessaire .e-css,
+    .h-necessaire .e-error {
+        font-family: @((MarkupString)Branding.Typography.FontFamily);
+        font-size: @(Branding.Typography.FontSize.PointsCss);
+        font-weight: normal;
+    }
+
+    button {
+        cursor: pointer;
+    }
+
+    .h-btn {
+        background-color: @(Branding.PrimaryColor.ToCssRGBA());
+        color: @(Branding.BackgroundColor.ToCssRGBA());
+    }
+
+    .dsbl {
+        opacity: .37!important;
+        cursor: not-allowed;
+    }
+
+    .h-btn.dngr {
+        background-color: @(Branding.DangerColor.ToCssRGBA());
+    }
+
+    .h-btn.sces {
+        background-color: @(Branding.SuccessColor.ToCssRGBA());
+    }
+
+    .h-btn.wrng {
+        background-color: @(Branding.WarningColor.ToCssRGBA());
+    }
+
+    .h-btn.info {
+        background-color: @(Branding.InformationColor.ToCssRGBA());
+    }
+
+    .h-btn.mute {
+        color: @(Branding.MuteColor.ToCssRGBA());
+    }
+
+
+    .h-btn:hover {
+        opacity: .9;
+    }
+
+    .h-btn:active {
+        opacity: .8;
+    }
+
+
+    .h-txt.dngr {
+        color: @(Branding.DangerColor.ToCssRGBA());
+    }
+
+    .h-txt.sces {
+        color: @(Branding.SuccessColor.ToCssRGBA());
+    }
+
+    .h-txt.wrng {
+        color: @(Branding.WarningColor.ToCssRGBA());
+    }
+
+    .h-txt.info {
+        color: @(Branding.InformationColor.ToCssRGBA());
+    }
+
+    .h-txt.mute {
+        color: @(Branding.MuteColor.ToCssRGBA());
+    }
+
+
+    .h-txt.normal {
+        font-size: @(Branding.Typography.FontSize.EmsCss);
+    }
+    .h-txt.smaller {
+        font-size: @(Branding.Typography.FontSizeSmaller.EmsCss);
+    }
+    .h-txt.small {
+        font-size: @(Branding.Typography.FontSizeSmall.EmsCss);
+    }
+    .h-txt.large {
+        font-size: @(Branding.Typography.FontSizeLarge.EmsCss);
+    }
+    .h-txt.larger {
+        font-size: @(Branding.Typography.FontSizeLarger.EmsCss);
+    }
+
+    .navi.item {
+        color: inherit;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+        .navi.item:hover, .navi.item:focus {
+            text-decoration: underline;
+            opacity: 0.8;
+        }
+
+        .navi.item.active {
+            color: @(Branding.Colors.Primary.Darker(3).ToCssRGBA());
+            font-weight: bold;
+        }
+
+    .mouse-highlight:hover {
+        background-color: @(Branding.SecondaryColorTranslucent.WithOpacity(.17f).ToCssRGBA())!important;
+    }
+
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    table th, table td {
+        padding: @(Branding.SizingUnitInPixels / 2)px;
+    }
+
+    table thead th {
+        background-color: @(Branding.PrimaryColor.ToCssRGBA());
+    }
+
+    table tbody tr:nth-child(even) td {
+        background-color: @(Branding.PrimaryColorFaded.ToCssRGBA());
+    }
+
+    table tbody tr:hover td {
+        background-color: @(Branding.PrimaryColorTranslucent.ToCssRGBA());
+    }
+
+    .underline {
+        text-decoration: underline;
+        text-underline-offset: 10px;
+        text-decoration-style: dotted;
+        text-decoration-thickness: 1px;
+    }
+
+    .underline-on-hover {
+        transition: @(animationDuration);
+        text-decoration: underline;
+        text-decoration-color: rgba(0, 0, 0, 0);
+        text-underline-offset: 10px;
+        text-decoration-style: dotted;
+        text-decoration-thickness: 1px;
+    }
+
+    .underline-on-hover:hover {
+        text-decoration-color: inherit;
+    }
+
+    .opaque-on-hover {
+        opacity: 0.63;
+        transition: @(animationDuration);
+    }
+
+    .opaque-on-hover:hover { 
+        opacity: 1;
+    }
+
+    .noselect {
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* Non-prefixed version, currently
+                                      supported by Chrome, Edge, Opera and Firefox */
+    }
+
+    h1, h2, h3, h4, h5, h6
+    {
+        color: @(Branding.Colors.Primary.Darker(3).ToCssRGBA());
+    }
+
+    p {
+        margin-top: @(Branding.SizingUnitInPixels)px;
+        margin-bottom: @(Branding.SizingUnitInPixels)px;
+    }
+
+    .markdown-view pre {
+        overflow-x: auto;
+    }
+
+    .markdown-view pre code 
+    {
+        width: 0;
+        display: inline-block;
+    }
+
+    .markdown-view pre {
+        background-color: @(Branding.Colors.Complementary.Lighter(1).WithOpacity(.83f).ToCssRGBA());
+        padding: @(Branding.SizingUnitInPixels / 2)px;
+        color: @(Branding.TextColor.ToCssRGBA());
+    }
+
+    .markdown-view code {
+        font-family: 'Fira Code', monospace;
+    }
+
+    .markdown-view strong {
+        color: @(Branding.Colors.Primary.Color.ToCssRGBA());
+    }
+
+    @@keyframes morph-in {
+        from {
+            scale: 1.05; 
+            opacity: .1;
+            -webkit-filter: blur(@blurAmount);
+            -moz-filter: blur(@blurAmount);
+            -o-filter: blur(@blurAmount);
+            -ms-filter: blur(@blurAmount);
+            filter: blur(@blurAmount);
+        }
+    }
+
+    .animate {
+        animation-duration: @animationDuration;
+        animation-timing-function: ease;
+    }
+
+    .animate.morph-in {
+        animation-name: morph-in;
+    }
+
+    .blur-underneath {
+        backdrop-filter: blur(@blurAmount);
+    }
+
+    @@media screen and (max-width: 1000px) {
+        .h-lay
+        {
+            margin: 0 @(SizingUnit)px;
+        }
+    }
+
+    
+</style>

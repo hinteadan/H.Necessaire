@@ -21,7 +21,8 @@
       <dependency id="H.Necessaire.Runtime" version="2.45.5" />
       <dependency id="H.Necessaire.Dapper" version="2.45.5" />
       <dependency id="H.Necessaire.Serialization" version="2.45.5" />
-      <dependency id="Microsoft.Data.Sqlite" version="9.0.11" />
+      <dependency id="Microsoft.Data.Sqlite" version="10.0.0" />
+      <dependency id="System.Text.Json" version="10.0.0" />
     </dependencies>
   </metadata>
   <files>

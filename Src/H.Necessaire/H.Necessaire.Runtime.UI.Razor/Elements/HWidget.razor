@@ -1,0 +1,29 @@
+﻿@using H.Necessaire.Runtime.UI.Razor.Abstracts
+@inherits HRazorComponentBase
+
+<div class="h-necessaire @nameof(HWidget) flex-item h-mrg h-lvt-4 @CssClassAddOns" style="background-color: @Branding.BackgroundColorTranslucent.ToCssRGBA();">
+
+	<div class="@nameof(HWidget)-Header flex-item-h h-pad" style="background-color: @Branding.Colors.Primary.Lighter(5).ToCssRGBA(); font-size: @Branding.Typography.FontSizeSmall.EmsCss;">
+		@if (!IconName.IsEmpty())
+		{
+			<div class="@nameof(HWidget)-Header-Icon flex-item cnt-c itm-c" style="margin-right: @(SizingUnit / 2)px;">
+				<HFontIcon IconName="@IconName" CssClassAddOns="flex-item" />
+			</div>
+		}
+		<div class="@nameof(HWidget)-Header-Title flex-node-h cnt-c itm-c">
+			@Header
+		</div>
+	</div>
+
+	<div class="@nameof(HWidget)-Content flex-node cnt-c">
+		@ChildContent
+	</div>
+
+</div>
+
+@code {
+	[Parameter] public RenderFragment ChildContent { get; set; }
+	[Parameter] public RenderFragment Header { get; set; }
+	[Parameter] public string CssClassAddOns { get; set; } = null;
+	[Parameter] public string IconName { get; set; } = null;
+}

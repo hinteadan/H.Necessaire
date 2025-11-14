@@ -19,7 +19,7 @@
     <dependencies>
       <dependency id="H.Necessaire" version="2.45.5" />
       <dependency id="H.Necessaire.Serialization" version="2.45.5" />
-      <dependency id="Microsoft.Bcl.AsyncInterfaces" version="9.0.11" />
+      <dependency id="Microsoft.Bcl.AsyncInterfaces" version="10.0.0" />
       <dependency id="RavenDB.Client" version="7.1.4" />
     </dependencies>
   </metadata>

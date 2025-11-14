@@ -1,0 +1,36 @@
+﻿@using H.Necessaire.Runtime.UI.Razor.Elements
+@using H.Necessaire.Runtime.UI.Razor.Layouts
+@inherits Abstracts.HRazorComponentBase
+
+<div class="h-necessaire @nameof(HDefaultChrome)" style="width: 100%; height: 100%; display: flex; flex-direction: column;">
+
+    @if(IsHeaderFullReplacement)
+    {
+        @Header
+    }
+    else
+    {
+        <HBrandingHeader>
+            <ChildContent>
+                @Header
+            </ChildContent>
+            <UserContent>
+                @HeaderUserContent
+            </UserContent>
+        </HBrandingHeader>
+    }
+
+    <HMainLayout>
+        <HScrollableContent>
+            @ChildContent
+        </HScrollableContent>
+    </HMainLayout>
+
+</div>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment Header { get; set; }
+    [Parameter] public RenderFragment HeaderUserContent { get; set; }
+    [Parameter] public bool IsHeaderFullReplacement { get; set; } = false;
+}

@@ -120,7 +120,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                     {
                         if (!note.IsEmpty() && IsNoteRemovalUserConfirmed)
                         {
-                            bool isConfirmed = await Application.Current.Windows[0].Page.DisplayAlert("Delete note?", "Are you sure you want to delete the underlying note?", "Yes", "No");
+                            bool isConfirmed = await Application.Current.Windows[0].Page.DisplayAlertAsync("Delete note?", "Are you sure you want to delete the underlying note?", "Yes", "No");
                             if (!isConfirmed)
                                 return;
                         }

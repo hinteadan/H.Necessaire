@@ -6,6 +6,7 @@
         public int PageIndex { get; set; } = 0;
         public int PageSize { get; set; } = 10;
         public int? TotalNumberOfPages { get; set; } = null;
+        public long? TotalCount { get; set; } = null;
 
         public static Page<T> For(IPageFilter pagefilter, long allCount, params T[] content)
         {
@@ -17,6 +18,7 @@
                 TotalNumberOfPages = (pagefilter?.PageFilter?.PageSize ?? 0) > 0
                     ? (int)(allCount / pagefilter.PageFilter.PageSize) + (allCount % pagefilter.PageFilter.PageSize == 0 ? 0 : 1)
                     : 1,
+                TotalCount = allCount,
             };
         }
 
@@ -28,6 +30,7 @@
                 PageIndex = 0,
                 PageSize = content?.Length ?? 0,
                 TotalNumberOfPages = 1,
+                TotalCount = content?.Length ?? 0,
             };
         }
 
@@ -39,6 +42,7 @@
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 TotalNumberOfPages = totalNumberOfPages,
+                TotalCount = 0,
             };
         }
     }

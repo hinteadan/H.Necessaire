@@ -12,7 +12,7 @@ namespace H.Necessaire.Runtime
 
         public async Task<string> SecuredPong()
         {
-            UseCaseContext context = (await EnsureAuthentication()).Payload;
+            UseCaseContext context = (await EnsureAuthentication()).ThrowOnFailOrReturn();
 
             return $"Pong by {(context.SecurityContext.User?.ToString() ?? $"[Unknown User - {context.ID}]")} @ {DateTime.Now}";
         }

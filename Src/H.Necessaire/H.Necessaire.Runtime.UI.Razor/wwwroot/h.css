@@ -1,0 +1,206 @@
+﻿html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+*:focus-visible {
+    outline: 0;
+}
+
+.flex-node {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0px;
+}
+
+.flex-node-h {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    min-height: 0px;
+    min-width: 0px;
+}
+
+.flex-item {
+    display: flex;
+    flex-direction: column;
+    min-height: 0px;
+}
+
+.flex-item-h {
+    display: flex;
+    flex-direction: row;
+    min-height: 0px;
+    min-width: 0px;
+}
+
+    .flex-node.center, .flex-node-h.center {
+        justify-content: center;
+    }
+
+    .flex-node.unflex, .flex-node-h.unflex {
+        flex: none;
+    }
+
+.cnt-c {
+    justify-content: center;
+}
+.cnt-l {
+    justify-content: start;
+}
+.cnt-r {
+    justify-content: end;
+}
+.itm-c {
+    align-items: center;
+}
+.itm-l {
+    align-items: start;
+}
+.itm-r {
+    align-items: end;
+}
+.wrp {
+    flex-wrap: wrap;
+}
+.h-txt.bold {
+    font-weight: bold;
+}
+.h-txt.italic {
+    font-style: italic;
+}
+.h-txt.underline {
+    text-decoration: underline;
+}
+.h-txt.wrp {
+    white-space: wrap;
+    overflow-wrap: normal;
+    word-wrap: normal;
+}
+.h-txt.wrp.any {
+    overflow-wrap: anywhere;
+    word-wrap: anywhere;
+}
+.h-txt-elps, .h-txt.elps {
+    text-overflow: ellipsis;
+}
+pre {
+    margin: 0;
+    padding: 0;
+}
+.h-txt-mono, .h-txt.mono, pre {
+    font-family: 'Fira Code';
+}
+.h-crs-point {
+    cursor: pointer;
+}
+
+.h-lvt-0 {
+    box-shadow: 0 0 0 0 transparent;
+}
+
+.h-lvt-4 {
+    box-shadow: 0 1.6px 3.6px 0 rgba(0,0,0,.132),0 .3px .9px 0 rgba(0,0,0,.108);
+}
+
+.h-lvt-8 {
+    box-shadow: 0 3.2px 7.2px 0 rgba(0,0,0,.132),0 .6px 1.8px 0 rgba(0,0,0,.108);
+}
+
+.h-lvt-16 {
+    box-shadow: 0 6.4px 14.4px 0 rgba(0,0,0,.132),0 1.2px 3.6px 0 rgba(0,0,0,.108);
+}
+
+.h-lvt-64 {
+    box-shadow: 0 25.6px 57.6px 0 rgba(0,0,0,.22),0 4.8px 14.4px 0 rgba(0,0,0,.18);
+}
+
+.small-width-only {
+    display: none;
+}
+
+.big-width-only {
+}
+
+.h-side-modal {
+    width: 97vw;
+    height: 100vh;
+    background-color: #000000;
+    position: fixed;
+    top: 0;
+    right: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0px;
+    box-shadow: 0 25.6px 57.6px 0 rgba(0,0,0,.22),0 4.8px 14.4px 0 rgba(0,0,0,.18);
+}
+
+.h-side-modal-backdrop {
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent;
+    position: fixed;
+    top: 0;
+    right: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0px;
+    backdrop-filter: blur(10px);
+}
+
+@media screen and (max-width: 600px) {
+    .small-width-only {
+        display: inherit;
+    }
+
+    .big-width-only {
+        display: none;
+    }
+}
+
+.h-lay {
+    
+}
+@media screen and (max-width: 1000px) {
+    .h-lay {
+        
+    }
+}
+
+@media screen and (min-width: 1001px) and (max-width: 1900px) {
+    .h-lay {
+        margin: 0 5%;
+    }
+}
+
+@media screen and (min-width: 1901px) {
+    .h-lay {
+        margin: 0 10%;
+    }
+}
+
+.h-img {
+    /*background-image: url('url/to/image');*/
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+}
+
+        .h-img.tinted {
+            /*mask-image: url('url/to/image');*/
+            /*-webkit-mask-image: url('url/to/image');*/
+            /*background-color: #ffffff;*/
+            background-image: none;
+            background-blend-mode: overlay;
+            mask-repeat: no-repeat;
+            -webkit-mask-repeat: no-repeat;
+            mask-size: contain;
+            -webkit-mask-size: contain;
+            mask-position: center center;
+            -webkit-mask-position: center center;
+        }

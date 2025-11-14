@@ -31,7 +31,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
             if (!IsVisible)
                 return;
 
-            await this.FadeTo(0);
+            await this.FadeToAsync(0);
             IsVisible = false;
             Data = null;
         }

@@ -1,0 +1,105 @@
+﻿@keyframes h-anmt-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes h-anmt-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes h-anmt-side-modal-slide-in {
+    from {
+        margin-right: -97vw;
+        opacity: 0;
+    }
+
+    to {
+        margin-right: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes h-anmt-side-modal-slide-out {
+    from {
+        margin-right: 0;
+        opacity: 1;
+    }
+
+    to {
+        margin-right: -97vw;
+        opacity: 0;
+    }
+}
+
+@keyframes h-anmt-side-modal-backdrop-fade-in {
+    from {
+        backdrop-filter: blur(0px);
+        opacity: 0;
+    }
+
+    to {
+        backdrop-filter: blur(10px);
+        opacity: 1;
+    }
+}
+
+@keyframes h-anmt-side-modal-backdrop-fade-out {
+    from {
+        backdrop-filter: blur(10px);
+        opacity: 1;
+    }
+
+    to {
+        backdrop-filter: blur(0px);
+        opacity: 0;
+    }
+}
+
+.h-anmt-fade-in {
+    animation-name: h-anmt-fade-in;
+    animation-duration: .17s;
+    animation-direction: normal;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+.h-anmt-fade-out {
+    animation-name: h-anmt-fade-out;
+    animation-duration: .17s;
+    animation-direction: normal;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+.h-anmt-side-modal-slide-in {
+    animation-name: h-anmt-side-modal-slide-in;
+    animation-duration: .17s;
+    animation-direction: normal;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+.h-anmt-side-modal-slide-out {
+    animation-name: h-anmt-side-modal-slide-out;
+    animation-duration: .17s;
+    animation-direction: normal;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+.h-anmt-side-modal-backdrop-fade-in {
+    animation-name: h-anmt-side-modal-backdrop-fade-in;
+    animation-duration: .17s;
+    animation-direction: normal;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+.h-anmt-side-modal-backdrop-fade-out {
+    animation-name: h-anmt-side-modal-backdrop-fade-out;
+    animation-duration: .17s;
+    animation-direction: normal;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
