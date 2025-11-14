@@ -18,12 +18,15 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
 
             debouncedSearchRaiser = new Debouncer(RaiseOnSearch, debounceInterval ?? defaultDebounceInterval);
 
+            Text = " ";
             FontFamily = HUiToolkit.Current.Branding.Typography.FontFamily;
             FontSize = HUiToolkit.Current.Branding.Typography.FontSize;
             TextColor = HUiToolkit.Current.Branding.TextColor.ToMaui();
             BackgroundColor = HUiToolkit.Current.Branding.BackgroundColorTranslucent.ToMaui();
             PlaceholderColor = HUiToolkit.Current.Branding.TextColor.WithOpacity(.3f).ToMaui();
             VerticalTextAlignment = TextAlignment.Center;
+
+            Keyboard = Keyboard.Text;
 
             SearchButtonPressed += HQuickSearchControl_SearchButtonPressed;
             TextChanged += HQuickSearchControl_TextChanged;
@@ -73,6 +76,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
         {
             if (HUiToolkit.Current.IsPageBinding)
                 return;
+
+            await this.HideSoftInputAsync(CancellationToken.None);
 
             await RaiseOnSearch();
         }

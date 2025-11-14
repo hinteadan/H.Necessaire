@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -26,7 +27,13 @@ namespace H.Necessaire
         static readonly TimeSpan httpRequestVerySlowTime = TimeSpan.FromSeconds(5);
         static readonly TimeSpan httpRequestSuperSlowTime = TimeSpan.FromSeconds(7.5);
         static EphemeralType<HttpClient> ephemeralHttpClient = null;
-        const string defaultUrlToCheckInternet = "https://www.apple.com/";
+        static readonly string[] defaultUrlsToCheckInternet = new string[] {
+            "https://www.apple.com",
+            "https://www.google.com",
+            "https://www.microsoft.com",
+            "https://portal.azure.com",
+            "https://www.amazon.com/",
+        };
 
         readonly ConcurrentDictionary<string, Func<Task<OperationResult>>> healthChecks = new ConcurrentDictionary<string, Func<Task<OperationResult>>>();
         readonly ConcurrentDictionary<string, EphemeralType<OperationResult>> healthCheckResults = new ConcurrentDictionary<string, EphemeralType<OperationResult>>();
@@ -57,7 +64,7 @@ namespace H.Necessaire
             if (healthChecks.Count == 0)
             {
                 OperationResult defaultCheck = await CheckDefaultConnectivity();
-                return defaultCheck.WithPayload(defaultCheck.Tag("DefaultCheck").Describe($"HTTP request to {defaultUrlToCheckInternet}").AsArray());
+                return defaultCheck.WithPayload(defaultCheck.Tag("DefaultCheck").Describe($"HTTP request to any of {string.Join(", ", defaultUrlsToCheckInternet)}").AsArray());
             }
 
             TaggedValue<OperationResult>[] checkResults = await Task.WhenAll(healthChecks.Select(kvp => RunHealthCheck(kvp.Key, kvp.Value)));
@@ -99,7 +106,8 @@ namespace H.Necessaire
                                     .Fail($"Error occurred while trying to ping {url}. HTTP Response Code: {(int)httpResponse.StatusCode} - {httpResponse.StatusCode}")
                                     .WithComment(
                                         $"HttpStatusCode::{(int)httpResponse.StatusCode}",
-                                        $"HttpStatusCodeLabel::{httpResponse.StatusCode}"
+                                        $"HttpStatusCodeLabel::{httpResponse.StatusCode}",
+                                        $"HttpRequestURL::{url}"
                                     )
                                     ;
                             }
@@ -116,7 +124,7 @@ namespace H.Necessaire
 
                 return
                     OperationResult.Win()
-                    .WithComment($"HttpRequestDuration::{requestDuration}", $"HttpRequestDurationTicks::{requestDuration.Ticks}")
+                    .WithComment($"HttpRequestURL::{url}", $"HttpRequestDuration::{requestDuration}", $"HttpRequestDurationTicks::{requestDuration.Ticks}")
                     .AndIf(!slowWarning.IsEmpty(), x => x.Warn(slowWarning))
                     ;
             }));
@@ -158,7 +166,20 @@ namespace H.Necessaire
 
         protected virtual async Task<OperationResult> CheckDefaultConnectivity()
         {
-            return await RunHttpRequestHealthCheck(defaultUrlToCheckInternet);
+            List<Task<OperationResult>> tasks = defaultUrlsToCheckInternet.Shuffle().Select(RunHttpRequestHealthCheck).ToList();
+            List<OperationResult> failures = new List<OperationResult>(defaultUrlsToCheckInternet.Length);
+
+            foreach(var _ in defaultUrlsToCheckInternet)
+            {
+                Task<OperationResult> completedTask = await Task.WhenAny(tasks);
+                if (completedTask.Result)
+                    return completedTask.Result;
+
+                tasks.Remove(completedTask);
+                failures.Add(completedTask.Result);
+            }
+
+            return failures.Merge($"HTTP requests failed to all of the following URLs: {string.Join(", ", defaultUrlsToCheckInternet)}");
         }
 
         static HttpClient EnsureHttpClient()

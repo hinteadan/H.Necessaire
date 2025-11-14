@@ -9,6 +9,8 @@ namespace H.Necessaire
 {
     public static class CollectionExtensions
     {
+        static readonly Random randomizer = new Random();
+
         public static bool In<T>(this T item, params T[] collection)
         {
             return item.In(collection?.AsEnumerable());
@@ -424,6 +426,27 @@ namespace H.Necessaire
             }
 
             return @this;
+        }
+
+        
+        public static T[] Shuffle<T>(this T[] array)
+        {
+            if (array.IsEmpty())
+                return array;
+
+            T[] result = new T[array.Length];
+            Array.Copy(array, result, array.Length);
+
+            int n = array.Length;
+            while (n > 1)
+            {
+                int k = randomizer.Next(n--);
+                T temp = result[n];
+                result[n] = result[k];
+                result[k] = temp;
+            }
+
+            return result;
         }
 
         sealed class ProjectedDisposableEnumerable<TProjection, T> : IDisposableEnumerable<TProjection>

@@ -7,7 +7,7 @@ namespace H.Necessaire
 {
     public static class TypeExtensions
     {
-        static readonly string[] coreAssemblyPrefixes = new string[] { "Microsoft.", "System.", "WinRT." };
+        static readonly string[] coreAssemblyPrefixes = new string[] { "Microsoft.", "System.", "WinRT.", "Skia" };
         public static string TypeName(this object instance)
         {
             if (instance is null)
