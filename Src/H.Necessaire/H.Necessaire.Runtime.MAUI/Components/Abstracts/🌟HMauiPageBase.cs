@@ -104,6 +104,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
         protected virtual Task OnLeave()
         {
+            GC.Collect();
             return Task.CompletedTask;
         }
 
