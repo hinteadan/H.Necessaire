@@ -79,8 +79,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                 return;
             }
 
-            await Task.Delay(animationDurationInMs);
-
             SetShellBrandingColors();
 
             if (Content is null || Content.ClassId == "PageInitializingView")
