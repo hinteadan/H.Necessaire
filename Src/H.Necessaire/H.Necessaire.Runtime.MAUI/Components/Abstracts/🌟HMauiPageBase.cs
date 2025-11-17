@@ -83,6 +83,10 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
             if (Content is null || Content.ClassId == "PageInitializingView")
             {
+#if ANDROID
+                await Task.Delay(animationDurationInMs);
+#endif
+
                 Content = ConstructContent();
             }
         }
