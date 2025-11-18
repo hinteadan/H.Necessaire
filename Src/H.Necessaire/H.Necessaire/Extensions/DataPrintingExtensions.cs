@@ -100,6 +100,24 @@ namespace H.Necessaire
             TimeSpan life = TimeSpan.FromTicks(DateTime.UtcNow.Ticks - dateTime.EnsureUtc().Ticks);
             DateTime localTime = dateTime.EnsureUtc().ToLocalTime();
 
+            if (life < TimeSpan.FromDays(-7))
+                return localTime.PrintTimeStamp();
+
+            if (life < TimeSpan.FromDays(-2))
+                return $"{localTime.ToString(DayOfWeekFormat)}, in {-(int)life.TotalDays} days at {localTime.ToString(TimeFormat)}";
+            if (life < TimeSpan.FromHours(-24))
+                return $"{localTime.ToString(DayOfWeekFormat)}, in {-(int)life.TotalDays} day at {localTime.ToString(TimeFormat)}";
+            if (life < TimeSpan.FromHours(-2))
+                return $"in {-(int)life.TotalHours} hours at {localTime.ToString(TimeFormat)}";
+            if (life < TimeSpan.FromMinutes(-59))
+                return $"in about an hour at {localTime.ToString(TimeFormat)}";
+            if (life < TimeSpan.FromMinutes(-5))
+                return $"in {-(int)life.TotalMinutes} minutes at {localTime.ToString(TimeFormat)}";
+            if (life < TimeSpan.FromMinutes(-1))
+                return $"in a few minutes at {localTime.ToString(TimeFormat)}";
+            if (life < TimeSpan.Zero)
+                return $"in a few seconds at {localTime.ToString(TimeFormat)}";
+
             if (life < TimeSpan.FromMinutes(1))
                 return "just now";
             if (life < TimeSpan.FromMinutes(5))
