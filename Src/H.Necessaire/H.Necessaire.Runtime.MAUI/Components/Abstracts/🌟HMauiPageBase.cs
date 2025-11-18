@@ -185,11 +185,6 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
         {
             base.OnAppearing();
 
-#if IOS
-        UIKit.UINavigationController vc = (UIKit.UINavigationController)Platform.GetCurrentUIViewController();//using UIKit, find the UINavigationController  
-        vc.InteractivePopGestureRecognizer.Enabled = false;  
-#endif
-
             Shell.Current.Navigating += Shell_Navigating;
             await OnShowingUp();
         }
