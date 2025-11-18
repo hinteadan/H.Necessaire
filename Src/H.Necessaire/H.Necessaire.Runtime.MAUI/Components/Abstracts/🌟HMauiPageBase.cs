@@ -183,6 +183,13 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
         protected override async void OnAppearing()
         {
+            base.OnAppearing();
+
+#if IOS
+        UIKit.UINavigationController vc = (UIKit.UINavigationController)Platform.GetCurrentUIViewController();//using UIKit, find the UINavigationController  
+        vc.InteractivePopGestureRecognizer.Enabled = false;  
+#endif
+
             Shell.Current.Navigating += Shell_Navigating;
             await OnShowingUp();
         }
@@ -192,6 +199,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             Shell.Current.Navigating -= Shell_Navigating;
             await OnLeaving();
             ClearQueryParams();
+
+            base.OnDisappearing();
         }
 
         async void Current_RequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
