@@ -72,6 +72,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             if (currentPageTheme != Application.Current.UserAppTheme)
             {
                 await Refresh(isContentReconstructionEnabled: true);
+                return;
             }
 
             if (!isHeavyInitializer)
