@@ -11,13 +11,13 @@ namespace H.Necessaire.Operations.Caching.Concrete
 
         public virtual async Task<T> GetOrAdd(string id, Func<string, Task<ImCachebale<T>>> cacheableItemFactory)
         {
-            if(id.IsEmpty())
+            if (id.IsEmpty())
                 OperationResult.Fail($"ID cannot be empty").ThrowOnFail();
 
             DateTime now = DateTime.UtcNow;
             ImCachebale<T> cachedItem = null;
-            if(cacheRegistry.TryGetValue(id, out cachedItem) && !cachedItem.IsExpired(now))
-            {                
+            if (cacheRegistry.TryGetValue(id, out cachedItem) && !cachedItem.IsExpired(now))
+            {
                 cachedItem.PinAccess(now);
                 if (!cachedItem.IsSlidingExpirationDisabled && cachedItem.ValidFor != null)
                 {
@@ -28,7 +28,7 @@ namespace H.Necessaire.Operations.Caching.Concrete
             }
 
             cachedItem = await cacheableItemFactory(id);
-            if(cachedItem == null)
+            if (cachedItem == null)
                 OperationResult.Fail($"Cacheable item {id} built via external cacheableItemFactory is NULL").ThrowOnFail();
 
             cacheRegistry.AddOrUpdate(id, cachedItem, (key, existing) => cachedItem);
@@ -88,10 +88,14 @@ namespace H.Necessaire.Operations.Caching.Concrete
             if (expiredItems.IsEmpty())
                 return true.AsTask();
 
-            foreach(ImCachebale<T> expiredItem in expiredItems)
+            foreach (ImCachebale<T> expiredItem in expiredItems)
             {
                 ImCachebale<T> removedItem = null;
-                cacheRegistry.TryRemove(expiredItem.ID, out removedItem);
+                bool isRemoved = cacheRegistry.TryRemove(expiredItem.ID, out removedItem);
+                if (isRemoved && removedItem != null && removedItem.Payload != null && removedItem.Payload is IDisposable disposable)
+                {
+                    HSafe.Run(disposable.Dispose);
+                }
             }
 
             return true.AsTask();
@@ -108,7 +112,7 @@ namespace H.Necessaire.Operations.Caching.Concrete
             if (ids.IsEmpty())
                 return true.AsTask();
 
-            foreach(string id in ids)
+            foreach (string id in ids)
             {
                 if (id.IsEmpty())
                     continue;

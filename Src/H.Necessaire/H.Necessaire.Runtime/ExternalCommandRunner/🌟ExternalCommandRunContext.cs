@@ -23,6 +23,7 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
         public bool IsMetricsCollectionEnabled { get; set; } = false;
         public IReadOnlyDictionary<DateTime, Note[]> Metrics { get; set; } = new Dictionary<DateTime, Note[]>();
         public static ExternalCommandRunContext GetCurrent() => ExternalCommandRunScope.GetCurrentContext();
+        public CancellationToken CommandRunningCancelToken { get; set; } = CancellationToken.None;
     }
 
     public static class ExternalCommandRunContextExtensions

@@ -24,7 +24,7 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
         /// </summary>
         /// <param name="args">Args for cmd.exe /c</param>
         /// <returns>Operation Result</returns>
-        public async Task<OperationResult<ExternalCommandRunContext>> RunCmd(params Note[] args)
+        public async Task<OperationResult<ExternalCommandRunContext>> RunCmd(CancellationToken cancellationToken, params Note[] args)
         {
             ExternalCommandRunContext context = ExternalCommandRunContext.GetCurrent();
             Note[] actualArgs = new Note[2 + (args?.Length ?? 0)];
@@ -35,10 +35,12 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
                 actualArgs[i + 2] = args[i];
             }
 
-            return await Run(actualArgs);
+            return await Run(cancellationToken, actualArgs);
         }
+        public async Task<OperationResult<ExternalCommandRunContext>> RunCmd(params Note[] args)
+            => await RunCmd(CancellationToken.None, args);
 
-        public async Task<OperationResult<ExternalCommandRunContext>> Run(params Note[] args)
+        public async Task<OperationResult<ExternalCommandRunContext>> Run(CancellationToken cancellationToken, params Note[] args)
         {
             string command = argsBuilder.BuildInline(args?.FirstOrDefault() ?? default);
             if (command.IsEmpty())
@@ -49,6 +51,8 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
             OperationResult<ExternalCommandRunContext> result = OperationResult.Fail("Not yet started").WithoutPayload<ExternalCommandRunContext>();
 
             ExternalCommandRunContext context = ExternalCommandRunContext.GetCurrent() ?? new ExternalCommandRunContext { };
+            if (cancellationToken != CancellationToken.None)
+                context.CommandRunningCancelToken = cancellationToken;
 
             await new Func<Task>(async () =>
             {
@@ -60,6 +64,16 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
 
                     CancellationTokenSource userInputCancelTokenSource = context.CancellationTokenSource;
                     Task userInputTask = context.IsUserInputExpected ? BuildUserInputMonitoringTask(context, externalProcess, userInputCancelTokenSource) : null;
+
+                    if (context.CommandRunningCancelToken != CancellationToken.None)
+                    {
+                        context.CommandRunningCancelToken.Register(() =>
+                        {
+                            HSafe.Run(() => externalProcess?.Kill());
+                            HSafe.Run(() => externalProcess?.Close());
+                            HSafe.Run(() => DisposeProcess(context, externalProcess));
+                        });
+                    }
 
                     externalProcess.WaitForExit();
 
@@ -82,19 +96,22 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
 
             return result;
         }
+        public async Task<OperationResult<ExternalCommandRunContext>> Run(params Note[] args)
+            => await Run(CancellationToken.None, args);
 
         public ImAContextualExternalCommandRunner WithContext(ExternalCommandRunContext context)
         {
             return new ContextualExternalCommandRunner(this, context);
         }
 
-        public ImAContextualExternalCommandRunner WithContext(bool isOutputPrinted = true, bool isOutputCaptured = false, bool isUserInputExpected = false)
+        public ImAContextualExternalCommandRunner WithContext(bool isOutputPrinted = true, bool isOutputCaptured = false, bool isUserInputExpected = false, CancellationToken? cancellationToken = null)
         {
             return WithContext(new ExternalCommandRunContext
             {
                 IsOutputPrinted = isOutputPrinted,
                 IsOutputCaptured = isOutputCaptured,
                 IsUserInputExpected = isUserInputExpected,
+                CommandRunningCancelToken = cancellationToken ?? CancellationToken.None,
             });
         }
 

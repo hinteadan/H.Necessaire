@@ -6,11 +6,22 @@ namespace H.Necessaire
     {
         #region Construct
         static readonly TimeSpan? defaultValidity = TimeSpan.FromHours(24);
-        TimeSpan? validFor = defaultValidity;
-        DateTime? expiresAt = DateTime.UtcNow + defaultValidity;
-        DateTime validFrom = DateTime.UtcNow;
-        DateTime createdAt = DateTime.UtcNow;
-        DateTime asOf = DateTime.UtcNow;
+        TimeSpan? validFor;
+        DateTime? expiresAt;
+        DateTime validFrom;
+        DateTime createdAt;
+        DateTime asOf;
+
+        public EphemeralTypeBase()
+        {
+            DateTime utcNow = DateTime.UtcNow;
+
+            validFor = defaultValidity;
+            expiresAt = utcNow + defaultValidity;
+            validFrom = utcNow;
+            createdAt = utcNow;
+            asOf = utcNow;
+        }
         #endregion
 
         public DateTime CreatedAt { get => createdAt; set => createdAt = value.EnsureUtc(); }
