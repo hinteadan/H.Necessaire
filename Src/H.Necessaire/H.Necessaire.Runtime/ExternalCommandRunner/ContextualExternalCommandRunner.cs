@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.ExternalCommandRunner
 {
@@ -16,20 +17,24 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
             this.context = context;
         }
 
-        public async Task<OperationResult<ExternalCommandRunContext>> Run(params Note[] args)
+        public async Task<OperationResult<ExternalCommandRunContext>> Run(CancellationToken cancellationToken, params Note[] args)
         {
             using (context.Scope())
             {
                 return await externalCommandRunner.Run(args);
             }
         }
+        public async Task<OperationResult<ExternalCommandRunContext>> Run(params Note[] args)
+            => await Run(CancellationToken.None, args);
 
-        public async Task<OperationResult<ExternalCommandRunContext>> RunCmd(params Note[] args)
+        public async Task<OperationResult<ExternalCommandRunContext>> RunCmd(CancellationToken cancellationToken, params Note[] args)
         {
             using (context.Scope())
             {
                 return await externalCommandRunner.RunCmd(args);
             }
         }
+        public async Task<OperationResult<ExternalCommandRunContext>> RunCmd(params Note[] args)
+            => await RunCmd(CancellationToken.None, args);
     }
 }
