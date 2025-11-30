@@ -72,6 +72,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             if (currentPageTheme != Application.Current.UserAppTheme)
             {
                 await Refresh(isContentReconstructionEnabled: true);
+                return;
             }
 
             if (!isHeavyInitializer)
@@ -79,12 +80,14 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
                 return;
             }
 
-            await Task.Delay(animationDurationInMs);
-
             SetShellBrandingColors();
 
             if (Content is null || Content.ClassId == "PageInitializingView")
             {
+#if ANDROID
+                await Task.Delay(animationDurationInMs);
+#endif
+
                 Content = ConstructContent();
             }
         }
@@ -104,6 +107,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
         protected virtual Task OnLeave()
         {
+            GC.Collect();
             return Task.CompletedTask;
         }
 
@@ -179,6 +183,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
 
         protected override async void OnAppearing()
         {
+            base.OnAppearing();
+
             Shell.Current.Navigating += Shell_Navigating;
             await OnShowingUp();
         }
@@ -188,6 +194,8 @@ namespace H.Necessaire.Runtime.MAUI.Components.Abstracts
             Shell.Current.Navigating -= Shell_Navigating;
             await OnLeaving();
             ClearQueryParams();
+
+            base.OnDisappearing();
         }
 
         async void Current_RequestedThemeChanged(object sender, AppThemeChangedEventArgs e)

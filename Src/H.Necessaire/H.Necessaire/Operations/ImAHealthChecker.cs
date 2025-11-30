@@ -182,25 +182,29 @@ namespace H.Necessaire
             return failures.Merge($"HTTP requests failed to all of the following URLs: {string.Join(", ", defaultUrlsToCheckInternet)}");
         }
 
+        static readonly object ensureHttpClientLocker = new object();
         static HttpClient EnsureHttpClient()
         {
-            if (ephemeralHttpClient?.IsActive() == true)
+            lock (ensureHttpClientLocker)
+            {
+                if (ephemeralHttpClient?.IsActive() == true)
+                    return ephemeralHttpClient.Payload;
+
+                if (ephemeralHttpClient != null)
+                {
+                    ephemeralHttpClient.Payload.Dispose();
+                    ephemeralHttpClient.Payload = null;
+                    ephemeralHttpClient = null;
+                }
+
+                ephemeralHttpClient = new EphemeralType<HttpClient>
+                {
+                    Payload = new HttpClient { Timeout = httpRequestTimeout },
+                    ValidFor = httpClientTimeout,
+                };
+
                 return ephemeralHttpClient.Payload;
-
-            if (ephemeralHttpClient != null)
-            {
-                ephemeralHttpClient.Payload.Dispose();
-                ephemeralHttpClient.Payload = null;
-                ephemeralHttpClient = null;
             }
-
-            ephemeralHttpClient = new EphemeralType<HttpClient>
-            {
-                Payload = new HttpClient { Timeout = httpRequestTimeout },
-                ValidFor = httpClientTimeout,
-            };
-
-            return ephemeralHttpClient.Payload;
         }
 
         static string CreateSlowHttpWarningIfNecessary(TimeSpan httpResponseTime)
