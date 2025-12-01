@@ -53,6 +53,24 @@ namespace H.Necessaire.Runtime.UI.Razor
             return await hjs.InvokeAsync<ConsumerIdentity>("GetConsumerInfo", newConsumerID);
         }
 
+        public async Task SetSessionValue(string key, string value)
+        {
+            IJSObjectReference hjs = await hJsModuleTask.Value;
+            await hjs.InvokeVoidAsync("SetSessionValue", key, value);
+        }
+
+        public async Task<string> GetSessionValue(string key)
+        {
+            IJSObjectReference hjs = await hJsModuleTask.Value;
+            return await hjs.InvokeAsync<string>("GetSessionValue", key);
+        }
+
+        public async Task ZapSessionValue(string key)
+        {
+            IJSObjectReference hjs = await hJsModuleTask.Value;
+            await hjs.InvokeVoidAsync("ZapSessionValue", key);
+        }
+
         public async ValueTask DisposeAsync()
         {
             if (!hJsModuleTask.IsValueCreated)

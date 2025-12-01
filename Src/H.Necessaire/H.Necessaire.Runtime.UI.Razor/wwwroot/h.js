@@ -195,6 +195,18 @@ class H {
         try { return window.navigator.userAgentData.platform; } catch (err) { console.warn(err); return null; };
     }
 
+    SetSessionValue(key, value) {
+        sessionStorage.setItem(key, value);
+    }
+
+    GetSessionValue(key) {
+        return sessionStorage.getItem(key);
+    }
+
+    ZapSessionValue(key) {
+        return sessionStorage.removeItem(key);
+    }
+
 }
 
 
@@ -212,4 +224,16 @@ export function GetScrollPosition(elementID) {
 
 export function GetConsumerInfo(id) {
     return H.Instance.GetConsumerInfo(id);
+}
+
+export function SetSessionValue(key, value) {
+    return H.Instance.SetSessionValue(key, value);
+}
+
+export function GetSessionValue(key) {
+    return H.Instance.GetSessionValue(key);
+}
+
+export function ZapSessionValue(key) {
+    return H.Instance.ZapSessionValue(key);
 }
