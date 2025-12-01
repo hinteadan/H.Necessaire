@@ -71,6 +71,24 @@ namespace H.Necessaire.Runtime.UI.Razor
             await hjs.InvokeVoidAsync("ZapSessionValue", key);
         }
 
+        public async Task SetLocalValue(string key, string value)
+        {
+            IJSObjectReference hjs = await hJsModuleTask.Value;
+            await hjs.InvokeVoidAsync("SetLocalValue", key, value);
+        }
+
+        public async Task<string> GetLocalValue(string key)
+        {
+            IJSObjectReference hjs = await hJsModuleTask.Value;
+            return await hjs.InvokeAsync<string>("GetLocalValue", key);
+        }
+
+        public async Task ZapLocalValue(string key)
+        {
+            IJSObjectReference hjs = await hJsModuleTask.Value;
+            await hjs.InvokeVoidAsync("ZapLocalValue", key);
+        }
+
         public async ValueTask DisposeAsync()
         {
             if (!hJsModuleTask.IsValueCreated)

@@ -204,7 +204,19 @@ class H {
     }
 
     ZapSessionValue(key) {
-        return sessionStorage.removeItem(key);
+        sessionStorage.removeItem(key);
+    }
+
+    SetLocalValue(key, value) {
+        localStorage.setItem(key, value);
+    }
+
+    GetLocalValue(key) {
+        return localStorage.getItem(key);
+    }
+
+    ZapLocalValue(key) {
+        localStorage.removeItem(key);
     }
 
 }
@@ -236,4 +248,16 @@ export function GetSessionValue(key) {
 
 export function ZapSessionValue(key) {
     return H.Instance.ZapSessionValue(key);
+}
+
+export function SetLocalValue(key, value) {
+    return H.Instance.SetLocalValue(key, value);
+}
+
+export function GetLocalValue(key) {
+    return H.Instance.GetLocalValue(key);
+}
+
+export function ZapLocalValue(key) {
+    return H.Instance.ZapLocalValue(key);
 }
