@@ -25,6 +25,8 @@ namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
             HIndexedDbContext dbContext = hIndexedDbContextProvider();
             IndexedDbStore consumerIdentityStore = dbContext.CoreDatabase[nameof(ConsumerIdentity)];
             bool isOK = await consumerIdentityStore.StoreAsync(consumerIdentity);
+            //Save to Consumer Storage
+            //Save to Audits
         }
 
         public async Task<ConsumerIdentity> GetCurrentConsumer()
