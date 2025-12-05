@@ -25,8 +25,14 @@ namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
             HIndexedDbContext dbContext = hIndexedDbContextProvider();
             IndexedDbStore consumerIdentityStore = dbContext.CoreDatabase[nameof(ConsumerIdentity)];
             bool isOK = await consumerIdentityStore.StoreAsync(consumerIdentity);
-            //Save to Consumer Storage
-            //Save to Audits
+
+            if (isOK)
+            {
+                //Save to Consumer Storage
+                //Save to Audits
+                //These depend on the DI registrations for the ImAStorgeService<X, X>
+                //Can be either stored locally in IndexedDB and sync-ed in the future or POST-ed to the server directly
+            }
         }
 
         public async Task<ConsumerIdentity> GetCurrentConsumer()
