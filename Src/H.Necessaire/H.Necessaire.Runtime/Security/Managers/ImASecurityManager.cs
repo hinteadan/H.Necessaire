@@ -7,6 +7,7 @@ namespace H.Necessaire.Runtime.Security.Managers
     {
         Task<OperationResult<SecurityContext>> AuthenticateCredentials(string username, string password);
         Task<OperationResult<SecurityContext>> AuthenticateAccessToken(string token);
+        Task<OperationResult<SecurityContext>> AuthenticateTotpToken(string totpToken);
         Task<OperationResult<SecurityContext>> RefreshAccessToken(string expiredAccessToken, string refreshToken);
         Task<OperationResult> SetPasswordForUser(Guid userID, string newPassword);
     }

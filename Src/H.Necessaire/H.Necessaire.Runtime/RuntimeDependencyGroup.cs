@@ -1,14 +1,17 @@
-﻿using H.Necessaire.Runtime.Security;
-
-namespace H.Necessaire.Runtime
+﻿namespace H.Necessaire.Runtime
 {
     public class RuntimeDependencyGroup : ImADependencyGroup
     {
         #region Construct
+        readonly bool isHttpClientCooklessCertless = false;
+        public RuntimeDependencyGroup(bool isHttpClientCooklessCertless = false)
+        {
+            this.isHttpClientCooklessCertless = isHttpClientCooklessCertless;
+        }
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry
-                .Register<HasherFactory>(() => new HasherFactory().RegisterOrUpdateHasher(nameof(RS512Hasher), new RS512Hasher()))
+                .Register<HasherFactory>(() => new HasherFactory().RegisterOrUpdateHasher(nameof(Security.RS512Hasher), new Security.RS512Hasher()))
                 ;
 
             dependencyRegistry
@@ -16,6 +19,7 @@ namespace H.Necessaire.Runtime
                 ;
 
             dependencyRegistry
+                .Register<HTTP.DependencyGroup>(() => new HTTP.DependencyGroup(isHttpClientCooklessCertless))
                 .Register<ExternalCommandRunner.DependencyGroup>(() => new ExternalCommandRunner.DependencyGroup())
                 .Register<Resources.DependencyGroup>(() => new Resources.DependencyGroup())
                 .Register<Validation.DependencyGroup>(() => new Validation.DependencyGroup())

@@ -66,14 +66,26 @@
 .wrp {
     flex-wrap: wrap;
 }
-.h-txt.bold {
+.h-txt.bold, .h-txt.b {
     font-weight: bold;
 }
-.h-txt.italic {
+.h-txt.italic, .h-txt.i {
     font-style: italic;
 }
-.h-txt.underline {
+.h-txt.underline, .h-txt.u {
     text-decoration: underline;
+}
+.h-txt.c {
+    text-align: center;
+}
+.h-txt.l {
+    text-align: left;
+}
+.h-txt.r {
+    text-align: right;
+}
+.h-txt.nowrp {
+    white-space: nowrap;
 }
 .h-txt.wrp {
     white-space: wrap;

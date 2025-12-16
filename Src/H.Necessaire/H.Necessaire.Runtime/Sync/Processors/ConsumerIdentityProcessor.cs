@@ -44,10 +44,10 @@ namespace H.Necessaire.Runtime.Sync.Processors
             await auditingService.Append(consumerIdentity.ToAuditMeta<ConsumerIdentity, Guid>(consumerExists ? AuditActionType.Modify : AuditActionType.Create, processorIdentity), consumerIdentity);
 
             if (!string.IsNullOrWhiteSpace(payload.IpAddress))
-                await actionQer.Queue(QdAction.New(WellKnown.QdActionType.ProcessIpAddress, $"{payload.IpAddress}|{payload.ID}"));
+                await actionQer.Queue(QdAction.New(WellKnown.QdActionType.ProcessIpAddress, WellKnown.QdActionType.ProcessIpAddressPayload(payload)));
 
             if (payload?.RuntimePlatform != null)
-                await actionQer.Queue(QdAction.New(WellKnown.QdActionType.ProcessRuntimePlatform, $"{payload.ToJsonObject()}"));
+                await actionQer.Queue(QdAction.New(WellKnown.QdActionType.ProcessRuntimePlatform, WellKnown.QdActionType.ProcessRuntimePlatformPayload(payload)));
 
             return result;
         }

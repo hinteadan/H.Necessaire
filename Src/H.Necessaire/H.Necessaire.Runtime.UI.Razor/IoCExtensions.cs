@@ -4,10 +4,10 @@ namespace H.Necessaire.Runtime.UI.Razor
 {
     public static class IoCExtensions
     {
-        public static T WithRazorRuntime<T>(this T dependencyRegistry, HRazorApp hRazorApp = null) where T : ImADependencyRegistry
+        public static T WithRazorRuntime<T>(this T dependencyRegistry, HRazorApp hRazorApp = null, bool isHttpClientCooklessCertless = false) where T : ImADependencyRegistry
         {
             dependencyRegistry
-                .WithHNecessaireRuntimeUI()
+                .WithHNecessaireRuntimeUI(isHttpClientCooklessCertless)
                 .Register<HRazorApp>(() => hRazorApp ?? HRazorApp.Default)
                 .Register<DependencyGroup>(() => new DependencyGroup())
                 ;
@@ -15,7 +15,7 @@ namespace H.Necessaire.Runtime.UI.Razor
             return dependencyRegistry;
         }
 
-        public static IServiceCollection WithHRazorRuntime<THRazorApp>(this IServiceCollection services, THRazorApp hRazorApp = null, Action<ImADependencyRegistry> deps = null) where THRazorApp : HRazorApp
+        public static IServiceCollection WithHRazorRuntime<THRazorApp>(this IServiceCollection services, THRazorApp hRazorApp = null, bool isHttpClientCooklessCertless = false, Action<ImADependencyRegistry> deps = null) where THRazorApp : HRazorApp
         {
             if (services is null)
                 return services;
@@ -26,7 +26,7 @@ namespace H.Necessaire.Runtime.UI.Razor
             services.AddIndexedDb("H.Necessaire.Core", objectStores: [nameof(ConsumerIdentity)], version: 1, key: "ID");
 
             ImADependencyRegistry registy = hRazorApp?.DependencyRegistry ?? HRazorApp.Default.DependencyRegistry;
-            registy.WithRazorRuntime(hRazorApp);
+            registy.WithRazorRuntime(hRazorApp, isHttpClientCooklessCertless);
             if (deps is not null)
                 deps.Invoke(registy);
             if (hRazorApp is not null && hRazorApp.GetType() != typeof(HRazorApp))

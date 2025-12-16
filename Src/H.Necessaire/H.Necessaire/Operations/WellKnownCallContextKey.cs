@@ -1,4 +1,4 @@
-﻿namespace H.Necessaire.Runtime
+﻿namespace H.Necessaire
 {
     public class WellKnownCallContextKey
     {

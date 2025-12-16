@@ -5,6 +5,11 @@ namespace H.Necessaire.Runtime.UI.Razor
 {
     public class HUiToolkit : ImADependency
     {
+#if DEBUG
+        public const bool IsDebug = true;
+#else
+	    public const bool IsDebug = false;
+#endif
         RuntimeConfig runtimeConfig;
         HRazorApp hRazorApp;
         ImAVersionProvider versionProvider;
@@ -15,7 +20,6 @@ namespace H.Necessaire.Runtime.UI.Razor
             runtimeConfig = dependencyProvider.GetRuntimeConfig() ?? RuntimeConfig.Empty;
             versionProvider = dependencyProvider.Get<ImAVersionProvider>();
         }
-
         public HRazorApp App => hRazorApp ?? HRazorApp.Default;
         public BrandingStyle Branding => App?.Branding ?? HRazorAppBranding.Default;
         public int SizingUnit => App?.Branding?.SizingUnitInPixels ?? HRazorAppBranding.Default.SizingUnitInPixels;

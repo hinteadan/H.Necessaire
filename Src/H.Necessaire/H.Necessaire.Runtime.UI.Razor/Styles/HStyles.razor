@@ -34,7 +34,6 @@
     html, body {
         background-color: @(Branding.BackgroundColorTranslucent.ToCssRGBA());
         font-family: @((MarkupString)Branding.Typography.FontFamily);
-
     }
 
     .h-side-modal {
@@ -54,7 +53,7 @@
         padding-left: @(SizingUnit)px;
     }
     .h-pad-r {
-        padding-right @(SizingUnit)px;
+        padding-right: @(SizingUnit)px;
     }
     .h-pad-v {
         padding: @(SizingUnit / 2)px 0;
@@ -76,7 +75,7 @@
         margin-left: @(SizingUnit)px;
     }
     .h-mrg-r {
-        margin-right @(SizingUnit)px;
+        margin-right: @(SizingUnit)px;
     }
     .h-mrg-v {
         margin: @(SizingUnit / 2)px 0;
@@ -165,6 +164,9 @@
         opacity: .8;
     }
 
+    .h-txt.nrml {
+        color: @(Branding.TextColor.ToCssRGBA());
+    }
 
     .h-txt.dngr {
         color: @(Branding.DangerColor.ToCssRGBA());
