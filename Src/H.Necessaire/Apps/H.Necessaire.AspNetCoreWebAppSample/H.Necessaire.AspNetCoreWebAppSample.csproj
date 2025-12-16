@@ -21,10 +21,6 @@
     <None Remove="free.hinteadan.client.certificate.with.password.pfx" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.0" />
-  </ItemGroup>
-
     <ItemGroup>
 	    <EmbeddedResource Include="version.txt" />
     </ItemGroup>
@@ -32,7 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\H.Necessaire.Runtime.Azure.CosmosDB\H.Necessaire.Runtime.Azure.CosmosDB.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime.Google.FirestoreDB\H.Necessaire.Runtime.Google.FirestoreDB.csproj" />
-    <ProjectReference Include="..\..\H.Necessaire.Runtime.Integration.NetCore\H.Necessaire.Runtime.Integration.NetCore.csproj" />
+    <ProjectReference Include="..\..\H.Necessaire.Runtime.Integration.NetCoreObsolete\H.Necessaire.Runtime.Integration.NetCoreObsolete.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime.RavenDB\H.Necessaire.Runtime.RavenDB.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime.SqlServer\H.Necessaire.Runtime.SqlServer.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime\H.Necessaire.Runtime.csproj" />

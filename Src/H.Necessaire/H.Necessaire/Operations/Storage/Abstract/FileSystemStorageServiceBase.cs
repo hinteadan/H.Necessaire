@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace H.Necessaire
@@ -19,6 +20,7 @@ namespace H.Necessaire
         const string rootStorageFolderName = "FileSystemStorage";
         public const string ConfigKeyRootFolderPath = "FileSystemStorageRootFolder";
 
+        readonly SemaphoreSlim dataWriteSemaphore = new SemaphoreSlim(1, 1);
         protected DirectoryInfo entityStorageFolder;
         readonly string fileExtension = "json";
         public FileSystemStorageServiceBase(DirectoryInfo rootFolder = null, string fileExtension = "json")
@@ -53,9 +55,17 @@ namespace H.Necessaire
             await
                 new Func<Task>(async () =>
                 {
-                    using (Stream fileStream = entityFile.OpenWrite())
+                    await dataWriteSemaphore.WaitAsync();
+                    try
                     {
-                        await SerializeEntityToStream(entity, fileStream);
+                        using (Stream fileStream = entityFile.OpenWrite())
+                        {
+                            await SerializeEntityToStream(entity, fileStream);
+                        }
+                    }
+                    finally
+                    {
+                        dataWriteSemaphore.Release();
                     }
                 })
                 .TryOrFailWithGrace(onFail: ex => result = OperationResult.Fail(ex));
@@ -88,21 +98,31 @@ namespace H.Necessaire
                     );
         }
 
-        public virtual Task<OperationResult> DeleteByID(TId id)
+        public virtual async Task<OperationResult> DeleteByID(TId id)
         {
             if (!entityStorageFolder.Exists)
-                return OperationResult.Win("There are no entities of this type, nothing to delete").AsTask();
+                return OperationResult.Win("There are no entities of this type, nothing to delete");
 
             FileInfo entityFile = BuildEntityFile(id);
 
             if (!entityFile.Exists)
-                return OperationResult.Win("The entity doesn't exist").AsTask();
+                return OperationResult.Win("The entity doesn't exist");
 
             OperationResult result = OperationResult.Win();
 
-            new Action(entityFile.Delete).TryOrFailWithGrace(onFail: ex => result = OperationResult.Fail(ex));
+            await dataWriteSemaphore.WaitAsync();
+            try
+            {
+                new Action(entityFile.Delete).TryOrFailWithGrace(onFail: ex => result = OperationResult.Fail(ex));
+            }
+            finally
+            {
+                dataWriteSemaphore.Release();
+            }
 
-            return result.AsTask();
+            
+
+            return result;
         }
 
         public virtual async Task<OperationResult<TId>[]> DeleteByIDs(params TId[] ids)
@@ -190,7 +210,7 @@ namespace H.Necessaire
 
         private static DirectoryInfo GetRootFolderFromStartAssembly()
         {
-            string path = Assembly.GetEntryAssembly()?.CodeBase;
+            string path = Assembly.GetEntryAssembly()?.Location;
             if (path.IsEmpty())
                 return new DirectoryInfo(Directory.GetCurrentDirectory());
             string folderName = Path.GetDirectoryName(path);

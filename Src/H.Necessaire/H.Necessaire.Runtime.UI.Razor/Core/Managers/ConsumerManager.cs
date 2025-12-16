@@ -3,17 +3,17 @@ using Tavenem.Blazor.IndexedDB;
 
 namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
 {
-    internal class ConsumerManager : ImADependency, ImADependencyGroup
+    internal class ConsumerManager : ImADependency
     {
-        static ConsumerIdentity currentConsumerIdentity = null;
-        public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
-        {
-            dependencyRegistry.Register<Func<ConsumerIdentity>>(() => () => currentConsumerIdentity);
-        }
+        ConsumerIdentity currentConsumerIdentity = null;
         Func<HIndexedDbContext> hIndexedDbContextProvider;
+        ImAStorageService<Guid, ConsumerIdentity> consumerIdentityStorageService;
+        ImAnAuditingService auditingService;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             hIndexedDbContextProvider = dependencyProvider.Get<Func<HIndexedDbContext>>();
+            consumerIdentityStorageService = dependencyProvider.Get<ImAStorageService<Guid, ConsumerIdentity>>();
+            auditingService = dependencyProvider.Get<ImAnAuditingService>();
         }
 
         public async Task SetCurrentConsumer(ConsumerIdentity consumerIdentity)
@@ -25,6 +25,30 @@ namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
             HIndexedDbContext dbContext = hIndexedDbContextProvider();
             IndexedDbStore consumerIdentityStore = dbContext.CoreDatabase[nameof(ConsumerIdentity)];
             bool isOK = await consumerIdentityStore.StoreAsync(consumerIdentity);
+
+            if (isOK)
+            {
+                await consumerIdentityStorageService.Save(consumerIdentity);
+                await AuditConsumerIfNecessary(consumerIdentity);
+            }
+        }
+
+        async Task AuditConsumerIfNecessary(ConsumerIdentity consumerIdentity)
+        {
+            if (auditingService is null)
+                return;
+
+            if (consumerIdentity is null)
+                return;
+
+            await HSafe.Run(async () => {
+
+                await auditingService.Append(
+                    consumerIdentity.ToAuditMeta(consumerIdentity.ID.ToString(), AuditActionType.Create),
+                    consumerIdentity
+                );
+
+            });
         }
 
         public async Task<ConsumerIdentity> GetCurrentConsumer()
@@ -38,14 +62,8 @@ namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
             HIndexedDbContext dbContext = hIndexedDbContextProvider();
             IndexedDbStore consumerIdentityStore = dbContext.CoreDatabase[nameof(ConsumerIdentity)];
             IAsyncEnumerable<ConsumerIdentity> allConsumers = consumerIdentityStore.GetAllAsync<ConsumerIdentity>();
-            await foreach (ConsumerIdentity consumerIdentity in allConsumers)
-            {
-                if (consumerIdentity.AsOf >= (currentConsumerIdentity?.AsOf ?? DateTime.MinValue))
-                    currentConsumerIdentity = consumerIdentity;
-            }
-            return currentConsumerIdentity;
+            ConsumerIdentity consumerIdentity = await allConsumers.OrderByDescending(x => x.AsOf).FirstOrDefaultAsync();
+            return consumerIdentity;
         }
-
-        
     }
 }

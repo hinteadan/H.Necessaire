@@ -211,6 +211,9 @@ namespace H.Necessaire
             return array;
         }
 
+        public static Note[] Set(this Note[] notes, string id, string newValue, bool isCaseInsensitive = false)
+            => notes.Set(x => x.ID.Is(id, !isCaseInsensitive), (id, newValue));
+
         public static T[] Remove<T>(this T[] array, Predicate<T> predicate)
         {
             if (predicate == null || (!array?.Any() ?? true))

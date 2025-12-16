@@ -3,35 +3,55 @@
 @implements IDisposable
 @inject HJs hjs
 @code {
-	[Inject(Key = "H.Necessaire.Core")] IndexedDb HNecessaireCoreIndexedDb { get; set; }
-	protected override void OnInitialized()
-	{
-		base.OnInitialized();
+    [Inject(Key = "H.Necessaire.Core")] IndexedDb HNecessaireCoreIndexedDb { get; set; }
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
 
-		App.DependencyRegistry.Register<Func<HJs>>(() => () => hjs);
-		App.DependencyRegistry.Register<Func<HIndexedDbContext>>(() => () => new HIndexedDbContext
-		{
-			CoreDatabase = HNecessaireCoreIndexedDb,
-		});
-	}
-	public void Dispose()
-	{
-		App.DependencyRegistry.Unregister<Func<HIndexedDbContext>>();
-		App.DependencyRegistry.Unregister<Func<HJs>>();
-	}
+        App.DependencyRegistry.Register<Func<HJs>>(() => () => hjs);
+        App.DependencyRegistry.Register<Func<HIndexedDbContext>>(() => () => new HIndexedDbContext
+        {
+            CoreDatabase = HNecessaireCoreIndexedDb,
+        });
+    }
+    public void Dispose()
+    {
+        App.DependencyRegistry.Unregister<Func<HIndexedDbContext>>();
+        App.DependencyRegistry.Unregister<Func<HJs>>();
+    }
 
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		await base.OnAfterRenderAsync(firstRender);
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
 
-		if (firstRender)
-		{
-			await InitializeConsumer();
-		}
-	}
+        if (firstRender)
+        {
+            await InitializeConsumer();
+        }
+    }
 
-	async Task InitializeConsumer()
-	{
-		await Get<ImAConsumerUseCase>().CreateOrResurrect();
-	}
+    async Task InitializeConsumer()
+    {
+        if (await IsConsumerReportedForThisSession())
+            return;
+
+        var consumer = await Get<ImAConsumerUseCase>().CreateOrResurrect();
+
+        await MarkConsumerReportedForThisSession();
+    }
+
+    static bool? isConsumerReportedForThisSession = null;
+    async Task<bool> IsConsumerReportedForThisSession()
+    {
+        if (isConsumerReportedForThisSession != null)
+            return isConsumerReportedForThisSession.Value;
+
+        isConsumerReportedForThisSession = (await hjs.GetSessionValue($"H-IsConsumerReportedForThisSession")).ParseToBoolOrFallbackTo(false).Value;
+
+        return isConsumerReportedForThisSession.Value;
+    }
+    async Task MarkConsumerReportedForThisSession()
+    {
+        await hjs.SetSessionValue("H-IsConsumerReportedForThisSession", true.ToString());
+    }
 }

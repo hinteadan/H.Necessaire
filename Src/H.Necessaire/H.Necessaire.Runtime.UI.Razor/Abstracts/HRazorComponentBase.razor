@@ -1,7 +1,12 @@
 ﻿@using H.Necessaire.Models.Branding
 @using System.Reflection
 @inject HUiToolkit huiToolkit
+@inject NavigationManager navi
 @code {
+	protected bool IsDebug => HUiToolkit.IsDebug;
+	protected string NaviCurrentURL => navi.Uri;
+	protected string NaviCurrentPath => new Uri(navi.Uri).LocalPath;
+	protected bool IsNaviCurrentlyHome => NaviCurrentPath.IfEmpty("/") == "/";
 	protected HRazorApp App => huiToolkit?.App ?? HRazorApp.Default;
 	protected BrandingStyle Branding => huiToolkit?.Branding ?? HRazorAppBranding.Default;
 	protected int SizingUnit => huiToolkit?.SizingUnit ?? HRazorAppBranding.Default.SizingUnitInPixels;

@@ -13,6 +13,7 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
         ImTheIronManProviderResource ironManProviderResource;
         ImAHasherEngine hasher;
         ImAUserAuthAggregatorEngine userAuthAggregatorEngine;
+        ImATotpHandler totpHandler;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             hasher = dependencyProvider.Get<HasherFactory>().GetDefaultHasher();
@@ -20,6 +21,7 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
             userInfoStorageResource = dependencyProvider.Get<ImAUserInfoStorageResource>();
             userAuthAggregatorEngine = dependencyProvider.Get<ImAUserAuthAggregatorEngine>();
             ironManProviderResource = dependencyProvider.Get<ImTheIronManProviderResource>();
+            totpHandler = dependencyProvider.Get<ImATotpHandler>();
         }
         #endregion
 
@@ -63,7 +65,7 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
 
             string ironManPassword = await ironManProviderResource.GetPasswordFor(user.ID);
 
-            if(ironMan != null && string.IsNullOrWhiteSpace(ironManPassword))
+            if (ironMan != null && string.IsNullOrWhiteSpace(ironManPassword))
                 return OperationResult.Fail("Invalid Credentials").WithoutPayload<SecurityContext>();
 
             string passwordHash = ironMan != null ? null : await userCredentialsStorageResource.GetPasswordFor(user.ID);
@@ -71,7 +73,7 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
             if (ironMan == null && string.IsNullOrWhiteSpace(passwordHash))
                 return OperationResult.Fail("Invalid Credentials").WithoutPayload<SecurityContext>();
 
-            OperationResult matchResult = 
+            OperationResult matchResult =
                 ironMan != null
                 ? (new OperationResult { IsSuccessful = string.Equals(ironManPassword, password, StringComparison.InvariantCulture) }.And(x => x.Reason = x.IsSuccessful ? null : "Invalid username or password"))
                 : (await hasher.VerifyMatch(password, SecuredHash.TryParse(passwordHash).ThrowOnFailOrReturn()));
@@ -104,6 +106,31 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
                 );
 
             return result;
+        }
+
+        public async Task<OperationResult<SecurityContext>> AuthenticateTotpToken(string totpToken)
+        {
+            if (!(await totpHandler.Validate(totpToken)).Ref(out var valRes, out var totp))
+                return valRes.WithoutPayload<SecurityContext>();
+
+            return
+                new SecurityContext
+                {
+                    User = new UserInfo
+                    {
+                        ID = totp.ID,
+                        AsOf = totp.AsOf,
+                        DisplayName = totp.Owner,
+                    },
+                    Auth = new AuthInfo
+                    {
+                        AccessToken = totpToken,
+                        AccessTokenGeneratedAt = totp.CreatedAt,
+                        AccessTokenType = WellKnownAccessTokenType.TOTP,
+                        RefreshToken = null,
+                        AccessTokenValidFor = totp.ValidFor ?? TimeSpan.Zero,
+                    },
+                };
         }
     }
 }

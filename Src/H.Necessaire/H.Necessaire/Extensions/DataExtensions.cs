@@ -375,8 +375,22 @@ namespace H.Necessaire
         public static TOut MorphIfNotNull<TIn, TOut>(this TIn @in, Func<TIn, TOut> projector, TOut defaultTo = default) where TIn : class
             => @in.MorphIf(@in != null, projector, defaultTo);
 
+        public static TOut MorphIfNull<TIn, TOut>(this TIn @in, Func<TIn, TOut> projector, TOut defaultTo = default) where TIn : class
+            => @in.MorphIf(@in is null, projector, defaultTo);
+
         public static TOut MorphIfNotEmpty<TOut>(this string @in, Func<string, TOut> projector, TOut defaultTo = default, bool isWhitespaceConsideredEmpty = true)
             => @in.MorphIf(!@in.IsEmpty(isWhitespaceConsideredEmpty), projector, defaultTo);
+
+        public static TOut MorphIfEmpty<TOut>(this string @in, Func<string, TOut> projector, TOut defaultTo = default, bool isWhitespaceConsideredEmpty = true)
+            => @in.MorphIf(@in.IsEmpty(isWhitespaceConsideredEmpty), projector, defaultTo);
+
+        public static T Morph<T>(this T @in, Func<T, T> projector) => @in.Morph(projector, @in);
+        public static T MorphIf<T>(this T @in, bool condition, Func<T, T> projector) => @in.MorphIf(condition, projector, @in);
+        public static T MorphIf<T>(this T @in, Func<T, bool> condition, Func<T, T> projector) => @in.MorphIf(condition, projector, @in);
+        public static T MorphIfNotNull<T>(this T @in, Func<T, T> projector) where T : class => @in.MorphIfNotNull(projector, @in);
+        public static T MorphIfNull<T>(this T @in, Func<T, T> projector) where T : class => @in.MorphIfNull(projector, @in);
+        public static string IfNotEmpty(this string @in, Func<string, string> projector, bool isWhitespaceConsideredEmpty = true) => @in.MorphIfNotEmpty(projector, @in, isWhitespaceConsideredEmpty);
+        public static string IfEmpty(this string @in, Func<string, string> projector, bool isWhitespaceConsideredEmpty = true) => @in.MorphIfEmpty(projector, @in, isWhitespaceConsideredEmpty);
 
         public static T And<T>(this T data, Action<T> doThis) { doThis?.Invoke(data); return data; }
         public static T AndIf<T>(this T data, bool condition, Action<T> doThis)
@@ -706,7 +720,7 @@ namespace H.Necessaire
             return isWhitespaceConsideredEmpty ? string.IsNullOrWhiteSpace(stringValue) : string.IsNullOrEmpty(stringValue);
         }
 
-        public static string IfEmpty(this string stringValue, string returnThis) => stringValue.IsEmpty() ? returnThis : stringValue;
+        public static string IfEmpty(this string stringValue, string returnThis, bool isWhitespaceConsideredEmpty = true) => stringValue.IsEmpty(isWhitespaceConsideredEmpty) ? returnThis : stringValue;
 
         public static bool IsEmpty(this GeoAddressArea geoAddressArea)
         {
