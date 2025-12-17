@@ -7,6 +7,7 @@
 
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+		<FrameworkReference Include="Microsoft.NETCore.App" />
 	</ItemGroup>
 
 	<ItemGroup>
