@@ -28,9 +28,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\H.Necessaire.Runtime.Azure.CosmosDB\H.Necessaire.Runtime.Azure.CosmosDB.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime.Google.FirestoreDB\H.Necessaire.Runtime.Google.FirestoreDB.csproj" />
-    <ProjectReference Include="..\..\H.Necessaire.Runtime.Integration.NetCoreObsolete\H.Necessaire.Runtime.Integration.NetCoreObsolete.csproj" />
+    <ProjectReference Include="..\..\H.Necessaire.Runtime.Integration.AspNetCore\H.Necessaire.Runtime.Integration.AspNetCore.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime.RavenDB\H.Necessaire.Runtime.RavenDB.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime.SqlServer\H.Necessaire.Runtime.SqlServer.csproj" />
+    <ProjectReference Include="..\..\H.Necessaire.Runtime.UI.Razor\H.Necessaire.Runtime.UI.Razor.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Runtime\H.Necessaire.Runtime.csproj" />
     <ProjectReference Include="..\..\H.Necessaire.Serialization\H.Necessaire.Serialization.csproj" />
     <ProjectReference Include="..\..\H.Necessaire\H.Necessaire.csproj" />
