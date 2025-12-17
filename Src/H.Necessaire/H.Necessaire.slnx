@@ -25,7 +25,6 @@
     <Project Path="H.Necessaire.Runtime.Integration.AspNetCore/H.Necessaire.Runtime.Integration.AspNetCore.csproj" Id="181114ef-e7d6-4a76-a00c-f9a6d3eab6c1" />
     <Project Path="H.Necessaire.Runtime.Integration.BlazorWasm/H.Necessaire.Runtime.Integration.BlazorWasm.csproj" Id="c064cb60-73c0-4f65-82df-a27c8b3c4835" />
     <Project Path="H.Necessaire.Runtime.Integration.DotNet/H.Necessaire.Runtime.Integration.DotNet.csproj" Id="02bfb348-3673-473d-9096-cbaa45aca000" />
-    <Project Path="H.Necessaire.Runtime.Integration.NetCoreObsolete/H.Necessaire.Runtime.Integration.NetCoreObsolete.csproj" />
     <Project Path="H.Necessaire.Runtime.MAUI/H.Necessaire.Runtime.MAUI.csproj" />
     <Project Path="H.Necessaire.Runtime.RavenDB/H.Necessaire.Runtime.RavenDB.csproj" />
     <Project Path="H.Necessaire.Runtime.Sqlite/H.Necessaire.Runtime.Sqlite.csproj" />

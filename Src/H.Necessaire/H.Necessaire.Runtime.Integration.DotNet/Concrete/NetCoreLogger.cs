@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Threading;
 
 namespace H.Necessaire.Runtime.Integration.DotNet.Concrete
 {
     internal class NetCoreLogger : ILogger
     {
         #region Construct
+        static readonly SemaphoreSlim logSemaphore = new SemaphoreSlim(1, 1);
         readonly ImALogger logger;
         public NetCoreLogger(ImALogger logger)
         {
@@ -40,7 +42,15 @@ namespace H.Necessaire.Runtime.Integration.DotNet.Concrete
                 },
             };
 
-            await logger.Log(logEntry).ConfigureAwait(false);
+            await logSemaphore.WaitAsync();
+            try
+            {
+                await logger.Log(logEntry).ConfigureAwait(false);
+            }
+            finally
+            {
+                logSemaphore.Release();
+            }
         }
 
         class LogStateHolder<TState> : IDisposable

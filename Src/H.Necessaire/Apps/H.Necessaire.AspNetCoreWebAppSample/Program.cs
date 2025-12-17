@@ -1,41 +1,55 @@
-using H.Necessaire;
 using H.Necessaire.AspNetCoreWebAppSample;
-using H.Necessaire.Runtime.Integration.NetCore;
-using Microsoft.AspNetCore;
+using H.Necessaire.AspNetCoreWebAppSample.Components;
+using H.Necessaire.Runtime.Integration.AspNetCore;
+using H.Necessaire.Runtime.UI.Razor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 public class Program
 {
-    public static readonly App App = new App(new AppWireup().WithEverything());
-
     public static void Main(string[] args)
     {
-        CreateWebHostBuilder(args).Build().Run();
-    }
+        var builder
+            = WebApplication
+            .CreateBuilder(args)
+            .WithHNecessaire(HAspNetCoreSampleApp.Instance.DependencyRegistry.WithDefaultHAppConfig())
+            ;
 
-    static IWebHostBuilder CreateWebHostBuilder(string[] args)
-    {
-        return
-            WebHost
+        // Add services to the container.
+        builder
+            .Services
+            .WithHRazorRuntime<HRazorApp>(HAspNetCoreSampleApp.Instance, deps: reg => reg.Register<DependencyGroup>(() => new DependencyGroup()))
+            .AddRazorComponents()
+            .AddInteractiveServerComponents()
+            ;
 
-            .CreateDefaultBuilder(args)
+        var app = builder.Build().BindToHNecessaireAspNetRuntime(HAspNetCoreSampleApp.Instance.DependencyRegistry);
 
-            .ConfigureServices(x =>
-            {
-                x.AddHNecessaireDependenciesToNetCore(App.Wireup.DependencyRegistry);
-            })
+        app.ConfigureHNecessaireAspNetRuntime(app.Environment);
 
-            .ConfigureLogging((context, logging) =>
-            {
-                logging
-                    .ClearProviders()
-                    .AddHNecessaireLogging(App.Wireup.DependencyRegistry)
-                    ;
-            })
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            //Do some dev related stuff
+        }
+        else
+        {
+            app.UseExceptionHandler("/Error");
+            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            app.UseHsts();
+        }
 
-            .UseStartup<Startup>();
+        app.UseHttpsRedirection();
+
+        app.UseAntiforgery();
+
+        app.MapStaticAssets();
+        app.MapRazorComponents<App>()
+            .AddInteractiveServerRenderMode()
+            ;
+
+        app.Run();
     }
 }

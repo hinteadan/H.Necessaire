@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using H.Necessaire.Runtime.Integration.DotNet.Concrete;
+using Microsoft.Extensions.Configuration;
 
 namespace H.Necessaire.Runtime.Integration.DotNet
 {
@@ -14,6 +15,7 @@ namespace H.Necessaire.Runtime.Integration.DotNet
         {
             RuntimeConfig runtimeConfig = dependencyRegistry.GetRuntimeConfig();
             dependencyRegistry
+                .Register<NetCoreLoggerProvider>(() => new NetCoreLoggerProvider())
                 .Register<ImAUseCaseContextProvider>(() => new Concrete.DotNetEnvironmentUseCaseContextProvider())
                 .Register<ImAConfigProvider>(() => new Concrete.NetCoreConfigProvider(runtimeConfig, configuration))
                 ;
