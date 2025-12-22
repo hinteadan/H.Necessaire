@@ -15,6 +15,7 @@ namespace H.Necessaire.Runtime.Integration.DotNet
         {
             RuntimeConfig runtimeConfig = dependencyRegistry.GetRuntimeConfig();
             dependencyRegistry
+                .Register<RuntimeDependencyGroup>(() => new RuntimeDependencyGroup())
                 .Register<NetCoreLoggerProvider>(() => new NetCoreLoggerProvider())
                 .Register<ImAUseCaseContextProvider>(() => new Concrete.DotNetEnvironmentUseCaseContextProvider())
                 .Register<ImAConfigProvider>(() => new Concrete.NetCoreConfigProvider(runtimeConfig, configuration))
