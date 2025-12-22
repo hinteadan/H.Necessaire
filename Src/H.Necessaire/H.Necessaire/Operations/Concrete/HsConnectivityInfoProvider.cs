@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace H.Necessaire.Runtime.MAUI.Core
+namespace H.Necessaire
 {
     public class HsConnectivityInfoProvider : ImAConnectivityInfoProvider, ImADependency
     {
