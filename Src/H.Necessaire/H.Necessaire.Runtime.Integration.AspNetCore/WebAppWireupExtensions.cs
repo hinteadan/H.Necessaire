@@ -16,6 +16,7 @@ namespace H.Necessaire.Runtime.Integration.AspNetCore
             hostApplicationBuilder
                 .Services
                 .AddHttpContextAccessor()
+                .AddAntiforgery()
                 .WithHNecessaireAspNetRuntime(dependencyRegistry, hostApplicationBuilder.Configuration)
                 ;
 
