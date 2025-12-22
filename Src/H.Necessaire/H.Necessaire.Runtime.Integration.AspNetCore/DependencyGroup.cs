@@ -3,18 +3,14 @@ using Microsoft.Extensions.Configuration;
 
 namespace H.Necessaire.Runtime.Integration.AspNetCore
 {
-    internal class DependencyGroup : ImADependencyGroup
+    internal class DependencyGroup(IConfiguration configuration) : ImADependencyGroup
     {
-        readonly IConfiguration configuration;
-        public DependencyGroup(IConfiguration configuration)
-        {
-            this.configuration = configuration;
-        }
+        readonly IConfiguration configuration = configuration;
 
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry
-                .WithHNecessaireDotNetruntimeIntegration(configuration)
+                .WithHNecessaireDotNetRuntimeIntegration(configuration)
                 .Register<UseCases.DependencyGroup>(() => new UseCases.DependencyGroup())
                 ;
         }
