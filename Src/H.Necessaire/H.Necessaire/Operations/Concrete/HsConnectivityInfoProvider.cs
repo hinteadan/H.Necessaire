@@ -42,8 +42,7 @@ namespace H.Necessaire
 
         public async Task ForceRefresh()
         {
-            if (connectivityInfo != null)
-                connectivityInfo.ExpireAt(DateTime.UtcNow.AddSeconds(-1));
+            connectivityInfo?.ExpireAt(DateTime.UtcNow.AddSeconds(-1));
 
             await RefreshConnectivityInfo();
         }
@@ -69,7 +68,7 @@ namespace H.Necessaire
                 {
                     Payload = new ConnectivityInfo
                     {
-                        HasConnectivity = !checkResult ? false : true,
+                        HasConnectivity = checkResult,
                         LinkSpeedLevel = !checkResult ? ConnectivityLinkSpeedLevel.NoConnectivity : MapLinkSpeedLevelFrom(defaultHttpOpRes),
                         Reasons = !checkResult ? checkResult.FlattenReasons().ToNonEmptyArray() : defaultHttpOpRes?.FlattenReasons().ToNonEmptyArray(),
                         AvailableProfiles = MapProfilesFrom(defaultHttpOpRes).Distinct().ToArrayNullIfEmpty(),
