@@ -25,16 +25,16 @@ namespace H.Necessaire.Runtime.UI.Razor
             services.AddIndexedDbService();
             services.AddIndexedDb("H.Necessaire.Core", objectStores: [nameof(ConsumerIdentity)], version: 1, key: "ID");
 
-            ImADependencyRegistry registy = hRazorApp?.DependencyRegistry ?? HRazorApp.Default.DependencyRegistry;
-            registy.WithRazorRuntime(hRazorApp, isHttpClientCooklessCertless);
+            ImADependencyRegistry registry = hRazorApp?.DependencyRegistry ?? HRazorApp.Default.DependencyRegistry;
+            registry.WithRazorRuntime(hRazorApp, isHttpClientCooklessCertless);
             if (deps is not null)
-                deps.Invoke(registy);
+                deps.Invoke(registry);
             if (hRazorApp is not null && hRazorApp.GetType() != typeof(HRazorApp))
             {
-                registy.Register<THRazorApp>(() => hRazorApp);
+                registry.Register<THRazorApp>(() => hRazorApp);
             }
 
-            services.AddHNecessaireDependenciesToDotNet(registy);
+            services.AddHNecessaireDependenciesToDotNet(registry);
 
             return services;
         }
