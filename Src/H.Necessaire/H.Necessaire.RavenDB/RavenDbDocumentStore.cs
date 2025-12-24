@@ -84,7 +84,8 @@ namespace H.Necessaire.RavenDB
             {
                 byte[] bytes = new byte[stream.Length];
                 stream.Read(bytes, 0, bytes.Length);
-                X509Certificate2 cert = new X509Certificate2(bytes, clientCertificatePassword/*, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable*/);
+                if (!HSafe.Run(() => new X509Certificate2(bytes, clientCertificatePassword, X509KeyStorageFlags.MachineKeySet)).RefPayload(out var cert))
+                    cert = new X509Certificate2(bytes, clientCertificatePassword /*, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable*/);
                 return cert;
             }
         }

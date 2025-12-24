@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>H.Necessaire.Runtime.MAUI</id>
-    <version>3.0.7</version>
+    <version>3.0.8</version>
     <title>H's Necessaire MAUI Runtime</title>
     <projectUrl>https://h.necessaire.dev</projectUrl>
     <repository type="git" url="https://github.com/hinteadan/H.Necessaire.git" branch="master" />
@@ -18,7 +18,7 @@
     <tags>hintea dan alexandru .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections batch task array rad rapid application development framework MAUI</tags>
     <dependencies>
       <dependency id="CommunityToolkit.Maui" version="13.0.0" />
-      <dependency id="H.Necessaire.Runtime" version="3.0.7" />
+      <dependency id="H.Necessaire.Runtime" version="3.0.8" />
       <dependency id="Microsoft.Maui.Controls" version="10.0.20" />
     </dependencies>
   </metadata>

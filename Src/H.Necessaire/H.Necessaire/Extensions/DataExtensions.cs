@@ -917,5 +917,30 @@ namespace H.Necessaire
 
             return periodOfTime.From.Value.BuildDailyTimestamps(periodOfTime.To.Value);
         }
+
+        public static string[] ToLines(this string multiLineValue)
+        {
+            if (multiLineValue.IsEmpty())
+                return null;
+
+            return
+                multiLineValue
+                .Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                .ToNonEmptyArray()
+                ;
+        }
+
+        public static ConfigNode[] ToConfig(this IEnumerable<string> values)
+        {
+            if (values.IsEmpty())
+                return Array.Empty<ConfigNode>();
+
+            return
+                values
+                .Where(v => !v.IsEmpty())
+                .Select((val, i) => i.ToString().ConfigWith(val))
+                .ToArray()
+                ;
+        }
     }
 }
