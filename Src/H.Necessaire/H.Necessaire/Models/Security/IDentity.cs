@@ -4,6 +4,6 @@
     {
         string IDTag { get; }
         string DisplayName { get; }
-        Note[] Notes { get; }
+        Note[] Notes { get; set; }
     }
 }

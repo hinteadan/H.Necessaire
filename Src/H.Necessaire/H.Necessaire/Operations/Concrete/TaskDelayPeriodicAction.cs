@@ -6,6 +6,13 @@ namespace H.Necessaire.Operations.Concrete
 {
     class TaskDelayPeriodicAction : ImAPeriodicAction
     {
+#if DEBUG
+        static readonly TimeSpan gcCollectInterval = TimeSpan.FromSeconds(15);
+#else
+        static readonly TimeSpan gcCollectInterval = TimeSpan.FromSeconds(150);
+#endif
+        static readonly EphemeralType<string> gcCollectState = new EphemeralType<string> { Payload = "GC", ValidFrom = DateTime.UtcNow - gcCollectInterval, ValidFor = gcCollectInterval };
+
         readonly object isStartedLocker = new object();
         bool isStarted = false;
         TimeSpan interval = TimeSpan.Zero;
@@ -36,14 +43,14 @@ namespace H.Necessaire.Operations.Concrete
             {
                 await Task.Delay(delay, CancellationToken);
             }
-            catch(TaskCanceledException)
+            catch (TaskCanceledException)
             {
                 return;
             }
 
             await action();
 
-            await DelayRunAndQueueAnother();
+            DelayRunAndQueueAnother().DontWait();
         }
 
         public void Stop()
@@ -92,7 +99,14 @@ namespace H.Necessaire.Operations.Concrete
             if (CancellationToken.IsCancellationRequested)
                 return;
 
-            await DelayRunAndQueueAnother();
+            if (gcCollectState.IsExpired())
+            {
+                GC.Collect();
+                gcCollectState.ActiveAsOf(DateTime.UtcNow);
+                gcCollectState.ExpireIn(gcCollectInterval);
+            }
+
+            DelayRunAndQueueAnother().DontWait();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Raven.Client.Documents;
+﻿using H.Necessaire.Serialization;
+using Raven.Client.Documents;
 using Raven.Client.Json.Serialization.NewtonsoftJson;
 using System;
 using System.Linq;
@@ -54,6 +55,7 @@ namespace H.Necessaire.RavenDB
                         CustomizeJsonDeserializer = x => {
                             x.ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace;
                             x.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.None;
+                            x.Converters.Add(new AbstractConverter<IDentity, InternalIdentity>());
                         },
                         CustomizeJsonSerializer = x => {
                             x.ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace;

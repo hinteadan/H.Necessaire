@@ -7,6 +7,9 @@ namespace H.Necessaire.Runtime.Integration.BlazorWasm.Concrete
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry
+
+                .Register<ImAnActionQer>(() => new HttpApiActionQer())
+
                 .Register<HttpApiStorageService<Guid, ConsumerIdentity>>(() => new HttpApiStorageService<Guid, ConsumerIdentity>())
                 .Register<ImAStorageService<Guid, ConsumerIdentity>>(dependencyRegistry.Get<HttpApiStorageService<Guid, ConsumerIdentity>>)
                 ;
