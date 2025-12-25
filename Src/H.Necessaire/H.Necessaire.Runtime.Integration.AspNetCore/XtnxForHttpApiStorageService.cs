@@ -62,7 +62,12 @@ namespace H.Necessaire.Runtime.Integration.AspNetCore
                     var result = await (method.Invoke(storageService, [entity]) as Task<OperationResult>);
 
                     if (consumerIdentity != null)
-                        await AuditConsumerIfNecessary(consumerIdentity, dependencyProvider);
+                    {
+                        await Task.WhenAll(
+                            AuditConsumerIfNecessary(consumerIdentity, dependencyProvider),
+                            QueueConsumerDetailsProcessingIfNecessary(consumerIdentity, dependencyProvider)
+                        );
+                    }
 
                     return result;
                 }
@@ -75,7 +80,6 @@ namespace H.Necessaire.Runtime.Integration.AspNetCore
 
             return result.Payload;
         }
-
 
         static OperationResult<object> GetUnderlyingHttpApiStorageService(this ImADependencyProvider dependencyProvider, HttpRequest request, out Type entityType, out Type storageServiceType)
             => dependencyProvider.GetUnderlyingHttpApiStorageService(request?.Headers, out entityType, out storageServiceType);
@@ -218,6 +222,28 @@ namespace H.Necessaire.Runtime.Integration.AspNetCore
                     consumerIdentity.ToAuditMeta(consumerIdentity.ID.ToString(), AuditActionType.Create),
                     consumerIdentity
                 );
+
+            });
+        }
+
+        static async Task QueueConsumerDetailsProcessingIfNecessary(ConsumerIdentity consumerIdentity, ImADependencyProvider dependencyProvider)
+        {
+            ImAnActionQer actionQer = dependencyProvider?.Get<ImAnActionQer>();
+
+            if (actionQer is null)
+                return;
+
+            if (consumerIdentity is null)
+                return;
+
+            await HSafe.Run(async () =>
+            {
+
+                if (!consumerIdentity.IpAddress.IsEmpty())
+                    await actionQer.Queue(QdAction.New(WellKnown.QdActionType.ProcessIpAddress, WellKnown.QdActionType.ProcessIpAddressPayload(consumerIdentity)));
+
+                if (consumerIdentity.RuntimePlatform != null)
+                    await actionQer.Queue(QdAction.New(WellKnown.QdActionType.ProcessRuntimePlatform, WellKnown.QdActionType.ProcessRuntimePlatformPayload(consumerIdentity)));
 
             });
         }

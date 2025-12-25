@@ -1,4 +1,5 @@
 ﻿using H.Necessaire.Runtime.UI.Razor.Core.Storage;
+using System.Runtime.InteropServices;
 using Tavenem.Blazor.IndexedDB;
 
 namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
@@ -32,9 +33,12 @@ namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
 
             if (isOK)
             {
-                await consumerIdentityStorageService.Save(consumerIdentity);
-                await AuditConsumerIfNecessary(consumerIdentity);
-                await QueueConsumerDetailsProcessingIfNecessary(consumerIdentity);
+                await consumerIdentityStorageService.Save(consumerIdentity);//This will trigger audit and QdAction for WASM
+                if (RuntimeInformation.ProcessArchitecture != Architecture.Wasm)
+                {
+                    await AuditConsumerIfNecessary(consumerIdentity);
+                    await QueueConsumerDetailsProcessingIfNecessary(consumerIdentity);
+                }
             }
         }
 
