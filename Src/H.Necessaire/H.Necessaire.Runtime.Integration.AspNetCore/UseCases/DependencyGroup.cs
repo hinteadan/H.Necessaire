@@ -6,6 +6,7 @@
         {
             dependencyRegistry
                 .RegisterAlwaysNew<StorageServiceHttpApiUseCase>(() => new StorageServiceHttpApiUseCase())
+                .RegisterAlwaysNew<QdActionHttpApiUseCase>(() => new QdActionHttpApiUseCase())
                 ;
         }
     }

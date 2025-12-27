@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.Integration.BlazorWasm
 {
-    public static class XtnxForHttpApiStorageService
+    public static class XtnxForHttpApi
     {
         const string headerMarkPrefix = WellKnownHttpApiStorageService.HeaderMarkPrefix;
 
@@ -33,11 +33,14 @@ namespace H.Necessaire.Runtime.Integration.BlazorWasm
         }
 
         public static async Task<OperationResult<HttpRequestMessage>> DecorateWithStorageTotpAuth(this HttpRequestMessage httpRequest, ImATotpHandler totpHandler)
+            => await httpRequest.DecorateWithTotpAuth(totpHandler, "HttpApiStorageService");
+
+        public static async Task<OperationResult<HttpRequestMessage>> DecorateWithTotpAuth(this HttpRequestMessage httpRequest, ImATotpHandler totpHandler, string owner = null)
         {
             if (httpRequest is null)
                 return null;
 
-            if (!(await totpHandler.Safeguard(new TotpToken { Owner = "HttpApiStorageService" })).Ref(out var tokenRes, out var token))
+            if (!(await totpHandler.Safeguard(new TotpToken { Owner = owner.IfEmpty("H.Necessaire.Runtime.Integration.BlazorWasm") })).Ref(out var tokenRes, out var token))
                 return tokenRes.WithPayload(httpRequest);
 
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue(WellKnownAccessTokenType.TOTP, token);

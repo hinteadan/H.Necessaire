@@ -1,4 +1,5 @@
-﻿using Raven.Client.Documents;
+﻿using H.Necessaire.Serialization;
+using Raven.Client.Documents;
 using Raven.Client.Json.Serialization.NewtonsoftJson;
 using System;
 using System.Linq;
@@ -54,6 +55,7 @@ namespace H.Necessaire.RavenDB
                         CustomizeJsonDeserializer = x => {
                             x.ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace;
                             x.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.None;
+                            x.Converters.Add(new AbstractConverter<IDentity, InternalIdentity>());
                         },
                         CustomizeJsonSerializer = x => {
                             x.ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace;
@@ -84,7 +86,8 @@ namespace H.Necessaire.RavenDB
             {
                 byte[] bytes = new byte[stream.Length];
                 stream.Read(bytes, 0, bytes.Length);
-                X509Certificate2 cert = new X509Certificate2(bytes, clientCertificatePassword/*, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable*/);
+                if (!HSafe.Run(() => new X509Certificate2(bytes, clientCertificatePassword, X509KeyStorageFlags.MachineKeySet)).RefPayload(out var cert))
+                    cert = new X509Certificate2(bytes, clientCertificatePassword /*, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable*/);
                 return cert;
             }
         }
