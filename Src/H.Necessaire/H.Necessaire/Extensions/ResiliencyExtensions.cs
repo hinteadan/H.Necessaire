@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace H.Necessaire
@@ -123,7 +124,13 @@ namespace H.Necessaire
             OperationResult<T> currentResult = await currentResultTask;
 
             if (currentResult.IsSuccessful)
+            {
+                if (isJustWarning && currentResult.HasWarnings())
+                {
+                    await logger.LogWarn(currentResult.Warnings.First(), currentResult.Payload, (currentResult.Warnings.Skip(1).Concat(currentResult.Comments ?? Array.Empty<string>())).ToNonEmptyArray()?.ToNotes("WarningDetail"));
+                }
                 return currentResult;
+            }
 
             if ("DoNotLog".In(currentResult.Comments))
                 return currentResult;
