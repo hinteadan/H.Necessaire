@@ -106,6 +106,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                 TextColor = Branding.TextColor.ToMaui(),
                 BackgroundColor = Branding.BackgroundColorTranslucent.ToMaui(),
                 VerticalTextAlignment = TextAlignment.Center,
+                HorizontalTextAlignment = TextAlignment.Center,
             }
             .And(x => x.ItemDisplayBinding = itemDisplayBinding)
             .And(x => editor = x)
