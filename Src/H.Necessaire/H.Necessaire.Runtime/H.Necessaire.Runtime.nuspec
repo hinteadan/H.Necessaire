@@ -21,7 +21,7 @@
       <dependency id="H.Necessaire.Serialization" version="3.0.9" />
       <dependency id="Microsoft.Bcl.AsyncInterfaces" version="10.0.1" />
       <dependency id="Newtonsoft.Json" version="13.0.4" />
-      <dependency id="StandardSocketsHttpHandler" version="2.2.0.9" />
+      <dependency id="StandardSocketsHttpHandler" version="2.2.0.10" />
       <dependency id="UrlBase64" version="2.0.0" />
       <dependency id="DeviceDetector.NET" version="6.4.7" />
       <dependency id="BouncyCastle.Cryptography" version="2.6.2" />
