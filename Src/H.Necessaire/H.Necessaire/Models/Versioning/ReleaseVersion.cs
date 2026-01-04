@@ -1,5 +1,6 @@
 ﻿namespace H.Necessaire
 {
+    /// <remarks>NOT Thread-Safe</remarks>
     public class ReleaseVersion : ImATaggedValue
     {
         public ReleaseVersion() { }
