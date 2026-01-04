@@ -1,9 +1,9 @@
 ﻿namespace H.Necessaire
 {
-    public class ReleaseVersion : TaggedValue<Version>
+    public class ReleaseVersion : ImATaggedValue
     {
         public ReleaseVersion() { }
-        internal ReleaseVersion(TaggedValue<Version> taggedValue) : this()
+        private ReleaseVersion(ImATaggedValue<Version> taggedValue) : this()
         {
             if (taggedValue is null) throw new OperationResultException("The provided tagged value is null");
             if (taggedValue.Value is null) throw new OperationResultException("The provided tagged value version is null");
@@ -12,20 +12,36 @@
             Name = taggedValue.Name;
             Description = taggedValue.Description;
             Notes = taggedValue.Notes;
-            Value = taggedValue.Value;
+            Version = taggedValue.Value;
         }
 
-        public Version Version => Value;
+        public string ID { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public Note[] Notes { get; set; }
+        public Version Version { get; set; }
 
-        public new ReleaseVersion Note(params Note[] notes)
+        public ReleaseVersion Note(params Note[] notes)
         {
-            base.Note(notes);
+            Notes = Notes.Push(notes);
             return this;
         }
-        public new ReleaseVersion Describe(string description)
+        public ReleaseVersion Describe(string description)
         {
-            base.Describe(description);
+            Description = description;
             return this;
         }
+
+        public override string ToString()
+        {
+            if (Name.IsEmpty())
+                return Version?.ToString();
+
+            return $"{Name} ({Description.IfEmpty("~ No Description ~")})";
+        }
+
+        public static implicit operator Version(ReleaseVersion releaseVersion) => releaseVersion.Version;
+        public static implicit operator ReleaseVersion(Version version) => new ReleaseVersion { ID = version.Commit, Name = version.Number.Semantic, Version = version };
+        public static implicit operator ReleaseVersion(TaggedValue<Version> taggedValue) => new ReleaseVersion(taggedValue);
     }
 }
