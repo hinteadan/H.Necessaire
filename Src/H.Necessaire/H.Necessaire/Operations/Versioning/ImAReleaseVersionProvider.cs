@@ -4,6 +4,6 @@ namespace H.Necessaire
 {
     public interface ImAReleaseVersionProvider
     {
-        Task<ReleaseVersion[]> GetAllReleases();
+        Task<ReleaseVersion[]> GetAllReleases(string idStartingWith = null);
     }
 }

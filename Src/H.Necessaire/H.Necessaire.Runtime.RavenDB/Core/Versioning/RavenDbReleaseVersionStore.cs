@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.RavenDB.Core.Versioning
 {
-    internal class RavenDbReleaseVersionStore : ImAReleaseVersionStore, ImADependency
+    internal class RavenDbReleaseVersionStore : ImAReleaseVersionStore, ImAReleaseVersionProvider, ImADependency
     {
         #region Construct
         string databaseName = null;
@@ -77,7 +77,22 @@ namespace H.Necessaire.Runtime.RavenDB.Core.Versioning
             return result;
         }
 
+        public async Task<ReleaseVersion[]> GetAllReleases(string idStartingWith = null)
+        {
+            using (var dbSess = ravenDbDocumentStore.Store.OpenAsyncSession(new SessionOptions { Database = databaseName, NoTracking = true }))
+            {
+                IAsyncDocumentQuery<ReleaseVersion> query = dbSess.Advanced.AsyncDocumentQuery<ReleaseVersion>();
 
+                if (!idStartingWith.IsEmpty())
+                    query = query.WhereStartsWith("id()", idStartingWith.ToDocID());
+
+                query = query.OrderByDescending(x => x.Version.Timestamp);
+
+                ReleaseVersion[] results = await query.ToArrayAsync();
+
+                return results;
+            }
+        }
     }
 
     internal static class RavenDbReleaseVersionStoreXtnx

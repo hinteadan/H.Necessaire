@@ -39,5 +39,8 @@ namespace H.Necessaire
         }
 
         public static ImCachebale<T> ToCacheableItem<T>(this T data, string identifier = null) => data.ToCacheableItem(identifier, expiresAt: null);
+
+        public static ImCachebale<T> NoSlidingExpiration<T>(this ImCachebale<T> cacheableItem) => cacheableItem.And(x => x.IsSlidingExpirationDisabled = true);
+        public static ImCachebale<T> SlidingExpiration<T>(this ImCachebale<T> cacheableItem) => cacheableItem.And(x => x.IsSlidingExpirationDisabled = false);
     }
 }

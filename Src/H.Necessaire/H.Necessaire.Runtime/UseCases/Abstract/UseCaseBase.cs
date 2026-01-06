@@ -1,4 +1,5 @@
-﻿using System;
+﻿using H.Necessaire.Runtime.Security;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -127,6 +128,17 @@ namespace H.Necessaire.Runtime
 
             return CheckPermissions(authResult.Payload?.SecurityContext, permissionClaims).WithPayload(authResult.Payload);
         }
+
+
+        protected async Task<OperationResult<UseCaseContext>> EnsureAuthenticationOnExternalCallOnly()
+            => !UseCaseCallScope.IsExternalUseCaseCall ? OperationResult.Win().WithoutPayload<UseCaseContext>() : await EnsureAuthentication();
+        protected async Task<OperationResult<UseCaseContext>> EnsureAuthenticationTypeOnExternalCallOnly(params string[] acceptedAuthTypes)
+            => !UseCaseCallScope.IsExternalUseCaseCall ? OperationResult.Win().WithoutPayload<UseCaseContext>() : await EnsureAuthenticationType(acceptedAuthTypes);
+        protected async Task<OperationResult<UseCaseContext>> EnsureAuthenticationAndPermissionsOnExternalCallOnly(params PermissionClaim[] permissionClaims)
+            => !UseCaseCallScope.IsExternalUseCaseCall ? OperationResult.Win().WithoutPayload<UseCaseContext>() : await EnsureAuthenticationAndPermissions(permissionClaims);
+        protected async Task<OperationResult<UseCaseContext>> EnsureAuthenticationTypeAndPermissionsOnExternalCallOnly(string[] acceptedAuthTypes, params PermissionClaim[] permissionClaims)
+            => !UseCaseCallScope.IsExternalUseCaseCall ? OperationResult.Win().WithoutPayload<UseCaseContext>() : await EnsureAuthenticationTypeAndPermissions(acceptedAuthTypes, permissionClaims);
+
 
         private OperationResult CheckPermissions(SecurityContext securityContext, params PermissionClaim[] permissionClaims)
         {

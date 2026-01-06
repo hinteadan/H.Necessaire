@@ -5,7 +5,9 @@
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry
-                .Register<ImAReleaseVersionStore>(() => new RavenDbReleaseVersionStore())
+                .Register<RavenDbReleaseVersionStore>(() => new RavenDbReleaseVersionStore())
+                .Register<ImAReleaseVersionStore>(() => dependencyRegistry.Get<RavenDbReleaseVersionStore>())
+                .Register<ImAReleaseVersionProvider>(() => dependencyRegistry.Get<RavenDbReleaseVersionStore>())
                 ;
         }
     }
