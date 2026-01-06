@@ -55,6 +55,21 @@ namespace H.Necessaire
             => CallContext<ProgressReporter>.GetData(scopeIdentifier);
     }
 
+    public static class ProgressReporterExtensions
+    {
+        public static async Task ReportProgress(this string progressiveScopeID, string currentActionName, double progressRelativeToSourceInterval = 0, NumberInterval? sourceIntervalToResetTo = null, params string[] additionalInfo)
+        {
+            ProgressReporter progressReporter = ProgressReporter.Get(progressiveScopeID);
+            if (progressReporter is null)
+                return;
+
+            if (sourceIntervalToResetTo != null && !sourceIntervalToResetTo.Value.IsInfinite)
+                progressReporter.SetSourceInterval(sourceIntervalToResetTo.Value);
+
+            await progressReporter.RaiseOnProgress(currentActionName, progressRelativeToSourceInterval, additionalInfo);
+        }
+    }
+
     public class ProgressEventArgs : EventArgs
     {
         public ProgressEventArgs(string currentActionName, NumberInterval sourceInterval, double progressSourceValue, double percentValue, params string[] additionalInfo)

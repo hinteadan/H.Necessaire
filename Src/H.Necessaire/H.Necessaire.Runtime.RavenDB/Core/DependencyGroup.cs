@@ -8,6 +8,10 @@ namespace H.Necessaire.Runtime.RavenDB.Core
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry
+                .Register<Versioning.DepsGroup>(() => new Versioning.DepsGroup())
+                ;
+
+            dependencyRegistry
                 .Register<SyncRequestRavenDbStorageResource>(() => new SyncRequestRavenDbStorageResource())
                 .Register<ImAStorageService<string, SyncRequest>>(() => dependencyRegistry.Get<SyncRequestRavenDbStorageResource>())
                 .Register<ImAStorageBrowserService<SyncRequest, SyncRequestFilter>>(() => dependencyRegistry.Get<SyncRequestRavenDbStorageResource>())

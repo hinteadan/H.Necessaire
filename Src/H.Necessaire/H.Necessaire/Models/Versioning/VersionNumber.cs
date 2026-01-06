@@ -8,7 +8,7 @@ namespace H.Necessaire
     {
         public static readonly IComparer<VersionNumber> Comparer = new VersionNumberComparer();
 
-        public static readonly VersionNumber Unknown = new VersionNumber
+        public static VersionNumber Unknown => new VersionNumber
         {
             Major = 0,
             Minor = 0,

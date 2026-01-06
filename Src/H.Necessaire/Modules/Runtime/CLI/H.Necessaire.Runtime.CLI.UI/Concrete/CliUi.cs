@@ -176,11 +176,11 @@ namespace H.Necessaire.Runtime.CLI.UI.Concrete
 
                 if (args.PercentValue == 0)
                 {
-                    statusContext.Status(args.CurrentActionName);
+                    statusContext?.Status(args.CurrentActionName);
                 }
                 else
                 {
-                    statusContext.Status($"{args.CurrentActionName} ({args.PercentValue.ToString("0.00")}%)");
+                    statusContext?.Status($"{args.CurrentActionName} ({args.PercentValue.ToString("0.00")}%)");
                 }
 
                 PrintAdditionalInfoNecessary(args);

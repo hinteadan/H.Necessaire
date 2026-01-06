@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace H.Necessaire
 {
@@ -288,6 +289,30 @@ namespace H.Necessaire
             foreach (T item in collection)
             {
                 processor.Invoke(item);
+            }
+        }
+
+        public static async Task ProcessStream<T>(this IEnumerable<T> collection, Func<T, Task> processor)
+        {
+            if (processor is null || collection.IsEmpty())
+                return;
+
+            foreach (T item in collection)
+            {
+                await processor.Invoke(item);
+            }
+        }
+
+        public static IEnumerable<T> Alter<T>(this IEnumerable<T> collection, Action<T> processor)
+        {
+            if (processor is null || collection.IsEmpty())
+                yield break;
+
+            foreach (T item in collection)
+            {
+                processor.Invoke(item);
+
+                yield return item;
             }
         }
 

@@ -2,7 +2,7 @@
 
 namespace H.Necessaire
 {
-    public class TaggedValue<TValue> : IStringIdentity
+    public class TaggedValue<TValue> : ImATaggedValue<TValue>
     {
         public string ID { get; set; }
         public string Name { get; set; }
