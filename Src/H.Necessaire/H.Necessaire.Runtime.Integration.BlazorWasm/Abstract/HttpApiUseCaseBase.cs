@@ -41,8 +41,8 @@ namespace H.Necessaire.Runtime.Integration.BlazorWasm.Abstract
             if (!runnerResponse.RefPayload(out var httpResponse))
                 return runnerResponse.WithoutPayload<T>();
 
-            if (!httpResponse.Content.TryJsonToObject<T>().Ref(out var parseRes, out var result))
-                return parseRes;
+            if (!httpResponse.Content.TryJsonToObject<OperationResult<T>>().Ref(out var parseRes, out var result))
+                return parseRes.WithoutPayload<T>();
 
             return result;
         }

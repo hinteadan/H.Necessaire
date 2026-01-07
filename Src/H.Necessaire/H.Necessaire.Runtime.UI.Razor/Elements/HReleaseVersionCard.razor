@@ -1,0 +1,30 @@
+﻿@using H.Necessaire.Runtime.UI.Razor.Abstracts
+@inherits HRazorComponentBase
+
+<div class="h-necessaire @nameof(HReleaseVersionCard) flex-item @CssClassAddOns" style="@Style">
+    <div class="flex-item-h h-pad-dn h-pad-up h-brd-dn">
+        <div class="flex-node cnt-c itm-l h-txt bold large">@ReleaseVersion.Name</div>
+        <div class="flex-node cnt-c itm-r h-txt small info">@ReleaseVersion.Version.Timestamp.PrintDateTimeAsOfNow()</div>
+    </div>
+    <div class="flex-item h-pad-dn h-pad-up">
+        <div class="h-txt small wrp">
+            @if (IsHtml)
+            {
+                @((MarkupString)ReleaseVersion.Description)
+            }
+            else
+            {
+                <pre class="flex-item">
+                    @ReleaseVersion.Description
+                </pre>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public ReleaseVersion ReleaseVersion { get; set; }
+    [Parameter] public string CssClassAddOns { get; set; } = null;
+    [Parameter] public string Style { get; set; } = null;
+    [Parameter] public bool IsHtml { get; set; } = true;
+}

@@ -1,0 +1,23 @@
+﻿@inherits Abstracts.HRazorComponentBase
+
+<div class="h-necessaire @nameof(HBusyIndicator) @CssClassAddOns" style="@Style">
+    @if (ChildContent != null)
+    {
+        @ChildContent
+    }
+    else if(!Label.IsEmpty())
+    {
+        <em>@Label</em>
+    }
+    else
+    {
+        <em>Loading, please wait...</em>
+    }
+</div>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public string Label { get; set; }
+    [Parameter] public string CssClassAddOns { get; set; } = null;
+    [Parameter] public string Style { get; set; } = null;
+}
