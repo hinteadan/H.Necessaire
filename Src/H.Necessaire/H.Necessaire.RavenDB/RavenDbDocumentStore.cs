@@ -4,7 +4,6 @@ using Raven.Client.Json.Serialization.NewtonsoftJson;
 using System;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
-using static Raven.Client.Constants;
 
 namespace H.Necessaire.RavenDB
 {
@@ -29,9 +28,6 @@ namespace H.Necessaire.RavenDB
             this.clientCertificateName = runtimeConfig?.Get("RavenDbConnections")?.Get("ClientCertificateName")?.ToString()?.NullIfEmpty();
             this.databaseUrls = runtimeConfig?.Get("RavenDbConnections")?.Get("DatabaseUrls")?.GetAllStrings() ?? this.databaseUrls ?? Array.Empty<string>();
             this.clientCertificatePassword = runtimeConfig?.Get("RavenDbConnections")?.Get("ClientCertificatePassword")?.ToString()?.NullIfEmpty();
-
-            if (databaseUrls?.Any() != true)
-                throw new InvalidOperationException("The RavenDB configuration is invalid. Missing database urls");
         }
         #endregion
 
@@ -39,6 +35,9 @@ namespace H.Necessaire.RavenDB
 
         IDocumentStore CreateStore()
         {
+            if (databaseUrls?.Any() != true)
+                throw new InvalidOperationException("The RavenDB configuration is invalid. Missing database urls");
+
             IDocumentStore store = new DocumentStore()
             {
                 Urls = databaseUrls,
