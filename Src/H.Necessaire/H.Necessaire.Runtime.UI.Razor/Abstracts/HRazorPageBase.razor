@@ -1,4 +1,5 @@
-﻿@using H.Necessaire.Runtime.UI.Razor.Core.Storage
+﻿@using H.Necessaire.Runtime.UI.Razor.Core.Managers
+@using H.Necessaire.Runtime.UI.Razor.Core.Storage
 @inherits HRazorComponentBase
 @inject HJs hjs
 @code {
@@ -8,10 +9,10 @@
     {
         await base.OnAfterRenderAsync(firstRender);
 
+        EnsureDependencies();
+
         if (firstRender)
         {
-            EnsureDependencies();
-
             await InitializeConsumer();
         }
     }
@@ -23,6 +24,7 @@
         {
             CoreDatabase = HNecessaireCoreIndexedDb,
         });
+        App.DependencyRegistry.Register<Func<Task<ConsumerIdentity>>>(() => new Func<Task<ConsumerIdentity>>(App.DependencyRegistry.Get<ConsumerManager>().GetCurrentConsumer));
     }
 
     async Task InitializeConsumer()
