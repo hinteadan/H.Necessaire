@@ -74,6 +74,9 @@ namespace H.Necessaire.Runtime.Integration.BlazorWasm.Abstract
             return httpRequest;
         }
 
+        protected HttpContent JsonContent<T>(T data)
+            => new StringContent(data.ToJsonObject(), encoding: null, "application/json");
+
         protected string Url(params string[] parts) => string.Join("/", baseUrlParts.Concat(parts).ToNonEmptyArray());
     }
 }
