@@ -5,6 +5,13 @@
 @code {
     [Inject(Key = "H.Necessaire.Core")] IndexedDb HNecessaireCoreIndexedDb { get; set; }
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        EnsureDependencies();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -19,12 +26,12 @@
 
     void EnsureDependencies()
     {
-        App.DependencyRegistry.Register<Func<HJs>>(() => () => hjs);
-        App.DependencyRegistry.Register<Func<HIndexedDbContext>>(() => () => new HIndexedDbContext
+        App.DependencyRegistry.Register<HJs>(() => hjs);
+        App.DependencyRegistry.Register<HIndexedDbContext>(() => new HIndexedDbContext
         {
             CoreDatabase = HNecessaireCoreIndexedDb,
         });
-        App.DependencyRegistry.Register<Func<Task<ConsumerIdentity>>>(() => new Func<Task<ConsumerIdentity>>(App.DependencyRegistry.Get<ConsumerManager>().GetCurrentConsumer));
+        GC.Collect();
     }
 
     async Task InitializeConsumer()

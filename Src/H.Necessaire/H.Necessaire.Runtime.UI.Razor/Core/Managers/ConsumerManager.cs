@@ -14,7 +14,7 @@ namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
         ImALogger log;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
-            hIndexedDbContextProvider = dependencyProvider.Get<Func<HIndexedDbContext>>();
+            hIndexedDbContextProvider = () => dependencyProvider.Get<HIndexedDbContext>();
             consumerIdentityStorageService = dependencyProvider.Get<ImAStorageService<Guid, ConsumerIdentity>>();
             auditingService = dependencyProvider.Get<ImAnAuditingService>();
             actionQer = dependencyProvider.Get<ImAnActionQer>();

@@ -1,6 +1,5 @@
 ﻿
 using H.Necessaire.Runtime.UI.Razor.Core.Managers;
-using System;
 
 namespace H.Necessaire.Runtime.UI.Razor.Core.UseCases
 {
@@ -12,7 +11,7 @@ namespace H.Necessaire.Runtime.UI.Razor.Core.UseCases
         public override void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             base.ReferDependencies(dependencyProvider);
-            hjsProvider = dependencyProvider.Get<Func<HJs>>();
+            hjsProvider = () => dependencyProvider.Get<HJs>();
             consumerManager = dependencyProvider.Get<ConsumerManager>();
         }
 
