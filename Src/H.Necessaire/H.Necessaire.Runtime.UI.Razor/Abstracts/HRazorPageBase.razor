@@ -35,7 +35,7 @@
         if (await IsConsumerReportedForThisSession())
             return;
 
-        var consumer = await Get<ImAConsumerUseCase>().CreateOrResurrect();
+        await Get<ImAConsumerUseCase>().CreateOrResurrect();
 
         await MarkConsumerReportedForThisSession();
     }

@@ -90,7 +90,10 @@ namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
 
         async Task<ConsumerIdentity> Resurrect()
         {
-            HIndexedDbContext dbContext = hIndexedDbContextProvider();
+            HIndexedDbContext dbContext = hIndexedDbContextProvider?.Invoke();
+            if (dbContext is null)
+                return null;
+
             IndexedDbStore consumerIdentityStore = dbContext.CoreDatabase[nameof(ConsumerIdentity)];
             IAsyncEnumerable<ConsumerIdentity> allConsumers = consumerIdentityStore.GetAllAsync<ConsumerIdentity>();
             ConsumerIdentity consumerIdentity = await allConsumers.OrderByDescending(x => x.AsOf).FirstOrDefaultAsync();
