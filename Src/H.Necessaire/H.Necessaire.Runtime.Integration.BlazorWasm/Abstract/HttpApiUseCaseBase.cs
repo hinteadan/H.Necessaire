@@ -25,10 +25,20 @@ namespace H.Necessaire.Runtime.Integration.BlazorWasm.Abstract
         readonly string controllerName;
         protected HttpApiUseCaseBase(string controllerName)
         {
-            this.controllerName = controllerName;
+            this.controllerName = controllerName.IfEmpty(AutoDetermineControllerName());
         }
         protected HttpApiUseCaseBase() : this(controllerName: null) { }
         #endregion
+
+        string AutoDetermineControllerName()
+        {
+            string result = GetType().Name;
+
+            if (result.EndsWith("UseCase", StringComparison.InvariantCultureIgnoreCase))
+                result = result.Substring(0, result.Length - 7/*"UseCase".Length*/);
+
+            return result;
+        }
 
         protected async Task<OperationResult<T>> RunHttpUseCaseRequest<T>(Func<Task<OperationResult<HttpRequestMessage>>> requestBuilder)
         {
