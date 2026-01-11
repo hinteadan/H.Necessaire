@@ -9,10 +9,10 @@
     {
         await base.OnAfterRenderAsync(firstRender);
 
-        EnsureDependencies();
-
         if (firstRender)
         {
+            EnsureDependencies();
+
             await InitializeConsumer();
         }
     }
