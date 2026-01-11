@@ -20,7 +20,7 @@ namespace H.Necessaire.Runtime.UI.Razor.Core.UseCases
         {
             ConsumerIdentity consumerIdentity
                 = await consumerManager.GetCurrentConsumer()
-                ?? (hjsProvider is null ? null : await hjsProvider().GetConsumerInfo(Guid.NewGuid()))
+                ?? await hjsProvider().GetConsumerInfo(Guid.NewGuid())
                 ;
 
             if (consumerIdentity is null)

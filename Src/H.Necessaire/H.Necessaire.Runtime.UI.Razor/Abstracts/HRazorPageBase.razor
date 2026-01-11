@@ -1,24 +1,8 @@
 ﻿@using H.Necessaire.Runtime.UI.Razor.Core.Storage
 @inherits HRazorComponentBase
-@implements IDisposable
 @inject HJs hjs
 @code {
     [Inject(Key = "H.Necessaire.Core")] IndexedDb HNecessaireCoreIndexedDb { get; set; }
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        App.DependencyRegistry.Register<Func<HJs>>(() => () => hjs);
-        App.DependencyRegistry.Register<Func<HIndexedDbContext>>(() => () => new HIndexedDbContext
-        {
-            CoreDatabase = HNecessaireCoreIndexedDb,
-        });
-    }
-    public void Dispose()
-    {
-        App.DependencyRegistry.Unregister<Func<HIndexedDbContext>>();
-        App.DependencyRegistry.Unregister<Func<HJs>>();
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -26,8 +10,19 @@
 
         if (firstRender)
         {
+            EnsureDependencies();
+
             await InitializeConsumer();
         }
+    }
+
+    void EnsureDependencies()
+    {
+        App.DependencyRegistry.Register<Func<HJs>>(() => () => hjs);
+        App.DependencyRegistry.Register<Func<HIndexedDbContext>>(() => () => new HIndexedDbContext
+        {
+            CoreDatabase = HNecessaireCoreIndexedDb,
+        });
     }
 
     async Task InitializeConsumer()
