@@ -19,7 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.2" />
 		<PackageReference Include="Tavenem.Blazor.IndexedDB" Version="6.4.1" />
 	</ItemGroup>
 
