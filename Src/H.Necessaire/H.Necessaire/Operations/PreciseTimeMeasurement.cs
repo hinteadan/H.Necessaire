@@ -15,7 +15,7 @@ namespace H.Necessaire
             scopedRunner
                 = new ScopedRunner(
                     () => startTime = Stopwatch.GetTimestamp(),
-                    () => { TimeSpan duration = TimeSpan.FromTicks(Stopwatch.GetTimestamp() - startTime); this.onDone?.Invoke(duration); }
+                    () => this.onDone?.Invoke(CalculateOSSafeTimeSpan(startTime, Stopwatch.GetTimestamp()))
                 );
         }
 
@@ -23,5 +23,10 @@ namespace H.Necessaire
         {
             scopedRunner.Dispose();
         }
+
+        static TimeSpan CalculateOSSafeTimeSpan(long startTime, long endTime)
+            => TimeSpan.FromSeconds(
+                (double)(endTime - startTime) / Stopwatch.Frequency
+            );
     }
 }
