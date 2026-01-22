@@ -25,8 +25,8 @@ namespace H.Necessaire
         }
 
         static TimeSpan CalculateOSSafeTimeSpan(long startTime, long endTime)
-            => TimeSpan.FromSeconds(
-                (double)(endTime - startTime) / Stopwatch.Frequency
+            => TimeSpan.FromTicks(
+                ((endTime - startTime) * TimeSpan.TicksPerSecond) / Stopwatch.Frequency
             );
     }
 }
