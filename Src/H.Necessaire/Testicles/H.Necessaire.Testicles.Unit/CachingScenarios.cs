@@ -54,15 +54,15 @@ namespace H.Necessaire.Testicles.Unit
             int cachedValue = (await cacher.TryGet("IntCacheTest")).ThrowOnFailOrReturn();
             cachedValue.Should().Be(42, because: "we just cached the value 42 for 1 second");
 
-            await Task.Delay(TimeSpan.FromSeconds(.4));
+            await Task.Delay(TimeSpan.FromSeconds(.4), TestContext.Current.CancellationToken);
             cachedValue = (await cacher.TryGet("IntCacheTest")).ThrowOnFailOrReturn();
             cachedValue.Should().Be(42, because: "The cached value of 42 hasn't expired yet");
 
-            await Task.Delay(TimeSpan.FromSeconds(.65));
+            await Task.Delay(TimeSpan.FromSeconds(.65), TestContext.Current.CancellationToken);
             cachedValue = (await cacher.TryGet("IntCacheTest")).ThrowOnFailOrReturn();
             cachedValue.Should().Be(42, because: "The cached value of 42 hasn't expired yet because it was slided");
 
-            await Task.Delay(TimeSpan.FromSeconds(.9));
+            await Task.Delay(TimeSpan.FromSeconds(.9), TestContext.Current.CancellationToken);
 
             OperationResult cachedValueResult = await cacher.TryGet("IntCacheTest");
             cachedValueResult.IsSuccessful.Should().BeFalse(because: "the cached item should have been removed from cache during a housekeeping session as it was not accessed and therefore not slided");
@@ -78,11 +78,11 @@ namespace H.Necessaire.Testicles.Unit
             int cachedValue = (await cacher.TryGet("IntCacheTest")).ThrowOnFailOrReturn();
             cachedValue.Should().Be(42, because: "we just cached the value 42 for 1 second");
 
-            await Task.Delay(TimeSpan.FromSeconds(.4));
+            await Task.Delay(TimeSpan.FromSeconds(.4), TestContext.Current.CancellationToken);
             cachedValue = (await cacher.TryGet("IntCacheTest")).ThrowOnFailOrReturn();
             cachedValue.Should().Be(42, because: "The cached value of 42 hasn't expired yet");
 
-            await Task.Delay(TimeSpan.FromSeconds(.65));
+            await Task.Delay(TimeSpan.FromSeconds(.65), TestContext.Current.CancellationToken);
             OperationResult cachedValueResult = await cacher.TryGet("IntCacheTest");
             cachedValueResult.IsSuccessful.Should().BeFalse(because: "the cached item should have been removed from cache during a housekeeping session as even though it was accessed, it has sliding expiration disabled");
         }
