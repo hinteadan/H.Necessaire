@@ -48,7 +48,7 @@ namespace H.Necessaire.Testicles.Unit
                 }).Start();
             }
 
-            mainSemaphore.Wait();
+            mainSemaphore.Wait(TestContext.Current.CancellationToken);
         }
 
         [Fact(DisplayName = "CallContext Works For Async Await On Main Thread")]
@@ -83,20 +83,20 @@ namespace H.Necessaire.Testicles.Unit
                 Task.Run(async () => {
                     CallContext<string>.SetData(ambientDataKey, "SomeValueA");
                     await AssertExpectedContextValueInCallChainAsync("SomeValueA", "That's the value for this async-await branch");
-                }),
+                }, TestContext.Current.CancellationToken),
                 Task.Run(async () => {
                     CallContext<string>.SetData(ambientDataKey, "SomeValueB");
                     await AssertExpectedContextValueInCallChainAsync("SomeValueB", "That's the value for this async-await branch");
-                }),
+                }, TestContext.Current.CancellationToken),
                 Task.Run(async () => {
                     CallContext<string>.SetData(ambientDataKey, "SomeValueC");
                     await AssertExpectedContextValueInCallChainAsync("SomeValueC", "That's the value for this async-await branch");
-                }),
+                }, TestContext.Current.CancellationToken),
                 Task.Run(async () => {
 
                     await AssertExpectedContextValueInCallChainAsync("SomeValue", "On this async-await branch we did not override the value");
 
-                })
+                }, TestContext.Current.CancellationToken)
             );
         }
 
@@ -125,7 +125,7 @@ namespace H.Necessaire.Testicles.Unit
                 }).Start();
             }
 
-            await mainSemaphore.WaitAsync();
+            await mainSemaphore.WaitAsync(TestContext.Current.CancellationToken);
 
         }
 
