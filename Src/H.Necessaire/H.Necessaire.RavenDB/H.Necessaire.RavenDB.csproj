@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.5" />
-    <PackageReference Include="RavenDB.Client" Version="7.2.0" />
+    <PackageReference Include="RavenDB.Client" Version="7.2.1" />
   </ItemGroup>
 
   <ItemGroup>
