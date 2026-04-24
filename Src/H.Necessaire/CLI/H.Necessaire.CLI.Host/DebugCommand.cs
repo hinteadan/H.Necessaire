@@ -14,24 +14,27 @@ namespace H.Necessaire.CLI.Host
 
         class DefaultSubCommand : SubCommandBase
         {
-            AsyncEventRaiser<EventArgs> demoEvent;
+            ImALogger log;
             public override void ReferDependencies(ImADependencyProvider dependencyProvider)
             {
                 base.ReferDependencies(dependencyProvider);
-                demoEvent = new AsyncEventRaiser<EventArgs>(this);
-            }
 
-            event AsyncEventHandler<EventArgs> OnDemo { add => demoEvent.OnEvent += value; remove => demoEvent.OnEvent -= value; }
+                log = dependencyProvider.GetLogger<DefaultSubCommand>();
+            }
 
             public override async Task<OperationResult> Run(params Note[] args)
             {
-                OnDemo += async (sender, args) => { await Task.Delay(2000); Log($"Handler 1 event from {sender.TypeName() ?? "[Unknown]"}"); };
+                await Task.WhenAll([
+                    log.LogInfo("Log A"),
+                    log.LogInfo("Log B"),
+                    log.LogInfo("Log C"),
+                    log.LogInfo("Log D"),
+                    log.LogInfo("Log E"),
+                    log.LogInfo("Log F"),
+                    log.LogInfo("Log G"),
+                ]);
 
-                OnDemo += async (sender, args) => { await Task.Delay(3000); Log($"Handler 2 event from {sender.TypeName() ?? "[Unknown]"}"); };
-
-                await demoEvent.Raise(EventArgs.Empty);
-
-                return OperationResult.Win();
+                return true;
             }
         }
 
