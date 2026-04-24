@@ -29,7 +29,7 @@ namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
             currentConsumerIdentity = consumerIdentity;
             HIndexedDbContext dbContext = hIndexedDbContextProvider();
             IndexedDbStore consumerIdentityStore = dbContext.CoreDatabase[nameof(ConsumerIdentity)];
-            bool isOK = await consumerIdentityStore.StoreAsync(consumerIdentity);
+            bool isOK = (await consumerIdentityStore.StoreItemAsync<IndexedDbStoreEntity<ConsumerIdentity, Guid>>(consumerIdentity)) != null;
 
             if (isOK)
             {
@@ -92,7 +92,7 @@ namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
         {
             HIndexedDbContext dbContext = hIndexedDbContextProvider();
             IndexedDbStore consumerIdentityStore = dbContext.CoreDatabase[nameof(ConsumerIdentity)];
-            IAsyncEnumerable<ConsumerIdentity> allConsumers = consumerIdentityStore.GetAllAsync<ConsumerIdentity>();
+            IAsyncEnumerable<ConsumerIdentity> allConsumers = consumerIdentityStore.GetAllAsync<IndexedDbStoreEntity<ConsumerIdentity, Guid>>().Select(x => x.Data);
             ConsumerIdentity consumerIdentity = await allConsumers.OrderByDescending(x => x.AsOf).FirstOrDefaultAsync();
             return consumerIdentity;
         }
