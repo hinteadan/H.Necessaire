@@ -7,6 +7,7 @@ namespace H.Necessaire
 {
     internal class ConsoleLogProcessor : LogProcessorBase
     {
+        static readonly object consoleWriteLocker = new object();
         const string separator = " | ";
         const ConsoleColor separatorColor = ConsoleColor.DarkGray;
         const ConsoleColor defaultColor = ConsoleColor.DarkGray;
@@ -25,22 +26,25 @@ namespace H.Necessaire
             if (logEntry == null || logEntry.Level == LogEntryLevel.None)
                 return OperationResult.Win().WithPayload(logEntry).AsTask();
 
-            Write(
-                logEntry.HappenedAt.PrintDateAndTime()?.TupleWith(ConsoleColor.DarkGray)
-                , logEntry.Message?.TupleWith(ColorFor(logEntry.Level))
-                , logEntry.Method?.TupleWith(ConsoleColor.DarkGray)
-                , logEntry.Component?.TupleWith(ConsoleColor.DarkGray)
-            );
+            lock (consoleWriteLocker)
+            {
+                Write(
+                    logEntry.HappenedAt.PrintDateAndTime()?.TupleWith(ConsoleColor.DarkGray)
+                    , logEntry.Message?.TupleWith(ColorFor(logEntry.Level))
+                    , logEntry.Method?.TupleWith(ConsoleColor.DarkGray)
+                    , logEntry.Component?.TupleWith(ConsoleColor.DarkGray)
+                );
 
-            if (logEntry.Payload != null)
-                Write($"{Environment.NewLine}Payload: {logEntry.Payload}{Environment.NewLine}", ColorFor(LogEntryLevel.Debug));
+                if (logEntry.Payload != null)
+                    Write($"{Environment.NewLine}Payload: {logEntry.Payload}{Environment.NewLine}", ColorFor(LogEntryLevel.Debug));
 
-            if (logEntry.Level >= LogEntryLevel.Error && !string.IsNullOrWhiteSpace(logEntry.StackTrace))
-                Write($"{Environment.NewLine}Stack Trace:{Environment.NewLine}{logEntry.StackTrace}{Environment.NewLine}", ColorFor(LogEntryLevel.Warn));
+                if (logEntry.Level >= LogEntryLevel.Error && !string.IsNullOrWhiteSpace(logEntry.StackTrace))
+                    Write($"{Environment.NewLine}Stack Trace:{Environment.NewLine}{logEntry.StackTrace}{Environment.NewLine}", ColorFor(LogEntryLevel.Warn));
 
-            Console.WriteLine();
+                Console.WriteLine();
 
-            return OperationResult.Win().WithPayload(logEntry).AsTask();
+                return OperationResult.Win().WithPayload(logEntry).AsTask();
+            }
         }
 
         static void Write(params Tuple<string, ConsoleColor>[] values)
@@ -54,7 +58,13 @@ namespace H.Necessaire
             }
         }
 
-        static void Write(string value, ConsoleColor color = ConsoleColor.DarkGray) { using (color.Scope()) Console.Write(value); }
+        static void Write(string value, ConsoleColor color = ConsoleColor.DarkGray)
+        {
+            using (color.Scope())
+            {
+                Console.Write(value);
+            }
+        }
 
         static ConsoleColor ColorFor(LogEntryLevel level) => colorPerLevel.ContainsKey(level) ? colorPerLevel[level] : defaultColor;
     }

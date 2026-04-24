@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="Google.Cloud.Firestore" Version="4.2.0" />
-    <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.6" />
+    <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.7" />
   </ItemGroup>
 
 	<ItemGroup>
