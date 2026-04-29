@@ -3,6 +3,7 @@ using H.Necessaire.Runtime.CLI.UI;
 using H.Necessaire.Runtime.ExternalCommandRunner;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,15 +25,9 @@ namespace H.Necessaire.CLI.Host
 
             public override async Task<OperationResult> Run(params Note[] args)
             {
-                await Task.WhenAll([
-                    log.LogInfo("Log A"),
-                    log.LogInfo("Log B"),
-                    log.LogInfo("Log C"),
-                    log.LogInfo("Log D"),
-                    log.LogInfo("Log E"),
-                    log.LogInfo("Log F"),
-                    log.LogInfo("Log G"),
-                ]);
+                int threadCount = 7;
+
+                await Task.WhenAll(Enumerable.Range(1, threadCount).Select(i => log.LogInfo($"Log Info {i}")));
 
                 return true;
             }
@@ -45,11 +40,13 @@ namespace H.Necessaire.CLI.Host
             {
                 var semaphore = new SemaphoreSlim(0, 1);
 
-                Throttler throttler = new Throttler(async () => {
+                Throttler throttler = new Throttler(async () =>
+                {
                     await Logger.LogInfo("Throttled action");
                 }, TimeSpan.FromSeconds(1));
 
-                new Thread(async () => {
+                new Thread(async () =>
+                {
 
                     var start = Stopwatch.GetTimestamp();
                     while (Stopwatch.GetElapsedTime(start) < TimeSpan.FromSeconds(5))

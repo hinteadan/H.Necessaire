@@ -4,16 +4,12 @@ using System.Threading.Tasks;
 
 public static class Program
 {
-    public static void Main()
-    {
-        MainAsync().GetAwaiter().GetResult();
-    }
-
-    static async Task MainAsync()
+    public static async Task Main()
     {
         await
             new App()
             .WithEverything()
+            .With(x => x.Register<H.Necessaire.Runtime.RuntimeDependencyGroup>(() => new H.Necessaire.Runtime.RuntimeDependencyGroup()))
             .Run()
             ;
     }
