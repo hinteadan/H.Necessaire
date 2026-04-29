@@ -142,7 +142,7 @@ namespace H.Necessaire
             return true.AsTask();
         }
 
-        protected virtual Task ClearAllLogEntires()
+        protected virtual Task ClearAllLogEntries()
         {
             new Action(() =>
             {
@@ -157,7 +157,7 @@ namespace H.Necessaire
         {
             if (!delayedProcessors?.Any() ?? true)
             {
-                await ClearAllLogEntires();
+                await ClearAllLogEntries();
                 return;
             }
 

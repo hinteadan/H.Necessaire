@@ -27,8 +27,12 @@ namespace H.Necessaire
             object instance = null;
             if (typeof(ImADependencyGroup).IsAssignableFrom(type))
             {
+                if (IsReferDepsAlreadyCalledFor(type))
+                    return this;
+
                 instance = factory();
                 ((ImADependencyGroup)instance).RegisterDependencies(this);
+                PinReferDepsCallFor(type);
             }
 
             InstanceFactory instanceFactory = new InstanceFactory(this, instance == null ? factory : () => instance, isAlwaysNew: false);
