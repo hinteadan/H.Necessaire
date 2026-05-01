@@ -71,7 +71,19 @@ namespace H.Necessaire
             dependencyDictionary.AddOrUpdate(type, instanceFactory, (x, y) => instanceFactory);
             return this;
         }
+        public ImADependencyRegistry RegisterAlwaysNew(Type type, Func<Type, object> typedFactory)
+        {
+            if (typeof(ImADependencyGroup).IsAssignableFrom(type))
+            {
+                throw new InvalidOperationException("Dependency groups must be registered using Register()");
+            }
+
+            InstanceFactory instanceFactory = new InstanceFactory(this, typedFactory, isAlwaysNew: true);
+            dependencyDictionary.AddOrUpdate(type, instanceFactory, (x, y) => instanceFactory);
+            return this;
+        }
         public ImADependencyRegistry RegisterAlwaysNew<T>(Func<object> factory) => RegisterAlwaysNew(typeof(T), factory);
+        public ImADependencyRegistry RegisterAlwaysNew<T>(Func<Type, object> factory) => RegisterAlwaysNew(typeof(T), factory);
         public ImADependencyRegistry RegisterAlwaysNew<T>() where T : new() => RegisterAlwaysNew<T>(() => new T());
 
         public ImADependencyRegistry Unregister(Type type)
