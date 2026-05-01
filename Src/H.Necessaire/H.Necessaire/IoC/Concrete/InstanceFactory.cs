@@ -10,6 +10,7 @@ namespace H.Necessaire
         private readonly DependencyRegistry dependencyRegistry;
         private readonly ImADependencyProvider dependencyProvider;
         private readonly Func<object> factory;
+        private readonly Func<Type, object> typedFactory;
         private object instance = null;
 
         public bool IsAlwaysNew { get; } = false;
@@ -19,25 +20,35 @@ namespace H.Necessaire
             this.dependencyRegistry = dependencyProvider as DependencyRegistry;
             this.dependencyProvider = dependencyProvider;
             this.factory = factory;
+            this.typedFactory = null;
+            this.IsAlwaysNew = isAlwaysNew;
+        }
+
+        public InstanceFactory(ImADependencyProvider dependencyProvider, Func<Type, object> typedFactory, bool isAlwaysNew = false)
+        {
+            this.dependencyRegistry = dependencyProvider as DependencyRegistry;
+            this.dependencyProvider = dependencyProvider;
+            this.factory = null;
+            this.typedFactory = typedFactory;
             this.IsAlwaysNew = isAlwaysNew;
         }
 
         public InstanceFactory(ImADependencyProvider dependencyProvider, object instance) : this(dependencyProvider, () => instance, isAlwaysNew: false) { }
 
-        public object GetInstance()
+        public object GetInstance(Type typeToEnsure = null)
         {
-            EnsureInstance();
+            EnsureInstance(typeToEnsure);
             return instance;
         }
 
-        private void EnsureInstance()
+        private void EnsureInstance(Type typeToEnsure = null)
         {
             lock (locker)
             {
                 if (instance != null && !IsAlwaysNew)
                     return;
 
-                instance = factory?.Invoke();
+                instance = typeToEnsure is null ? factory?.Invoke() : (typedFactory?.Invoke(typeToEnsure) ?? factory?.Invoke());
                 if (instance is ImADependency dependency)
                 {
                     Type type = dependency.GetType();
