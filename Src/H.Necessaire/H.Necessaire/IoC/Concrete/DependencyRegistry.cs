@@ -39,14 +39,32 @@ namespace H.Necessaire
             dependencyDictionary.AddOrUpdate(type, instanceFactory, (x, y) => instanceFactory);
             return this;
         }
+        public ImADependencyRegistry Register(Type type, Func<Type, object> typedFactory)
+        {
+            object instance = null;
+            if (typeof(ImADependencyGroup).IsAssignableFrom(type))
+            {
+                if (IsReferDepsAlreadyCalledFor(type))
+                    return this;
+
+                instance = typedFactory(type);
+                ((ImADependencyGroup)instance).RegisterDependencies(this);
+                PinReferDepsCallFor(type);
+            }
+
+            InstanceFactory instanceFactory = new InstanceFactory(this, instance == null ? typedFactory : t => instance, isAlwaysNew: false);
+            dependencyDictionary.AddOrUpdate(type, instanceFactory, (x, y) => instanceFactory);
+            return this;
+        }
         public ImADependencyRegistry Register<T>(Func<object> factory) => Register(typeof(T), factory);
+        public ImADependencyRegistry Register<T>(Func<Type, object> factory) => Register(typeof(T), factory);
         public ImADependencyRegistry Register<T>() where T : new() => Register<T>(() => new T());
 
         public ImADependencyRegistry RegisterAlwaysNew(Type type, Func<object> factory)
         {
             if (typeof(ImADependencyGroup).IsAssignableFrom(type))
             {
-                throw new InvalidOperationException("Dependecy groups must be registered using Register()");
+                throw new InvalidOperationException("Dependency groups must be registered using Register()");
             }
 
             InstanceFactory instanceFactory = new InstanceFactory(this, factory, isAlwaysNew: true);
@@ -69,7 +87,7 @@ namespace H.Necessaire
             if (!dependencyDictionary.TryGetValue(type, out var x))
                 return null;
 
-            return x.GetInstance();
+            return x.GetInstance(type);
         }
         public T Get<T>() => (T)Get(typeof(T));
 
@@ -78,7 +96,7 @@ namespace H.Necessaire
             return
                 dependencyDictionary
                 .Where(x => !x.Value.IsAlwaysNew)
-                .Select(x => new KeyValuePair<Type, Func<object>>(x.Key, x.Value.GetInstance));
+                .Select(x => new KeyValuePair<Type, Func<object>>(x.Key, () => x.Value.GetInstance(x.Key)));
         }
 
         public IEnumerable<KeyValuePair<Type, Func<object>>> GetAllAlwaysNewTypes()
@@ -86,7 +104,7 @@ namespace H.Necessaire
             return
                 dependencyDictionary
                 .Where(x => x.Value.IsAlwaysNew)
-                .Select(x => new KeyValuePair<Type, Func<object>>(x.Key, x.Value.GetInstance));
+                .Select(x => new KeyValuePair<Type, Func<object>>(x.Key, () => x.Value.GetInstance(x.Key)));
         }
 
         internal bool IsReferDepsAlreadyCalledFor(Type type)
