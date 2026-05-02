@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using H.Necessaire.Testicles.Unit.Model.IoC;
+using System;
 using System.Linq;
 using Xunit;
 
@@ -17,7 +18,7 @@ namespace H.Necessaire.Testicles.Unit
 
             dependencyRegistry.Register(typeof(ComposedDependency), () => new ComposedDependency());
             dependencyRegistry.Get(typeof(ComposedDependency)).Should().BeSameAs(dependencyRegistry.Get(typeof(ComposedDependency)), "The composed dependecy was registered as singleton");
-            (dependencyRegistry.Get(typeof(ComposedDependency)) as ComposedDependency).PureDependency.Should().BeSameAs(dependencyRegistry.Get(typeof(PureDependency)), "The composed dependecy refers the pure dependency, registred as singleton");
+            (dependencyRegistry.Get(typeof(ComposedDependency)) as ComposedDependency).PureDependency.Should().BeSameAs(dependencyRegistry.Get(typeof(PureDependency)), "The composed dependecy refers the pure dependency, registered as singleton");
         }
 
         [Fact(DisplayName = "IoC API Can Correctly Register A Singleton Dependency Via GenericType")]
@@ -28,7 +29,7 @@ namespace H.Necessaire.Testicles.Unit
 
             dependencyRegistry.Register<ComposedDependency>(() => new ComposedDependency());
             dependencyRegistry.Get<ComposedDependency>().Should().BeSameAs(dependencyRegistry.Get(typeof(ComposedDependency)), "The composed dependecy was registered as singleton");
-            dependencyRegistry.Get<ComposedDependency>().PureDependency.Should().BeSameAs(dependencyRegistry.Get(typeof(PureDependency)), "The composed dependecy refers the pure dependency, registred as singleton");
+            dependencyRegistry.Get<ComposedDependency>().PureDependency.Should().BeSameAs(dependencyRegistry.Get(typeof(PureDependency)), "The composed dependecy refers the pure dependency, registered as singleton");
         }
 
         [Fact(DisplayName = "IoC API Can Correctly Register A Transient Dependency Via Type")]
@@ -42,7 +43,7 @@ namespace H.Necessaire.Testicles.Unit
             dependencyRegistry.Get(typeof(ComposedDependency)).Should().NotBeNull();
             dependencyRegistry.Get(typeof(ComposedDependency)).Should().NotBeSameAs(dependencyRegistry.Get(typeof(ComposedDependency)), "The composed dependecy was registered as transient");
             (dependencyRegistry.Get(typeof(ComposedDependency)) as ComposedDependency).PureDependency.Should().NotBeNull();
-            (dependencyRegistry.Get(typeof(ComposedDependency)) as ComposedDependency).PureDependency.Should().NotBeSameAs(dependencyRegistry.Get(typeof(PureDependency)), "The composed dependecy refers the pure dependency, registred as transient");
+            (dependencyRegistry.Get(typeof(ComposedDependency)) as ComposedDependency).PureDependency.Should().NotBeSameAs(dependencyRegistry.Get(typeof(PureDependency)), "The composed dependecy refers the pure dependency, registered as transient");
         }
 
         [Fact(DisplayName = "IoC API Can Correctly Register A Transient Dependency Via GenericType")]
@@ -56,7 +57,7 @@ namespace H.Necessaire.Testicles.Unit
             dependencyRegistry.Get<ComposedDependency>().Should().NotBeNull();
             dependencyRegistry.Get<ComposedDependency>().Should().NotBeSameAs(dependencyRegistry.Get(typeof(ComposedDependency)), "The composed dependecy was registered as transient");
             dependencyRegistry.Get<ComposedDependency>().PureDependency.Should().NotBeNull();
-            dependencyRegistry.Get<ComposedDependency>().PureDependency.Should().NotBeSameAs(dependencyRegistry.Get(typeof(PureDependency)), "The composed dependecy refers the pure dependency, registred as transient");
+            dependencyRegistry.Get<ComposedDependency>().PureDependency.Should().NotBeSameAs(dependencyRegistry.Get(typeof(PureDependency)), "The composed dependecy refers the pure dependency, registered as transient");
         }
 
         [Fact(DisplayName = "IoC API Can Correctly Unregister A Dependency Via Type")]
@@ -105,11 +106,19 @@ namespace H.Necessaire.Testicles.Unit
             dependencyRegistry.Register<PureDependency>(() => new PureDependency());
             dependencyRegistry.RegisterAlwaysNew<ComposedDependency>(() => new ComposedDependency());
 
-            dependencyRegistry.GetAllOneTimeTypes().Should().HaveCount(1, "we registred one singleton");
-            dependencyRegistry.GetAllAlwaysNewTypes().Should().HaveCount(1, "we registred one transient");
+            dependencyRegistry.GetAllOneTimeTypes().Should().HaveCount(1, "we registered one singleton");
+            dependencyRegistry.GetAllAlwaysNewTypes().Should().HaveCount(1, "we registered one transient");
             dependencyRegistry.GetAllOneTimeTypes().Single().Value().Should().Be(dependencyRegistry.Get<PureDependency>(), "singletons always have the same instance");
             dependencyRegistry.GetAllAlwaysNewTypes().Single().Value().Should().NotBeNull("calling the factory should resolve");
             dependencyRegistry.GetAllAlwaysNewTypes().Single().Value().Should().NotBe(dependencyRegistry.Get<ComposedDependency>(), "transients always resolve to new instances");
+        }
+
+        [Fact(DisplayName = "IoC API Can Correctly Resolve Open Generics")]
+        public void IoC_API_Can_Correctly_Resolve_Open_Generics()
+        {
+            dependencyRegistry.RegisterAlwaysNew(typeof(EphemeralType<>), t => Activator.CreateInstance(t));
+
+            dependencyRegistry.Get<EphemeralType<int>>().Should().NotBeNull(because: "we registered the open generic for it");
         }
     }
 }
