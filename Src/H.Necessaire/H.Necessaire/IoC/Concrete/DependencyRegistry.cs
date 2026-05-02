@@ -96,10 +96,13 @@ namespace H.Necessaire
 
         public object Get(Type type)
         {
-            if (!dependencyDictionary.TryGetValue(type, out var x))
-                return null;
+            if (dependencyDictionary.TryGetValue(type, out var instanceFactory))
+                return instanceFactory.GetInstance(type);
 
-            return x.GetInstance(type);
+            if (type.IsGenericType && dependencyDictionary.TryGetValue(type.GetGenericTypeDefinition(), out instanceFactory))
+                return instanceFactory.GetInstance(type);
+
+            return null;            
         }
         public T Get<T>() => (T)Get(typeof(T));
 
