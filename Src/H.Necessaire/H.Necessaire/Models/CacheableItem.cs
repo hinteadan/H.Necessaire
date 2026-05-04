@@ -10,7 +10,21 @@ namespace H.Necessaire
 
         public bool IsSlidingExpirationDisabled { get; set; } = false;
 
-        public void PinAccess(DateTime? at = null) => AsOf = at?.EnsureUtc() ?? DateTime.UtcNow;
+        public void PinAccess(DateTime? at = null, bool isValidityExtensionDisabled = false)
+        {
+            if (IsExpired(at))
+                return;
+
+            AsOf = at?.EnsureUtc() ?? DateTime.UtcNow;
+
+            if (isValidityExtensionDisabled)
+                return;
+
+            if (IsSlidingExpirationDisabled || ValidFor == null)
+                return;
+
+            ActiveAsOf(AsOf);
+        }
 
         public override string ToString()
         {
