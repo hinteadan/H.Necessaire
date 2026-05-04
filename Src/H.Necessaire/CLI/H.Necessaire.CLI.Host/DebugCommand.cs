@@ -25,9 +25,9 @@ namespace H.Necessaire.CLI.Host
 
             public override async Task<OperationResult> Run(params Note[] args)
             {
-                int threadCount = 7;
+                var cache = 17.ToCacheableItem(TimeSpan.FromSeconds(5)).AbsoluteExpiration();
 
-                await Task.WhenAll(Enumerable.Range(1, threadCount).Select(i => log.LogInfo($"Log Info {i}")));
+
 
                 return true;
             }
