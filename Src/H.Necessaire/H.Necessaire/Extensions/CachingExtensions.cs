@@ -66,6 +66,12 @@ namespace H.Necessaire
         public static ImCachebale<T> FixedExpiration<T>(this ImCachebale<T> cacheableItem)
             => cacheableItem.DontSlideExpiration();
 
+        /// <summary>
+        /// Alias for DontSlideExpiration
+        /// </summary>
+        public static ImCachebale<T> NoSlidingExpiration<T>(this ImCachebale<T> cacheableItem)
+            => cacheableItem.DontSlideExpiration();
+
 
         /// <summary>
         /// Default behavior, no need to explicitly call this, unless your logic can potentially disable sliding expiration and you want to make sure it's enabled
@@ -83,5 +89,11 @@ namespace H.Necessaire
 
             return cacheableItem;
         }
+
+        /// <summary>
+        /// Alias for SlideExpiration
+        /// </summary>
+        public static ImCachebale<T> SlidingExpiration<T>(this ImCachebale<T> cacheableItem)
+            => cacheableItem.SlideExpiration();
     }
 }
