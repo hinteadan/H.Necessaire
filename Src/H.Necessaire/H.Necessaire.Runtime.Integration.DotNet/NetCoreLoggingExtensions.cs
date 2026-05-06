@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Configuration;
+using System;
 
 namespace H.Necessaire.Runtime.Integration.DotNet
 {
@@ -28,6 +29,17 @@ namespace H.Necessaire.Runtime.Integration.DotNet
             builder.AddConfiguration();
 
             builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider>(dependencyProvider.Get<NetCoreLoggerProvider>()));
+
+            LoggerProviderOptions.RegisterProviderOptions<RuntimeConfig, NetCoreLoggerProvider>(builder.Services);
+
+            return builder;
+        }
+
+        public static ILoggingBuilder AddHNecessaireLogging(this ILoggingBuilder builder, Func<IServiceProvider, ImADependencyProvider> dependencyProvider)
+        {
+            builder.AddConfiguration();
+
+            builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider>(sp => dependencyProvider.Invoke(sp).Get<NetCoreLoggerProvider>()));
 
             LoggerProviderOptions.RegisterProviderOptions<RuntimeConfig, NetCoreLoggerProvider>(builder.Services);
 
