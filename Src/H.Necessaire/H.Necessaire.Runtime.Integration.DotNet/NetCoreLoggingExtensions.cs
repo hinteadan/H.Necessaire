@@ -28,7 +28,7 @@ namespace H.Necessaire.Runtime.Integration.DotNet
         {
             builder.AddConfiguration();
 
-            builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider>(dependencyProvider.Get<NetCoreLoggerProvider>()));
+            builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton(dependencyProvider.Get<NetCoreLoggerProvider>()));
 
             LoggerProviderOptions.RegisterProviderOptions<RuntimeConfig, NetCoreLoggerProvider>(builder.Services);
 
@@ -39,7 +39,7 @@ namespace H.Necessaire.Runtime.Integration.DotNet
         {
             builder.AddConfiguration();
 
-            builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<ILoggerProvider>(sp => dependencyProvider.Invoke(sp).Get<NetCoreLoggerProvider>()));
+            builder.Services.TryAddEnumerable(ServiceDescriptor.Singleton(sp => dependencyProvider.Invoke(sp).Get<NetCoreLoggerProvider>()));
 
             LoggerProviderOptions.RegisterProviderOptions<RuntimeConfig, NetCoreLoggerProvider>(builder.Services);
 
