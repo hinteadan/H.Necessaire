@@ -25,9 +25,21 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
         /// <param name="args">Args for cmd.exe /c</param>
         /// <returns>Operation Result</returns>
         public async Task<OperationResult<ExternalCommandRunContext>> RunCmd(CancellationToken cancellationToken, params Note[] args)
+            => await RawRunCmd(cancellationToken, argsBuilder.Build(args));
+        public async Task<OperationResult<ExternalCommandRunContext>> RunCmd(params Note[] args)
+            => await RunCmd(CancellationToken.None, args);
+        public async Task<OperationResult<ExternalCommandRunContext>> Run(CancellationToken cancellationToken, params Note[] args)
+            => await RawRun(cancellationToken, argsBuilder.Build(args));
+        public async Task<OperationResult<ExternalCommandRunContext>> Run(params Note[] args)
+            => await Run(CancellationToken.None, args);
+
+
+        public async Task<OperationResult<ExternalCommandRunContext>> RawRunCmd(params string[] args)
+            => await RawRunCmd(CancellationToken.None, args);
+        public async Task<OperationResult<ExternalCommandRunContext>> RawRunCmd(CancellationToken cancellationToken, params string[] args)
         {
             ExternalCommandRunContext context = ExternalCommandRunContext.GetCurrent();
-            Note[] actualArgs = new Note[2 + (args?.Length ?? 0)];
+            string[] actualArgs = new string[2 + (args?.Length ?? 0)];
             actualArgs[0] = "cmd.exe";
             actualArgs[1] = context?.IsUserInputExpected == true ? null : "/c";
             for (int i = 0; i < (args?.Length ?? 0); i++)
@@ -35,14 +47,13 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
                 actualArgs[i + 2] = args[i];
             }
 
-            return await Run(cancellationToken, actualArgs);
+            return await RawRun(cancellationToken, actualArgs);
         }
-        public async Task<OperationResult<ExternalCommandRunContext>> RunCmd(params Note[] args)
-            => await RunCmd(CancellationToken.None, args);
-
-        public async Task<OperationResult<ExternalCommandRunContext>> Run(CancellationToken cancellationToken, params Note[] args)
+        public async Task<OperationResult<ExternalCommandRunContext>> RawRun(params string[] args)
+            => await RawRun(CancellationToken.None, args);
+        public async Task<OperationResult<ExternalCommandRunContext>> RawRun(CancellationToken cancellationToken, params string[] args)
         {
-            string command = argsBuilder.BuildInline(args?.FirstOrDefault() ?? default);
+            string command = args?.FirstOrDefault();
             if (command.IsEmpty())
             {
                 return OperationResult.Fail("Missing external command to run, as first argument").WithoutPayload<ExternalCommandRunContext>();
@@ -96,8 +107,7 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
 
             return result;
         }
-        public async Task<OperationResult<ExternalCommandRunContext>> Run(params Note[] args)
-            => await Run(CancellationToken.None, args);
+
 
         public ImAContextualExternalCommandRunner WithContext(ExternalCommandRunContext context)
         {
@@ -178,11 +188,11 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
             }
         }
 
-        Process BuildProcess(ExternalCommandRunContext context, string command, params Note[] args)
+        Process BuildProcess(ExternalCommandRunContext context, string command, params string[] args)
         {
             Process externalProcess = new Process();
             externalProcess.StartInfo.FileName = command;
-            externalProcess.StartInfo.Arguments = argsBuilder.BuildInline(args.ToNoNullsArray());
+            externalProcess.StartInfo.Arguments = argsBuilder.BuildInline(args);
             externalProcess.StartInfo.UseShellExecute = false;
             externalProcess.StartInfo.RedirectStandardOutput = context.IsOutputCaptured;
             externalProcess.StartInfo.RedirectStandardError = context.IsOutputCaptured;
