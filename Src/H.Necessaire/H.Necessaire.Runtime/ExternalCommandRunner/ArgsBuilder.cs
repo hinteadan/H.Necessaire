@@ -14,10 +14,10 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
                 ;
         }
 
-        public string BuildInline(params Note[] args)
+        public string BuildInline(params string[] args)
         {
-            string[] parts = Build(args);
-            if (parts?.Any() != true)
+            string[] parts = args?.ToNonEmptyArray();
+            if (parts.IsEmpty())
                 return null;
 
             return string.Join(" ", parts);
