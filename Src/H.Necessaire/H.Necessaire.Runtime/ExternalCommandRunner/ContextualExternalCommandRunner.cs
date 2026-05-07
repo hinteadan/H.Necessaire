@@ -36,5 +36,27 @@ namespace H.Necessaire.Runtime.ExternalCommandRunner
         }
         public async Task<OperationResult<ExternalCommandRunContext>> RunCmd(params Note[] args)
             => await RunCmd(CancellationToken.None, args);
+
+        public async Task<OperationResult<ExternalCommandRunContext>> RawRun(params string[] args)
+            => await RawRun(CancellationToken.None, args);
+
+        public async Task<OperationResult<ExternalCommandRunContext>> RawRun(CancellationToken cancellationToken, params string[] args)
+        {
+            using (context.Scope())
+            {
+                return await externalCommandRunner.RawRun(args);
+            }
+        }
+
+        public async Task<OperationResult<ExternalCommandRunContext>> RawRunCmd(params string[] args)
+            => await RawRunCmd(CancellationToken.None, args);
+
+        public async Task<OperationResult<ExternalCommandRunContext>> RawRunCmd(CancellationToken cancellationToken, params string[] args)
+        {
+            using (context.Scope())
+            {
+                return await externalCommandRunner.RawRunCmd(args);
+            }
+        }
     }
 }
