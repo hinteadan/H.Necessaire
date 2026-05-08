@@ -25,9 +25,7 @@ namespace H.Necessaire.CLI.Host
 
             public override async Task<OperationResult> Run(params Note[] args)
             {
-                var cache = 17.ToCacheableItem(TimeSpan.FromSeconds(5)).AbsoluteExpiration();
-
-
+                return await HSafe.Run(() => { throw new InvalidOperationException("Test"); });
 
                 return true;
             }

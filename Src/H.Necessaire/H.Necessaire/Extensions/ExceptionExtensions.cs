@@ -41,5 +41,19 @@ namespace H.Necessaire
                 .Select(ex => new Note(ex.HResult.ToString(), ex.ToString()))
                 .ToArray();
         }
+
+        public static string ToStringPolished(this Exception ex)
+        {
+            if (ex == null)
+                return null;
+
+            return 
+                string.Join(
+                    "", 
+                    ex.GetType().FullName, ": ", ex.Message,
+                    (ex.StackTrace.IsEmpty() ? "" : string.Join("", Environment.NewLine, "   ")),
+                    ex.StackTrace?.ToLogStackTraces()?.Morph(stack => stack.IsEmpty() ? "" : string.Join(string.Join("", Environment.NewLine, "   "), stack))
+                );
+        }
     }
 }

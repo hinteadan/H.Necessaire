@@ -36,7 +36,7 @@ namespace H.Necessaire
                     .Select(x => x.Message)
                     .Concat(
                         all
-                        .Select((x, i) => $"Exception Details [{i}]:{Environment.NewLine}{x}")
+                        .Select((x, i) => $"Exception Details [{i}]:{Environment.NewLine}{x.ToStringPolished()}")
                     )
                     .ToArray()
                 );
