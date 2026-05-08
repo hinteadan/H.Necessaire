@@ -22,7 +22,7 @@ namespace H.Necessaire
                     x.Component = Component;
                     x.ScopeID = CallContext<Guid?>.GetData(CallContextKey.LoggingScopeID) ?? x.ScopeID;
                     x.OperationContext = CallContext<OperationContext>.GetData(CallContextKey.OperationContext);
-                    x.StackTrace = x.Exception?.StackTrace;
+                    x.StackTrace = x.Exception?.StackTrace?.ToLogStackTraces()?.Morph(stack => stack.IsEmpty() ? null : string.Join(Environment.NewLine, stack));
                 })
                 .And(x =>
                 {
@@ -32,7 +32,7 @@ namespace H.Necessaire
                     new Action(() =>
                     {
                         string stackTrace = Environment.StackTrace;
-                        x.StackTrace = stackTrace?.Substring(stackTrace.IndexOf(Environment.NewLine) + Environment.NewLine.Length);
+                        x.StackTrace = stackTrace?.Substring(stackTrace.IndexOf(Environment.NewLine) + Environment.NewLine.Length)?.ToLogStackTraces()?.Morph(stack => stack.IsEmpty() ? null : string.Join(Environment.NewLine, stack));
                     })
                     .TryOrFailWithGrace();
                 });
