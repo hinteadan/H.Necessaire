@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace H.Necessaire.Operations
+namespace H.Necessaire
 {
     public interface ImAConnectivityInfoProvider
     {

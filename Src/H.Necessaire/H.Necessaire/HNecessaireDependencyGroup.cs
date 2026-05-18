@@ -1,5 +1,4 @@
-﻿using H.Necessaire.Operations;
-using H.Necessaire.Operations.Concrete;
+﻿using H.Necessaire.Operations.Concrete;
 using H.Necessaire.Operations.Versioning;
 
 namespace H.Necessaire
@@ -23,6 +22,8 @@ namespace H.Necessaire
                 .Register<AesCryptographer>(() => new AesCryptographer())
                 .Register<CaesarCipherCryptographer>(() => new CaesarCipherCryptographer())
                 .Register<ImACryptographer>(() => dependencyRegistry.Get<AesCryptographer>())
+                .Register<ImACancellationManagerFactory>(() => new CancellationManagerFactory())
+                .Register<ImACancellationManager>(() => new CancellationManager())
 
                 .Register<ImATotpHandler>(() => new TotpHandler())
                 .Register<Operations.QdAction.DependenctGroup>(() => new Operations.QdAction.DependenctGroup())

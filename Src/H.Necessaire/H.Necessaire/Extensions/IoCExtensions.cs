@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 
 namespace H.Necessaire
 {
@@ -66,5 +67,11 @@ namespace H.Necessaire
                 defaultTo
                 ;
         }
+
+        public static ImACancellationManager GetNewCancellationManager<T>(this T deps) where T : ImADependencyProvider
+            => deps.Get<ImACancellationManagerFactory>().New();
+
+        public static ImACancellationManager GetNewCancellationManager<T>(this T deps, params CancellationToken[] linkedTokens) where T : ImADependencyProvider
+            => deps.Get<ImACancellationManagerFactory>().New(linkedTokens);
     }
 }
