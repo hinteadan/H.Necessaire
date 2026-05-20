@@ -22,7 +22,7 @@ namespace H.Necessaire.RavenDB
             if (measurement is null)
                 return;
 
-            HMeasurement existing = await dbSession.LoadAsync<HMeasurement>(measurement.ID);
+            HMeasurement existing = await dbSession.LoadAsync<HMeasurement>(measurement.ID, include => include.IncludeAllCounters().IncludeAllTimeSeries());
 
             if (existing is null)
             {
@@ -146,7 +146,7 @@ namespace H.Necessaire.RavenDB
 
         public static async Task<HMeasurement> LoadHMeasurement(this IAsyncDocumentSession dbSession, string id)
         {
-            HMeasurement metric = await dbSession.LoadAsync<HMeasurement>(id);
+            HMeasurement metric = await dbSession.LoadAsync<HMeasurement>(id, include => include.IncludeAllCounters().IncludeAllTimeSeries());
 
             if (metric is null)
                 return null;
