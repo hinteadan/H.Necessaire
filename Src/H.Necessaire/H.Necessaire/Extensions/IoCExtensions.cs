@@ -1,4 +1,5 @@
-﻿using System;
+﻿using H.Necessaire.Operations.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -73,5 +74,11 @@ namespace H.Necessaire
 
         public static ImACancellationManager GetNewCancellationManager<T>(this T deps, params CancellationToken[] linkedTokens) where T : ImADependencyProvider
             => deps.Get<ImACancellationManagerFactory>().New(linkedTokens);
+
+        public static ImALimitedConcurrencyRunner NewLimitedConcurrencyRunner(this ImADependencyProvider dependencyProvider)
+            => dependencyProvider.Get<ImALimitedConcurrencyRunnerFactory>().New();
+        public static ImALimitedConcurrencyRunner NewLimitedConcurrencyRunner(this ImADependencyProvider dependencyProvider, int maxConcurrency = 150)
+            => dependencyProvider.Get<ImALimitedConcurrencyRunnerFactory>().New(maxConcurrency);
+
     }
 }

@@ -24,6 +24,7 @@ namespace H.Necessaire
                 .Register<ImACryptographer>(() => dependencyRegistry.Get<AesCryptographer>())
                 .Register<ImACancellationManagerFactory>(() => new CancellationManagerFactory())
                 .Register<ImACancellationManager>(() => new CancellationManager())
+                .Register<ImALimitedConcurrencyRunnerFactory>(() => new LimitedConcurrencyRunnerFactory())
 
                 .Register<ImATotpHandler>(() => new TotpHandler())
                 .Register<Operations.QdAction.DependenctGroup>(() => new Operations.QdAction.DependenctGroup())
