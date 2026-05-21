@@ -114,7 +114,7 @@ namespace H.Necessaire.RavenDB
 
                 foreach (HTimeSeriesEntry entry in updatedTimeSeries)
                 {
-                    var existingEntry = existingEntries.FirstOrDefault(x => x.Timestamp == entry.Timestamp);
+                    var existingEntry = existingEntries?.FirstOrDefault(x => x.Timestamp == entry.Timestamp);
 
                     if (existingEntry != null)
                         continue;
