@@ -125,6 +125,7 @@ namespace H.Necessaire
             //self.ID = other.ID;
             self.Tag = other.Tag;
             self.DisplayLabel = other.DisplayLabel;
+            self.Source = other.Source;
             self.Period = MergePeriods(self.Period, other.Period);
             self.Notes = self.Notes.Push(other.Notes);
 

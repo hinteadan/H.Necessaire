@@ -17,7 +17,7 @@ namespace H.Necessaire.RavenDB
             dbSession.Advanced.GetMetadataFor(document)[Raven.Client.Constants.Documents.Metadata.Collection] = collectionName;
         }
 
-        public static async Task SaveHMeasurement(this IAsyncDocumentSession dbSession, HMeasurement measurement, string collectionName = null, bool isSaveChangesCallDisabled = false)
+        public static async Task SaveHMeasurement(this IAsyncDocumentSession dbSession, HMeasurement measurement, string collectionName = null, bool isSaveChangesCallDisabled = false, Action<HMeasurement> decorator = null)
         {
             if (measurement is null)
                 return;
@@ -83,13 +83,18 @@ namespace H.Necessaire.RavenDB
             {
                 var existingCount = (await existingCounters.GetAsync(updatedCounter.ID)) ?? 0;
                 var diff = updatedCounter.Count;
-                if (measurement.Period is null || existing.Period is null)
-                    diff = updatedCounter.Count - existingCount;
-                else if ((measurement.Period.From ?? DateTime.MinValue) < (existing.Period.To ?? DateTime.MaxValue))
-                    diff = (measurement.Period.To ?? DateTime.MaxValue) > (existing.Period.To ?? DateTime.MaxValue)
-                        ? diff = updatedCounter.Count - existingCount
-                        : 0
-                        ;
+
+                if (measurement.Source == existing.Source)
+                {
+                    if (measurement.Period is null || existing.Period is null)
+                        diff = updatedCounter.Count - existingCount;
+                    else if ((measurement.Period.From ?? DateTime.MinValue) < (existing.Period.To ?? DateTime.MaxValue))
+                        diff = (measurement.Period.To ?? DateTime.MaxValue) > (existing.Period.To ?? DateTime.MaxValue)
+                            ? diff = updatedCounter.Count - existingCount
+                            : 0
+                            ;
+                }
+                
                 existingCounters.Increment(updatedCounter.ID, diff);
             }
 
@@ -138,7 +143,7 @@ namespace H.Necessaire.RavenDB
                 }
             }
 
-            existing = existing.UpdateMeta(measurement);
+            existing = existing.UpdateMeta(measurement).AndIf(decorator != null, decorator);
 
             if (!isSaveChangesCallDisabled)
                 await dbSession.SaveChangesAsync();

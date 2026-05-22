@@ -16,6 +16,7 @@ namespace H.Necessaire
         public string ID { get; set; }
         public string Tag { get; set; }
         public string DisplayLabel { get; set; }
+        public string Source { get; set; }
 
         public PeriodOfTime Period { get; set; }
 
