@@ -12,6 +12,11 @@ namespace H.Necessaire
         {
             this.streamFactory = streamFactory;
         }
+
+        /// <summary>
+        /// For serialization
+        /// </summary>
+        private DataBin() { }
         #endregion
 
         public virtual async Task<ImADataBinStream> OpenDataBinStream()
