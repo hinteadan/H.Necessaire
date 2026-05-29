@@ -1,4 +1,5 @@
 ﻿using H.Necessaire.Analytics;
+using H.Necessaire.RavenDB;
 using H.Necessaire.Runtime.RavenDB.Core.Resources;
 using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Queries;

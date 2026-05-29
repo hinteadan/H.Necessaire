@@ -4,9 +4,9 @@ using Raven.Client.Documents.Session;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace H.Necessaire.Runtime.RavenDB
+namespace H.Necessaire.RavenDB
 {
-    internal class RavenStream<TEntity> : IDisposableEnumerable<TEntity>
+    public class RavenStream<TEntity> : IDisposableEnumerable<TEntity>
     {
         readonly IDocumentSession ravenSession;
         readonly IRavenQueryable<TEntity> ravenQueryableEnumeration;
