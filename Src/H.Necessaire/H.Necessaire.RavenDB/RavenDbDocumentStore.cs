@@ -49,7 +49,6 @@ namespace H.Necessaire.RavenDB
                 Conventions =
                 {
                     MaxNumberOfRequestsPerSession = 100,
-                    UseOptimisticConcurrency = true,
                     Serialization = new NewtonsoftJsonSerializationConventions {
                         CustomizeJsonDeserializer = x => {
                             x.ObjectCreationHandling = Newtonsoft.Json.ObjectCreationHandling.Replace;
