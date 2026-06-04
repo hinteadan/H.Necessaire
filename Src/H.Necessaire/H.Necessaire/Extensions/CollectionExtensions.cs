@@ -248,19 +248,27 @@ namespace H.Necessaire
 
         public static string[] TrimToValidKeywordsOnly(this string[] keywords, int minLength = 3, int maxNumberOfKeywords = 3)
         {
-            if (keywords == null)
-                return keywords;
-
-            if (!keywords.Any())
+            if (keywords.IsEmpty())
                 return keywords;
 
             return keywords
                 .Where(k =>
-                    !string.IsNullOrWhiteSpace(k)
+                    !k.IsEmpty()
                     && k.Length >= minLength
                 )
                 .Take(maxNumberOfKeywords)
+                .Select(k => k.Trim())
                 .ToArray();
+        }
+
+        public static string[] TrimToValidKeywordsOnly(this string searchKey, int minLength = 3, int maxNumberOfKeywords = 3, string[] splitters = null)
+        {
+            if (searchKey.IsEmpty())
+                return null;
+
+            string[] keywords = searchKey.Split(!splitters.IsEmpty() ? splitters : new string[] { " ", "\t", "\r", "\n", "\f", "\v" }, StringSplitOptions.RemoveEmptyEntries);
+
+            return keywords.TrimToValidKeywordsOnly(minLength, maxNumberOfKeywords);
         }
 
         public static ImAnAuditEntry LatestOrDefault(this IEnumerable<ImAnAuditEntry> auditEntries)
