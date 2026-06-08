@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 
 namespace H.Necessaire
 {
@@ -89,5 +90,15 @@ namespace H.Necessaire
 
             return innerOpRes;
         }
+
+
+        public static OperationResult DoNotLog(this OperationResult opRes)
+            => opRes?.And(x => x.WithComment("DoNotLog"));
+        public static OperationResult<T> DoNotLog<T>(this OperationResult<T> opRes)
+            => opRes?.And(x => x.WithComment("DoNotLog"));
+        public static async Task<OperationResult> DoNotLog(this Task<OperationResult> opRes)
+            => opRes is null ? null : (await opRes).DoNotLog();
+        public static async Task<OperationResult<T>> DoNotLog<T>(this Task<OperationResult<T>> opRes)
+            => opRes is null ? null : (await opRes).DoNotLog();
     }
 }
