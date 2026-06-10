@@ -7,7 +7,7 @@
 	<ItemGroup>
 	  <PackageReference Include="Spectre.Console" Version="0.56.0" />
 	  <PackageReference Include="Spectre.Console.Json" Version="0.56.0" />
-	  <PackageReference Include="System.Text.Json" Version="10.0.8" />
+	  <PackageReference Include="System.Text.Json" Version="10.0.9" />
 	</ItemGroup>
 
 	<ItemGroup>

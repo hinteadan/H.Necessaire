@@ -30,7 +30,12 @@ namespace H.Necessaire
             });
 
             periodicActionDestroyer.Stop();
-            periodicActionDestroyer.StartDelayed(throttleInterval, throttleInterval, () => { periodicActionExecutioner.Stop(); return true.AsTask(); });
+            periodicActionDestroyer.StartDelayed(throttleInterval, throttleInterval, () =>
+            {
+                periodicActionDestroyer.Stop();
+                periodicActionExecutioner.Stop();
+                return true.AsTask();
+            });
 
             await Task.FromResult(true);
         }
