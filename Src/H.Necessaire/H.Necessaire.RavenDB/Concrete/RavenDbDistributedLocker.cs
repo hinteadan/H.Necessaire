@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Raven.Client.Documents.Session;
+using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,7 +12,7 @@ namespace H.Necessaire.RavenDB.Concrete
         const string idSeparator = "::";
         string coreDatabaseName;
         RavenDbDocumentStore ravenDbDocumentStore;
-        readonly SemaphoreSlim lockSemaphore = new SemaphoreSlim(1, 1);
+        readonly ConcurrentDictionary<string, SemaphoreSlim> lockSemaphores = new ConcurrentDictionary<string, SemaphoreSlim>();
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             ravenDbDocumentStore = dependencyProvider.Get<RavenDbDocumentStore>();
@@ -21,12 +23,14 @@ namespace H.Necessaire.RavenDB.Concrete
         {
             string docID = BuildID(lockID);
 
+            var lockSemaphore = GetLockSemaphore(lockID);
+
             await lockSemaphore.WaitAsync();
             using (new ScopedRunner(null, _ => lockSemaphore.Release()))
             {
                 return (await HSafe.Run<OperationResult<DistributedLock>>(async () =>
                 {
-                    using (var dbSession = ravenDbDocumentStore.Store.OpenAsyncSession(coreDatabaseName))
+                    using (var dbSession = OpenDbSession())
                     {
                         DistributedLock existingLock = await dbSession.LoadAsync<DistributedLock>(docID);
 
@@ -86,7 +90,7 @@ namespace H.Necessaire.RavenDB.Concrete
 
             return (await HSafe.Run<OperationResult>(async () =>
             {
-                using (var dbSession = ravenDbDocumentStore.Store.OpenAsyncSession(coreDatabaseName))
+                using (var dbSession = OpenDbSession())
                 {
                     DistributedLock existingLock = await dbSession.LoadAsync<DistributedLock>(docID);
 
@@ -121,6 +125,17 @@ namespace H.Necessaire.RavenDB.Concrete
             })).UnwrapToFirstFailOrLastWin();
         }
 
+        IAsyncDocumentSession OpenDbSession()
+        {
+            return
+                ravenDbDocumentStore.Store.OpenAsyncSession(coreDatabaseName).And(db =>
+                {
+                    db.Advanced.OptimisticConcurrencyMode = OptimisticConcurrencyMode.Writes;
+                });
+        }
+
         static string BuildID(string lockID) => idPrefix + idSeparator + lockID;
+
+        SemaphoreSlim GetLockSemaphore(string lockID) => lockSemaphores.GetOrAdd(lockID, new SemaphoreSlim(1, 1));
     }
 }
