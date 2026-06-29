@@ -63,9 +63,10 @@ namespace H.Necessaire.Operations.Concrete
                 isStarted = false;
             }
 
-            cancellationTokenSource.Cancel();
-            cancellationTokenSource.Dispose();
-            cancellationTokenSource = new CancellationTokenSource();
+            var prevToken = Interlocked.Exchange(ref cancellationTokenSource, new CancellationTokenSource());
+
+            prevToken.Cancel();
+            prevToken.Dispose();
         }
 
         async Task DelayRunAndQueueAnother()
