@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace H.Necessaire
 {
@@ -54,6 +55,24 @@ namespace H.Necessaire
             string[] parts = rawLogMessage.Split(messagePartsBreaker, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToArrayNullIfEmpty();
 
             return parts;
+        }
+
+        public static async Task<IDisposable> LogInfoDuration(this ImALogger log, string action, string emoji = null, Func<TimeSpan, string> endMessageBuilder = null, bool isFullyCustomized = false)
+        {
+            if (log is null)
+                return ScopedRunner.Null;
+
+            action = action.IfEmpty("(> Unknown Action <)");
+            string actionToDisplay = isFullyCustomized ? action : string.Join(" ", "Running", action);
+            string prefix = emoji.IsEmpty() ? "" : string.Join("", emoji, " ");
+
+            await log.LogInfo($"{prefix}{actionToDisplay}");
+
+            return new PreciseTimeMeasurement(async t => {
+                string endActionToDisplay = (endMessageBuilder?.Invoke(t)).IfEmpty(string.Join(" ", "DONE", actionToDisplay, "in", t));
+                string endPrefix = prefix.IsEmpty() ? "" : string.Join("", "✅", prefix);
+                await log.LogInfo($"{endPrefix}{endActionToDisplay}");
+            });
         }
 
         static string TrimStackTraceLine(this string stackTraceLine)
