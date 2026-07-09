@@ -43,6 +43,10 @@ namespace H.Necessaire.Operations.Concrete
             {
                 await Task.Delay(delay, CancellationToken);
             }
+            catch (ObjectDisposedException)
+            {
+                return;
+            }
             catch (TaskCanceledException)
             {
                 return;
@@ -89,6 +93,10 @@ namespace H.Necessaire.Operations.Concrete
             try
             {
                 await Task.Delay(interval, CancellationToken);
+            }
+            catch (ObjectDisposedException)
+            {
+                return;
             }
             catch (TaskCanceledException)
             {

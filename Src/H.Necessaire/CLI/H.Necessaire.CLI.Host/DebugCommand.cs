@@ -25,7 +25,21 @@ namespace H.Necessaire.CLI.Host
 
             public override async Task<OperationResult> Run(params Note[] args)
             {
-                return await HSafe.Run(() => { throw new InvalidOperationException("Test"); });
+                //return await HSafe.Run(() => { throw new InvalidOperationException("Test"); });
+
+                Throttler th = new Throttler(async () => { Console.Write("."); await Task.Delay(200); }, TimeSpan.FromMilliseconds(1000));
+
+                Enumerable.Range(0, 10).Select(index => Task.Run(async () => {
+
+                    for (int i = 0; i < 50; i++)
+                    {
+                        await Task.Delay(500);
+                        await th.Invoke();
+                    }
+
+                })).ProcessStream(_ => { });
+
+                await Task.Delay(20000);
 
                 return true;
             }
