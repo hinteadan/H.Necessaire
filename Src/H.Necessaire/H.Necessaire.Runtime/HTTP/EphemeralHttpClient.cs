@@ -67,7 +67,7 @@ namespace H.Necessaire.Runtime.HTTP
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && !IsExpired())
+            if (!IsExpired())
                 return;
 
             HSafe.Run(() => base.Dispose(disposing));
