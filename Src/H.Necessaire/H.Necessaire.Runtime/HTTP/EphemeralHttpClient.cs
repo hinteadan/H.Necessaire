@@ -70,7 +70,7 @@ namespace H.Necessaire.Runtime.HTTP
             if (disposing && !IsExpired())
                 return;
 
-            base.Dispose(disposing);
+            HSafe.Run(() => base.Dispose(disposing));
         }
     }
 }
