@@ -4,12 +4,14 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.HTTP
 {
     internal class EphemeralHttpClient : HttpClient, IEphemeralType, ImAnHttpCookieHolder, ImAnHttpClientCertificatesHolder
     {
         static readonly TimeSpan defaultRecycleSpan = TimeSpan.FromMinutes(30);
+        static readonly TimeSpan gracePeriod = TimeSpan.FromSeconds(6);
         readonly EphemeralType<HttpClient> ephemeralHttpClient
             = new EphemeralType<HttpClient>()
             .And(x => x.ExpireIn(defaultRecycleSpan))
@@ -69,6 +71,16 @@ namespace H.Necessaire.Runtime.HTTP
         {
             if (!IsExpired())
                 return;
+
+            bool isInGracePeriod = DateTime.UtcNow - ExpiresAt.Value <= gracePeriod;
+            if (isInGracePeriod)
+            {
+                Task.Run(async () => {
+                    await Task.Delay(gracePeriod);
+                    HSafe.Run(() => base.Dispose(disposing));
+                });
+                return;
+            }
 
             HSafe.Run(() => base.Dispose(disposing));
         }
