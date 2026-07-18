@@ -9,11 +9,13 @@ namespace H.Necessaire.Runtime.MAUI.Core
         ISecureStorage secureStorage;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
-            secureStorage = SecureStorage.Default;
+            secureStorage ??= SecureStorage.Default;
         }
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry.RegisterAlwaysNew<ConsumerIdentity>(() => consumerIdentity);
+
+            secureStorage ??= SecureStorage.Default;
         }
 
         public async Task<ConsumerIdentity> CreateOrResurrect()
