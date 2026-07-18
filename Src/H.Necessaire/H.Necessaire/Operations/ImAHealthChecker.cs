@@ -20,7 +20,7 @@ namespace H.Necessaire
 
     public class HealthChecker : ImAHealthChecker
     {
-        static readonly TimeSpan healthCheckTimeout = TimeSpan.FromSeconds(3);
+        static readonly TimeSpan healthCheckTimeout = TimeSpan.FromSeconds(10);
         static readonly TimeSpan httpClientTimeout = TimeSpan.FromMinutes(5);
         static readonly TimeSpan httpRequestTimeout = TimeSpan.FromSeconds(10);
         static readonly TimeSpan httpRequestSlowTime = TimeSpan.FromSeconds(2.5);
@@ -86,7 +86,7 @@ namespace H.Necessaire
             if (httpConnectivityCheckResults.TryGetValue(url, out var check) && check?.IsActive() == true)
                 return check.Payload;
 
-            var result = await HSafe.Run(async () => await Task.Run(async () =>
+            var result = await HSafe.Run(async () =>
             {
                 var http = EnsureHttpClient();
 
@@ -127,7 +127,7 @@ namespace H.Necessaire
                     .WithComment($"HttpRequestURL::{url}", $"HttpRequestDuration::{requestDuration}", $"HttpRequestDurationTicks::{requestDuration.Ticks}")
                     .AndIf(!slowWarning.IsEmpty(), x => x.Warn(slowWarning))
                     ;
-            }));
+            });
 
             var checkResult = new EphemeralType<OperationResult>
             {

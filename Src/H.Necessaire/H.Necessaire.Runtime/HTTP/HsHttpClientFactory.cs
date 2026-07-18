@@ -39,10 +39,13 @@ namespace H.Necessaire.Runtime.HTTP
                         c.Add(cookie);
                     }
                 }), clientCertificates);
-                if (!httpClientsDictionary.TryAdd(id, httpClient))
+
+                var httpFromDic = httpClientsDictionary.GetOrAdd(id, httpClient);
+
+                if (httpFromDic != httpClient)
                 {
                     HSafe.Run(httpClient.Dispose);
-                    return httpClientsDictionary[id];
+                    return httpFromDic;
                 }
 
                 return httpClient;
@@ -53,15 +56,16 @@ namespace H.Necessaire.Runtime.HTTP
 
             EphemeralHttpClient newHttpClient = new EphemeralHttpClient(httpClientCandidate.CookieContainer, httpClientCandidate.ClientCertificates);
 
-            httpClientsDictionary.TryRemove(id, out httpClientCandidate);
+            if (httpClientsDictionary.TryRemove(id, out httpClientCandidate))
+                HSafe.Run(httpClientCandidate.Dispose);
 
-            HSafe.Run(httpClientCandidate.Dispose);
 
+            var httpFromDict = httpClientsDictionary.GetOrAdd(id, newHttpClient);
 
-            if (!httpClientsDictionary.TryAdd(id, newHttpClient))
+            if (httpFromDict != newHttpClient)
             {
                 HSafe.Run(newHttpClient.Dispose);
-                return httpClientsDictionary[id];
+                return httpFromDict;
             }
 
             return newHttpClient;
