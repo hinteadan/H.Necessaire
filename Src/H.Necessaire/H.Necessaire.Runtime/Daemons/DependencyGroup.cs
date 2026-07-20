@@ -4,7 +4,10 @@
     {
         public void RegisterDependencies(ImADependencyRegistry dependencyRegistry)
         {
-            dependencyRegistry.Register<SyncRequestProcessingDaemon>(() => new SyncRequestProcessingDaemon());
+            dependencyRegistry
+                .Register<SyncRequestProcessingDaemon>(() => new SyncRequestProcessingDaemon())
+                .Register<BackgroundServiceDaemonDebugger>(() => new BackgroundServiceDaemonDebugger())
+                ;
         }
     }
 }
