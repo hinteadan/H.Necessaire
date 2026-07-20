@@ -35,6 +35,10 @@
       "commandName": "Project",
       "commandLineArgs": "debug tamers"
     },
+    "CLI - debug BackgroundServiceDaemonDebugger": {
+      "commandName": "Project",
+      "commandLineArgs": "dbx BackgroundServiceDaemonDebugger"
+    },
     "CLI - version": {
       "commandName": "Project",
       "commandLineArgs": "version"
