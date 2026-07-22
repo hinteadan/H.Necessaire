@@ -18,7 +18,7 @@
 	protected async Task<H.Necessaire.Version> GetAppVersion() => await huiToolkit.GetAppVersion();
 
 	public bool IsBusy { get; private set; }
-	protected IDisposable BusyScope() => new ScopedRunner(_ => IsBusy = true, _ => IsBusy = false);
+	protected IDisposable BusyScope(bool shouldCallStateChange = false) => new ScopedRunner(_ => IsBusy = true.AndIf(shouldCallStateChange, _ => StateHasChanged()), _ => IsBusy = false.AndIf(shouldCallStateChange, _ => StateHasChanged()));
 
 	protected ImALogger log;
 	protected override async Task OnInitializedAsync()
