@@ -1,4 +1,5 @@
 ﻿using H.Necessaire.Runtime.UI.Razor.Core.Storage;
+using System.Runtime.InteropServices;
 using Tavenem.Blazor.IndexedDB;
 
 namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
@@ -9,11 +10,15 @@ namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
         Func<HIndexedDbContext> hIndexedDbContextProvider;
         ImAStorageService<Guid, ConsumerIdentity> consumerIdentityStorageService;
         ImAnAuditingService auditingService;
+        ImAnActionQer actionQer;
+        ImALogger log;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
-            hIndexedDbContextProvider = dependencyProvider.Get<Func<HIndexedDbContext>>();
+            hIndexedDbContextProvider = () => dependencyProvider.Get<HIndexedDbContext>();
             consumerIdentityStorageService = dependencyProvider.Get<ImAStorageService<Guid, ConsumerIdentity>>();
             auditingService = dependencyProvider.Get<ImAnAuditingService>();
+            actionQer = dependencyProvider.Get<ImAnActionQer>();
+            log = dependencyProvider.GetLogger<ConsumerManager>();
         }
 
         public async Task SetCurrentConsumer(ConsumerIdentity consumerIdentity)
@@ -28,9 +33,34 @@ namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
 
             if (isOK)
             {
-                await consumerIdentityStorageService.Save(consumerIdentity);
-                await AuditConsumerIfNecessary(consumerIdentity);
+                await consumerIdentityStorageService.Save(consumerIdentity);//This will trigger audit and QdAction for WASM
+                if (RuntimeInformation.ProcessArchitecture != Architecture.Wasm)
+                {
+                    await AuditConsumerIfNecessary(consumerIdentity);
+                    await QueueConsumerDetailsProcessingIfNecessary(consumerIdentity);
+                }
             }
+        }
+
+        async Task QueueConsumerDetailsProcessingIfNecessary(ConsumerIdentity consumerIdentity)
+        {
+            if (actionQer is null)
+                return;
+
+            if (consumerIdentity is null)
+                return;
+
+            await HSafe.Run(async () =>
+            {
+
+                if (!consumerIdentity.IpAddress.IsEmpty())
+                    await actionQer.Queue(QdAction.New(WellKnown.QdActionType.ProcessIpAddress, WellKnown.QdActionType.ProcessIpAddressPayload(consumerIdentity))).LogError(log, "actionQer.Queue ProcessIpAddress");
+
+                if (consumerIdentity.RuntimePlatform != null)
+                    await actionQer.Queue(QdAction.New(WellKnown.QdActionType.ProcessRuntimePlatform, WellKnown.QdActionType.ProcessRuntimePlatformPayload(consumerIdentity))).LogError(log, "actionQer.Queue ProcessRuntimePlatform");
+
+            }, "QueueConsumerDetailsProcessingIfNecessary")
+            .LogError(log, "QueueConsumerDetailsProcessingIfNecessary");
         }
 
         async Task AuditConsumerIfNecessary(ConsumerIdentity consumerIdentity)
@@ -41,7 +71,8 @@ namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
             if (consumerIdentity is null)
                 return;
 
-            await HSafe.Run(async () => {
+            await HSafe.Run(async () =>
+            {
 
                 await auditingService.Append(
                     consumerIdentity.ToAuditMeta(consumerIdentity.ID.ToString(), AuditActionType.Create),

@@ -10,7 +10,7 @@ namespace H.Necessaire.Runtime.UI.Razor.Core.Managers
                 .AndIf(RuntimeInformation.ProcessArchitecture != Architecture.Wasm, x => x.RegisterAlwaysNew<ConsumerManager>(() => new ConsumerManager()))
                 .AndIf(RuntimeInformation.ProcessArchitecture == Architecture.Wasm, x => x.Register<ConsumerManager>(() => new ConsumerManager()))
 
-                .Register<Func<Task<ConsumerIdentity>>>(() => dependencyRegistry.Get<ConsumerManager>().GetCurrentConsumer())
+                .Register<Func<Task<ConsumerIdentity>>>(() => new Func<Task<ConsumerIdentity>>(dependencyRegistry.Get<ConsumerManager>().GetCurrentConsumer))
 
                 ;
         }

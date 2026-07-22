@@ -71,7 +71,11 @@ namespace H.Necessaire.Runtime.HTTP
             }, tag: $"HTTP Full Request {httpRequestMessage.Method} {httpRequestMessage.RequestUri}");
 
             if (!isHttpRequestMessageDisposalAlreadyHandled)
+            {
+                if (httpRequestMessage.Content != null)
+                    HSafe.Run(httpRequestMessage.Content.Dispose);
                 HSafe.Run(httpRequestMessage.Dispose);
+            }
 
             return
                 executionResult.IsSuccessful
@@ -137,7 +141,11 @@ namespace H.Necessaire.Runtime.HTTP
             }, tag: $"HTTP Streamed Request {httpRequestMessage.Method} {httpRequestMessage.RequestUri}");
 
             if (!executionResult && !isHttpRequestMessageDisposalAlreadyHandled)
+            {
+                if (httpRequestMessage.Content != null)
+                    HSafe.Run(httpRequestMessage.Content.Dispose);
                 HSafe.Run(httpRequestMessage.Dispose);
+            }
 
             return
                 executionResult.IsSuccessful
