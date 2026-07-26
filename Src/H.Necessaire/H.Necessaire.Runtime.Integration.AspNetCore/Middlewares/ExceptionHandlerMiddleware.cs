@@ -28,35 +28,26 @@ namespace H.Necessaire.Runtime.Integration.AspNetCore.Middlewares
             {
                 await HandleOperationResultException(context, exception, exception?.OperationResult?.Payload?.FailContext?.ReasonCode ?? (int)HttpStatusCode.BadRequest);
             }
-            catch (OperationResultException exception)
-            {
-                await HandleOperationResultException(context, exception);
-            }
             catch (Exception exception)
             {
                 await HandleOperationResultException(context, exception);
             }
         }
 
-        private async Task HandleOperationResultException(HttpContext context, Exception ex, int httpStatusCode = (int)HttpStatusCode.BadRequest)
+        async Task HandleOperationResultException(HttpContext context, Exception ex, int httpStatusCode = (int)HttpStatusCode.BadRequest)
         {
             logger.LogError(ex, $"API Endpoint Exception @ {context.Request.Path}: {ex.Message}");
-            foreach (Exception flatException in ex.Flatten())
+            foreach (Exception flatException in ex.Flatten() ?? [])
             {
                 logger.LogError(flatException, flatException.Message);
             }
 
-            string result = new
-            {
-                error = "There was an error processing your request. Check the reasons below for details.",
-                reasons = (ex as OperationResultException)?.OperationResult?.FlattenReasons() ?? "Unknown reasons, please contact an administrator".AsArray(),
-            }
-            .ToJsonObject();
+            ExceptionPresentationModel result = ex;
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = httpStatusCode;
 
-            await context.Response.WriteAsync(result);
+            await context.Response.WriteAsync(result.ToJsonObject());
         }
     }
 }
