@@ -1,21 +1,17 @@
-﻿namespace H.Necessaire.Runtime.Integration.AspNetCore.Middlewares
+﻿using System.Diagnostics;
+
+namespace H.Necessaire.Runtime.Integration.AspNetCore.Middlewares
 {
     internal class ExceptionPresentationModel
     {
         const string defaultError = "There was an error processing your request. If any details are available you'll see them below in the Reasons section.";
-#if DEBUG
-        const bool isDebug = true;
-#else
-        const bool isDebug = false;
-#endif
 
         public ExceptionPresentationModel() { }
         public ExceptionPresentationModel(Exception exception) : this()
         {
-#pragma warning disable CS0162 // Unreachable code detected
             if (exception is null)
                 return;
-
+            
             if (exception is OperationResultException opResException)
             {
                 OperationResult opRes = opResException?.OperationResult;
@@ -26,11 +22,11 @@
                     else
                         Reasons = opRes.ReasonsToDisplay;
 
-                    if (!isDebug)
+                    if (!Debugger.IsAttached)
                         return;
                 }
 
-                if (!isDebug)
+                if (!Debugger.IsAttached)
                     return;
 
                 var reasons = opRes?.FlattenReasons();
@@ -43,7 +39,7 @@
                 }
             }
 
-            if (!isDebug)
+            if (!Debugger.IsAttached)
                 return;
 
             var exReasons = exception.Flatten()?.Select(ex => string.Join("", ex.GetType().Name, " ", "Exception Message: ", ex.Message.IfEmpty("[No Message]"))).ToArrayNullIfEmpty();
@@ -55,8 +51,6 @@
                 Error = exReasons[0];
             else
                 Reasons = Reasons.IsEmpty() ? exReasons : Reasons.Push(exReasons, checkDistinct: false);
-
-#pragma warning restore CS0162 // Unreachable code detected
         }
 
         public string Error { get; set; } = defaultError;
