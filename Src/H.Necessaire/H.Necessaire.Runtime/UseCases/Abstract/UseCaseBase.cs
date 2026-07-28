@@ -42,6 +42,7 @@ namespace H.Necessaire.Runtime
                 useCaseContext?.SecurityContext == null
                 ? OperationResult
                 .Fail(noAuthReason)
+                .Display(noAuthReason)
                 .WithPayload(
                     (useCaseContext ?? new UseCaseContext())
                     .And(x => x.FailContext = new UseCaseFailContext
@@ -64,6 +65,7 @@ namespace H.Necessaire.Runtime
                 result
                     = OperationResult
                     .Fail("Accepted auth types are NOT specified, therefore any auth type is denied.")
+                    .Display("The provided authentication type is not supported for this use case")
                     .WithPayload(
                         (result?.Payload ?? new UseCaseContext())
                         .And(x => x.FailContext = new UseCaseFailContext
@@ -80,6 +82,7 @@ namespace H.Necessaire.Runtime
                 result
                     = OperationResult
                     .Fail("Access token type is NOT specfied in the current context, therefore access is denied")
+                    .Display("The provided authentication type is not supported for this use case")
                     .WithPayload(
                         (result?.Payload ?? new UseCaseContext())
                         .And(x => x.FailContext = new UseCaseFailContext
@@ -97,6 +100,7 @@ namespace H.Necessaire.Runtime
                 result
                     = OperationResult
                     .Fail(reason)
+                    .Display(reason)
                     .WithPayload(
                         (result?.Payload ?? new UseCaseContext())
                         .And(x => x.FailContext = new UseCaseFailContext
@@ -144,7 +148,11 @@ namespace H.Necessaire.Runtime
         {
             bool hasPermission = securityContext?.HasPermission(permissionClaims) == true;
             if (!hasPermission)
-                return OperationResult.Fail($"{securityContext?.User?.Username} doesn't have permissions to execute this operation");
+                return 
+                    OperationResult
+                    .Fail($"{securityContext?.User?.Username} doesn't have permissions to execute this operation")
+                    .Display("Forbidden access due to insufficient permissions")
+                    ;
 
             return OperationResult.Win();
         }
