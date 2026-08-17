@@ -12,8 +12,8 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="H.Versioning" Version="3.1.0" />
-		<PackageReference Include="System.Runtime.Caching" Version="10.0.10" />
+		<PackageReference Include="H.Versioning" Version="3.1.1" />
+		<PackageReference Include="System.Runtime.Caching" Version="10.0.11" />
 	</ItemGroup>
 
 	<ItemGroup>
