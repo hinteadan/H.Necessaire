@@ -1,5 +1,4 @@
-﻿using H.Necessaire.Operations;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Security;
@@ -30,7 +29,28 @@ namespace H.Necessaire.Runtime.HTTP
                 ClientCertificates = clientCertificates.IsEmpty() ? new X509CertificateCollection() : new X509CertificateCollection(clientCertificates),
                 RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) =>
                 {
-                    return true;
+                    if (sslPolicyErrors == SslPolicyErrors.None)
+                        return true;
+
+                    // Check if the only issue is the broken/incomplete chain
+                    if (sslPolicyErrors == SslPolicyErrors.RemoteCertificateChainErrors && certificate != null)
+                    {
+                        if (!(HSafe.Run(() => certificate is X509Certificate2 c2 ? c2 : new X509Certificate2(certificate))).RefPayload(out var cert2))
+                            return false;
+
+                        // Verify the certificate belongs to vfr.caa.ro via its Subject or SANs
+                        if (cert2.Subject.IndexOf("=caa.ro", StringComparison.OrdinalIgnoreCase) >= 0
+                        || cert2.Subject.IndexOf(".caa.ro", StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            var now = DateTime.UtcNow;
+                            if (now >= cert2.NotBefore && now <= cert2.NotAfter)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+
+                    return false;
                 }
             }
         }, disposeHandler: true)
@@ -75,7 +95,8 @@ namespace H.Necessaire.Runtime.HTTP
             bool isInGracePeriod = DateTime.UtcNow - ExpiresAt.Value <= gracePeriod;
             if (isInGracePeriod)
             {
-                Task.Run(async () => {
+                Task.Run(async () =>
+                {
                     await Task.Delay(gracePeriod);
                     HSafe.Run(() => base.Dispose(disposing));
                 });
