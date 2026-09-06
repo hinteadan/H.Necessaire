@@ -1,14 +1,26 @@
-﻿using Raven.Client.Documents.Session;
+﻿using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
+using Raven.Client.Documents.Queries;
+using Raven.Client.Documents.Session;
 using Raven.Client.Documents.Session.TimeSeries;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace H.Necessaire.RavenDB
 {
     public static class RavenDbExtensions
     {
+#if DEBUG
+        public const bool isDebug = true;
+#else
+        public const bool isDebug = false;
+#endif
         public static void SetCollectionForStoredDocument<T>(this IAsyncDocumentSession dbSession, T document, string collectionName)
         {
             if (collectionName.IsEmpty())
@@ -16,6 +28,55 @@ namespace H.Necessaire.RavenDB
 
             dbSession.Advanced.GetMetadataFor(document)[Raven.Client.Constants.Documents.Metadata.Collection] = collectionName;
         }
+
+        /// <summary>
+        /// Converts a RavenDB LINQ IQueryable into a copy-pasteable RQL string with all parameters inlined for Raven Studio.
+        /// Compatible with .NET Standard 2.0.
+        /// </summary>
+        public static string ToRavenStudioRql<T>(this IQueryable<T> queryable)
+        {
+            if (queryable == null)
+                throw new ArgumentNullException(nameof(queryable));
+
+            // ToDocumentQuery() is the extension method in Raven.Client.Documents
+            IDocumentQuery<T> documentQuery = queryable.ToDocumentQuery();
+            IndexQuery indexQuery = documentQuery.GetIndexQuery();
+            string rql = indexQuery.Query;
+
+            if (indexQuery.QueryParameters.IsEmpty())
+                return rql;
+
+            // Sort parameters by token length descending so $p10 is replaced before $p1
+            KeyValuePair<string, object>[] orderedParams = indexQuery.QueryParameters
+                .OrderByDescending(p => p.Key.Length)
+                .ToArray();
+
+            foreach (KeyValuePair<string, object> param in orderedParams)
+            {
+                string token = "$" + param.Key;
+                string formattedValue = FormatValueForRql(param.Value);
+
+                // Use word boundary \b to prevent matching parameter tokens inside longer string names
+                string pattern = @"\" + token + @"\b";
+                rql = Regex.Replace(rql, pattern, formattedValue);
+            }
+
+            return rql;
+        }
+
+        public static async Task LogRqlIfDebugging<T>(this IQueryable<T> query, ImALogger log)
+        {
+            if (!isDebug || !Debugger.IsAttached || query == null || log == null)
+                return;
+
+            if (!HSafe.Run(query.ToRavenStudioRql).RefPayload(out string rql))
+                return;
+
+            await log.LogDebug(string.Join(Environment.NewLine, "RQL", rql));
+        }
+
+        public static async Task<IRavenQueryable<T>> LogRqlIfDebugging<T>(this IRavenQueryable<T> query, ImALogger log)
+            => await query.AndAsync(async q => await (q as IQueryable<T>).LogRqlIfDebugging(log));
 
         public static async Task SaveHMeasurement(this IAsyncDocumentSession dbSession, HMeasurement measurement, string collectionName = null, bool isSaveChangesCallDisabled = false, Action<HMeasurement> decorator = null)
         {
@@ -94,7 +155,7 @@ namespace H.Necessaire.RavenDB
                             : 0
                             ;
                 }
-                
+
                 existingCounters.Increment(updatedCounter.ID, diff);
             }
 
@@ -212,6 +273,64 @@ namespace H.Necessaire.RavenDB
                 Value = value,
                 AddonValues = addonValues,
             };
+        }
+
+        static string FormatValueForRql(object value)
+        {
+            if (value == null)
+                return "null";
+
+            if (value is string s)
+                return "\"" + EscapeString(s) + "\"";
+
+            if (value is bool b)
+                return b ? "true" : "false";
+
+            if (value is DateTime dt)
+                return "\"" + dt.ToString("o", CultureInfo.InvariantCulture) + "\"";
+
+            if (value is DateTimeOffset dto)
+                return "\"" + dto.ToString("o", CultureInfo.InvariantCulture) + "\"";
+
+            if (value is Guid || value is Enum)
+                return "\"" + value.ToString() + "\"";
+
+            if (value is byte || value is sbyte || value is short || value is ushort ||
+                value is int || value is uint || value is long || value is ulong)
+            {
+                return value.ToString();
+            }
+
+            if (value is float f)
+                return f.ToString("G", CultureInfo.InvariantCulture);
+
+            if (value is double d)
+                return d.ToString("G", CultureInfo.InvariantCulture);
+
+            if (value is decimal dec)
+                return dec.ToString(CultureInfo.InvariantCulture);
+
+            if (value is IEnumerable enumerable)
+            {
+                List<string> formattedItems = new List<string>();
+                foreach (object item in enumerable)
+                {
+                    formattedItems.Add(FormatValueForRql(item));
+                }
+                return "[" + string.Join(", ", formattedItems) + "]";
+            }
+
+            return "\"" + EscapeString(value.ToString()) + "\"";
+        }
+
+        static string EscapeString(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return string.Empty;
+
+            return input
+                .Replace(@"\", @"\\")
+                .Replace("\"", "\\\"");
         }
     }
 }
