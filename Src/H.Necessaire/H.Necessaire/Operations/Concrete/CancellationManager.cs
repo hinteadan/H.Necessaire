@@ -26,6 +26,7 @@ namespace H.Necessaire.Operations.Concrete
             await beforeCancelRaiser.Raise(EventArgs.Empty);
 
             cancellationTokenSource.Cancel();
+            cancellationTokenSource.Dispose();
 
             await afterCancelRaiser.Raise(EventArgs.Empty);
         }

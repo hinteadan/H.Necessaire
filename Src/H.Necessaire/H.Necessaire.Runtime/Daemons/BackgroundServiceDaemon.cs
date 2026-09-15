@@ -73,11 +73,12 @@ namespace H.Necessaire.Runtime
 
         void ReArm(CancellationToken? cancellationToken = null)
         {
-            Interlocked.Exchange(
+            CancellationTokenSource prevCts = Interlocked.Exchange(
                 ref killSwitch,
                 CancellationTokenSource.CreateLinkedTokenSource(cancellationManager?.Token ?? CancellationToken.None, cancellationToken ?? CancellationToken.None)
                 .And(x => x.Token.Register(async () => { await Stop(); }))
             );
+            HSafe.Run(prevCts.Dispose);
         }
     }
 }

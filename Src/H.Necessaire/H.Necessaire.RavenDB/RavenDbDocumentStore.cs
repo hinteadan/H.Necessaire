@@ -16,18 +16,38 @@ namespace H.Necessaire.RavenDB
         string[] databaseUrls = new string[0];
         string clientCertificateName = null;
         string clientCertificatePassword = null;
+        readonly Func<RuntimeConfig, ConfigNode> ravenDbConfigRootNodeProvider = null;
         public RavenDbDocumentStore()
         {
             store = new Lazy<IDocumentStore>(CreateStore);
+        }
+        /// <summary>
+        /// Structure:
+        /// *RootNode* (E.g.: runtimeConfig?.Get("RavenDbConnections") or dependencyProvider.GetRuntimeConfig()?.Get("RavenDbConnections")?.Get("ColdArchiving"))
+        ///   ↳ ClientCertificateName (string single)
+        ///   ↳ ClientCertificatePassword (string single)
+        ///   ↳ DatabaseUrls (multiple strings)
+        ///   
+        /// Default root node: runtimeConfig?.Get("RavenDbConnections")
+        /// </summary>
+        /// <param name="ravenDbConfigRootNode"></param>
+        public RavenDbDocumentStore(Func<RuntimeConfig, ConfigNode> ravenDbConfigRootNodeProvider) : this()
+        {
+            this.ravenDbConfigRootNodeProvider = ravenDbConfigRootNodeProvider;
         }
 
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             RuntimeConfig runtimeConfig = dependencyProvider?.GetRuntimeConfig();
 
-            this.clientCertificateName = runtimeConfig?.Get("RavenDbConnections")?.Get("ClientCertificateName")?.ToString()?.NullIfEmpty();
-            this.databaseUrls = runtimeConfig?.Get("RavenDbConnections")?.Get("DatabaseUrls")?.GetAllStrings() ?? this.databaseUrls ?? Array.Empty<string>();
-            this.clientCertificatePassword = runtimeConfig?.Get("RavenDbConnections")?.Get("ClientCertificatePassword")?.ToString()?.NullIfEmpty();
+            ConfigNode config = ravenDbConfigRootNodeProvider != null ? ravenDbConfigRootNodeProvider(runtimeConfig) : runtimeConfig?.Get("RavenDbConnections");
+
+            if (config != null)
+            {
+                this.clientCertificateName = config.Get("ClientCertificateName")?.ToString()?.NullIfEmpty();
+                this.clientCertificatePassword = config.Get("ClientCertificatePassword")?.ToString()?.NullIfEmpty();
+                this.databaseUrls = config.Get("DatabaseUrls")?.GetAllStrings() ?? this.databaseUrls ?? Array.Empty<string>();
+            }
         }
         #endregion
 
@@ -79,7 +99,7 @@ namespace H.Necessaire.RavenDB
         {
             if (clientCertificateName.IsEmpty())
                 return null;
-            
+
             using (System.IO.Stream stream = clientCertificateName.OpenEmbeddedResource())
             {
                 byte[] bytes = new byte[stream.Length];

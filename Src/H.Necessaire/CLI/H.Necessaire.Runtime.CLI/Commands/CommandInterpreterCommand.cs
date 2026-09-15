@@ -1,9 +1,7 @@
 ﻿using H.Necessaire.CLI.Commands;
 using H.Necessaire.Runtime.CLI.CommandInterpreter;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -100,6 +98,7 @@ namespace H.Necessaire.Runtime.CLI.Commands
             if (IsExitCommand(userInput))
             {
                 commandCancelTokenSource.Cancel();
+                commandCancelTokenSource.Dispose();
                 return OperationResult.Win();
             }
 
@@ -125,6 +124,7 @@ namespace H.Necessaire.Runtime.CLI.Commands
         {
             e.Cancel = true;
             commandCancelTokenSource.Cancel();
+            commandCancelTokenSource.Dispose();
         }
     }
 }
