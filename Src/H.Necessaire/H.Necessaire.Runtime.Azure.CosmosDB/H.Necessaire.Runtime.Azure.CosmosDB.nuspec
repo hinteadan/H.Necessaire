@@ -20,7 +20,7 @@
       <dependency id="H.Necessaire" version="3.7.7" />
       <dependency id="H.Necessaire.Runtime" version="3.7.7" />
       <dependency id="H.Necessaire.Serialization" version="3.7.7" />
-      <dependency id="Microsoft.Azure.Cosmos" version="3.63.0" />
+      <dependency id="Microsoft.Azure.Cosmos" version="3.63.1" />
     </dependencies>
   </metadata>
   <files>
