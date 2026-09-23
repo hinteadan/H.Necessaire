@@ -41,7 +41,6 @@ namespace H.Necessaire
 
             return opRes.Payload;
         }
-
         public static OperationResult<T> UnwrapToFirstFailOrLastWin<T>(this OperationResult<OperationResult<T>> opRes)
         {
             if (opRes == null)
@@ -52,7 +51,11 @@ namespace H.Necessaire
 
             return opRes.Payload;
         }
-
+        public static async Task<OperationResult> UnwrapToFirstFailOrLastWin(this Task<OperationResult<OperationResult>> opRes)
+            => opRes is null ? null : (await opRes).UnwrapToFirstFailOrLastWin();
+        public static async Task<OperationResult<T>> UnwrapToFirstFailOrLastWin<T>(this Task<OperationResult<OperationResult<T>>> opRes)
+            => opRes is null ? null : (await opRes).UnwrapToFirstFailOrLastWin();
+        
         public static OperationResult DeepUnwrapToFirstFailOrLastWin<T> (this OperationResult<T> opRes) where T : OperationResult
         {
             if (opRes == null)
@@ -71,7 +74,6 @@ namespace H.Necessaire
 
             return innerOpRes;
         }
-
         public static OperationResult<TResult> DeepUnwrapToFirstFailOrLastWin<T, TResult>(this OperationResult<T> opRes) where T : OperationResult<TResult>
         {
             if (opRes == null)
@@ -90,7 +92,10 @@ namespace H.Necessaire
 
             return innerOpRes;
         }
-
+        public static async Task<OperationResult> DeepUnwrapToFirstFailOrLastWin<T>(this Task<OperationResult<T>> opRes) where T : OperationResult
+            => opRes is null ? null : (await opRes).DeepUnwrapToFirstFailOrLastWin();
+        public static async Task<OperationResult<TResult>> DeepUnwrapToFirstFailOrLastWin<T, TResult>(this Task<OperationResult<T>> opRes) where T : OperationResult<TResult>
+            => opRes is null ? null : (await opRes).DeepUnwrapToFirstFailOrLastWin<T, TResult>();
 
         public static OperationResult DoNotLog(this OperationResult opRes)
             => opRes?.And(x => x.WithComment("DoNotLog"));

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire
 {
-    public static class HSafe
+    public static partial class HSafe
     {
         public static OperationResult Run(Action action, string tag = null)
         {
@@ -161,5 +161,8 @@ namespace H.Necessaire
 
             return result;
         }
+
+
+
     }
 }
