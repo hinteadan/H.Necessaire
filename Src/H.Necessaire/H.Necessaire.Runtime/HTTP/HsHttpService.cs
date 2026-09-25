@@ -73,8 +73,8 @@ namespace H.Necessaire.Runtime.HTTP
             if (!isHttpRequestMessageDisposalAlreadyHandled)
             {
                 if (httpRequestMessage.Content != null)
-                    HSafe.Run(httpRequestMessage.Content.Dispose);
-                HSafe.Run(httpRequestMessage.Dispose);
+                    HSafe.Run(() => httpRequestMessage?.Content?.Dispose());
+                HSafe.Run(() => httpRequestMessage?.Dispose());
             }
 
             return
@@ -143,8 +143,8 @@ namespace H.Necessaire.Runtime.HTTP
             if (!executionResult && !isHttpRequestMessageDisposalAlreadyHandled)
             {
                 if (httpRequestMessage.Content != null)
-                    HSafe.Run(httpRequestMessage.Content.Dispose);
-                HSafe.Run(httpRequestMessage.Dispose);
+                    HSafe.Run(() => httpRequestMessage?.Content?.Dispose());
+                HSafe.Run(() => httpRequestMessage?.Dispose());
             }
 
             return

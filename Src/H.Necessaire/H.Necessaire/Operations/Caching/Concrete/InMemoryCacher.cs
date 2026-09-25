@@ -94,7 +94,7 @@ namespace H.Necessaire.Operations.Caching.Concrete
                 bool isRemoved = cacheRegistry.TryRemove(expiredItem.ID, out removedItem);
                 if (isRemoved && removedItem != null && removedItem.Payload != null && removedItem.Payload is IDisposable disposable)
                 {
-                    HSafe.Run(disposable.Dispose);
+                    HSafe.Run(() => disposable?.Dispose());
                 }
             }
 

@@ -19,7 +19,7 @@ namespace H.Necessaire.Runtime.HTTP
 
             foreach (CooklessCertlessEphemeralHttpClient httpClient in httpClientsDictionary.Values)
             {
-                HSafe.Run(httpClient.Dispose);
+                HSafe.Run(() => httpClient?.Dispose());
             }
         }
 
@@ -32,7 +32,7 @@ namespace H.Necessaire.Runtime.HTTP
                 CooklessCertlessEphemeralHttpClient httpClient = new CooklessCertlessEphemeralHttpClient();
                 if (!httpClientsDictionary.TryAdd(id, httpClient))
                 {
-                    HSafe.Run(httpClient.Dispose);
+                    HSafe.Run(() => httpClient?.Dispose());
                     return httpClientsDictionary[id];
                 }
 
@@ -46,12 +46,12 @@ namespace H.Necessaire.Runtime.HTTP
 
             httpClientsDictionary.TryRemove(id, out httpClientCandidate);
 
-            HSafe.Run(httpClientCandidate.Dispose);
+            HSafe.Run(() => httpClientCandidate?.Dispose());
 
 
             if (!httpClientsDictionary.TryAdd(id, newHttpClient))
             {
-                HSafe.Run(newHttpClient.Dispose);
+                HSafe.Run(() => newHttpClient?.Dispose());
                 return httpClientsDictionary[id];
             }
 

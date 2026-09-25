@@ -76,17 +76,9 @@ namespace H.Necessaire.Runtime
             CancellationTokenSource prevCts = Interlocked.Exchange(
                 ref killSwitch,
                 CancellationTokenSource.CreateLinkedTokenSource(cancellationManager?.Token ?? CancellationToken.None, cancellationToken ?? CancellationToken.None)
-                .And(x => x.Token.Register(OnCancellationTriggered, this))
+                .And(x => x.Token.Register(async () => { await Stop(); }))
             );
-            HSafe.Run(prevCts.Dispose);
-        }
-
-        static void OnCancellationTriggered(object state)
-        {
-            if (state is ImADaemon daemon)
-            {
-                HSafe.Run(() => daemon.Stop()).DontWait();
-            }
+            HSafe.Run(() => prevCts?.Dispose());
         }
     }
 }
