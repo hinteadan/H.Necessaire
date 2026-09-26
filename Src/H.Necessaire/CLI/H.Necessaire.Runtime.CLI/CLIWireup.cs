@@ -6,17 +6,34 @@ using H.Necessaire.Runtime.Wireup.Abstracts;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 
 namespace H.Necessaire.Runtime.CLI
 {
     public class CliWireup : ApiWireupBase
     {
+        readonly CancellationTokenSource cliCancellationTokenSource = new CancellationTokenSource();
+        public CliWireup()
+        {
+            Console.CancelKeyPress += (sender, eventArgs) =>
+            {
+                eventArgs.Cancel = true;
+                HandleExit();
+            };
+            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) =>
+            {
+                HandleExit();
+            };
+        }
+
+
         public override ImAnApiWireup WithEverything()
         {
             return
                 base
 
                 .WithEverything()
+                .With(x => x.Register<ImACancellationManager>(() => x.GetNewCancellationManager(cliCancellationTokenSource.Token)))
 
                 .WithCliCommons()
 
@@ -30,7 +47,17 @@ namespace H.Necessaire.Runtime.CLI
                 ;
         }
 
-        private static void AddAllCommandsInAllAssemblies(ImADependencyRegistry registry)
+        void HandleExit()
+        {
+            HSafe.Run(() =>
+            {
+                cliCancellationTokenSource.Cancel();
+                cliCancellationTokenSource.Dispose();
+            });
+
+        }
+
+        static void AddAllCommandsInAllAssemblies(ImADependencyRegistry registry)
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetNonCoreAssemblies();
 
@@ -43,7 +70,7 @@ namespace H.Necessaire.Runtime.CLI
             }
         }
 
-        private static void AddAllSubCommandsInAllAssemblies(ImADependencyRegistry registry)
+        static void AddAllSubCommandsInAllAssemblies(ImADependencyRegistry registry)
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetNonCoreAssemblies();
 
