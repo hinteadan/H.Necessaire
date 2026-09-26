@@ -1,6 +1,4 @@
-﻿using H.Necessaire;
-using H.Necessaire.Runtime;
-using H.Necessaire.Runtime.Security.Managers;
+﻿using H.Necessaire.Runtime.Security.Managers;
 using Microsoft.AspNetCore.Http;
 using System.Text;
 
@@ -181,7 +179,8 @@ namespace H.Necessaire.Runtime.Integration.AspNetCore.Concrete
             string totpToken = ExtractAccessTokenPartFromAuthHeader(WellKnownAccessTokenType.TOTP, authHeader);
 
             (
-                await HSafe.Run(async () => {
+                await HSafe.Run(async () =>
+                {
 
                     return await securityManager.AuthenticateTotpToken(totpToken).ThrowOnFailOrReturn();
 
