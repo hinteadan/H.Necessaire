@@ -24,8 +24,8 @@
   </metadata>
   <files>
     <file src="IconLogo.png" target="images\" />
-	<file src="wwwroot\**\*" target="staticwebassets" />
-	<file src="build\H.Necessaire.Runtime.UI.Razor.targets" target="build" />
-	<file src="build\H.Necessaire.Runtime.UI.Razor.targets" target="buildTransitive" />
+    <file src="wwwroot\**\*" target="staticwebassets" />
+    <file src="build\H.Necessaire.Runtime.UI.Razor.targets" target="build" />
+    <file src="build\H.Necessaire.Runtime.UI.Razor.targets" target="buildTransitive" />
   </files>
 </package>
