@@ -1,10 +1,12 @@
 ﻿<Project>
-  <Target Name="CopyHNecessaireRazorWebAssets" BeforeTargets="BeforeBuild">
-    <ItemGroup>
-      <HNecessaireRazorAssets Include="$(MSBuildThisFileDirectory)..\staticwebassets\**\*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(HNecessaireRazorAssets)"
-          DestinationFiles="@(HNecessaireRazorAssets->'$(MSBuildProjectDirectory)\wwwroot\_content\H.Necessaire.Runtime.UI.Razor\%(RecursiveDir)%(Filename)%(Extension)')"
-          SkipUnchangedFiles="true" />
-  </Target>
+	<Target Name="CopyHNecessaireRazorWebAssets"
+			BeforeTargets="BeforeBuild"
+			Condition="'$(HNecessaireCopyWebAssets)' == 'true' Or ('$(HNecessaireCopyWebAssets)' != 'false' And '$(UsingMicrosoftNETSdkBlazorWebAssembly)' != 'true')">
+		<ItemGroup>
+			<HNecessaireRazorAssets Include="$(MSBuildThisFileDirectory)..\staticwebassets\**\*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(HNecessaireRazorAssets)"
+			  DestinationFiles="@(HNecessaireRazorAssets->'$(MSBuildProjectDirectory)\wwwroot\_content\H.Necessaire.Runtime.UI.Razor\%(RecursiveDir)%(Filename)%(Extension)')"
+			  SkipUnchangedFiles="true" />
+	</Target>
 </Project>
