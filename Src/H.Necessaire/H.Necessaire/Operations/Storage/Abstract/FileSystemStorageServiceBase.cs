@@ -58,7 +58,7 @@ namespace H.Necessaire
                     await dataWriteSemaphore.WaitAsync();
                     try
                     {
-                        using (Stream fileStream = entityFile.OpenWrite())
+                        using (Stream fileStream = entityFile.Create())
                         {
                             await SerializeEntityToStream(entity, fileStream);
                         }
