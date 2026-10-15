@@ -57,6 +57,7 @@ namespace H.Necessaire.Runtime.Integration.AspNetCore
         static void BindToHNecessaireAspNetRuntime(this IServiceProvider serviceProvider, ImADependencyRegistry dependencyRegistry)
         {
             dependencyRegistry.RegisterAlwaysNew<ImAUseCaseContextProvider>(() => new HttpContextToUseCaseContextProvider(serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext));
+            dependencyRegistry.Register<ImACancellationManager>(() => dependencyRegistry.GetNewCancellationManager(serviceProvider.GetRequiredService<IHostApplicationLifetime>().ApplicationStopping));
         }
     }
 }

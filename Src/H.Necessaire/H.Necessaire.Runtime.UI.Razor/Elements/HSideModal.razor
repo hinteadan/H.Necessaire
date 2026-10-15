@@ -52,7 +52,7 @@
 	[Parameter] public string Title { get; set; }
 	[Parameter] public RenderFragment TitleContent { get; set; }
 	[Parameter] public bool IsContentPadded { get; set; } = true;
-	[Parameter] public Func<Task> OnClose { get; set; }
+	[Parameter] public EventCallback OnClose { get; set; }
 
 	bool isClosing = false;
 	async Task TriggerClose()
@@ -61,10 +61,7 @@
 		{
 			await Task.Delay(TimeSpan.FromSeconds(.17));
 
-			if (OnClose is not null)
-			{
-				await OnClose.Invoke();
-			}
+			await OnClose.InvokeAsync();
 		}
 	}
 	async Task OnEscapePressed(object sender, EventArgs args) => await TriggerClose();

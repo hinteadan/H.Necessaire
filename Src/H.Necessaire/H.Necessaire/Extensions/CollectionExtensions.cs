@@ -262,12 +262,13 @@ namespace H.Necessaire
                 .ToArray();
         }
 
+        static readonly string[] defaultTrimToValidKeywordsSplitters = new string[] { " ", "\t", "\r", "\n", "\f", "\v" };
         public static string[] TrimToValidKeywordsOnly(this string searchKey, int minLength = 3, int maxNumberOfKeywords = 3, string[] splitters = null)
         {
             if (searchKey.IsEmpty())
                 return null;
 
-            string[] keywords = searchKey.Split(!splitters.IsEmpty() ? splitters : new string[] { " ", "\t", "\r", "\n", "\f", "\v" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] keywords = searchKey.Split(!splitters.IsEmpty() ? splitters : defaultTrimToValidKeywordsSplitters, StringSplitOptions.RemoveEmptyEntries);
 
             return keywords.TrimToValidKeywordsOnly(minLength, maxNumberOfKeywords);
         }

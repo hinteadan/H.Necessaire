@@ -2,7 +2,7 @@
 
 namespace H.Necessaire
 {
-    public interface ILimitedEnumerable<T> : IEnumerable<T>
+    public interface ILimitedEnumerable<out T> : IEnumerable<T>
     {
         int Offset { get; }
         int Length { get; }

@@ -3,7 +3,7 @@
 @inherits HRazorComponentBase
 @inject HJs hjs
 @code {
-    [Inject(Key = "H.Necessaire.Core")] IndexedDb HNecessaireCoreIndexedDb { get; set; }
+    [Inject(Key = "HNecessaireCore")] IndexedDb HNecessaireCoreIndexedDb { get; set; }
 
     protected override void OnInitialized()
     {

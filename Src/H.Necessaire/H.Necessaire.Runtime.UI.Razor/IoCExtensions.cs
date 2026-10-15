@@ -23,7 +23,7 @@ namespace H.Necessaire.Runtime.UI.Razor
             services.AddScoped<ExampleJsInterop>();
             services.AddScoped<HJs>();
             services.AddIndexedDbService();
-            services.AddIndexedDb("H.Necessaire.Core", objectStores: [nameof(ConsumerIdentity)], version: 1, key: "ID");
+            services.AddIndexedDb("HNecessaireCore", objectStores: ["HsConsumerIdentity"]);
 
             ImADependencyRegistry registry = hRazorApp?.DependencyRegistry ?? HRazorApp.Default.DependencyRegistry;
             registry.WithRazorRuntime(hRazorApp, isHttpClientCooklessCertless);

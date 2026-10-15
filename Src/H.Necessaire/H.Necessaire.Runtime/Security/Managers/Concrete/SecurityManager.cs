@@ -14,6 +14,9 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
         ImAHasherEngine hasher;
         ImAUserAuthAggregatorEngine userAuthAggregatorEngine;
         ImATotpHandler totpHandler;
+        static readonly TimeSpan userInfoAndPassCacheDuration = TimeSpan.FromHours(1);
+        ImACacher<UserInfo> userInfoCache;
+        ImACacher<string> userPassCache;
         public void ReferDependencies(ImADependencyProvider dependencyProvider)
         {
             hasher = dependencyProvider.Get<HasherFactory>().GetDefaultHasher();
@@ -22,6 +25,8 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
             userAuthAggregatorEngine = dependencyProvider.Get<ImAUserAuthAggregatorEngine>();
             ironManProviderResource = dependencyProvider.Get<ImTheIronManProviderResource>();
             totpHandler = dependencyProvider.Get<ImATotpHandler>();
+            userInfoCache = dependencyProvider.GetCacher<UserInfo>();
+            userPassCache = dependencyProvider.GetCacher<string>();
         }
         #endregion
 
@@ -51,14 +56,16 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
             UserInfo user =
                 ironMan
                 ??
-                (
-                    (await userInfoStorageResource.SearchUsers(new UserInfoSearchCriteria
-                    {
-                        Usernames = username?.AsArray()
-                    }))
-                    ?.SingleOrDefault()
-                )
-                ;
+                await userInfoCache.GetOrAdd(username.ToLowerInvariant(), async cacheKey =>
+                    (
+                        (await userInfoStorageResource.SearchUsers(new UserInfoSearchCriteria
+                        {
+                            Usernames = username?.AsArray()
+                        }))
+                        ?.SingleOrDefault()
+                    )
+                    .ToCacheableItem(cacheKey, userInfoAndPassCacheDuration).DontSlideExpiration()
+                );
 
             if (user == null)
                 return OperationResult.Fail("Invalid Credentials").WithoutPayload<SecurityContext>();
@@ -68,7 +75,7 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
             if (ironMan != null && string.IsNullOrWhiteSpace(ironManPassword))
                 return OperationResult.Fail("Invalid Credentials").WithoutPayload<SecurityContext>();
 
-            string passwordHash = ironMan != null ? null : await userCredentialsStorageResource.GetPasswordFor(user.ID);
+            string passwordHash = ironMan != null ? null : await userPassCache.GetOrAdd(username.ToLowerInvariant(), async id => (await userCredentialsStorageResource.GetPasswordFor(user.ID)).ToCacheableItem(id, userInfoAndPassCacheDuration).DontSlideExpiration());
 
             if (ironMan == null && string.IsNullOrWhiteSpace(passwordHash))
                 return OperationResult.Fail("Invalid Credentials").WithoutPayload<SecurityContext>();
