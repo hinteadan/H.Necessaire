@@ -9,6 +9,16 @@
     outline: 0;
 }
 
+.flex, .flx, .fx {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-h, .flx-h, .fx-h {
+    display: flex;
+    flex-direction: row;
+}
+
 .flex-node {
     flex: 1;
     display: flex;
@@ -37,75 +47,94 @@
     min-width: 0px;
 }
 
-    .flex-node.center, .flex-node-h.center {
-        justify-content: center;
-    }
+.flex-node.center, .flex-node-h.center {
+    justify-content: center;
+}
 
-    .flex-node.unflex, .flex-node-h.unflex {
-        flex: none;
-    }
+.flex-node.unflex, .flex-node-h.unflex {
+    flex: none;
+}
 
 .cnt-c {
     justify-content: center;
 }
+
 .cnt-l {
     justify-content: start;
 }
+
 .cnt-r {
     justify-content: end;
 }
+
 .itm-c {
     align-items: center;
 }
+
 .itm-l {
     align-items: start;
 }
+
 .itm-r {
     align-items: end;
 }
+
 .wrp {
     flex-wrap: wrap;
 }
+
 .h-txt.bold, .h-txt.b {
     font-weight: bold;
 }
+
 .h-txt.italic, .h-txt.i {
     font-style: italic;
 }
+
 .h-txt.underline, .h-txt.u {
     text-decoration: underline;
 }
+
 .h-txt.c {
     text-align: center;
 }
+
 .h-txt.l {
     text-align: left;
 }
+
 .h-txt.r {
     text-align: right;
 }
+
 .h-txt.nowrp {
     white-space: nowrap;
 }
+
 .h-txt.wrp {
     white-space: wrap;
     overflow-wrap: normal;
     word-wrap: normal;
 }
-.h-txt.wrp.any {
-    overflow-wrap: anywhere;
-    word-wrap: anywhere;
-}
+
+    .h-txt.wrp.any {
+        overflow-wrap: anywhere;
+        word-wrap: anywhere;
+    }
+
 .h-txt-elps, .h-txt.elps {
     text-overflow: ellipsis;
 }
+
 pre {
     margin: 0;
     padding: 0;
 }
+
 .h-txt-mono, .h-txt.mono, pre {
     font-family: 'Fira Code';
 }
+
 .h-crs-point {
     cursor: pointer;
 }
@@ -176,11 +205,10 @@ pre {
 }
 
 .h-lay {
-    
 }
+
 @media screen and (max-width: 1000px) {
     .h-lay {
-        
     }
 }
 
@@ -203,16 +231,16 @@ pre {
     background-size: contain;
 }
 
-        .h-img.tinted {
-            /*mask-image: url('url/to/image');*/
-            /*-webkit-mask-image: url('url/to/image');*/
-            /*background-color: #ffffff;*/
-            background-image: none;
-            background-blend-mode: overlay;
-            mask-repeat: no-repeat;
-            -webkit-mask-repeat: no-repeat;
-            mask-size: contain;
-            -webkit-mask-size: contain;
-            mask-position: center center;
-            -webkit-mask-position: center center;
-        }
+    .h-img.tinted {
+        /*mask-image: url('url/to/image');*/
+        /*-webkit-mask-image: url('url/to/image');*/
+        /*background-color: #ffffff;*/
+        background-image: none;
+        background-blend-mode: overlay;
+        mask-repeat: no-repeat;
+        -webkit-mask-repeat: no-repeat;
+        mask-size: contain;
+        -webkit-mask-size: contain;
+        mask-position: center center;
+        -webkit-mask-position: center center;
+    }
