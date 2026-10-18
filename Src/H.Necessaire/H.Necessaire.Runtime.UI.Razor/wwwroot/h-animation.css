@@ -103,3 +103,21 @@
     animation-timing-function: ease-in;
     animation-fill-mode: forwards;
 }
+
+@keyframes h-anmt-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.h-anmt-spin {
+    animation: h-anmt-spin 1s ease infinite;
+}
+
+.h-anmt-spin-linear {
+    animation: h-anmt-spin 1s linear infinite;
+}
