@@ -7,10 +7,10 @@ namespace H.Necessaire.Runtime.UI.Razor
         readonly IJSRuntime js;
         readonly Lazy<Task<IJSObjectReference>> hJsModuleTask;
         readonly HUiToolkit uiToolikit;
-        public HJs(IJSRuntime js, HUiToolkit uiToolikit)
+        public HJs(IJSRuntime js, ImADependencyProvider deps)
         {
             this.js = js;
-            this.uiToolikit = uiToolikit;
+            this.uiToolikit = deps.Get<HUiToolkit>();
             hJsModuleTask = new(async () => await js.InvokeAsync<IJSObjectReference>("import", "./_content/H.Necessaire.Runtime.UI.Razor/h.js"));
         }
 

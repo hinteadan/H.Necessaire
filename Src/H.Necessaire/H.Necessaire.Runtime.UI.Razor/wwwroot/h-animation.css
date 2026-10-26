@@ -1,4 +1,4 @@
-﻿@keyframes h-anmt-fade-in {
+@keyframes h-anmt-fade-in {
     from { opacity: 0; }
     to { opacity: 1; }
 }
@@ -102,4 +102,22 @@
     animation-direction: normal;
     animation-timing-function: ease-in;
     animation-fill-mode: forwards;
+}
+
+@keyframes h-anmt-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.h-anmt-spin {
+    animation: h-anmt-spin 1s ease infinite;
+}
+
+.h-anmt-spin-linear {
+    animation: h-anmt-spin 1s linear infinite;
 }
