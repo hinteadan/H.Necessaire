@@ -1,4 +1,4 @@
-﻿(function (document, DotNet) {
+(function (document, DotNet) {
 
     document.addEventListener('keyup', ev => {
 

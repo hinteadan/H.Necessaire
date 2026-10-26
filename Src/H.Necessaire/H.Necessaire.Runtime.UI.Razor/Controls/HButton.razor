@@ -3,7 +3,7 @@
 @inherits HRazorComponentBase
 @rendermode InteractiveAuto
 
-<button class="h-necessaire @nameof(HButton) h-btn @GetCssClassForRole() h-crs-point @(IsBusy ? "dsbl" : null)" data-action-tag="@ActionTag" @onclick=TriggerClick disabled="@(IsBusy ? "disabled" : null)">
+<button class="h-necessaire @nameof(HButton) h-btn @GetCssClassForRole() h-crs-point @(IsBusy ? "dsbl" : null) @Classes" style="@Styles" data-action-tag="@ActionTag" @onclick=TriggerClick disabled="@(IsBusy ? "disabled" : null)">
     @ChildContent
 </button>
 
@@ -12,6 +12,9 @@
     [Parameter] public string ActionTag { get; set; }
     [Parameter] public EventCallback OnClick { get; set; }
     [Parameter] public UIRole Role { get; set; } = UIRole.Unspecified;
+
+    [Parameter] public string Classes { get; set; }
+    [Parameter] public string Styles { get; set; }
 
     async Task TriggerClick()
     {
