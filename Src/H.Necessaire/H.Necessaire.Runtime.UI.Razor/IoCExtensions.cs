@@ -20,7 +20,6 @@ namespace H.Necessaire.Runtime.UI.Razor
             if (services is null)
                 return services;
 
-            services.AddScoped<ExampleJsInterop>();
             services.AddScoped<HJs>();
             services.AddIndexedDbService();
             services.AddIndexedDb("HNecessaireCore", objectStores: ["HsConsumerIdentity"]);

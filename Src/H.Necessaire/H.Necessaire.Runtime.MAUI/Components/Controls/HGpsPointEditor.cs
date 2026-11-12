@@ -247,7 +247,7 @@ namespace H.Necessaire.Runtime.MAUI.Components.Controls
                     Description = isForLng ? "Dir" : null,
                     SelectedIndex = 0,
                 }
-                .SetDataSource<string>(isForLng ? ["E", "W"] : ["N", "S"])
+                .SetDataSource<string>(isForLng ? new string[] { "E", "W" } : new string[] { "N", "S" })
                 .And(x => x.SelectedIndex = 0)
                 .Bind(this, null, x => x.SelectedIndex = isForLng ? (dmsCoordinates.Lng.Direction == GeoDmsLngDirection.East ? 0 : 1) : (dmsCoordinates.Lat.Direction == GeoDmsLatDirection.North ? 0 : 1))
                 .And(x => x.SelectedIndexChanged += (s, e) => IfNotBinding(_ =>

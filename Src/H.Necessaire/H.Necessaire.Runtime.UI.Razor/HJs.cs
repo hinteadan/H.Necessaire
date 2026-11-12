@@ -1,4 +1,6 @@
-﻿using Microsoft.JSInterop;
+﻿#pragma warning disable BL0016 // Unguarded JS interop call
+
+using Microsoft.JSInterop;
 
 namespace H.Necessaire.Runtime.UI.Razor
 {
@@ -11,6 +13,7 @@ namespace H.Necessaire.Runtime.UI.Razor
         {
             this.js = js;
             this.uiToolikit = deps.Get<HUiToolkit>();
+
             hJsModuleTask = new(async () => await js.InvokeAsync<IJSObjectReference>("import", "./_content/H.Necessaire.Runtime.UI.Razor/h.js"));
         }
 
@@ -117,3 +120,5 @@ namespace H.Necessaire.Runtime.UI.Razor
         }
     }
 }
+
+#pragma warning restore BL0016 // Unguarded JS interop call

@@ -25,7 +25,7 @@ namespace H.Necessaire.Testicles.Unit
 
             using (RSACryptoServiceProvider privateKeyDecryptor = securedMessage.Notes.Get(RS512Hasher.KnownNoteIdPrivateKey).ImportAsPEMPrivateRsaKey().ThrowOnFailOrReturn())
             {
-                string decodedMessage = Encoding.UTF8.GetString(privateKeyDecryptor.Decrypt(Convert.FromBase64String(securedMessage.Notes.Get(RS512Hasher.KnownNoteIdEncryptedValue)), fOAEP: true));
+                string decodedMessage = Encoding.UTF8.GetString(privateKeyDecryptor.Decrypt(Convert.FromBase64String(securedMessage.Notes.Get(RS512Hasher.KnownNoteIdEncryptedValue)), RSAEncryptionPadding.OaepSHA1));
                 decodedMessage.Should().Be(message, "We can decode the full message with the private key");
             }
 

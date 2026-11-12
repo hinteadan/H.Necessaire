@@ -22,8 +22,8 @@
       <dependency id="H.Necessaire.Dapper" version="3.8.5" />
       <dependency id="H.Necessaire.Serialization" version="3.8.5" />
       <dependency id="Microsoft.Data.SqlClient" version="7.1.1" />
-      <dependency id="System.Runtime.Caching" version="10.0.14" />
-      <dependency id="System.Security.Cryptography.Pkcs" version="10.0.14" />
+      <dependency id="System.Runtime.Caching" version="11.0.0" />
+      <dependency id="System.Security.Cryptography.Pkcs" version="11.0.0" />
     </dependencies>
   </metadata>
   <files>

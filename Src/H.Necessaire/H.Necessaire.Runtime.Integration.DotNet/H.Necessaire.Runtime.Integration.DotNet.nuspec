@@ -19,8 +19,8 @@
     <dependencies>
       <dependency id="H.Necessaire" version="3.8.5" />
       <dependency id="H.Necessaire.Runtime" version="3.8.5" />
-      <dependency id="Microsoft.Extensions.Hosting.Abstractions" version="10.0.14" />
-      <dependency id="Microsoft.Extensions.Logging.Configuration" version="10.0.14" />
+      <dependency id="Microsoft.Extensions.Hosting.Abstractions" version="11.0.0" />
+      <dependency id="Microsoft.Extensions.Logging.Configuration" version="11.0.0" />
     </dependencies>
   </metadata>
   <files>

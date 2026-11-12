@@ -75,7 +75,7 @@ namespace H.Necessaire.Runtime.Security.Managers.Concrete
             if (ironMan != null && string.IsNullOrWhiteSpace(ironManPassword))
                 return OperationResult.Fail("Invalid Credentials").WithoutPayload<SecurityContext>();
 
-            string passwordHash = ironMan != null ? null : await userPassCache.GetOrAdd(username.ToLowerInvariant(), async id => (await userCredentialsStorageResource.GetPasswordFor(user.ID)).ToCacheableItem(id, userInfoAndPassCacheDuration).DontSlideExpiration());
+            string passwordHash = ironMan != null ? null : await userPassCache.GetOrAdd(string.Join("", "H.Necessaire.Runtime.Security.Managers.Concrete.SecurityManager.Username:", username.ToLowerInvariant()), async id => (await userCredentialsStorageResource.GetPasswordFor(user.ID)).ToCacheableItem(id, userInfoAndPassCacheDuration).DontSlideExpiration());
 
             if (ironMan == null && string.IsNullOrWhiteSpace(passwordHash))
                 return OperationResult.Fail("Invalid Credentials").WithoutPayload<SecurityContext>();
