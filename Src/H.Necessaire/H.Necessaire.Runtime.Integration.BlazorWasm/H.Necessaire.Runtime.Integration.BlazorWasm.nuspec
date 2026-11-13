@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>H.Necessaire.Runtime.Integration.BlazorWasm</id>
-    <version>3.8.5</version>
+    <version>4.0.0</version>
     <title>H's Necessaire Runtime Integration with .NET Blazor WebAssembly</title>
     <projectUrl>https://h.necessaire.dev</projectUrl>
     <repository type="git" url="https://github.com/hinteadan/H.Necessaire.git" branch="master" />
@@ -17,11 +17,12 @@
     <copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</copyright>
     <tags>hintea dan alexandru .net essentials utils extensions core utilities data execution operation operations debounce throttle unsafe code retry policy useful normalization task collections batch task array rad rapid application development framework .netcore core .net net</tags>
     <dependencies>
-      <dependency id="H.Necessaire" version="3.8.5" />
-      <dependency id="H.Necessaire.Runtime" version="3.8.5" />
+      <dependency id="H.Necessaire" version="4.0.0" />
+      <dependency id="H.Necessaire.Runtime" version="4.0.0" />
     </dependencies>
   </metadata>
   <files>
     <file src="IconLogo.png" target="images\" />
+    <file src="bin\$configuration$\netstandard2.0\H.Necessaire.Runtime.Integration.BlazorWasm.dll" target="lib\netstandard2.0\" />
   </files>
 </package>

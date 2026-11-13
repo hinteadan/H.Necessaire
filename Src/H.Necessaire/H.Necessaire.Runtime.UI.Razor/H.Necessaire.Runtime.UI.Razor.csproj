@@ -6,6 +6,12 @@
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<NuspecFile>H.Necessaire.Runtime.UI.Razor.nuspec</NuspecFile>
+		<NuspecBasePath>$(SolutionDir)H.Necessaire.Runtime.UI.Razor</NuspecBasePath>
+		<NuspecProperties>configuration=$(Configuration)</NuspecProperties>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<None Include="..\..\..\LICENSE" Link="LICENSE">
 			<PackagePath></PackagePath>

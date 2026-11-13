@@ -5,6 +5,12 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<NuspecFile>H.Necessaire.Runtime.Integration.AspNetCore.nuspec</NuspecFile>
+		<NuspecBasePath>$(SolutionDir)H.Necessaire.Runtime.Integration.AspNetCore</NuspecBasePath>
+		<NuspecProperties>configuration=$(Configuration)</NuspecProperties>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>

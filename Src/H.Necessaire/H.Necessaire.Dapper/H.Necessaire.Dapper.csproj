@@ -1,32 +1,38 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Create_KeyValueStore_Table.sql" />
-  </ItemGroup>
+	<PropertyGroup>
+		<NuspecFile>H.Necessaire.Dapper.nuspec</NuspecFile>
+		<NuspecBasePath>$(SolutionDir)H.Necessaire.Dapper</NuspecBasePath>
+		<NuspecProperties>configuration=$(Configuration)</NuspecProperties>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Create_KeyValueStore_Table.sql" />
-    <EmbeddedResource Include="Create_SqliteMigration_Table.sql" />
-    <EmbeddedResource Include="Create_SqlServerMigration_Table.sql" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Create_KeyValueStore_Table.sql" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.1.89" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="11.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Create_KeyValueStore_Table.sql" />
+		<EmbeddedResource Include="Create_SqliteMigration_Table.sql" />
+		<EmbeddedResource Include="Create_SqlServerMigration_Table.sql" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\H.Necessaire\H.Necessaire.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Dapper" Version="2.1.89" />
+		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="11.0.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="IconLogo.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\H.Necessaire\H.Necessaire.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="IconLogo.png">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

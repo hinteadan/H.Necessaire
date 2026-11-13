@@ -1,31 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\..\..\..\LICENSE" Link="LICENSE">
-      <PackagePath></PackagePath>
-      <Pack>True</Pack>
-    </None>
-  </ItemGroup>
+	<PropertyGroup>
+		<NuspecFile>H.Necessaire.Runtime.CLI.nuspec</NuspecFile>
+		<NuspecBasePath>$(SolutionDir)CLI/H.Necessaire.Runtime.CLI</NuspecBasePath>
+		<NuspecProperties>configuration=$(Configuration)</NuspecProperties>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="11.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\..\..\LICENSE" Link="LICENSE">
+			<PackagePath></PackagePath>
+			<Pack>True</Pack>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\H.Necessaire.Runtime\H.Necessaire.Runtime.csproj" />
-    <ProjectReference Include="..\..\H.Necessaire\H.Necessaire.csproj" />
-    <ProjectReference Include="..\..\Modules\Runtime\CLI\H.Necessaire.Runtime.CLI.Common\H.Necessaire.Runtime.CLI.Common.csproj" />
-    <ProjectReference Include="..\..\Modules\Runtime\CLI\H.Necessaire.Runtime.CLI.UI\H.Necessaire.Runtime.CLI.UI.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="System.Text.Json" Version="11.0.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="IconLogo.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\H.Necessaire.Runtime\H.Necessaire.Runtime.csproj" />
+		<ProjectReference Include="..\..\H.Necessaire\H.Necessaire.csproj" />
+		<ProjectReference Include="..\..\Modules\Runtime\CLI\H.Necessaire.Runtime.CLI.Common\H.Necessaire.Runtime.CLI.Common.csproj" />
+		<ProjectReference Include="..\..\Modules\Runtime\CLI\H.Necessaire.Runtime.CLI.UI\H.Necessaire.Runtime.CLI.UI.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="IconLogo.png">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

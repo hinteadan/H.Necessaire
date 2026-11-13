@@ -4,6 +4,12 @@
 		<TargetFramework>net11.0</TargetFramework>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<NuspecFile>H.Necessaire.Runtime.Sqlite.nuspec</NuspecFile>
+		<NuspecBasePath>$(SolutionDir)H.Necessaire.Runtime.Sqlite</NuspecBasePath>
+		<NuspecProperties>configuration=$(Configuration)</NuspecProperties>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<None Include="..\..\..\LICENSE" Link="LICENSE">
 			<PackagePath></PackagePath>

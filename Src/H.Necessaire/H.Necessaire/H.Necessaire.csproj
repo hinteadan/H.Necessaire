@@ -1,37 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>H.Necessaire</PackageId>
-    <Version>1.0.1</Version>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Authors>Hintea Dan Alexandru</Authors>
-    <Company></Company>
-    <Product>H.Necessaire</Product>
-    <Copyright>Copyright © 2021. Hintea Dan Alexandru. All Rights Reserved.</Copyright>
-    <PackageProjectUrl></PackageProjectUrl>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <RepositoryUrl>https://github.com/hinteadan/H.Necessaire</RepositoryUrl>
-    <RepositoryType>GIT</RepositoryType>
-    <PackageTags>hintea,dan,alexandru,.net,essentials,utils,extensions,core,utilities,data,execution,useful,collections,batch,task,array</PackageTags>
-    <PackageReleaseNotes>A collection of useful data and execution extensions for .NET</PackageReleaseNotes>
-    <Description>A collection of useful data and execution extensions for .NET</Description>
-    <ApplicationIcon>necessaire_logo.ico</ApplicationIcon>
-    <SignAssembly>false</SignAssembly>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
+	<PropertyGroup>
+		<NuspecFile>H.Necessaire.nuspec</NuspecFile>
+		<NuspecBasePath>$(SolutionDir)H.Necessaire</NuspecBasePath>
+		<NuspecProperties>configuration=$(Configuration)</NuspecProperties>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Update="IconLogo.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="IconLogo.png">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

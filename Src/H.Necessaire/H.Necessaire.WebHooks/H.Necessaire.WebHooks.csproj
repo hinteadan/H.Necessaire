@@ -1,18 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\H.Necessaire.Dapper\H.Necessaire.Dapper.csproj" />
-    <ProjectReference Include="..\H.Necessaire.Serialization\H.Necessaire.Serialization.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<NuspecFile>H.Necessaire.WebHooks.nuspec</NuspecFile>
+		<NuspecBasePath>$(SolutionDir)H.Necessaire.WebHooks</NuspecBasePath>
+		<NuspecProperties>configuration=$(Configuration)</NuspecProperties>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Update="IconLogo.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\H.Necessaire.Dapper\H.Necessaire.Dapper.csproj" />
+		<ProjectReference Include="..\H.Necessaire.Serialization\H.Necessaire.Serialization.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="IconLogo.png">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

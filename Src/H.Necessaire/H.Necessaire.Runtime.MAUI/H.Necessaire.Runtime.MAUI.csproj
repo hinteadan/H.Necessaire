@@ -17,8 +17,14 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<NuspecFile>H.Necessaire.Runtime.MAUI.nuspec</NuspecFile>
+		<NuspecBasePath>$(SolutionDir)H.Necessaire.Runtime.MAUI</NuspecBasePath>
+		<NuspecProperties>configuration=$(Configuration)</NuspecProperties>
+	</PropertyGroup>
+
 	<ItemGroup>
-	  <EmbeddedResource Include="Resources\**\*" />
+		<EmbeddedResource Include="Resources\**\*" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -27,20 +33,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\H.Necessaire.Runtime\H.Necessaire.Runtime.csproj" />
-	  <ProjectReference Include="..\Modules\Runtime\UI\H.Necessaire.Runtime.UI\H.Necessaire.Runtime.UI.csproj" />
+		<ProjectReference Include="..\H.Necessaire.Runtime\H.Necessaire.Runtime.csproj" />
+		<ProjectReference Include="..\Modules\Runtime\UI\H.Necessaire.Runtime.UI\H.Necessaire.Runtime.UI.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Platforms\Tizen\" />
-	  <Folder Include="WellKnown\FluentUI\Glyphs\" />
+		<Folder Include="Platforms\Tizen\" />
+		<Folder Include="WellKnown\FluentUI\Glyphs\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="..\..\..\LICENSE" Link="LICENSE">
-	    <PackagePath></PackagePath>
-	    <Pack>True</Pack>
-	  </None>
+		<None Include="..\..\..\LICENSE" Link="LICENSE">
+			<PackagePath></PackagePath>
+			<Pack>True</Pack>
+		</None>
 	</ItemGroup>
 
 </Project>
