@@ -128,14 +128,16 @@ namespace H.Necessaire.RavenDB.Concrete
         IAsyncDocumentSession OpenDbSession()
         {
             return
-                ravenDbDocumentStore.Store.OpenAsyncSession(coreDatabaseName).And(db =>
+                ravenDbDocumentStore.Store.OpenAsyncSession(new SessionOptions
                 {
-                    db.Advanced.OptimisticConcurrencyMode = OptimisticConcurrencyMode.Writes;
+                    Database = coreDatabaseName,
+                    TransactionMode = TransactionMode.ClusterWide,
+                    OptimisticConcurrencyMode = OptimisticConcurrencyMode.Writes,
                 });
         }
 
         static string BuildID(string lockID) => idPrefix + idSeparator + lockID;
 
-        SemaphoreSlim GetLockSemaphore(string lockID) => lockSemaphores.GetOrAdd(lockID, new SemaphoreSlim(1, 1));
+        SemaphoreSlim GetLockSemaphore(string lockID) => lockSemaphores.GetOrAdd(lockID, _ => new SemaphoreSlim(1, 1));
     }
 }

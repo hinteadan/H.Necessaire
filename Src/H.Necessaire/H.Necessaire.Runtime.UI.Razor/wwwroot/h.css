@@ -178,6 +178,7 @@ pre {
     flex-direction: column;
     min-height: 0px;
     box-shadow: 0 25.6px 57.6px 0 rgba(0,0,0,.22),0 4.8px 14.4px 0 rgba(0,0,0,.18);
+    z-index: 1;
 }
 
 .h-side-modal-backdrop {

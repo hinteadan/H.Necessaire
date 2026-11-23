@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Google.Cloud.Firestore" Version="4.6.0" />
+		<PackageReference Include="Google.Cloud.Firestore" Version="4.7.0" />
 		<PackageReference Include="Microsoft.Bcl.Memory" Version="11.0.0" />
 	</ItemGroup>
 
