@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace H.Necessaire.Runtime.Integration.BlazorWasm.Concrete
 {
-    internal class HttpApiStorageService<TId, TEntity> : ImAStorageService<TId, TEntity>, ImADependency
+    public class HttpApiStorageService<TId, TEntity> : ImAStorageService<TId, TEntity>, ImADependency
         where TEntity : IDentityType<TId>
     {
         #region Construct
