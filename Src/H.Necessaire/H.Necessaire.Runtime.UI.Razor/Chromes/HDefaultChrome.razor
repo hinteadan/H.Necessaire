@@ -20,7 +20,7 @@
         </HBrandingHeader>
     }
 
-    <HMainLayout>
+    <HMainLayout FooterContent="FooterContent">
         <HScrollableContent>
             @ChildContent
         </HScrollableContent>
@@ -33,4 +33,5 @@
     [Parameter] public RenderFragment Header { get; set; }
     [Parameter] public RenderFragment HeaderUserContent { get; set; }
     [Parameter] public bool IsHeaderFullReplacement { get; set; } = false;
+    [Parameter] public RenderFragment FooterContent { get; set; }
 }

@@ -6,10 +6,11 @@
         @ChildContent
     </div>
 
-    <HBrandingFooter />
+    <HBrandingFooter ChildContent="FooterContent" />
 
 </div>
 
 @code {
     [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment FooterContent { get; set; }
 }

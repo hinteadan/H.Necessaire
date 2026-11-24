@@ -1,22 +1,31 @@
 ﻿@inherits Abstracts.HRazorComponentBase
 
 <footer class="h-necessaire @nameof(HBrandingFooter)" style="
-height: @(SizingUnit * 3)px;
-display: flex;
-flex-direction: column;
-justify-content: center;
-text-align: center;
-color: @(Branding.MuteColor.ToCssRGBA());
-font-size: @(Branding.Typography.FontSizeSmaller.EmsCss);
-background-color: @(Branding.SecondaryColorTranslucent.ToCssRGBA());
-box-shadow: 0 -3.2px 7.2px 0 rgba(0,0,0,.132),0 .6px 1.8px 0 rgba(0,0,0,.108);
-">
-    <div class="h-necessaire">
-        <span>@RenderCopyrightLabel()</span>
-    </div>
+    height: @(SizingUnit * 3)px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    color: @(Branding.MuteColor.ToCssRGBA());
+    font-size: @(Branding.Typography.FontSizeSmaller.EmsCss);
+    background-color: @(Branding.SecondaryColorTranslucent.ToCssRGBA());
+    box-shadow: 0 -3.2px 7.2px 0 rgba(0,0,0,.132),0 .6px 1.8px 0 rgba(0,0,0,.108);
+    ">
+    @if (ChildContent is not null)
+    {
+        @ChildContent
+    }
+    else
+    {
+        <div class="h-necessaire">
+            <span>@RenderCopyrightLabel()</span>
+        </div>
+    }
 </footer>
 
 @code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
     H.Necessaire.Version appVersion = null;
     protected override async Task OnInitializedAsync()
     {
