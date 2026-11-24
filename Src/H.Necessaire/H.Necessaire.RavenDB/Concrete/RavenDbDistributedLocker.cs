@@ -132,7 +132,6 @@ namespace H.Necessaire.RavenDB.Concrete
                 {
                     Database = coreDatabaseName,
                     TransactionMode = TransactionMode.ClusterWide,
-                    OptimisticConcurrencyMode = OptimisticConcurrencyMode.Writes,
                 });
         }
 
