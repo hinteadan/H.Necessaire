@@ -6,19 +6,11 @@ namespace H.Necessaire.Operations.Concrete
 {
     class TaskDelayPeriodicAction : ImAPeriodicAction
     {
-#if DEBUG
-        static readonly TimeSpan gcCollectInterval = TimeSpan.FromSeconds(15);
-#else
-        static readonly TimeSpan gcCollectInterval = TimeSpan.FromSeconds(150);
-#endif
-        static readonly EphemeralType<string> gcCollectState = new EphemeralType<string> { Payload = "GC", ValidFrom = DateTime.UtcNow - gcCollectInterval, ValidFor = gcCollectInterval };
-
         readonly object isStartedLocker = new object();
         bool isStarted = false;
         TimeSpan interval = TimeSpan.Zero;
         Func<Task> action = null;
         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        CancellationToken CancellationToken => cancellationTokenSource.Token;
 
         public void Start(TimeSpan interval, Func<Task> action)
             => StartDelayed(TimeSpan.Zero, interval, action);
@@ -28,12 +20,15 @@ namespace H.Necessaire.Operations.Concrete
             if (action is null)
                 return;
 
+            CancellationToken cnclToken;
             lock (isStartedLocker)
             {
                 if (isStarted)
                     return;
 
                 isStarted = true;
+
+                cnclToken = cancellationTokenSource.Token;
             }
 
             this.action = action;
@@ -41,7 +36,7 @@ namespace H.Necessaire.Operations.Concrete
 
             try
             {
-                await Task.Delay(delay, CancellationToken);
+                await Task.Delay(delay, cnclToken);
             }
             catch (ObjectDisposedException)
             {
@@ -52,9 +47,9 @@ namespace H.Necessaire.Operations.Concrete
                 return;
             }
 
-            await action();
+            await HSafe.Run(action);
 
-            DelayRunAndQueueAnother().DontWait();
+            DelayRunAndQueueAnother(cnclToken).DontWait();
         }
 
         public void Stop()
@@ -73,7 +68,7 @@ namespace H.Necessaire.Operations.Concrete
             prevToken.Dispose();
         }
 
-        async Task DelayRunAndQueueAnother()
+        async Task DelayRunAndQueueAnother(CancellationToken cnclToken)
         {
             lock (isStartedLocker)
             {
@@ -87,12 +82,12 @@ namespace H.Necessaire.Operations.Concrete
             if (interval <= TimeSpan.Zero)
                 return;
 
-            if (CancellationToken.IsCancellationRequested)
+            if (cnclToken.IsCancellationRequested)
                 return;
 
             try
             {
-                await Task.Delay(interval, CancellationToken);
+                await Task.Delay(interval, cnclToken);
             }
             catch (ObjectDisposedException)
             {
@@ -103,19 +98,12 @@ namespace H.Necessaire.Operations.Concrete
                 return;
             }
 
-            await action();
+            await HSafe.Run(action);
 
-            if (CancellationToken.IsCancellationRequested)
+            if (cnclToken.IsCancellationRequested)
                 return;
 
-            if (gcCollectState.IsExpired())
-            {
-                GC.Collect();
-                gcCollectState.ActiveAsOf(DateTime.UtcNow);
-                gcCollectState.ExpireIn(gcCollectInterval);
-            }
-
-            DelayRunAndQueueAnother().DontWait();
+            DelayRunAndQueueAnother(cnclToken).DontWait();
         }
     }
 }

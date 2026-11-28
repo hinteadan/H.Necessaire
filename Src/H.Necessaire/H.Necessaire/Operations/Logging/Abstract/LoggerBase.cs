@@ -8,6 +8,7 @@ namespace H.Necessaire
     public abstract class LoggerBase : ImALogger, ImADependency
     {
         #region Construct
+        const int maxPendingEntries = 10_000;
         static readonly TimeSpan delayedProcessorsInterval = TimeSpan.FromSeconds(7);
 
         private readonly ConcurrentDictionary<Guid, LogEntry> logDictionary = new ConcurrentDictionary<Guid, LogEntry>();
@@ -65,23 +66,17 @@ namespace H.Necessaire
 
             await StoreLogEntry(logEntry);
 
-            await
-                new Func<Task>(async () =>
+            await HSafe.Run(async () =>
+            {
+                foreach (var immediateProcessor in immediateProcessors)
                 {
-                    await
-                        Task.WhenAll(
-                            immediateProcessors
-                            .Select(
-                                processor => processor
-                                .IsEligibleFor(logEntry)
-                                .ContinueWith(
-                                    async x => x.Result == false ? OperationResult.Win().WithPayload(logEntry) : await processor.Process(logEntry)
-                                )
-                            )
-                            .ToArray()
-                        );
-                })
-                .TryOrFailWithGrace(onFail: ex => { });
+                    bool isEligible = await immediateProcessor.IsEligibleFor(logEntry);
+                    if (!isEligible)
+                        continue;
+
+                    await HSafe.Run(async () => await immediateProcessor.Process(logEntry));
+                }
+            });
 
             return this;
         }
@@ -121,13 +116,17 @@ namespace H.Necessaire
 
         protected virtual Task StoreLogEntry(LogEntry logEntry)
         {
+            if (logDictionary.Count >= maxPendingEntries)
+                return Task.CompletedTask;
+
             logDictionary.AddOrUpdate(logEntry.ID, logEntry, (x, y) => logEntry);
-            return true.AsTask();
+
+            return Task.CompletedTask;
         }
 
         protected virtual Task<IDisposableEnumerable<LogEntry>> StreamAllLogEntries()
         {
-            return (logDictionary.Values.ToArray().ToDisposableEnumerable()).AsTask();
+            return (logDictionary.Values.ToDisposableEnumerable()).AsTask();
         }
 
         protected virtual Task RemoveLogEntry(Guid logEntryID)
@@ -168,23 +167,17 @@ namespace H.Necessaire
 
                 foreach (LogEntry logEntry in logEntries)
                 {
-                    await
-                        new Func<Task>(async () =>
+                    await HSafe.Run(async () =>
+                    {
+                        foreach (var delayedProcessor in delayedProcessors)
                         {
-                            await
-                                Task.WhenAll(
-                                    delayedProcessors
-                                    .Select(
-                                        processor => processor
-                                        .IsEligibleFor(logEntry)
-                                        .ContinueWith(
-                                            async x => x.Result == false ? OperationResult.Win().WithPayload(logEntry) : await processor.Process(logEntry)
-                                        )
-                                    )
-                                    .ToArray()
-                                );
-                        })
-                        .TryOrFailWithGrace(onFail: ex => { });
+                            bool isEligible = await delayedProcessor.IsEligibleFor(logEntry);
+                            if (!isEligible)
+                                continue;
+
+                            await HSafe.Run(async () => await delayedProcessor.Process(logEntry));
+                        }
+                    });
 
                     await RemoveLogEntry(logEntry.ID);
                 }
